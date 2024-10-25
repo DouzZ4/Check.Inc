@@ -1,51 +1,61 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Inicio - Usuario</title>
+    <meta charset="UTF-8"> <!-- Define el conjunto de caracteres como UTF-8, permitiendo el uso de caracteres especiales -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Hace la página responsive para dispositivos móviles -->
+    <title>Página de Inicio - Usuario</title> <!-- Título que aparecerá en la pestaña del navegador -->
+    
     <!-- Vincula los estilos generales y específicos para esta página -->
-    <link rel="stylesheet" href="../assets/styles/main.css">
-    <link rel="stylesheet" href="../assets/styles/index_patient.css">
+    <link rel="stylesheet" href="../assets/styles/main.css"> <!-- Estilos generales del sitio web -->
+    <link rel="stylesheet" href="../assets/styles/index_patient.css"> <!-- Estilos específicos para esta página -->
 </head>
 <body>
+    <!-- Barra de navegación principal -->
     <nav class="navbar">
+        <!-- Contenedor para el "check" -->
         <div class="check">
-            <label for="check">Check</label>
+            <label for="check">CHECK</label> <!-- Etiqueta de texto para el "check" (posiblemente para un checkbox o similar) -->
         </div>
+        
+        <!-- Lista de enlaces de la barra de navegación -->
         <ul class="nav-links">
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="#">Historial</a></li>
+            <li><a href="index.html">Inicio</a></li> <!-- Enlace a la página de inicio -->
+            <li><a href="#">Historial</a></li> <!-- Enlace (aún sin definir) para el historial -->
             <li class="dropdown">
-                <a href="#" class="dropdown-btn">Registros</a>
+                <a href="#" class="dropdown-btn">Registros</a> <!-- Botón que despliega el menú de registros -->
                 <ul class="dropdown-content">
-                    <li><a href="#">Alarmas</a></li>
+                    <!-- Contenido del menú desplegable, cada enlace lleva a una sección diferente -->
+                    <li><a href="#">Alarmas</a></li> 
                     <li><a href="#">Actividades</a></li>
                     <li><a href="#">Citas</a></li>
                     <li><a href="#">Medicamentos</a></li>
                 </ul>
             </li>
-            <li><a href="#">Perfil</a></li>
-            <li><a href="#" id="Anomalias-btn">Anomalías</a></li>
+            <li><a href="#">Perfil</a></li> <!-- Enlace (aún sin definir) para el perfil del usuario -->
+            <li><a href="#" id="Anomalias-btn">Anomalías</a></li> <!-- Enlace con un botón específico para "Anomalías" -->
         </ul>
     </nav>
     
+    <!-- Sección de bienvenida para el usuario -->
     <section class="bienvenida">
-        <p>Bienvenido</p>
-        <h1>Nombre Usuario</h1>
+        <p>Bienvenido</p> <!-- Mensaje de bienvenida al usuario -->
+        <h1>Nombre Usuario</h1> <!-- Muestra el nombre del usuario (a ser reemplazado por el nombre real) -->
     </section>
 
+    <!-- Sección del reporte semanal del usuario -->
     <section class="reporte-semanal">
+        <!-- Imagen del reporte, con ruta relativa a la ubicación de la imagen -->
         <img src="../assets/images/Familia_Paciente.png" alt="Imagen de familia" class="imagen-reporte">
-        <h2>Tu <br> reporte <br> semanal</h2>
-        <p>Tiempo hasta próxima alarma</p>
-        <p>Hora de próxima alarma</p>
+        <h2>Tu <br> reporte <br> semanal</h2> <!-- Título del reporte, con saltos de línea para la distribución del texto -->
+        <p>Tiempo hasta próxima alarma</p> <!-- Texto indicando el tiempo restante hasta la próxima alarma -->
+        <p>Hora de próxima alarma</p> <!-- Texto indicando la hora de la próxima alarma -->
     </section>
 
+    <!-- Sección con botones de acceso rápido para configurar alarmas -->
     <section class="botones-alarmas">
-        <button>Alarma comidas</button>
-        <button>Alarma Actividad</button>
-        <button>Alarma Toma de Glucosa</button>
+        <button>Alarma comidas</button> <!-- Botón para activar o configurar la alarma de comidas -->
+        <button>Alarma Actividad</button> <!-- Botón para la alarma de actividad física -->
+        <button>Alarma Toma de Glucosa</button> <!-- Botón para la alarma de toma de glucosa -->
     </section>
 </body>
 </html>
