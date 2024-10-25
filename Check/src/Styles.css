@@ -1,0 +1,186 @@
+/* Estilo global para el body, eliminando márgenes y configurando la fuente predeterminada */
+body {
+    margin: 0;
+    font-family: Quando, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f7f7f7;
+}
+
+.bienvenida {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.bienvenida p {
+    font-size: 30px;
+    color: #555;
+}
+
+.bienvenida h1 {
+    font-size: 40px;
+    font-weight: bold;
+    color: #2C2C2C;
+}
+
+.reporte-semanal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.imagen-reporte {
+    width: 300px; /* Ajusta el tamaño de la imagen */
+    border: 3px solid #f45501;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.reporte-semanal h2 {
+    font-size: 36px;
+    color: #3058a6;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.reporte-semanal p {
+    font-size: 18px;
+    color: #555;
+}
+
+.botones-alarmas {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.botones-alarmas button {
+    background-color: #3058a6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.botones-alarmas button:hover {
+    background-color: #f45501;
+}
+
+/* Estilo para la barra de navegación */
+.navbar {
+    background-color: #3058a6; /* Color de fondo azul de la barra */
+    padding: 15px 20px; /* Espacio interno (padding) de la barra */
+    display: flex; /* Muestra los elementos en línea */
+    align-items: center; /* Centra verticalmente los elementos */
+    justify-content: space-between; /* Distribuye el contenido a los extremos */
+    color: rgb(255, 255, 255); /* Color del texto (blanco) */
+}
+
+/* Estilo para el contenedor del "check" */
+.check {
+    display: flex; /* Muestra los elementos en línea */
+    align-items: center; /* Centra verticalmente el contenido */
+    margin-left: 1px; /* Ajusta este valor para mover el "check" horizontalmente */
+}
+
+/* Estilo para ocultar el input tipo checkbox */
+.check input {
+    display: none; /* Oculta la casilla de verificación */
+    margin-right: 1px; /* Espacio a la derecha del input (no se verá por el display: none) */
+}
+
+/* Estilo para la etiqueta del "check" */
+.check label {
+    font-size: 30px; /* Tamaño del texto del "check" */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el texto, indicando que es clicable */
+}
+
+/* Estilo para la lista de enlaces de la barra de navegación */
+.nav-links {
+    list-style: none; /* Elimina los estilos de lista predeterminados (puntos) */
+    display: flex; /* Muestra los elementos en línea */
+    margin: 0; /* Elimina el margen de la lista */
+    padding: 0; /* Elimina el padding de la lista */
+}
+
+/* Estilo para cada ítem de la lista de navegación */
+.nav-links li {
+    margin-left: 20px; /* Espacio entre cada enlace de la barra de navegación */
+}
+
+/* Estilo para los enlaces de la barra de navegación */
+.nav-links a {
+    text-decoration: none; /* Elimina el subrayado de los enlaces */
+    color: rgb(255, 255, 255); /* Color del texto de los enlaces (blanco) */
+    padding: 8px 5px; /* Espacio interno de los enlaces */
+    transition: background-color 0.3s; /* Suaviza el cambio de color de fondo al hacer hover */
+}
+
+/* Estilo cuando el mouse pasa sobre un enlace */
+.nav-links a:hover {
+    background-color: #F45501; /* Cambia el fondo a un color naranja al hacer hover */
+    border-radius: 5px; /* Redondea ligeramente los bordes del fondo del enlace */
+}
+
+/* Estilo para la sección del menú desplegable */
+.dropdown {
+    position: relative; /* Permite que el contenido desplegable se posicione en relación al botón */
+}
+
+/* Estilo para el contenido del menú desplegable */
+.dropdown-content {
+    display: none; /* Oculta el contenido del dropdown por defecto */
+    position: absolute; /* Posiciona el contenido sobre otros elementos */
+    background-color: #3058a6; /* Color de fondo del contenido desplegable */
+    max-width: 150px; /* Ancho máximo del menú desplegable */
+    min-width: 50px; /* Ancho mínimo del menú desplegable */
+    box-shadow: 0px 8px 16px rgba(255, 255, 255, 0.2); /* Sombra para dar un efecto flotante */
+    z-index: 0; /* Controla la superposición del dropdown */
+    list-style: none; /* Elimina los estilos de lista */
+    margin: 0; /* Elimina el margen de la lista */
+    padding: 0; /* Elimina el padding de la lista */
+}
+
+/* Estilo para cada ítem dentro del contenido del menú desplegable */
+.dropdown-content li {
+    margin: 0; /* Elimina el margen entre ítems */
+    padding: 0; /* Elimina el padding entre ítems */
+    border-bottom: 2px solid #ffffff; /* Añade una línea divisoria entre los ítems */
+}
+
+/* Estilo para el último ítem del dropdown (sin línea inferior) */
+.dropdown-content li:last-child {
+    border-bottom: none; /* Elimina la línea divisoria inferior del último ítem */
+}
+
+/* Estilo para los enlaces dentro del contenido del menú desplegable */
+.dropdown-content a {
+    color: rgb(255, 255, 255); /* Color del texto de los ítems (blanco) */
+    padding: 10px; /* Espacio interno de cada ítem */
+    display: block; /* Muestra los ítems en bloque, ocupando todo el ancho */
+    text-decoration: none; /* Elimina el subrayado de los enlaces */
+}
+
+/* Estilo cuando el mouse pasa sobre un ítem del menú desplegable */
+.dropdown-content a:hover {
+    background-color: #F45501; /* Cambia el fondo a naranja al hacer hover */
+}
+
+/* Muestra el contenido del dropdown cuando se pasa el mouse sobre el elemento */
+.dropdown:hover .dropdown-content {
+    display: block; /* Muestra el menú desplegable */
+}
+
+/* Estilo específico para el botón "Anomalías" */
+#Anomalias-btn {
+    background-color: #ffffff; /* Fondo blanco para este botón */
+    color: black; /* Color del texto en negro */
+    border-radius: 10px; /* Bordes redondeados para el botón */
+}
