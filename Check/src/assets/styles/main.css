@@ -1,0 +1,89 @@
+/* styles/main.css */
+
+/* Configuración básica del cuerpo */
+body {
+    margin: 0;
+    font-family: 'Quando', sans-serif; /* Puedes cambiarlo por tu tipografía preferida */
+    background-color: #f0f2f5; /* Color de fondo general */
+    color: #333; /* Color del texto principal */
+    line-height: 1.6;
+}
+
+/* Estilos generales para los títulos */
+h1, h2, h3, h4, h5, h6 {
+    color: #3058a6; /* Color principal para títulos */
+    margin: 0;
+    padding: 10px 0;
+}
+
+/* Estilos para párrafos */
+p {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+/* Configuración general para enlaces */
+a {
+    text-decoration: none;
+    color: #3058a6; /* Color del enlace */
+}
+
+a:hover {
+    color: #F45501; /* Color al pasar el cursor */
+}
+
+/* Configuración básica de botones */
+button {
+    background-color: #3058a6; /* Color de fondo de botones */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #F45501; /* Color de fondo al pasar el cursor */
+}
+
+/* Contenedores principales */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Estilos generales para la barra de navegación */
+.navbar {
+    background-color: #3058a6;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+
+.nav-links a {
+    color: #fff;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.nav-links a:hover {
+    background-color: #F45501;
+}
+
+/* Configuración general para imágenes */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto; /* Centra las imágenes */
+}

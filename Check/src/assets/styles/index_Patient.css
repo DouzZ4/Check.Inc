@@ -2,21 +2,21 @@
 body {
     margin: 0;
     font-family: Quando, sans-serif;
-    display: flex;
+    display: contents;
     flex-direction: column;
-    align-items: left;
+    align-items: center;
     background-color: #f7f7f7;
 }
 
 .bienvenida {
+    display: block;
     text-align: left;
-    padding: 20px;
-    margin-top: 10px;
+    margin-top: 20px;
+    margin: 20px;
 }
 
 .bienvenida p {
-    text-align: left;
-    font-size: 20px;
+    font-size: 30px;
     color: #555;
 }
 
@@ -30,25 +30,22 @@ body {
     display: flex;
     flex-direction: column;
     align-items: left;
-    margin-top: 15px;
+    margin-top: 20px;
     text-align: left;
-    padding: 20px;
+    margin: 20px;
 }
 
 .imagen-reporte {
-    display: block;
-    margin: 0 auto; /* Centra la imagen */
-    width: 100%; /* Ajusta el ancho de la imagen para que ocupe el 80% del contenedor */
-    max-width: 600px; /* Establece un ancho máximo para que no se extienda demasiado */
-    border: 3px solid #f45501; /* Borde naranja */
-    border-radius: 10px; /* Bordes redondeados */
-    height: 300px; /* Mantiene la proporción de la imagen */
+    width: 80%; /* Ajusta el tamaño de la imagen */
+    border: 3px solid #f45501;
+    border-radius: 10px;
+    margin-bottom: 20px;
 }
 
 .reporte-semanal h2 {
     font-size: 36px;
     color: #3058a6;
-    margin: 10;
+    margin: 0;
     line-height: 1.2;
 }
 
@@ -72,7 +69,7 @@ body {
     padding: 10px 20px;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color 0.5s;
+    transition: background-color 0.3s;
 }
 
 .botones-alarmas button:hover {

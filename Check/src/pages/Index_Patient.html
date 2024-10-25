@@ -1,66 +1,47 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <!-- Define el tipo de documento y el idioma de la página -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Inicio - Usuario</title>
-    <!-- Vincula la hoja de estilos CSS externa -->
-    <link rel="stylesheet" href="styles.css">
+    <!-- Vincula los estilos generales y específicos para esta página -->
+    <link rel="stylesheet" href="../assets/styles/main.css">
+    <link rel="stylesheet" href="../assets/styles/index_patient.css">
 </head>
 <body>
-    <!-- Barra de navegación principal -->
     <nav class="navbar">
-        <!-- Contenedor para el "Check" -->
         <div class="check">
-            <!-- Input de tipo checkbox (oculto en CSS) -->
-            <input type="checkbox" id="check">
-            <!-- Label que funciona como el botón visible del "Check" -->
             <label for="check">Check</label>
         </div>
-
-        <!-- Lista de enlaces de navegación -->
         <ul class="nav-links">
-            <!-- Enlace de navegación para la página de inicio -->
-            <li><a href="#">Inicio</a></li>
-            <!-- Enlace de navegación para la página de historial -->
+            <li><a href="index.html">Inicio</a></li>
             <li><a href="#">Historial</a></li>
-
-            <!-- Enlace con menú desplegable para registros -->
             <li class="dropdown">
-                <!-- Botón del menú desplegable de registros -->
                 <a href="#" class="dropdown-btn">Registros</a>
-                <!-- Contenido del menú desplegable -->
                 <ul class="dropdown-content">
-                    <!-- Opciones del menú desplegable -->
                     <li><a href="#">Alarmas</a></li>
                     <li><a href="#">Actividades</a></li>
                     <li><a href="#">Citas</a></li>
                     <li><a href="#">Medicamentos</a></li>
                 </ul>
             </li>
-            
-            <!-- Enlace de navegación para la página de perfil del usuario -->
             <li><a href="#">Perfil</a></li>
-            <!-- Enlace de navegación específico con estilo personalizado para "Anomalías" -->
             <li><a href="#" id="Anomalias-btn">Anomalías</a></li>
         </ul>
     </nav>
-     <!-- Sección de bienvenida -->
-     <section class="bienvenida">
+    
+    <section class="bienvenida">
         <p>Bienvenido</p>
         <h1>Nombre Usuario</h1>
     </section>
 
-    <!-- Sección de reporte semanal -->
     <section class="reporte-semanal">
-        <img src="una familia con un paciente de diabetes.png" alt="Imagen de familia" class="imagen-reporte">
+        <img src="../assets/images/Familia_Paciente.png" alt="Imagen de familia" class="imagen-reporte">
         <h2>Tu <br> reporte <br> semanal</h2>
         <p>Tiempo hasta próxima alarma</p>
         <p>Hora de próxima alarma</p>
     </section>
 
-    <!-- Sección de botones de alarmas -->
     <section class="botones-alarmas">
         <button>Alarma comidas</button>
         <button>Alarma Actividad</button>
