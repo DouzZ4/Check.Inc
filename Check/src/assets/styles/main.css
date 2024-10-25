@@ -3,7 +3,7 @@
 /* Configuración básica del cuerpo */
 body {
     margin: 0;
-    font-family: 'Quando', sans-serif; /* Puedes cambiarlo por tu tipografía preferida */
+    font-family: Quando, bond; /* Puedes cambiarlo por tu tipografía preferida */
     background-color: #f0f2f5; /* Color de fondo general */
     color: #333; /* Color del texto principal */
     line-height: 1.6;

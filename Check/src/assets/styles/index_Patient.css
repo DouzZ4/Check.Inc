@@ -1,7 +1,7 @@
 /* Estilo global para el body, eliminando márgenes y configurando la fuente predeterminada */
 body {
     margin: 0; /* Elimina los márgenes por defecto del body */
-    font-family: Quando, sans-serif; /* Define la fuente predeterminada */
+    font-family: Quando, bond; /* Define la fuente predeterminada */
     display: contents; /* Muestra solo el contenido de los elementos, sin crear un contenedor adicional */
     flex-direction: column; /* Organiza los elementos en columnas (no tiene efecto con display: contents) */
     align-items: center; /* Centra los elementos horizontalmente */
