@@ -1,0 +1,13 @@
+body {
+    margin: 0; /* Elimina los márgenes por defecto del body */
+    font-family: Quando, bond; /* Define la fuente predeterminada */
+    display: contents; /* Muestra solo el contenido de los elementos, sin crear un contenedor adicional */
+    flex-direction: column; /* Organiza los elementos en columnas (no tiene efecto con display: contents) */
+    align-items: center; /* Centra los elementos horizontalmente */
+    background-color: #f7f7f7; /* Color de fondo claro */
+}
+
+.imagen-logo {
+    display: flex;
+    align-items: left;
+}
