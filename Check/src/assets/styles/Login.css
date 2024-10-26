@@ -8,6 +8,9 @@ body {
 }
 
 .imagen-logo {
-    display: flex;
+    display: auto;
     align-items: left;
+    height: 200px;
+    width: 200px;
+    padding: 60px;
 }
