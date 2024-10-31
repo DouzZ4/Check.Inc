@@ -1,268 +1,194 @@
-/* Estilo global para el body, eliminando márgenes y configurando la fuente predeterminada */
+/* Estilo global para el body */
 body {
-    margin: 0; /* Elimina los márgenes por defecto del body */
-    font-family: Quando, bond; /* Define la fuente predeterminada */
-    background-color: white; /* Color de fondo claro */
+    margin: 0;
+    font-family: Quando, bond;
+    background-color: white;
+    max-width: flex;
 }
 
 /* Estilo para la sección de bienvenida */
 .bienvenida {
-    display: block; /* Hace que la sección ocupe toda la línea disponible */
-    text-align: left; /* Alinea el texto a la izquierda */
-    margin: 20px; /* Margen alrededor de toda la sección */
+    margin: 20px;
+    text-align: left;
 }
-
 .bienvenida p {
-    font-size: 1.5em; /* Tamaño del texto */
-    color: #555; /* Color de texto gris */
+    font-size: 1.5em;
+    color: #555;
+}
+.bienvenida h1 {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #2C2C2C;
 }
 
-.bienvenida h1 {
-    font-size: 2.5em; /* Tamaño del título */
-    font-weight: bold; /* Negrita para el texto */
-    color: #2C2C2C; /* Color del texto */
+#Anomalias-btn {
+    background-color: white;
+    color: black;
 }
 
 /* Estilo para la sección del reporte semanal */
 .reporte-semanal {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra horizontalmente el contenido */
+    align-items: center;
     margin: 20px;
-    width: 100%;
-    text-align: center; /* Centra el texto también */
+    width: 80%;
+    max-width: 1000px;
+    text-align: center;
 }
-
 .imagen-reporte {
-    width: auto; /* Ajuste automático del ancho */
-    max-width: 80%; /* Limita el ancho al 80% del contenedor */
-    height: auto; /* Altura automática */
+    max-width: 80%;
     border: 3px solid #f45501;
     border-radius: 10px;
     margin-bottom: 20px;
 }
-
 .Text-reporte {
-    text-align: left;
-    font-size: 2em; /* Tamaño del subtítulo */
-    color: #3058a6; /* Color azul del texto */
-    margin: 20px; /* Elimina el margen */
-}
-
-/* Estilo para los botones de alarmas */
-.botones-alarmas {
-    display: contents; /* Muestra los botones en línea */
-    justify-content: center; /* Centra los botones horizontalmente */
-    gap: 10px; /* Espacio entre los botones */
-    margin-top: 20px; /* Margen superior */
-}
-
-.botones-alarmas button {
-    background-color: #3058a6; /* Fondo azul */
-    color: white; /* Texto en blanco */
-    border: none; /* Sin borde */
-    border-radius: 5px; /* Bordes redondeados */
-    padding: 10px 15px; /* Espacio interno del botón */
-    cursor: pointer; /* Cambia el cursor a puntero al pasar por encima */
-    font-size: 1em; /* Tamaño del texto */
-    transition: background-color 0.3s; /* Suaviza el cambio de color del fondo */
-}
-
-.botones-alarmas button:hover {
-    background-color: #f45501; /* Cambia el fondo a color naranja al hacer hover */
-}
-
-/* Estilo para la barra de navegación */
-.navbar {
-    background-color: #3058a6; /* Fondo azul de la barra */
-    padding: 15px; /* Espacio interno de la barra */
-    display: flex; /* Muestra los elementos en línea */
-    align-items: center; /* Centra verticalmente los elementos */
-    justify-content: space-between; /* Distribuye el contenido de forma uniforme */
-    color: rgb(255, 255, 255); /* Texto en blanco */
+    font-size: 2em;
+    color: #3058a6;
+    margin: 20px;
 }
 
 /* Estilo para el contenedor de alarmas */
 .contenedor-alarma {
-    display: flex, row;
-    flex-wrap: wrap; /* Permite que los contadores se ajusten en dos columnas */
-    justify-content: center;
-    gap: 20px; /* Espacio entre los contadores */
-    padding: 20px;
+    display: flex;
+    justify-content: row;
+    gap: 10px;
+    padding: 10px;
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
-    max-width: flex;
+    max-width: 800px;
     margin: 20px auto;
 }
 
 .contador {
-    width: 48%; /* Ocupa casi la mitad del contenedor */
+    flex: 1;
+    font-size: 1em;
     background-color: #f0f0f0;
-    padding: 10px;
-    border-radius: 10px;
+    padding: 5px;
+    border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
-
-
 .contador h2 {
-    font-size: 1.5em; /* Tamaño del título del contador */
+    font-size: 0.5em;
     color: #333;
     margin-bottom: 10px;
 }
 
 .contador-grupo {
     display: flex;
-    gap: 4px;
+    justify-content: center;
+    align-items: center;
 }
 
 .digito {
+    width: 15px;
+    height: 25px;
+    background-color: #f45501;
+    color: white;
+    margin: 0 2px;
+    padding: 1px 5px;
+    font-size: 1em;
+    border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 25px; /* Ancho más pequeño */
-    height: 35px; /* Alto más pequeño */
-    background-color: #f45501;
-    color: white;
-    font-size: 1.3em; /* Tamaño de la fuente más grande */
-    border-radius: 5px;
-    box-shadow: inset 0px 0px 4px rgba(255, 255, 255, 0.3);
 }
 
 .separador {
-    font-size: 1.0em; /* Tamaño del separador */
+    font-size: 1em;
+    margin: 0px;
     color: #3058a6;
-    padding: 0 4px;
+    padding: 0px;
 }
 
-/* Estilo para el contenedor del "check" (checkbox) */
-.check {
-    display: flex; /* Muestra los elementos en línea */
-    align-items: center; /* Centra verticalmente el contenido */
-    margin-left: 1px; /* Ajusta el margen izquierdo */
+/* Estilo para los botones de alarmas */
+.botones-alarmas {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    
 }
 
-/* Oculta el input tipo checkbox */
-.check input {
-    display: none; /* Oculta la casilla de verificación */
-    margin-right: 1px; /* Espacio a la derecha del input */
+button {
+    background-color: #3058a6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
 }
 
-/* Estilo para la etiqueta del "check" */
-.check label {
-    font-size: 30px; /* Tamaño del texto de la etiqueta */
-    cursor: pointer; /* Cambia el cursor a puntero al pasar por encima */
-}
-#Anomalias-btn {
-    background-color: #f7f7f7;
-    color: #2C2C2C;
-
-
+button:hover {
+    background-color: #f45501;
 }
 
-/* Estilo para la lista de enlaces de la barra de navegación */
+/* Estilo para la barra de navegación */
+.navbar {
+    background-color: #3058a6;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+}
+
 .nav-links {
-    list-style: none; /* Elimina el estilo de lista (sin viñetas) */
-    display: flex; /* Muestra los elementos en línea */
-    margin: 0; /* Elimina el margen de la lista */
-    padding: 0; /* Elimina el padding de la lista */
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
 }
-
-/* Estilo para cada ítem de la lista de navegación */
 .nav-links li {
-    margin-left: 20px; /* Espacio entre cada enlace */
+    margin-left: 20px;
 }
-
-/* Estilo para los enlaces de la barra de navegación */
 .nav-links a {
-    text-decoration: none; /* Elimina el subrayado de los enlaces */
-    color: rgb(255, 255, 255); /* Color blanco para el texto */
-    padding: 8px 5px; /* Espacio interno de los enlaces */
-    transition: background-color 0.3s; /* Suaviza el cambio de color al hacer hover */
+    text-decoration: none;
+    color: white;
+    padding: 8px 5px;
+    transition: background-color 0.3s;
 }
-
-/* Cambia el fondo a naranja al pasar sobre un enlace */
 .nav-links a:hover {
-    background-color: #F45501; /* Fondo naranja */
-    border-radius: 5px; /* Redondea ligeramente los bordes */
+    background-color: #F45501;
+    border-radius: 5px;
 }
 
-/* Estilo para la sección del menú desplegable */
+/* Menú desplegable */
 .dropdown {
-    position: relative; /* Posiciona el contenido relativo al botón */
+    position: relative;
 }
-
-/* Estilo para el contenido del menú desplegable */
 .dropdown-content {
-    display: none; /* Oculta el contenido por defecto */
-    position: absolute; /* Posiciona el contenido sobre otros elementos */
-    background-color: #3058a6; /* Fondo azul */
-    max-width: 150px; /* Ancho máximo */
-    min-width: 50px; /* Ancho mínimo */
-    box-shadow: 0px 8px 16px rgba(255, 255, 255, 0.2); /* Sombra para dar efecto de profundidad */
-    z-index: 0; /* Controla la superposición del menú */
-    list-style: none; /* Elimina el estilo de lista */
-    margin: 0; /* Elimina el margen */
-    padding: 0; /* Elimina el padding */
+    display: none;
+    position: absolute;
+    background-color: #3058a6;
+    box-shadow: 0px 8px 16px rgba(255, 255, 255, 0.2);
+    z-index: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
-
-/* Estilo para cada ítem dentro del menú desplegable */
 .dropdown-content li {
-    margin: 0; /* Elimina el margen entre ítems */
-    padding: 0; /* Elimina el padding entre ítems */
-    border-bottom: 2px solid #ffffff; /* Línea divisoria entre ítems */
+    padding: 0;
+    border-bottom: 2px solid #ffffff;
 }
-
-/* Elimina la línea inferior del último ítem */
 .dropdown-content li:last-child {
-    border-bottom: none; /* Sin borde inferior */
+    border-bottom: none;
 }
-
-/* Estilo para los enlaces dentro del contenido del menú desplegable */
 .dropdown-content a {
-    color: rgb(255, 255, 255); /* Texto blanco */
-    padding: 10px; /* Espacio interno de cada ítem */
-    display: block; /* Ocupa todo el ancho */
-    text-decoration: none; /* Sin subrayado */
+    color: white;
+    padding: 10px;
+    display: block;
+    text-decoration: none;
 }
-
-/* Cambia el fondo a naranja al pasar sobre un ítem */
 .dropdown-content a:hover {
-    background-color: #F45501; /* Fondo naranja */
+    background-color: #F45501;
 }
-
-/* Muestra el contenido del dropdown al pasar el mouse */
 .dropdown:hover .dropdown-content {
-    display: block; /* Muestra el menú */
+    display: block;
 }
 
-       /* Agregar estilo adicional para los contadores */
-       .contenedor-alarma {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 20px 0;
-    }
-    .contador {
-        background-color: #f0f0f0;
-        padding: 10px; /* Ajustar padding */
-        border-radius: 10px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-        margin: 10px 0;
-        font-size: 1.5rem; /* Ajustar tamaño de fuente */
-    }
-    .contador-grupo {
-        display: flex;
-        font-size: 1.5rem; /* Ajustar tamaño de fuente */
-    }
-    .separador {
-        margin: 0 5px; /* Ajustar el margen del separador */
-    }
-    .botones-alarmas {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-bottom: 20px;
-    }
