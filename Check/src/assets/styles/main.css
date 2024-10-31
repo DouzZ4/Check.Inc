@@ -3,7 +3,7 @@
 /* Configuración básica del cuerpo */
 body {
     margin: 0;
-    font-family: Quando, bond; /* Puedes cambiarlo por tu tipografía preferida */
+    font-family: Quando, bond !important; /* Puedes cambiarlo por tu tipografía preferida */
     background-color: #f0f2f5; /* Color de fondo general */
     color: #333; /* Color del texto principal */
     line-height: 1.6;
@@ -56,28 +56,33 @@ button:hover {
 
 /* Estilos generales para la barra de navegación */
 .navbar {
+    
     background-color: #3058a6;
-    padding: 10px 20px;
+    padding: 15px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color: #fff;
+    color: white;
 }
 
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 15px;
+    margin: 0;
+    padding: 0;
 }
-
+.nav-links li {
+    margin-left: 20px;
+}
 .nav-links a {
-    color: #fff;
-    padding: 8px;
-    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    padding: 8px 5px;
+    transition: background-color 0.3s;
 }
-
 .nav-links a:hover {
     background-color: #F45501;
+    border-radius: 5px;
 }
 
 /* Configuración general para imágenes */
