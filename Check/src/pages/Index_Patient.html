@@ -1,117 +1,178 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8"> <!-- Define el conjunto de caracteres como UTF-8, permitiendo el uso de caracteres especiales -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Hace la página responsive para dispositivos móviles -->
-    <title>Página de Inicio - Usuario</title> <!-- Título que aparecerá en la pestaña del navegador -->
-    
-    <!-- Vincula los estilos generales y específicos para esta página -->
-    <link rel="stylesheet" href="../assets/styles/main.css"> <!-- Estilos generales del sitio web -->
-    <link rel="stylesheet" href="../assets/styles/index_patient.css"> <!-- Estilos específicos para esta página -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Inicio - Usuario</title>
+    <link rel="stylesheet" href="../assets/styles/main.css">
+    <link rel="stylesheet" href="../assets/styles/index_patient.css">
+    <style>
+        /* Agregar estilo adicional para los contadores */
+        .contenedor-alarma {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .contador {
+            background-color: #f0f0f0;
+            padding: 10px; /* Ajustar padding */
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            margin: 10px 0;
+            font-size: 1.5rem; /* Ajustar tamaño de fuente */
+        }
+        .contador-grupo {
+            display: flex;
+            font-size: 1.5rem; /* Ajustar tamaño de fuente */
+        }
+        .separador {
+            margin: 0 5px; /* Ajustar el margen del separador */
+        }
+        .botones-alarmas {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
     <!-- Barra de navegación principal -->
     <nav class="navbar">
-        <!-- Contenedor para el "check" -->
         <div class="check">
-            <label for="check">CHECK</label> <!-- Etiqueta de texto para el "check" (posiblemente para un checkbox o similar) -->
+            <label for="check">CHECK</label>
         </div>
         
-        <!-- Lista de enlaces de la barra de navegación -->
         <ul class="nav-links">
-            <li><a href="index.html">Inicio</a></li> <!-- Enlace a la página de inicio -->
-            <li><a href="#">Historial</a></li> <!-- Enlace (aún sin definir) para el historial -->
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="#">Historial</a></li>
             <li class="dropdown">
-                <a href="#" class="dropdown-btn">Registros</a> <!-- Botón que despliega el menú de registros -->
+                <a href="#" class="dropdown-btn">Registros</a>
                 <ul class="dropdown-content">
-                    <!-- Contenido del menú desplegable, cada enlace lleva a una sección diferente -->
                     <li><a href="#">Alarmas</a></li> 
                     <li><a href="#">Actividades</a></li>
                     <li><a href="#">Citas</a></li>
                     <li><a href="#">Medicamentos</a></li>
                 </ul>
             </li>
-            <li><a href="#">Perfil</a></li> <!-- Enlace (aún sin definir) para el perfil del usuario -->
-            <li><a href="#" id="Anomalias-btn">Anomalías</a></li> <!-- Enlace con un botón específico para "Anomalías" -->
+            <li><a href="#">Perfil</a></li>
+            <li><a href="#" id="Anomalias-btn">Anomalias</a></li>
         </ul>
     </nav>
     
     <!-- Sección de bienvenida para el usuario -->
     <section class="bienvenida">
-        <p>Bienvenido</p> <!-- Mensaje de bienvenida al usuario -->
-        <h1>Nombre Usuario</h1> <!-- Muestra el nombre del usuario (a ser reemplazado por el nombre real) -->
+        <p>Bienvenido</p>
+        <h1>Nombre Usuario</h1>
     </section>
 
     <!-- Sección del reporte semanal del usuario -->
     <section class="reporte-semanal">
-        <!-- Imagen del reporte, con ruta relativa a la ubicación de la imagen -->
         <img src="../assets/images/Familia_Paciente.png" alt="Imagen de familia" class="imagen-reporte">
-        <h2>Tu <br> reporte <br> semanal</h2> <!-- Título del reporte, con saltos de línea para la distribución del texto -->
-        <p>Tiempo hasta próxima alarma</p> <!-- Texto indicando el tiempo restante hasta la próxima alarma -->
-        <p>Hora de próxima alarma</p> <!-- Texto indicando la hora de la próxima alarma -->
+        <h2>Tu <br> reporte <br> semanal</h2>
     </section>
-        <!-- Contenedor del contador -->
-        <div class="contador">
+    
+    <!-- Contenedor de contadores -->
+    <div class="contenedor-alarma">
+        <!-- Primer contador de alarmas -->
+        <div class="contador" id="contador-alarma-1">
             <h2>Tiempo hasta la próxima alarma:</h2>
-            <div class="contador-grupo" id="horas">
-                <div class="digito" id="horas-unidad">0</div>
-                <div class="digito" id="horas-decena">0</div>
-            </div>
-            <span class="separador">:</span>
-            <div class="contador-grupo" id="minutos">
-                <div class="digito" id="minutos-decena">0</div>
-                <div class="digito" id="minutos-unidad">0</div>
-            </div>
-            <span class="separador">:</span>
-            <div class="contador-grupo" id="segundos">
-                <div class="digito" id="segundos-decena">0</div>
-                <div class="digito" id="segundos-unidad">0</div>
+            <div class="contador-grupo">
+                <div class="digito" id="horas-decena-1">0</div>
+                <div class="digito" id="horas-unidad-1">0</div>
+                <span class="separador">:</span>
+                <div class="digito" id="minutos-decena-1">0</div>
+                <div class="digito" id="minutos-unidad-1">0</div>
+                <span class="separador">:</span>
+                <div class="digito" id="segundos-decena-1">0</div>
+                <div class="digito" id="segundos-unidad-1">0</div>
             </div>
         </div>
-    
-        <!-- JavaScript para el contador -->
-        <script>
-            // Duración en segundos (por ejemplo, 1 hora = 3600 segundos)
-            let duracion = 3600;
-    
-            const horasUnidad = document.getElementById("horas-unidad");
-            const horasDecena = document.getElementById("horas-decena");
-            const minutosUnidad = document.getElementById("minutos-unidad");
-            const minutosDecena = document.getElementById("minutos-decena");
-            const segundosUnidad = document.getElementById("segundos-unidad");
-            const segundosDecena = document.getElementById("segundos-decena");
-    
-            const iniciarContador = () => {
-                const intervalo = setInterval(() => {
-                    let horas = Math.floor(duracion / 3600);
-                    let minutos = Math.floor((duracion % 3600) / 60);
-                    let segundos = duracion % 60;
-    
-                    // Asigna cada dígito a su respectivo recuadro
-                    horasDecena.textContent = Math.floor(horas / 10);
-                    horasUnidad.textContent = horas % 10;
-                    minutosDecena.textContent = Math.floor(minutos / 10);
-                    minutosUnidad.textContent = minutos % 10;
-                    segundosDecena.textContent = Math.floor(segundos / 10);
-                    segundosUnidad.textContent = segundos % 10;
-    
-                    duracion--;
-    
-                    if (duracion < 0) {
-                        clearInterval(intervalo);
-                        alert("¡Es hora de tu alarma!");
-                    }
-                }, 1000);
-            };
-    
-            iniciarContador();
-        </script>
 
-    <!-- Sección con botones de acceso rápido para configurar alarmas -->
-    <section class="botones-alarmas">
-        <button>Alarma comidas</button> <!-- Botón para activar o configurar la alarma de comidas -->
-        <button>Alarma Actividad</button> <!-- Botón para la alarma de actividad física -->
-        <button>Alarma Toma de Glucosa</button> <!-- Botón para la alarma de toma de glucosa -->
-    </section>
+        <!-- Botones de alarmas para el primer contador -->
+        <section class="botones-alarmas">
+            <button data-duration="7200" data-contador="1">Alarma comidas</button>
+            <button data-duration="3600" data-contador="1">Alarma Toma de Glucosa</button>
+        </section>
+
+        <!-- Segundo contador de alarmas -->
+        <div class="contador" id="contador-alarma-2">
+            <h2>Tiempo hasta la próxima alarma 2:</h2>
+            <div class="contador-grupo">
+                <div class="digito" id="horas-decena-2">0</div>
+                <div class="digito" id="horas-unidad-2">0</div>
+                <span class="separador">:</span>
+                <div class="digito" id="minutos-decena-2">0</div>
+                <div class="digito" id="minutos-unidad-2">0</div>
+                <span class="separador">:</span>
+                <div class="digito" id="segundos-decena-2">0</div>
+                <div class="digito" id="segundos-unidad-2">0</div>
+            </div>
+        </div>
+
+        <!-- Botones de alarmas para el segundo contador -->
+        <section class="botones-alarmas">
+            <button data-duration="1800" data-contador="2">Alarma Actividad</button>
+            <button data-duration="5400" data-contador="2">Alarma Ejercicio</button>
+        </section>
+    </div>
+
+    <script>
+        let intervalosAlarma = [null, null];  // Almacena los intervalos de las alarmas actuales
+
+        // Actualiza el contador con la duración indicada
+        function actualizarContador(duracion, contadorIndex) {
+            const horasDecena = document.getElementById(`horas-decena-${contadorIndex}`);
+            const horasUnidad = document.getElementById(`horas-unidad-${contadorIndex}`);
+            const minutosDecena = document.getElementById(`minutos-decena-${contadorIndex}`);
+            const minutosUnidad = document.getElementById(`minutos-unidad-${contadorIndex}`);
+            const segundosDecena = document.getElementById(`segundos-decena-${contadorIndex}`);
+            const segundosUnidad = document.getElementById(`segundos-unidad-${contadorIndex}`);
+
+            const actualizarPantalla = () => {
+                let horas = Math.floor(duracion / 3600);
+                let minutos = Math.floor((duracion % 3600) / 60);
+                let segundos = duracion % 60;
+                
+                horasDecena.textContent = Math.floor(horas / 10);
+                horasUnidad.textContent = horas % 10;
+                minutosDecena.textContent = Math.floor(minutos / 10);
+                minutosUnidad.textContent = minutos % 10;
+                segundosDecena.textContent = Math.floor(segundos / 10);
+                segundosUnidad.textContent = segundos % 10;
+
+                if (duracion <= 0) {
+                    clearInterval(intervalosAlarma[contadorIndex - 1]);
+                    // Opcional: Resetear contadores
+                    horasDecena.textContent = '0';
+                    horasUnidad.textContent = '0';
+                    minutosDecena.textContent = '0';
+                    minutosUnidad.textContent = '0';
+                    segundosDecena.textContent = '0';
+                    segundosUnidad.textContent = '0';
+                }
+                duracion--;
+            };
+
+            clearInterval(intervalosAlarma[contadorIndex - 1]);  // Limpia cualquier alarma previa
+            actualizarPantalla();  // Actualiza la primera vez inmediatamente
+            intervalosAlarma[contadorIndex - 1] = setInterval(actualizarPantalla, 1000);  // Configura el intervalo
+        }
+
+        // Cambia la duración de la alarma al hacer clic en un botón
+        document.querySelectorAll('.botones-alarmas button').forEach(button => {
+            button.addEventListener('click', () => {
+                const duracion = parseInt(button.getAttribute('data-duration'));
+                const contadorIndex = parseInt(button.getAttribute('data-contador'));
+                actualizarContador(duracion, contadorIndex);
+                
+                // Estilo visual para el botón activo
+                document.querySelectorAll('.botones-alarmas button').forEach(btn => btn.style.backgroundColor = '#3058a6');
+                button.style.backgroundColor = '#f45501';
+            });
+        });
+    </script>
+
 </body>
 </html>

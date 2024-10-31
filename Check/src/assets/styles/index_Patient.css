@@ -2,9 +2,6 @@
 body {
     margin: 0; /* Elimina los márgenes por defecto del body */
     font-family: Quando, bond; /* Define la fuente predeterminada */
-    display: contents; /* Muestra solo el contenido de los elementos, sin crear un contenedor adicional */
-    flex-direction: column; /* Organiza los elementos en columnas (no tiene efecto con display: contents) */
-    align-items: center; /* Centra los elementos horizontalmente */
     background-color: #f7f7f7; /* Color de fondo claro */
 }
 
@@ -12,50 +9,44 @@ body {
 .bienvenida {
     display: block; /* Hace que la sección ocupe toda la línea disponible */
     text-align: left; /* Alinea el texto a la izquierda */
-    margin-top: 20px; /* Margen superior */
     margin: 20px; /* Margen alrededor de toda la sección */
 }
 
 .bienvenida p {
-    font-size: 30px; /* Tamaño del texto */
+    font-size: 1.5em; /* Tamaño del texto */
     color: #555; /* Color de texto gris */
 }
 
 .bienvenida h1 {
-    font-size: 40px; /* Tamaño del título */
+    font-size: 2.5em; /* Tamaño del título */
     font-weight: bold; /* Negrita para el texto */
     color: #2C2C2C; /* Color del texto */
 }
 
 /* Estilo para la sección del reporte semanal */
 .reporte-semanal {
-    display: flex; /* Hace que los elementos hijos se organicen en línea o columna */
-    flex-direction: column; /* Organiza los elementos en una columna */
-    align-items: left; /* Alinea los elementos a la izquierda */
-    margin-top: 20px; /* Margen superior */
-    text-align: left; /* Alinea el texto a la izquierda */
-    margin: 20px; /* Margen alrededor de toda la sección */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra horizontalmente el contenido */
+    margin: 20px;
+    width: 100%;
+    text-align: center; /* Centra el texto también */
 }
 
 .imagen-reporte {
-    justify-content: center;
-    width: 1000px; /* Ajusta el tamaño de la imagen al 80% del contenedor */
-    height: 400px;
-    border: 3px solid #f45501; /* Borde con color naranja */
-    border-radius: 10px; /* Bordes redondeados */
-    margin-bottom: 20px; /* Margen inferior */
+    width: auto; /* Ajuste automático del ancho */
+    max-width: 80%; /* Limita el ancho al 80% del contenedor */
+    height: auto; /* Altura automática */
+    border: 3px solid #f45501;
+    border-radius: 10px;
+    margin-bottom: 20px;
 }
 
 .reporte-semanal h2 {
-    font-size: 36px; /* Tamaño del subtítulo */
+    text-align: left;
+    font-size: 2em; /* Tamaño del subtítulo */
     color: #3058a6; /* Color azul del texto */
     margin: 0; /* Elimina el margen */
-    line-height: 1.2; /* Altura de línea */
-}
-
-.reporte-semanal p {
-    font-size: 18px; /* Tamaño del texto del párrafo */
-    color: #555; /* Color de texto gris */
 }
 
 /* Estilo para los botones de alarmas */
@@ -71,9 +62,9 @@ body {
     color: white; /* Texto en blanco */
     border: none; /* Sin borde */
     border-radius: 5px; /* Bordes redondeados */
-    padding: 10px 20px; /* Espacio interno del botón */
+    padding: 10px 15px; /* Espacio interno del botón */
     cursor: pointer; /* Cambia el cursor a puntero al pasar por encima */
-    font-size: 14px; /* Tamaño del texto */
+    font-size: 1em; /* Tamaño del texto */
     transition: background-color 0.3s; /* Suaviza el cambio de color del fondo */
 }
 
@@ -84,11 +75,64 @@ body {
 /* Estilo para la barra de navegación */
 .navbar {
     background-color: #3058a6; /* Fondo azul de la barra */
-    padding: 15px 20px; /* Espacio interno de la barra */
+    padding: 15px; /* Espacio interno de la barra */
     display: flex; /* Muestra los elementos en línea */
     align-items: center; /* Centra verticalmente los elementos */
     justify-content: space-between; /* Distribuye el contenido de forma uniforme */
     color: rgb(255, 255, 255); /* Texto en blanco */
+}
+
+/* Estilo para el contenedor de alarmas */
+.contenedor-alarma {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se ajusten si es necesario */
+    justify-content: center; /* Centra el contenedor */
+    align-items: flex-start;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+    max-width: flex; /* Limita el ancho total del contenedor */
+    margin: 20px auto; /* Centra el contenedor en la página */
+}
+
+/* Contador */
+.contador {
+    flex: 1 1 200px; /* Tamaño más pequeño para el contador */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+}
+
+.contador h2 {
+    font-size: 1.5em; /* Tamaño del título del contador */
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.contador-grupo {
+    display: flex;
+    gap: 4px;
+}
+
+.digito {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px; /* Ancho más pequeño */
+    height: 35px; /* Alto más pequeño */
+    background-color: #f45501;
+    color: white;
+    font-size: 1.3em; /* Tamaño de la fuente más grande */
+    border-radius: 5px;
+    box-shadow: inset 0px 0px 4px rgba(255, 255, 255, 0.3);
+}
+
+.separador {
+    font-size: 1.0em; /* Tamaño del separador */
+    color: #3058a6;
+    padding: 0 4px;
 }
 
 /* Estilo para el contenedor del "check" (checkbox) */
@@ -108,6 +152,12 @@ body {
 .check label {
     font-size: 30px; /* Tamaño del texto de la etiqueta */
     cursor: pointer; /* Cambia el cursor a puntero al pasar por encima */
+}
+#Anomalias-btn {
+    background-color: #f7f7f7;
+    color: #2C2C2C;
+
+
 }
 
 /* Estilo para la lista de enlaces de la barra de navegación */
@@ -186,62 +236,3 @@ body {
     display: block; /* Muestra el menú */
 }
 
-/* Estilo específico para el botón "Anomalías" */
-#Anomalias-btn {
-    background-color: #ffffff; /* Fondo blanco */
-    color: black; /* Texto negro */
-    border-radius: 10px; /* Bordes redondeados */
-}
-
-/* Contenedor general del contador */
-.contador {
-    text-align: center;
-    margin-top: 30px;
-    font-family: 'Roboto', sans-serif;
-    color: #3058a6;
-}
-
-/* Estilos para el título del contador */
-.contador h2 {
-    font-size: 1.8em;
-    color: #2C3E50;
-    margin-bottom: 10px;
-    font-weight: 300;
-}
-
-/* Contenedor de cada dígito individual */
-.digito {
-    font-size: 2.5em;
-    font-weight: bold;
-    color: #F45501;
-    background-color: #ffffff;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    margin: 2px;
-    display: inline-block;
-    width: 1.5em;
-    text-align: center;
-}
-
-/* Contenedor para agrupar dígitos en horas, minutos y segundos */
-.contador-grupo {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 5px;
-}
-
-/* Efecto de parpadeo en los dos puntos ":" */
-.separador {
-    font-size: 2em;
-    margin: 0 5px;
-    animation: blink 1s step-end infinite;
-}
-
-/* Animación para el parpadeo */
-@keyframes blink {
-    50% {
-        opacity: 0;
-    }
-}
