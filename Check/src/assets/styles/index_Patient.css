@@ -38,7 +38,8 @@ body {
 }
 
 .imagen-reporte {
-    width: 80%; /* Ajusta el tamaño de la imagen al 80% del contenedor */
+    width: 800px; /* Ajusta el tamaño de la imagen al 80% del contenedor */
+    height: 400px;
     border: 3px solid #f45501; /* Borde con color naranja */
     border-radius: 10px; /* Bordes redondeados */
     margin-bottom: 20px; /* Margen inferior */
