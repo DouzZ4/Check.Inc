@@ -2,7 +2,7 @@
 body {
     margin: 0; /* Elimina los márgenes por defecto del body */
     font-family: Quando, bond; /* Define la fuente predeterminada */
-    background-color: #f7f7f7; /* Color de fondo claro */
+    background-color: white; /* Color de fondo claro */
 }
 
 /* Estilo para la sección de bienvenida */
@@ -42,16 +42,16 @@ body {
     margin-bottom: 20px;
 }
 
-.reporte-semanal h2 {
+.Text-reporte {
     text-align: left;
     font-size: 2em; /* Tamaño del subtítulo */
     color: #3058a6; /* Color azul del texto */
-    margin: 0; /* Elimina el margen */
+    margin: 20px; /* Elimina el margen */
 }
 
 /* Estilo para los botones de alarmas */
 .botones-alarmas {
-    display: flex; /* Muestra los botones en línea */
+    display: contents; /* Muestra los botones en línea */
     justify-content: center; /* Centra los botones horizontalmente */
     gap: 10px; /* Espacio entre los botones */
     margin-top: 20px; /* Margen superior */
@@ -84,26 +84,28 @@ body {
 
 /* Estilo para el contenedor de alarmas */
 .contenedor-alarma {
-    display: flex;
-    flex-wrap: wrap; /* Permite que los elementos se ajusten si es necesario */
-    justify-content: center; /* Centra el contenedor */
-    align-items: flex-start;
+    display: flex, row;
+    flex-wrap: wrap; /* Permite que los contadores se ajusten en dos columnas */
+    justify-content: center;
+    gap: 20px; /* Espacio entre los contadores */
     padding: 20px;
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
-    max-width: flex; /* Limita el ancho total del contenedor */
-    margin: 20px auto; /* Centra el contenedor en la página */
+    max-width: flex;
+    margin: 20px auto;
 }
 
-/* Contador */
 .contador {
-    flex: 1 1 200px; /* Tamaño más pequeño para el contador */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 10px;
+    width: 48%; /* Ocupa casi la mitad del contenedor */
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
+
+
 
 .contador h2 {
     font-size: 1.5em; /* Tamaño del título del contador */
@@ -236,3 +238,31 @@ body {
     display: block; /* Muestra el menú */
 }
 
+       /* Agregar estilo adicional para los contadores */
+       .contenedor-alarma {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 20px 0;
+    }
+    .contador {
+        background-color: #f0f0f0;
+        padding: 10px; /* Ajustar padding */
+        border-radius: 10px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        margin: 10px 0;
+        font-size: 1.5rem; /* Ajustar tamaño de fuente */
+    }
+    .contador-grupo {
+        display: flex;
+        font-size: 1.5rem; /* Ajustar tamaño de fuente */
+    }
+    .separador {
+        margin: 0 5px; /* Ajustar el margen del separador */
+    }
+    .botones-alarmas {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
