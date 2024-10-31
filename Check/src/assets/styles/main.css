@@ -81,7 +81,7 @@ button:hover {
 }
 
 /* Configuración general para imágenes */
-img {
+.img {
     max-width: 100%;
     height: auto;
     display: block;
