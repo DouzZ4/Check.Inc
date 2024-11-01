@@ -1,8 +1,11 @@
 /* styles/main.css */
 
 /* Configuración básica del cuerpo */
+@media screen {
+    
+
 body {
-    margin: 0;
+    margin: 0; 
     font-family: Quando, bond !important; /* Puedes cambiarlo por tu tipografía preferida */
     background-color: #f0f2f5; /* Color de fondo general */
     color: #333; /* Color del texto principal */
@@ -91,4 +94,5 @@ button:hover {
     height: auto;
     display: block;
     margin: 0 auto; /* Centra las imágenes */
+}
 }
