@@ -1,0 +1,250 @@
+.body {
+    margin: 0; /* Elimina los márgenes por defecto del body */
+    font-family: Quando, bond; /* Define la fuente predeterminada */
+    display: contents; /* Muestra solo el contenido de los elementos, sin crear un contenedor adicional */
+    flex-direction: column; /* Organiza los elementos en columnas (no tiene efecto con display: contents) */
+    align-items: center; /* Centra los elementos horizontalmente */
+    background-color: #f7f7f7; /* Color de fondo claro */
+}
+
+
+.icono {
+    display: auto;
+    height: auto;
+    width: 350px;
+    padding: 60px;
+}
+
+#Ingresar {
+    background-color: white;
+    color: black;
+    border-radius: 10px;
+}
+
+#check {
+    font-size: 30px;
+}
+
+.contenedor {
+    background-color: #ebebeba5;
+}
+.sub-contenedor {
+    display: flex;
+    align-items: center;
+    margin: 10px 180px;
+}
+
+.Che {
+    font-size: 42px;
+}
+
+.leyenda {
+    color: #888888;
+    font-size: 25px;
+    
+}
+.button-mas {
+    font-family: quando;
+    background-color: black;
+    font-size: 12,5px;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.button-mas:hover {
+    background-color: #F45501;
+    color: white;
+}
+
+.titulo-testi, .ben {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    font-size: 60px;
+    font-weight: normal;
+    padding: 100px;
+}
+
+.testi {
+    background-color: white;
+    width: 280px;
+    height: auto;
+    border-radius: 16px;
+    margin: 0 30px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.icon {
+    display: flex;
+    width: 100%; 
+    align-items: center;
+    margin-bottom: 20px; 
+}
+
+.icon img {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    margin-right: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.ic p {
+    color: black;
+    font-family: Quando;
+    margin: 0;
+    font-size: 25px;
+}
+
+#arroba {
+    color: #888888;
+    font-size: 18px;
+}
+
+.testimonios-com {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+.contenedoracordeon {
+    padding: 80px;
+}
+
+.acordeon {
+    justify-content: center;
+    width: 60%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: quando;
+    background-color: #ebebeba5;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    margin: 0 auto;
+}
+
+details {
+    font-family: quando;
+    font-weight: normal;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 0;
+    cursor: pointer;
+}
+
+details:last-child {
+    border-bottom: none;
+}
+
+summary {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    color: #1a1a1a;
+    outline: none;
+    padding: 10px;
+    list-style: none;
+}
+
+summary::before {
+    content: "+";
+    font-size: 1.8rem;
+    color: rgb(104, 104, 104);
+    margin-right: 10px;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+
+details[open] summary::before {
+    transform: rotate(45deg);
+}
+
+summary h3 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: black;
+}
+
+.contenido1 {
+    padding: 10px;
+    background-color: #ebebeba5;
+    font-size: 20px;
+    color: #888888;
+}
+
+details[open] summary {
+    background-color: #ebebeba5;
+}
+
+.descargar {
+    background-color: #ebebeba5;
+    display: flex;
+    justify-content: center;
+    padding-top: 60px;
+}
+
+.imagen1 {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 400px;
+}
+
+.descargar div {
+    padding: 20px;
+}
+
+.div1 {
+    justify-content: left;
+    align-content: center;
+    width: 500px;
+}
+
+.Empieza {
+    font-size: 40px;
+    font-weight: normal;
+}
+
+.button2 {
+    background-color: #1a1a1a;
+    margin-bottom: auto;
+    color: white;
+    border-radius: 8px;
+    font-family: quando;
+    font-size: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.footer {
+    background-color: black;
+    color: white;
+    padding: 20px;
+    font-family: quando, sans-serif;
+    font-weight: normal;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+}
+
+.footerde {
+    font-size: 14px;
+}
+
+#foa {
+    font-size: 14px;
+    color: white;
+}
+
+#foa a {
+    color: white; 
+    margin-left: 15px; 
+    text-decoration: none; 
+}
+
+
+
+
