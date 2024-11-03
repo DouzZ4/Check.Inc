@@ -1,111 +1,86 @@
-.body {
-    margin: 0; /* Elimina los márgenes por defecto del body */
-    font-family: Quando, bond; /* Define la fuente predeterminada */
-    display: contents; /* Muestra solo el contenido de los elementos, sin crear un contenedor adicional */
-    flex-direction: column; /* Organiza los elementos en columnas (no tiene efecto con display: contents) */
-    align-items: center; /* Centra los elementos horizontalmente */
-    background-color: #f7f7f7; /* Color de fondo claro */
+@import url('https://fonts.googleapis.com/css?family=Numans');
+
+html,body{
+font-family: 'Quando', sans-serif;
+background-size: flex;
+height: 100%;
+width: auto;
 }
 
-.icono {
-    display: auto;
-    height: auto;
-    width: 350px;
-    padding: 60px;
+.container{
+height: 100%;
+align-content: center;
 }
 
-#Ingresar {
-    background-color: white;
-    color: black;
-    border-radius: 10px;
+.card{
+height: 370px;
+margin-top: auto;
+margin-bottom: auto;
+width: 400px;
+background-color: black!important;
 }
 
-#check {
-    font-size: 30px;
+.social_icon span{
+font-size: 60px;
+margin-left: 10px;
+color: #3058a6;
 }
 
-.contenedor {
-    background-color: #ebebeba5;
-}
-.sub-contenedor {
-    display: flex;
-    align-items: center;
-    margin: 10px 180px;
+.social_icon span:hover{
+color: #f45501;
+cursor: pointer;
 }
 
-.Che {
-    font-size: 42px;
+.card-header h3{
+color: white;
 }
 
-.leyenda {
-    color: #888888;
-    font-size: 25px;
-    
-}
-.button-mas {
-    font-family: quando;
-    background-color: black;
-    font-size: 12,5px;
-    color: white;
-    border-radius: 8px;
-    font-weight: bold;
+.social_icon{
+position: absolute;
+right: 20px;
+top: -45px;
 }
 
-.button-mas:hover {
-    background-color: #F45501;
-    color: white;
+.input-group-prepend span{
+margin: 5px;
+width: 40px;
+background-color: #3058a6;
+color: black;
+border:0 !important;
 }
 
-.titulo-testi {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    font-size: 50px;
-    font-weight: normal;
+input:focus{
+outline: 0 0 0 0  !important;
+box-shadow: 0 0 0 0 !important;
 }
 
-.testi {
-    background-color: white;
-    width: 280px;
-    height: auto;
-    border-radius: 16px;
-    margin: 0 30px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.remember{
+color: white;
 }
 
-.icon {
-    display: flex;
-    width: 100%; 
-    align-items: center;
-    margin-bottom: 20px; 
+.remember input{
+width: 20px;
+height: 20px;
+margin-left: 15px;
+margin-right: 5px;
 }
 
-.icon img {
-    border-radius: 50%;
-    width: 80px;
-    height: 80px;
-    margin-right: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.login_btn{
+margin: 5px;
+color: black;
+background-color: #3058a6;
+width: 100px;
 }
 
-.ic p {
-    color: black;
-    font-family: Quando;
-    margin: 0;
-    font-size: 25px;
+.login_btn:hover{
+color: black;
+background-color: #F45501;
 }
 
-#arroba {
-    color: #888888;
-    font-size: 18px;
+.links{
+color: white;
 }
 
-.testimonios-com {
-    display: flex;
-    justify-content: center;
-    align-content: center;
+.links a{
+margin-left: 4px;
 }

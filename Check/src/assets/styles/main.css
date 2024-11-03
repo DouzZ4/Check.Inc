@@ -1,89 +1,91 @@
-/* styles/main.css */
+@media screen {
+    
 
-/* Configuración básica del cuerpo */
-body {
-    margin: 0;
-    font-family: Quando, bond; /* Puedes cambiarlo por tu tipografía preferida */
-    background-color: #f0f2f5; /* Color de fondo general */
-    color: #333; /* Color del texto principal */
-    line-height: 1.6;
+body{
+    background-color: white;
+
 }
 
-/* Estilos generales para los títulos */
-h1, h2, h3, h4, h5, h6 {
-    color: #3058a6; /* Color principal para títulos */
-    margin: 0;
-    padding: 10px 0;
-}
+.quando-regular {
+    font-family: "Quando", serif !important;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
 
-/* Estilos para párrafos */
-p {
-    margin: 10px 0;
-    font-size: 16px;
-}
-
-/* Configuración general para enlaces */
-a {
-    text-decoration: none;
-    color: #3058a6; /* Color del enlace */
-}
-
-a:hover {
-    color: #F45501; /* Color al pasar el cursor */
-}
-
-/* Configuración básica de botones */
-button {
-    background-color: #3058a6; /* Color de fondo de botones */
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 15px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-button:hover {
-    background-color: #F45501; /* Color de fondo al pasar el cursor */
-}
-
-/* Contenedores principales */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* Estilos generales para la barra de navegación */
+/* Barra de navegación personalizada */
 .navbar {
-    background-color: #3058a6;
-    padding: 10px 20px;
-    display: flex;
+    background-color: #3058a6 !important; /* Color original */
+    max-width: auto;
+    padding: 15px;
+    display: auto;
     align-items: center;
     justify-content: space-between;
-    color: #fff;
+    color: white;
+    box-shadow: none; /* Remueve sombras por defecto de Bootstrap */
 }
 
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    margin-left: 0px;
 }
 
 .nav-links a {
-    color: #fff;
-    padding: 8px;
-    border-radius: 5px;
+    text-decoration: none;
+    color: white !important;
+    padding: 8px 6px;
+    transition: background-color 0.3s;
 }
 
 .nav-links a:hover {
     background-color: #F45501;
+    border-radius: 2px;
+    padding: 5px;
 }
 
-/* Configuración general para imágenes */
-.img {
-    max-width: 100%;
-    height: auto;
+/* Menú desplegable personalizado */
+.dropdown {
+    position: relative;
+    margin: 0;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #3058a6;
+    box-shadow: 0px 8px 16px rgba(255, 255, 255, 0.2);
+    z-index: 1000;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown-content li {
+    border-bottom: 2px solid #ffffff;
+}
+
+.dropdown-content li:last-child {
+    border-bottom: none;
+}
+
+.dropdown-content a {
+    color: white !important;
+    padding: 10px;
     display: block;
-    margin: 0 auto; /* Centra las imágenes */
+    text-decoration: none;
+}
+
+.dropdown-content a:hover {
+    background-color: #F45501;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
 }
