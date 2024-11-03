@@ -65,8 +65,8 @@ button:hover {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color: white;
-}
+    color: white !important;
+} 
 
 .nav-links {
     list-style: none;

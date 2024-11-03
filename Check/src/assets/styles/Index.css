@@ -4,7 +4,7 @@
     display: contents; /* Muestra solo el contenido de los elementos, sin crear un contenedor adicional */
     flex-direction: column; /* Organiza los elementos en columnas (no tiene efecto con display: contents) */
     align-items: center; /* Centra los elementos horizontalmente */
-    background-color: #f7f7f7; /* Color de fondo claro */
+    background-color: white; /* Color de fondo claro */
 }
 
 .icono {
@@ -25,7 +25,7 @@
 }
 
 .contenedor {
-    background-color: #ebebeba5;
+    background-color: #a00000a5;
 }
 .sub-contenedor {
     display: flex;
