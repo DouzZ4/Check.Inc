@@ -2,23 +2,18 @@
     
     /* Configuración del cuerpo de la página */
     body {
+        font-family: Quando, bond !important;
         background-color: white;
         max-width: flex;
-    }
-    
-    /* Configuración de la fuente personalizada 'Quando' */
-    .quando-regular {
-        font-family: Quando, bond !important;
-        font-weight: 400;
-        font-style: normal;
     }
       
     /* Barra de navegación personalizada */
     .navbar {
+        margin: 0;
         position: sticky; /* Hace que la barra de navegación permanezca en la parte superior al hacer scroll */
         top: 0.2px; /* Espaciado mínimo desde el borde superior */
         background-color: #3058a6 !important; /* Color de fondo de la barra */
-        max-width: auto;
+        max-width: flex;
         padding: 15px; /* Espacio alrededor del contenido */
         display: flex;
         align-items: center;

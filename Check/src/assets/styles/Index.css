@@ -1,37 +1,35 @@
-.body {
+body {
     margin: 0; /* Elimina los márgenes por defecto del body */
-    font-family: Quando, bond; /* Define la fuente predeterminada */
-    display: contents; /* Muestra solo el contenido de los elementos, sin crear un contenedor adicional */
-    flex-direction: column; /* Organiza los elementos en columnas (no tiene efecto con display: contents) */
+    display: flex;
+    flex-direction: column; /* Organiza los elementos en columnas */
     align-items: center; /* Centra los elementos horizontalmente */
     background-color: white; /* Color de fondo claro */
-}
-
-.icono {
-    display: auto;
-    height: auto;
-    width: 250px;
-    padding: 30px;
-}
-
-#Ingresar {
-    background-color: white;
-    color: black;
-    border-radius: 10px;
-}
-
-#check {
-    font-size: 30px;
+    max-width: 100%; /* Ajusta el ancho máximo si es necesario */
 }
 
 .contenedor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
     background-color: transparent;
-    max-width: 1000px;
 }
+
 .sub-contenedor {
     display: flex;
     align-items: center;
-    margin: 10px 180px;
+}
+
+.icono {
+    width: 180px; /* Ajusta el tamaño según tu preferencia */
+    height: auto;
+    padding-right: 20px;
+}
+
+#Ingresar {
+    background-color: black;
+    color: white; /* Cambia a blanco para que el texto sea visible */
+    border-radius: 5px;
 }
 
 .Che {
@@ -41,12 +39,11 @@
 .leyenda {
     color: #888888;
     font-size: 25px;
-    
 }
+
 .button-mas {
-    font-family: quando;
     background-color: black;
-    font-size: 12,5px;
+    font-size: 12.5px; /* Corrige el formato del tamaño de fuente */
     color: white;
     border-radius: 8px;
     font-weight: bold;
@@ -109,4 +106,21 @@
     display: flex;
     justify-content: center;
     align-content: center;
+    max-width: 100%;
+}
+
+.Wrapper {
+    background-color: #888888;
+    font-size: 1.5em;
+    width: 100%; /* Ajusta el ancho máximo */
+}
+
+.accordion {
+    background-color: transparent;
+    backdrop-filter: blur(40px);
+    width: 100%; /* Ajusta el ancho máximo */
+}
+
+.imagen1 {
+    max-width: 100%;
 }
