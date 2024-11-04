@@ -1,86 +1,106 @@
-@import url('https://fonts.googleapis.com/css?family=Numans');
-
-html,body{
-font-family: 'Quando', sans-serif;
-background-size: flex;
-height: 100%;
-width: auto;
+html, body {
+    font-family: Quando, bond;
+    background-size: cover;
+    height: 100%;
+    width: auto;
 }
 
-.container{
-height: 100%;
-align-content: center;
+.Container-Img-Logo {
+    display: flex;
+    justify-content: center;
+    padding-top: 40px; /* Reduce el espacio superior */
 }
 
-.card{
-height: 370px;
-margin-top: auto;
-margin-bottom: auto;
-width: 400px;
-background-color: black!important;
+.Img_logo {
+    max-width: 500px;
+    width: auto;
+    height: auto;
 }
 
-.social_icon span{
-font-size: 60px;
-margin-left: 10px;
-color: #3058a6;
+.container {
+    height: 100%;
+    align-content: center;
+    padding-top: 40px; /* Reduce el espacio superior entre logo y card */
 }
 
-.social_icon span:hover{
-color: #f45501;
-cursor: pointer;
+.card {
+    height: 370px;
+    margin-top: 10px; /* Acerca la card al logo */
+    margin-bottom: auto;
+    width: 400px;
+    background-color: transparent;
+    backdrop-filter: blur(20px);
 }
 
-.card-header h3{
-color: white;
+.social_icon span {
+    font-size: 60px;
+    margin-left: 10px;
+    color: #3058a6;
 }
 
-.social_icon{
-position: absolute;
-right: 20px;
-top: -45px;
+.social_icon span:hover {
+    color: #f45501;
+    cursor: pointer;
 }
 
-.input-group-prepend span{
-margin: 5px;
-width: 40px;
-background-color: #3058a6;
-color: black;
-border:0 !important;
+.card-header h3 {
+    color: black;
 }
 
-input:focus{
-outline: 0 0 0 0  !important;
-box-shadow: 0 0 0 0 !important;
+.social_icon {
+    position: absolute;
+    right: 20px;
+    top: -45px;
 }
 
-.remember{
-color: white;
+.input-group-prepend span {
+    margin: 5px;
+    width: 40px;
+    background-color: transparent;
+    backdrop-filter: blur(40px);
+    color: black;
+    border: 0 !important;
 }
 
-.remember input{
-width: 20px;
-height: 20px;
-margin-left: 15px;
-margin-right: 5px;
+input:focus {
+    outline: none !important;
+    box-shadow: none !important;
 }
 
-.login_btn{
-margin: 5px;
-color: black;
-background-color: #3058a6;
-width: 100px;
+.remember {
+    color: black;
 }
 
-.login_btn:hover{
-color: black;
-background-color: #F45501;
+.remember input {
+    width: 20px;
+    height: 20px;
+    margin-left: 15px;
+    margin-right: 5px;
 }
 
-.links{
-color: white;
+.login_btn {
+    margin: 5px;
+    color: black;
+    background-color: #3058a6;
+    width: 100px;
 }
 
-.links a{
-margin-left: 4px;
+.login_btn:hover {
+    color: black;
+    background-color: #F45501;
+}
+
+.links {
+    color: black;
+}
+
+.links a {
+    margin-left: 4px;
+}
+
+.Registrarme_btn {
+    margin: 5px;
+    color: black;
+    background-color: #3058a6;
+    width: auto;
 }

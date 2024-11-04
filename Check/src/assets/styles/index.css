@@ -10,8 +10,8 @@
 .icono {
     display: auto;
     height: auto;
-    width: 350px;
-    padding: 60px;
+    width: 250px;
+    padding: 30px;
 }
 
 #Ingresar {
@@ -25,7 +25,8 @@
 }
 
 .contenedor {
-    background-color: #ffffffa5;
+    background-color: transparent;
+    max-width: 1000px;
 }
 .sub-contenedor {
     display: flex;
