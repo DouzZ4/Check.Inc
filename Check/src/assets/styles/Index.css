@@ -21,13 +21,13 @@ body {
 }
 
 .icono {
-    width: 180px; /* Ajusta el tamaño según tu preferencia */
+    width: 300px; /* Ajusta el tamaño según tu preferencia */
     height: auto;
     padding-right: 20px;
 }
 
 #Ingresar {
-    background-color: black;
+    background-color: transparent;
     color: white; /* Cambia a blanco para que el texto sea visible */
     border-radius: 5px;
 }
@@ -106,20 +106,76 @@ body {
     display: flex;
     justify-content: center;
     align-content: center;
+    flex-wrap: wrap; /* Permite que los testimonios se acomoden en varias filas */
+    gap: 20px; /* Espacio entre cada testimonio */
     max-width: 100%;
+    padding: 20px;
+}
+
+.testi {
+    background-color: white;
+    width: 280px; /* Ancho inicial para pantallas más grandes */
+    height: auto;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Media query para ajustar el tamaño en pantallas pequeñas */
+@media (max-width: 768px) {
+    .testi {
+        width: 100%; /* Ancho completo para pantallas pequeñas */
+        margin: 10px 0; /* Margen superior e inferior para separación */
+    }
 }
 
 .Wrapper {
-    background-color: #888888;
+    background-color: #f0f0f0; /* Fondo claro para el contenedor */
     font-size: 1.5em;
-    width: 100%; /* Ajusta el ancho máximo */
+    width: 100%;
+    padding: 20px;
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para resaltar el contenedor */
 }
 
 .accordion {
-    background-color: transparent;
-    backdrop-filter: blur(40px);
-    width: 100%; /* Ajusta el ancho máximo */
+    background-color: white; /* Fondo blanco para cada "cajón" */
+    border: 1px solid #ddd; /* Borde sutil */
+    border-radius: 8px; /* Bordes redondeados */
+    margin-bottom: 10px; /* Espacio entre los "cajones" */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Sombra para simular el efecto de un cajón */
+    padding: 15px;
+    cursor: pointer; /* Cambia el cursor para indicar interactividad */
+    transition: background-color 0.3s ease; /* Transición suave para el hover */
 }
+
+.accordion summary {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #333; /* Color de texto más oscuro */
+    margin-bottom: 10px; /* Espacio inferior para separar el contenido */
+}
+
+.accordion p {
+    margin: 0;
+    padding: 10px 0;
+    color: #555; /* Color de texto gris */
+    line-height: 1.5;
+}
+
+/* Efecto hover para el acordeón */
+.accordion:hover {
+    background-color: #f8f8f8; /* Fondo más claro en hover */
+}
+
+/* Opcional: efecto de apertura para cada detalle */
+details[open] .accordion {
+    background-color: #e0e0e0; /* Fondo más oscuro cuando se abre */
+}
+
 
 .imagen1 {
     max-width: 100%;

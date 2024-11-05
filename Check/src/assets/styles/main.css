@@ -1,5 +1,3 @@
-@media screen {
-    
     /* Configuración del cuerpo de la página */
     body {
         font-family: Quando, bond !important;
@@ -13,7 +11,8 @@
         position: sticky; /* Hace que la barra de navegación permanezca en la parte superior al hacer scroll */
         top: 0.2px; /* Espaciado mínimo desde el borde superior */
         background-color: #3058a6 !important; /* Color de fondo de la barra */
-        max-width: flex;
+        max-width: 100%;
+        width: 100%;
         padding: 15px; /* Espacio alrededor del contenido */
         display: flex;
         align-items: center;
@@ -32,7 +31,7 @@
     }
     
     .nav-links li {
-        margin-left: 0px;
+        margin: 0;
     }
     
     /* Enlaces dentro de la barra de navegación */
@@ -99,50 +98,45 @@
     .dropdown:hover .dropdown-content {
         display: block;
     }
-    
-    /* Estilo del pie de página */
     .footer {
-        background-color: #333; /* Color de fondo oscuro */
-        color: white;
-        padding: 20px 0;
+        background-color: black; /* Color de fondo negro */
+        color: white; /* Color del texto blanco */
+        padding: 20px; /* Espaciado interno alrededor del contenido */
         text-align: center; /* Centra el texto */
-        width: 100%;
-        position: relative;
-        bottom: 0; /* Posición en la parte inferior */
+        width: 100%; /* Ancho completo */
+        position: relative; /* Posiciona el footer de forma relativa */
+        bottom: 0; /* Posición inferior */
     }
     
     .footer-content {
-        max-width: 800px; /* Ancho máximo para centrar contenido */
-        margin: auto; /* Centra el contenido horizontalmente */
+        max-width: 800px; /* Ancho máximo del contenido del footer */
+        margin: 0 auto; /* Centra el contenido dentro del footer */
     }
     
-    /* Estilo de texto dentro del pie de página */
     .footer p {
-        margin: 0;
-        font-size: 14px;
+        margin: 10px 0; /* Espaciado arriba y abajo del párrafo */
+        font-size: 14px; /* Tamaño de fuente */
     }
     
-    /* Estilos de los iconos de redes sociales */
     .social-icons {
-        list-style: none;
-        padding: 0;
-        display: flex;
-        justify-content: center; /* Centra los iconos */
-        gap: 15px; /* Espacio entre iconos */
+        list-style: none; /* Quita los puntos de lista */
+        padding: 0; /* Quita el padding */
+        display: flex; /* Utiliza flexbox para la alineación */
+        justify-content: center; /* Centra los íconos */
+        gap: 15px; /* Espaciado entre íconos */
     }
     
     .social-icons li {
-        display: inline-block; /* Muestra los iconos en línea */
+        display: inline-block; /* Asegura que se muestren en línea */
     }
     
-    /* Enlaces de redes sociales */
     .social-icons a {
-        color: #ccc; /* Color base de los iconos */
-        font-size: 20px;
-        transition: color 0.3s; /* Suaviza el cambio de color */
+        color: #ccc; /* Color de los íconos */
+        font-size: 20px; /* Tamaño de los íconos */
+        transition: color 0.3s; /* Suaviza el cambio de color al pasar el cursor */
     }
     
     .social-icons a:hover {
-        color: #f45501; /* Cambia el color de los iconos al pasar el cursor */
+        color: #f45501; /* Color de los íconos al pasar el cursor */
     }
-}    
+    

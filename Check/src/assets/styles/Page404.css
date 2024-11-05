@@ -1,0 +1,41 @@
+body {
+    margin: 0; /* Elimina los márgenes por defecto del body */
+    display: flex;
+    flex-direction: column; /* Organiza los elementos en columnas */
+    align-items: center; /* Centra los elementos horizontalmente */
+    background-color: white; /* Color de fondo claro */
+    max-width: 100%; /* Ajusta el ancho máximo si es necesario */
+}
+
+.container {
+    text-align: center;
+    padding: 30px;
+}
+
+p {
+    font-size: 1.2em;
+    color: #333;
+}
+
+.buttons a {
+    text-decoration: none;
+    color: white;
+    background-color: #f45501;
+    padding: 12px 24px;
+    border-radius: 5px;
+    margin: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.buttons a:hover {
+    background-color: #3058a6; /* Cambio de color en hover */
+}
+
+
+.Img-Page404 {
+    display: block;
+    margin: 20px auto; /* Centrar la imagen */
+    width: 400px;
+    max-width: 100%; /* Hace que la imagen sea responsiva */
+    height: auto; /* Mantiene la proporción de la imagen */
+}
