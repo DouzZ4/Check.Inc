@@ -22,9 +22,13 @@ body {
     padding-right: 20px;
 }
 
-#Ingresar {
-    background-color: transparent;
-    color: white; /* Cambia a blanco para que el texto sea visible */
+.Ingresar {
+    background-color: black;
+    border-radius: 5px;
+}
+
+.Ingresar:hover {
+    background-color: #F45501; /* Cambio de color en hover */
     border-radius: 5px;
 }
 
@@ -175,6 +179,24 @@ details[open] .accordion {
 
 .img-descarga {
     width: 400px;
+}
+
+.button2-m-2-2 {
+    color: white;
+    background: black;
+    border-radius: 8px;
+    font-size: 18px;
+    padding: 8px 15px;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.button2-m-2-2:hover {
+    background-color: #F45501;
+    border: none;
 }
 
 .button2-m-2 {

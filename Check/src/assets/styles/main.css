@@ -6,6 +6,7 @@
         font-family: 'Quando' !important;
         background-color: white;
         max-width: 100%;
+        margin: 0;
     }
       
     /* Barra de navegación personalizada */
@@ -109,6 +110,7 @@
         width: flex; /* Ancho completo */
         position: relative; /* Posiciona el footer de forma relativa */
         bottom: 0; /* Posición inferior */
+        
     }
     
     .footer-content {
@@ -143,3 +145,12 @@
         color: #f45501; /* Color de los íconos al pasar el cursor */
     }
     
+    .Ingresar {
+        background-color: black;
+        border-radius: 5px;
+    }
+    
+    .Ingresar:hover {
+        background-color: #F45501; /* Cambio de color en hover */
+        border-radius: 5px;
+    }

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../assets/styles/main.css">
+    <link rel="stylesheet" href="../assets/styles/registro.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div id="check">
+            <label for="check">CHECK</label>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Inicio</a></li> 
+            <li><a href="Functionality.html">Funcionalidades</a></li>       
+            <li><a href="#">Testimonios</a></li>
+            <li><a href="#">Descargar</a></li> 
+            <li><a href="#">Contacto</a></li> 
+            <li><a href="Login.html" class="Ingresar">Ingresar</a></li> 
+        </ul>
+    </nav>
+    <section class="img">
+        <img src="../assets/images/LOGO PNG.png" class="img">
+    </section>
+    <section class="contenido">
+        <div class="container">
+            <h2>¡Comienza Ahora!</h2>
+            <form action="#" method="post">
+                <div class="form-group">
+                    <label for="name">Nombre</label>
+                    <input type="text" id="name" name="name" placeholder="Ingrese su Nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastname">Apellido</label>
+                    <input type="text" id="lastname" name="lastname" placeholder="Ingrese su Apellido" required>
+                </div>
+                <div class="form-group">
+                    <label for="document-type">Tipo de documento</label>
+                    <select id="document-type" name="document-type" required>
+                        <option value="">Seleccionar</option>
+                        <option value="dni">CC</option>
+                        <option value="passport">TI</option>
+                        <option value="license">CE</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="document-number">Número de documento</label>
+                    <input type="text" id="document-number" name="document-number" placeholder="Ingrese número" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo</label>
+                    <input type="email" id="email" name="email" placeholder="Ingrese un correo" required>
+                </div>
+                <div class="form-group">
+                    <label for="Contraseña">Contraseña</label>
+                    <input type="password" id="contraseña" name="contraseña" placeholder="Ingrese contraseña" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Registrarse</button>
+                </div>
+            </form>
+    </section>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Check</p>
+            <ul class="social-icons list-unstyled d-flex justify-content-center mt-3">
+                <li class="mx-2"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                <li class="mx-2"><a href="#"><i class="fab fa-twitter"></i></a></li>
+                <li class="mx-2"><a href="#"><i class="fab fa-instagram"></i></a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.querySelector("form");
+    
+            form.addEventListener("submit", function (event) {
+                // Obtener los valores de los campos
+                const name = document.getElementById("name").value.trim();
+                const lastname = document.getElementById("lastname").value.trim();
+                const documentType = document.getElementById("document-type").value;
+                const documentNumber = document.getElementById("document-number").value.trim();
+                const email = document.getElementById("email").value.trim();
+                const password = document.getElementById("contraseña").value.trim();
+    
+                // Expresión regular para validar el correo electrónico
+                const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    
+                // Validación de cada campo
+                if (name === "") {
+                    alert("Por favor, ingresa tu nombre.");
+                    event.preventDefault();
+                    return;
+                }
+    
+                if (lastname === "") {
+                    alert("Por favor, ingresa tu apellido.");
+                    event.preventDefault();
+                    return;
+                }
+    
+                if (documentType === "") {
+                    alert("Por favor, selecciona un tipo de documento.");
+                    event.preventDefault();
+                    return;
+                }
+    
+                if (documentNumber === "" || isNaN(documentNumber)) {
+                    alert("Por favor, ingresa un número de documento válido.");
+                    event.preventDefault();
+                    return;
+                }
+    
+                if (!emailPattern.test(email)) {
+                    alert("Por favor, ingresa un correo electrónico válido.");
+                    event.preventDefault();
+                    return;
+                }
+    
+                if (password === "") {
+                    alert("Por favor, ingresa una contraseña.");
+                    event.preventDefault();
+                    return;
+                }
+    
+                if (password.length < 6) {
+                    alert("La contraseña debe tener al menos 6 caracteres.");
+                    event.preventDefault();
+                    return;
+                }
+    
+                // Si todas las validaciones son correctas, el formulario se envía
+                alert("¡Registro exitoso!");
+            });
+        });
+    </script>
+</body>
+</html>
