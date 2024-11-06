@@ -22,14 +22,13 @@ p {
 }
 
 .buttons a:hover {
-    background-color: #3058a6; /* Cambio de color en hover */
+    background-color: #3058a6;
 }
-
 
 .Img-Page404 {
     display: block;
-    margin: 20px auto; /* Centrar la imagen */
+    margin: 20px auto;
     width: 400px;
-    max-width: 100%; /* Hace que la imagen sea responsiva */
-    height: auto; /* Mantiene la proporción de la imagen */
+    max-width: 100%;
+    height: auto;
 }

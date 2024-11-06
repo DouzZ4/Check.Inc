@@ -1,10 +1,5 @@
 body {
     margin: 0; /* Elimina los márgenes por defecto del body */
-    display: flex;
-    flex-direction: column; /* Organiza los elementos en columnas */
-    align-items: center; /* Centra los elementos horizontalmente */
-    background-color: white; /* Color de fondo claro */
-    max-width: 100%; /* Ajusta el ancho máximo si es necesario */
 }
 
 .contenedor {
@@ -178,5 +173,5 @@ details[open] .accordion {
 
 
 .imagen1 {
-    max-width: 100%;
+    max-width: flex;
 }

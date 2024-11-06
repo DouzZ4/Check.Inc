@@ -1,8 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Quando&display=swap');
+
+
     /* Configuración del cuerpo de la página */
     body {
-        font-family: Quando, bond !important;
+        font-family: 'Quando' !important;
         background-color: white;
-        max-width: flex;
+        max-width: 100%;
     }
       
     /* Barra de navegación personalizada */
@@ -12,7 +15,7 @@
         top: 0.2px; /* Espaciado mínimo desde el borde superior */
         background-color: #3058a6 !important; /* Color de fondo de la barra */
         max-width: 100%;
-        width: 100%;
+        width: auto;
         padding: 15px; /* Espacio alrededor del contenido */
         display: flex;
         align-items: center;
@@ -51,7 +54,7 @@
     
     /* Botón de anomalías con un diseño diferente */
     #Anomalias-btn {
-        background-color: white;
+        background-color: #F45501;
         color: black;
         border-radius: 5px; /* Bordes redondeados para el botón */
     }
@@ -103,13 +106,13 @@
         color: white; /* Color del texto blanco */
         padding: 20px; /* Espaciado interno alrededor del contenido */
         text-align: center; /* Centra el texto */
-        width: 100%; /* Ancho completo */
+        width: flex; /* Ancho completo */
         position: relative; /* Posiciona el footer de forma relativa */
         bottom: 0; /* Posición inferior */
     }
     
     .footer-content {
-        max-width: 800px; /* Ancho máximo del contenido del footer */
+        max-width: auto; /* Ancho máximo del contenido del footer */
         margin: 0 auto; /* Centra el contenido dentro del footer */
     }
     

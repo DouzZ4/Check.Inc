@@ -1,9 +1,6 @@
 /* Estilo global para el body */
 body {
-    margin: auto;
-    font-family: Quando, bond;
-    background-color: white;
-    max-width: flex;
+    margin: 0;
 }
 
 /* Estilo para la sección de bienvenida */

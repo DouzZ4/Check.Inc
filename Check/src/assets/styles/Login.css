@@ -1,8 +1,5 @@
 html, body {
-    font-family: Quando, bond;
-    background-size: cover;
-    height: 100%;
-    width: auto;
+    margin: 0;
 }
 
 .Container-Img-Logo {
