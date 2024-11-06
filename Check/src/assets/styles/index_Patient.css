@@ -1,9 +1,6 @@
 /* Estilo global para el body */
 body {
-    margin: auto;
-    font-family: Quando, bond;
-    background-color: white;
-    max-width: flex;
+    margin: 0;
 }
 
 /* Estilo para la sección de bienvenida */
@@ -19,12 +16,6 @@ body {
     font-size: 2.5em;
     font-weight: bold;
     color: #2C2C2C;
-}
-
-#Anomalias-btn {
-    background-color: white;
-    color: black;
-    border-radius: 5px;
 }
 
 /* Estilo para la sección del reporte semanal */

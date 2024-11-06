@@ -1,73 +1,99 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
+    <!-- Configuración de caracteres para asegurar visualización de caracteres especiales como la Ñ -->
+    <meta charset="UTF-8">
+
+    <!-- Título de la página -->
     <title>Login Page</title>
 
+    <!-- Importa la fuente personalizada 'Quando' desde Google Fonts -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Quando&display=swap');
     </style>
-    <!-- Bootstrap 5.3.3 CSS (solo una versión) -->
+
+    <!-- CSS de Bootstrap 5.3.3 para estilos responsivos y componentes prefabricados -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-    <!-- Fontawesome CDN -->
+    <!-- Font Awesome para iconos -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
-    <!-- Custom styles -->
-     <link rel="stylesheet" href="../assets/styles/Main.css">
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="../assets/styles/Main.css">
     <link rel="stylesheet" href="../assets/styles/Login.css">
 </head>
 <body>
+    <!-- Barra de navegación -->
     <nav class="navbar">
         <div class="check">
             <label for="check">CHECK</label>
         </div>
+        <!-- Enlaces de navegación -->
         <ul class="nav-links">
-            <li><a href="index.html">Inicio</a></li> 
-            <li><a href="#">Funcionalidades</a></li>       
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="#">Funcionalidades</a></li>
             <li><a href="#">Testimonios</a></li>
-            <li><a href="#">Descargar</a></li> 
-            <li><a href="#">Contacto</a></li> 
-            <li><a href="Login.html">Ingresar</a></li> 
+            <li><a href="#">Descargar</a></li>
+            <li><a href="#">Contacto</a></li>
+            <li><a href="Login.html">Ingresar</a></li>
         </ul>
     </nav>
 
+    <!-- Sección del logo -->
+    <section class="Container-Img-Logo">
+        <!-- Imagen del logo con clase para estilo responsivo -->
+        <img src="../assets/images/LOGO PNG.png" alt="Img-Logo" class="Img_logo img-fluid">
+    </section>
+
+    <!-- Contenedor del formulario de inicio de sesión -->
     <section class="container">
         <div class="d-flex justify-content-center h-100">
             <div class="card">
+                <!-- Encabezado del formulario -->
                 <div class="card-header">
-                    <h3>Sign In</h3>
+                    <h3>Inicia sesion</h3>
                     <div class="d-flex justify-content-end social_icon">
+                        <!-- Iconos de redes sociales -->
                         <span><i class="fab fa-facebook-square"></i></span>
                         <span><i class="fab fa-google-plus-square"></i></span>
                         <span><i class="fab fa-twitter-square"></i></span>
                     </div>
                 </div>
                 <div class="card-body">
+                    <!-- Formulario de inicio de sesión -->
                     <form>
+                        <!-- Campo para el nombre de usuario con ícono de usuario -->
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
                             <input type="text" class="form-control" placeholder="username">
                         </div>
+                        <!-- Campo para la contraseña con ícono de llave -->
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-key"></i></span>
                             </div>
                             <input type="password" class="form-control" placeholder="Contraseña">
                         </div>
+                        <!-- Checkbox para recordar sesión -->
                         <div class="row align-items-center remember">
                             <input type="checkbox">Recuerdame
                         </div>
+                        <!-- Botones de enviar formulario e ir a registro -->
                         <div class="form-group">
                             <input type="submit" value="Ingresar" class="btn float-right login_btn">
+                            <input type="submit" value="Registrarme" class="btn float-right Registrarme_btn">
                         </div>
                     </form>
                 </div>
                 <div class="card-footer">
+                    <!-- Enlace a página de registro -->
                     <div class="d-flex justify-content-center links">
-                        No Tienes una cuenta?<a href="#"> Registrate</a>
+                        No tienes una cuenta? <a href="#">Registrate</a>
                     </div>
+                    <!-- Enlace para recuperación de contraseña -->
                     <div class="d-flex justify-content-center">
                         <a href="#">Olvidaste tu contraseña?</a>
                     </div>
@@ -76,10 +102,23 @@
         </div>
     </section>
 
-    <!-- jQuery (solo una vez) -->
+    <!-- Pie de página -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Check</p>
+            <!-- Iconos de redes sociales en el pie de página -->
+            <ul class="social-icons">
+                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+            </ul>
+        </div>
+    </footer>
+    
+    <!-- jQuery (necesario para algunas funciones de Bootstrap) -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-    <!-- Bootstrap JS (solo una vez) -->
+    <!-- Bootstrap JS (contiene funcionalidades como modales y otros componentes dinámicos) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
 </body>
 </html>

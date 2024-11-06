@@ -1,91 +1,145 @@
-@media screen {
+@import url('https://fonts.googleapis.com/css2?family=Quando&display=swap');
+
+
+    /* Configuración del cuerpo de la página */
+    body {
+        font-family: 'Quando' !important;
+        background-color: white;
+        max-width: 100%;
+    }
+      
+    /* Barra de navegación personalizada */
+    .navbar {
+        margin: 0;
+        position: sticky; /* Hace que la barra de navegación permanezca en la parte superior al hacer scroll */
+        top: 0.2px; /* Espaciado mínimo desde el borde superior */
+        background-color: #3058a6 !important; /* Color de fondo de la barra */
+        max-width: 100%;
+        width: auto;
+        padding: 15px; /* Espacio alrededor del contenido */
+        display: flex;
+        align-items: center;
+        justify-content: space-between; /* Espacia los elementos entre sí */
+        color: white;
+        box-shadow: none; /* Sin sombras para un diseño plano */
+        z-index: 1000; /* Alta prioridad en la superposición para que esté encima del contenido */
+    }
     
-
-body{
-    background-color: white;
-
-}
-
-.quando-regular {
-    font-family: "Quando", serif !important;
-    font-weight: 400;
-    font-style: normal;
-  }
-  
-
-/* Barra de navegación personalizada */
-.navbar {
-    background-color: #3058a6 !important; /* Color original */
-    max-width: auto;
-    padding: 15px;
-    display: auto;
-    align-items: center;
-    justify-content: space-between;
-    color: white;
-    box-shadow: none; /* Remueve sombras por defecto de Bootstrap */
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    margin: 0;
-    padding: 0;
-}
-
-.nav-links li {
-    margin-left: 0px;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: white !important;
-    padding: 8px 6px;
-    transition: background-color 0.3s;
-}
-
-.nav-links a:hover {
-    background-color: #F45501;
-    border-radius: 2px;
-    padding: 5px;
-}
-
-/* Menú desplegable personalizado */
-.dropdown {
-    position: relative;
-    margin: 0;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #3058a6;
-    box-shadow: 0px 8px 16px rgba(255, 255, 255, 0.2);
-    z-index: 1000;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.dropdown-content li {
-    border-bottom: 2px solid #ffffff;
-}
-
-.dropdown-content li:last-child {
-    border-bottom: none;
-}
-
-.dropdown-content a {
-    color: white !important;
-    padding: 10px;
-    display: block;
-    text-decoration: none;
-}
-
-.dropdown-content a:hover {
-    background-color: #F45501;
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-}
+    /* Configuración de los enlaces de la barra de navegación */
+    .nav-links {
+        list-style: none; /* Quita los puntos de lista */
+        display: flex;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .nav-links li {
+        margin: 0;
+    }
+    
+    /* Enlaces dentro de la barra de navegación */
+    .nav-links a {
+        text-decoration: none; /* Elimina el subrayado de los enlaces */
+        color: white !important; /* Color de texto */
+        padding: 8px 6px; /* Espaciado interno */
+        transition: background-color 0.3s; /* Suaviza el cambio de color de fondo al pasar el cursor */
+    }
+    
+    /* Efecto al pasar el cursor por encima de los enlaces */
+    .nav-links a:hover {
+        background-color: #F45501; /* Color de fondo al pasar el cursor */
+        border-radius: 2px; /* Bordes ligeramente redondeados */
+        padding: 5px; /* Ajuste del espaciado al pasar el cursor */
+    }
+    
+    /* Botón de anomalías con un diseño diferente */
+    #Anomalias-btn {
+        background-color: #F45501;
+        color: black;
+        border-radius: 5px; /* Bordes redondeados para el botón */
+    }
+    
+    /* Configuración del menú desplegable */
+    .dropdown {
+        position: relative;
+        margin: 0;
+    }
+    
+    .dropdown-content {
+        display: none; /* Escondido por defecto */
+        position: absolute; /* Posicionado de manera absoluta respecto a .dropdown */
+        background-color: #3058a6; /* Color de fondo del menú desplegable */
+        box-shadow: 0px 8px 16px rgba(255, 255, 255, 0.2); /* Sombra del menú desplegable */
+        z-index: 1000;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    /* Estilo de los elementos del menú desplegable */
+    .dropdown-content li {
+        border-bottom: 2px solid #ffffff; /* Línea divisoria entre elementos */
+    }
+    
+    .dropdown-content li:last-child {
+        border-bottom: none; /* Sin línea divisoria en el último elemento */
+    }
+    
+    /* Enlaces dentro del menú desplegable */
+    .dropdown-content a {
+        color: white !important;
+        padding: 10px;
+        display: block; /* Hace que ocupe toda la línea */
+        text-decoration: none; /* Sin subrayado */
+    }
+    
+    .dropdown-content a:hover {
+        background-color: #F45501; /* Cambia el color de fondo al pasar el cursor */
+    }
+    
+    /* Muestra el contenido del menú desplegable al pasar el cursor */
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    .footer {
+        background-color: black; /* Color de fondo negro */
+        color: white; /* Color del texto blanco */
+        padding: 20px; /* Espaciado interno alrededor del contenido */
+        text-align: center; /* Centra el texto */
+        width: flex; /* Ancho completo */
+        position: relative; /* Posiciona el footer de forma relativa */
+        bottom: 0; /* Posición inferior */
+    }
+    
+    .footer-content {
+        max-width: auto; /* Ancho máximo del contenido del footer */
+        margin: 0 auto; /* Centra el contenido dentro del footer */
+    }
+    
+    .footer p {
+        margin: 10px 0; /* Espaciado arriba y abajo del párrafo */
+        font-size: 14px; /* Tamaño de fuente */
+    }
+    
+    .social-icons {
+        list-style: none; /* Quita los puntos de lista */
+        padding: 0; /* Quita el padding */
+        display: flex; /* Utiliza flexbox para la alineación */
+        justify-content: center; /* Centra los íconos */
+        gap: 15px; /* Espaciado entre íconos */
+    }
+    
+    .social-icons li {
+        display: inline-block; /* Asegura que se muestren en línea */
+    }
+    
+    .social-icons a {
+        color: #ccc; /* Color de los íconos */
+        font-size: 20px; /* Tamaño de los íconos */
+        transition: color 0.3s; /* Suaviza el cambio de color al pasar el cursor */
+    }
+    
+    .social-icons a:hover {
+        color: #f45501; /* Color de los íconos al pasar el cursor */
+    }
+    

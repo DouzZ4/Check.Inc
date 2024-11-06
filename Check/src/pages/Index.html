@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <link rel="stylesheet" href="../assets/styles/main.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index Page</title>
+
+    <!-- CSS de Bootstrap para estilos responsivos y componentes prefabricados -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="../assets/styles/Main.css">
     <link rel="stylesheet" href="../assets/styles/index.css">
 </head>
 <body>
+    <!-- Barra de navegación original -->
     <nav class="navbar">
         <div id="check">
             <label for="check">CHECK</label>
@@ -14,104 +24,117 @@
         <ul class="nav-links">
             <li><a href="index.html">Inicio</a></li> 
             <li><a href="Functionality.html">Funcionalidades</a></li>       
-            <li ><a href="#">Testimonios</a></li>
+            <li><a href="#">Testimonios</a></li>
             <li><a href="#">Descargar</a></li> 
             <li><a href="#">Contacto</a></li> 
             <li><a href="Login.html" id="Ingresar">Ingresar</a></li> 
         </ul>
-    </nav>index
-<section class="contenedor">
-    <div class="sub-contenedor">
-        <img src="../assets/images/ICONO.png" class="icono">
+    </nav>
+    
+    <!-- Sección principal -->
+    <section class="contenedor">
+        <div class="sub-contenedor d-flex align-items-center">
+            <img src="../assets/images/ICONO.png" class="icono me-3">
             <section>
                 <h1 class="Che">CHECK</h1>
-                <br>
                 <p class="leyenda">Monitorea tus niveles de azúcar, controla tus comidas y mantén tus citas médicas en un solo lugar.</p>
-                <br>
                 <button class="button-mas">Más Información</button>
             </section>   
-    </div>
-</section>
-<br>
-<section>
-    <div class="titulo-testi">
-        <h1>Testimonios</h1>
-    </div>
-    <br>
-    <div class="testimonios-com">
-        <div class="testi">
-            <div class="icon">
-                <img src="../assets/images/ICONO.png" alt="icono1">
-                <div class="ic">
-                    <p>Nombre</p>
-                    <p id="arroba">@arrobanombre</p>
+        </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section>
+        <header class="titulo-testi text-center my-5">
+            <h1>Testimonios</h1>
+        </header>
+        <div class="testimonios-com container">
+            <div class="row justify-content-center">
+                <!-- Testimonio 1 -->
+                <div class="col-md-4">
+                    <div class="testi p-3">
+                        <div class="icon d-flex align-items-center">
+                            <img src="../assets/images/ICONO.png" alt="icono1">
+                            <div class="ic">
+                                <p>Nombre</p>
+                                <p id="arroba">@arrobanombre</p>
+                            </div>
+                        </div>
+                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit...</p>    
+                    </div>
+                </div>
+                <!-- Testimonio 2 -->
+                <div class="col-md-4">
+                    <div class="testi p-3">
+                        <div class="icon d-flex align-items-center">
+                            <img src="../assets/images/ICONO.png" alt="icono2">
+                            <div class="ic">
+                                <p>Nombre</p>
+                                <p id="arroba">@arrobanombre</p>
+                            </div>
+                        </div>
+                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit...</p>    
+                    </div>
+                </div>
+                <!-- Testimonio 3 -->
+                <div class="col-md-4">
+                    <div class="testi p-3">
+                        <div class="icon d-flex align-items-center">
+                            <img src="../assets/images/ICONO.png" alt="icono3">
+                            <div class="ic">
+                                <p>Nombre</p>
+                                <p id="arroba">@arrobanombre</p>
+                            </div>
+                        </div>
+                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit...</p>    
+                    </div>
                 </div>
             </div>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consectetur accusantium natus officia! Eligendi quia perferendis amet illum, expedita, repellat enim quidem provident quam consequatur iure, blanditiis eos assumenda ullam placeat.</p>    
         </div>
-        <div class="testi">
-            <div class="icon">
-                <img src="../assets/images/ICONO.png" alt="icono1">
-                <div class="ic">
-                    <p>Nombre</p>
-                    <p id="arroba">@arrobanombre</p>
-                </div>
-            </div>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consectetur accusantium natus officia! Eligendi quia perferendis amet illum, expedita, repellat enim quidem provident quam consequatur iure, blanditiis eos assumenda ullam placeat.</p>    
+    </section>
+    
+
+    <!-- Beneficios -->
+    <section class="container my-5">
+        <div class="text-center mb-3">
+            <h1>Beneficios</h1>
         </div>
-        <div class="testi">
-            <div class="icon">
-                <img src="../assets/images/ICONO.png" alt="icono1">
-                <div class="ic">
-                    <p>Nombre</p>
-                    <p id="arroba">@arrobanombre</p>
-                </div>
-            </div>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consectetur accusantium natus officia! Eligendi quia perferendis amet illum, expedita, repellat enim quidem provident quam consequatur iure, blanditiis eos assumenda ullam placeat.</p>    
+        <div class="Wrapper">
+            <details name="accordion" class="accordion">
+                <summary>Mejor Control de Salud</summary>
+                <p>Evita complicaciones al tener un seguimiento preciso de tu diabetes.</p>
+            </details>
+            <details name="accordion" class="accordion">
+                <summary>Interfaz Intuitiva</summary>
+                <p>Fácil de usar, diseñada para ayudarte a gestionar tu salud de manera eficiente.</p>
+            </details>
+            <details name="accordion" class="accordion">
+                <summary>Personalización</summary>
+                <p>Ajusta tus alarmas y recordatorios según tus necesidades personales.</p>
+            </details>
         </div>
-    </div>
-</section>
-<br>
-<section>
-    <br>
-    <div class="ben">
-        <h1>Beneficios</h1>
-    </div>
-    <br>
-    <div class="accordion-container">
-        <details>
-            <summary><h3 class="titulos-acor">Mejor Control de Salud</h3></summary>
-            <div class="accordion-content">
-                Evita complicaciones al tener un seguimiento preciso de tu diabetes.
-            </div>
-        </details>
-        
-        <details>
-            <summary><h3 class="titulos-acor">Interfaz Intuitiva</h3></summary>
-            <div class="accordion-content">
-                Fácil de usar, diseñada para ayudarte a gestionar tu salud de manera eficiente.
-            </div>
-        </details>
-        
-        <details>
-            <summary><h3 class="titulos-acor">Personalización</h3></summary>
-            <div class="accordion-content">
-                Ajusta tus alarmas y recordatorios según tus necesidades personales.
-            </div>
-        </details>
-    </div>
-</section>
-<br>
-<section>
-    <div class="footer">
-        <div class="footer-left">
-            &copy; Check 2024
+    </section>
+
+    <!-- Sección de descarga -->
+    <section class="container my-5 text-center">
+        <h1>Empieza a controlar tu diabetes hoy........:</h1>
+        <button class="button2 btn btn-primary m-2">Registrarme</button>
+        <button class="button2 btn btn-secondary m-2">Descargar</button>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer bg-light text-center py-4">
+        <div class="container">
+            <p>&copy; 2024 Check</p>
+            <ul class="social-icons list-unstyled d-flex justify-content-center mt-3">
+                <li class="mx-2"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                <li class="mx-2"><a href="#"><i class="fab fa-twitter"></i></a></li>
+                <li class="mx-2"><a href="#"><i class="fab fa-instagram"></i></a></li>
+            </ul>
         </div>
-        <div class="footer-right">
-            <a href="#">Instagram</a>
-            <a href="#">Email</a>
-        </div>
-    </div>    
-</section>
+    </footer>
+
+    <!-- JS de Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+Z0lb1E6wBLTX2IOq00pBjYd15N9O" crossorigin="anonymous"></script>
 </body>
 </html>
