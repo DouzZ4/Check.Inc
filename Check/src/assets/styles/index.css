@@ -13,6 +13,7 @@ body {
 .sub-contenedor {
     display: flex;
     align-items: center;
+    width: 75%;
 }
 
 .icono {
@@ -29,24 +30,12 @@ body {
 
 .Che {
     font-size: 42px;
+    color: #3058a6;
 }
 
 .leyenda {
     color: #888888;
     font-size: 25px;
-}
-
-.button-mas {
-    background-color: black;
-    font-size: 12.5px; /* Corrige el formato del tamaño de fuente */
-    color: white;
-    border-radius: 8px;
-    font-weight: bold;
-}
-
-.button-mas:hover {
-    background-color: #F45501;
-    color: white;
 }
 
 .titulo-testi {
@@ -171,7 +160,41 @@ details[open] .accordion {
     background-color: #e0e0e0; /* Fondo más oscuro cuando se abre */
 }
 
+.container-my-5-text-center {
+    display: flex;
+    justify-content: center;
+}
 
+.container-my-5-text-center h1 {
+    color: #3058a6;
+}
+
+.div-my-5 {
+    width: 500px;
+}
+
+.img-descarga {
+    width: 400px;
+}
+
+.button2-m-2 {
+    color: white;
+    background: black;
+    border-radius: 8px;
+    font-size: 18px;
+    padding: 8px 15px;
+}
+
+.button2-m-2:hover {
+    background-color: #F45501;
+    border: none;
+}
+
+#titulos-home {
+    color: #3058a6;
+    font-size: 50px;
+
+}
 .imagen1 {
     max-width: flex;
 }
