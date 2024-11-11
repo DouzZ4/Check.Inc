@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="../assets/styles/Dashboard_Patient.css">
 </head>
 <body>
+    
+    <!-- Incluir los archivos JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../assets/scripts/dashboard.js"></script>  <!-- Código específico del Dashboard -->
+    <script src="../assets/scripts/main.js"></script>  <!-- Código general -->
+
     <div class="dashboard">
 
         <!-- Barra de navegación principal -->
@@ -45,7 +51,14 @@
             </aside>
     
             <!-- Panel Principal -->
+
             <main class="main-content">
+
+                <section class="resumen-salud">
+                    <img src="../assets/images/Familia_Paciente.png" alt="Imagen resumen de salud" class="imagen-resumen">
+                    <!-- Aquí irán detalles del estado de salud actual -->
+                </section>
+
                 <section class="resumen-salud">
                     <h2>Resumen de Salud</h2>
                     <!-- Aquí irán detalles del estado de salud actual -->
@@ -60,6 +73,42 @@
                     <h2>Últimas Citas</h2>
                     <!-- Información de citas recientes -->
                 </section>
+
+                <section class="estadisticas-semana">
+                    <h2>Resumen de la Semana</h2>
+                    <div class="estadisticas-cards">
+                        <!-- Card de Glucosa -->
+                        <div class="estadistica-card">
+                            <h3>Glucosa Promedio</h3>
+                            <p>120 mg/dL</p> <!-- Aquí iría el dato de glucosa promedio -->
+                        </div>
+                
+                        <!-- Card de Presión Arterial -->
+                        <div class="estadistica-card">
+                            <h3>Presión Arterial Promedio</h3>
+                            <p>120/80 mmHg</p> <!-- Datos promedio de presión -->
+                        </div>
+                
+                        <!-- Card de Frecuencia Cardíaca -->
+                        <div class="estadistica-card">
+                            <h3>Frecuencia Cardíaca Promedio</h3>
+                            <p>75 bpm</p> <!-- Datos de frecuencia cardíaca -->
+                        </div>
+                    </div>
+                
+                    <!-- Gráficos (si los tienes disponibles) -->
+                    <section class="graficas">
+                        <h3>Gráficas de Salud</h3>
+                        <div class="grafico">
+                            <canvas id="grafico-glucosa"></canvas> <!-- Gráfico de Glucosa -->
+                        </div>
+                        <div class="grafico">
+                            <canvas id="grafico-peso"></canvas> <!-- Gráfico de Peso -->
+                        </div>
+                    </section>
+                    
+                </section>
+                
             </main>
         </div>
     </div>
