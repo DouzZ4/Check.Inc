@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Quando&display=swap');
+
 body {
     margin: 0; /* Elimina los márgenes por defecto del body */
 }
 
+/* Contenedor principal centrado */
 .contenedor {
     display: flex;
     justify-content: center;
@@ -16,22 +19,29 @@ body {
     width: 75%;
 }
 
+/* Icono ajustable */
 .icono {
     width: 300px; /* Ajusta el tamaño según tu preferencia */
     height: auto;
     padding-right: 20px;
 }
 
-.Ingresar {
+/* Estilo de botón */
+.Ingresar, .button2-m-2, .button2-m-2-2 {
     background-color: black;
+    color: white;
     border-radius: 5px;
+    font-size: 18px;
+    padding: 8px 15px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
 }
 
-.Ingresar:hover {
-    background-color: #F45501; /* Cambio de color en hover */
-    border-radius: 5px;
+.Ingresar:hover, .button2-m-2:hover, .button2-m-2-2:hover {
+    background-color: #F45501;
 }
 
+/* Texto destacado */
 .Che {
     font-size: 42px;
     color: #3058a6;
@@ -42,18 +52,18 @@ body {
     font-size: 25px;
 }
 
+/* Título centrado */
 .titulo-testi {
     display: flex;
     justify-content: center;
-    align-content: center;
     font-size: 50px;
     font-weight: normal;
 }
 
+/* Estilos de los testimonios */
 .testi {
     background-color: white;
     width: 280px;
-    height: auto;
     border-radius: 16px;
     margin: 0 30px;
     padding: 20px;
@@ -65,7 +75,6 @@ body {
 
 .icon {
     display: flex;
-    width: 100%; 
     align-items: center;
     margin-bottom: 20px; 
 }
@@ -80,7 +89,7 @@ body {
 
 .ic p {
     color: black;
-    font-family: Quando;
+    font-family: 'Quando';
     margin: 0;
     font-size: 25px;
 }
@@ -90,80 +99,68 @@ body {
     font-size: 18px;
 }
 
+/* Contenedor de testimonios */
 .testimonios-com {
     display: flex;
     justify-content: center;
-    align-content: center;
     flex-wrap: wrap; /* Permite que los testimonios se acomoden en varias filas */
-    gap: 20px; /* Espacio entre cada testimonio */
-    max-width: 100%;
+    gap: 20px;
     padding: 20px;
 }
 
-.testi {
-    background-color: white;
-    width: 280px; /* Ancho inicial para pantallas más grandes */
-    height: auto;
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Media query para ajustar el tamaño en pantallas pequeñas */
+/* Responsive para testimonios */
 @media (max-width: 768px) {
     .testi {
-        width: 100%; /* Ancho completo para pantallas pequeñas */
-        margin: 10px 0; /* Margen superior e inferior para separación */
+        width: 100%;
+        margin: 10px 0;
     }
 }
 
+/* Wrapper con sombra */
 .Wrapper {
-    background-color: #f0f0f0; /* Fondo claro para el contenedor */
+    background-color: #f0f0f0;
     font-size: 1.5em;
     width: 100%;
     padding: 20px;
-    border-radius: 10px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para resaltar el contenedor */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* Acordeón */
 .accordion {
-    background-color: white; /* Fondo blanco para cada "cajón" */
-    border: 1px solid #ddd; /* Borde sutil */
-    border-radius: 8px; /* Bordes redondeados */
-    margin-bottom: 10px; /* Espacio entre los "cajones" */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Sombra para simular el efecto de un cajón */
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     padding: 15px;
-    cursor: pointer; /* Cambia el cursor para indicar interactividad */
-    transition: background-color 0.3s ease; /* Transición suave para el hover */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .accordion summary {
     font-weight: bold;
     font-size: 1.1em;
-    color: #333; /* Color de texto más oscuro */
-    margin-bottom: 10px; /* Espacio inferior para separar el contenido */
+    color: #333;
+    margin-bottom: 10px;
 }
 
 .accordion p {
     margin: 0;
     padding: 10px 0;
-    color: #555; /* Color de texto gris */
+    color: #555;
     line-height: 1.5;
 }
 
-/* Efecto hover para el acordeón */
 .accordion:hover {
-    background-color: #f8f8f8; /* Fondo más claro en hover */
+    background-color: #f8f8f8;
 }
 
-/* Opcional: efecto de apertura para cada detalle */
 details[open] .accordion {
-    background-color: #e0e0e0; /* Fondo más oscuro cuando se abre */
+    background-color: #e0e0e0;
 }
 
+/* Contenedor y título principal */
 .container-my-5-text-center {
     display: flex;
     justify-content: center;
@@ -173,50 +170,18 @@ details[open] .accordion {
     color: #3058a6;
 }
 
+/* Tamaño y estilo de imagen */
 .div-my-5 {
     width: 500px;
 }
 
-.img-descarga {
-    width: 400px;
+.img-descarga, .imagen1 {
+    width: 100%;
+    max-width: 400px;
 }
 
-.button2-m-2-2 {
-    color: white;
-    background: black;
-    border-radius: 8px;
-    font-size: 18px;
-    padding: 8px 15px;
-}
-
-a {
-    text-decoration: none;
-    color: white;
-}
-
-.button2-m-2-2:hover {
-    background-color: #F45501;
-    border: none;
-}
-
-.button2-m-2 {
-    color: white;
-    background: black;
-    border-radius: 8px;
-    font-size: 18px;
-    padding: 8px 15px;
-}
-
-.button2-m-2:hover {
-    background-color: #F45501;
-    border: none;
-}
-
+/* Estilo del título principal */
 #titulos-home {
     color: #3058a6;
     font-size: 50px;
-
-}
-.imagen1 {
-    max-width: flex;
 }

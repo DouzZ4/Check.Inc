@@ -1,0 +1,61 @@
+body {
+    margin: 0;
+}
+
+.dashboard {
+    display: flex;
+    flex-direction: column; /* Cambiar a disposición vertical */
+    height: 100vh;
+}
+
+.header {
+    background-color: #3058a6;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.sidebar {
+    background-color: #222;
+    color: white;
+    width: 20vw;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f4f4f4;
+    overflow-y: auto; /* Permite el desplazamiento si el contenido es largo */
+}
+
+.resumen-salud, .graficas, .citas-recientes {
+    background-color: white;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}

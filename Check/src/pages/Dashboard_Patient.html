@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../assets/styles/main.css">
+    <link rel="stylesheet" href="../assets/styles/Dashboard_Patient.css">
+</head>
+<body>
+    <div class="dashboard">
+
+        <!-- Barra de navegación principal -->
+    <nav class="navbar">
+        <div class="check">
+            <label for="check">CHECK</label>
+        </div>
+        
+        <ul class="nav-links">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="#">Historial</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-btn">Registros</a>
+                <ul class="dropdown-content">
+                    <li><a href="#">Alarmas</a></li> 
+                    <li><a href="#">Actividades</a></li>
+                    <li><a href="#">Citas</a></li>
+                    <li><a href="#">Medicamentos</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Perfil</a></li>
+            <li><a href="#" id="Anomalias-btn">Anomalias</a></li>
+        </ul>
+    </nav>
+    
+        <div class="dashboard-content">
+            <!-- Barra Lateral -->
+            <aside class="sidebar">
+                <ul>
+                    <li><a href="#">Resultados de Exámenes</a></li>
+                    <li><a href="#">Medicamentos</a></li>
+                    <li><a href="#">Citas Programadas</a></li>
+                    <li><a href="#">Estadísticas de Salud</a></li>
+                </ul>
+            </aside>
+    
+            <!-- Panel Principal -->
+            <main class="main-content">
+                <section class="resumen-salud">
+                    <h2>Resumen de Salud</h2>
+                    <!-- Aquí irán detalles del estado de salud actual -->
+                </section>
+                
+                <section class="graficas">
+                    <h2>Gráficas de Salud</h2>
+                    <!-- Gráficos como niveles de glucosa u otros indicadores -->
+                </section>
+                
+                <section class="citas-recientes">
+                    <h2>Últimas Citas</h2>
+                    <!-- Información de citas recientes -->
+                </section>
+            </main>
+        </div>
+    </div>
+    
+</body>
+</html>
