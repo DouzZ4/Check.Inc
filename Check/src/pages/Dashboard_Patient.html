@@ -1,46 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../assets/styles/main.css">
-    <link rel="stylesheet" href="../assets/styles/Dashboard_Patient.css">
+    <!-- Metadatos de la página -->
+    <meta charset="UTF-8"> <!-- Define la codificación de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Permite que la página sea responsiva en dispositivos móviles -->
+    <title>Document</title> <!-- Título de la página -->
+    
+    <!-- Enlaces a los archivos de estilo CSS -->
+    <link rel="stylesheet" href="../assets/styles/main.css"> <!-- Estilos generales -->
+    <link rel="stylesheet" href="../assets/styles/Dashboard_Patient.css"> <!-- Estilos específicos para el dashboard -->
 </head>
 <body>
-    
+
     <!-- Incluir los archivos JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../assets/scripts/dashboard.js"></script>  <!-- Código específico del Dashboard -->
     <script src="../assets/scripts/main.js"></script>  <!-- Código general -->
-
+    <!-- Sección principal que contiene todo el dashboard -->
     <div class="dashboard">
 
         <!-- Barra de navegación principal -->
-    <nav class="navbar">
-        <div class="check">
-            <label for="check">CHECK</label>
-        </div>
+        <nav class="navbar">
+            <div class="check">
+                <label for="check">CHECK</label> <!-- Etiqueta de comprobación -->
+            </div>
+            
+            <ul class="nav-links"> <!-- Menú de navegación -->
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="#">Historial</a></li>
+                <li class="dropdown"> <!-- Menú desplegable para registros -->
+                    <a href="#" class="dropdown-btn">Registros</a>
+                    <ul class="dropdown-content">
+                        <li><a href="#">Alarmas</a></li> 
+                        <li><a href="#">Actividades</a></li>
+                        <li><a href="#">Citas</a></li>
+                        <li><a href="#">Medicamentos</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Perfil</a></li>
+                <li><a href="#" id="Anomalias-btn">Anomalias</a></li>
+            </ul>
+        </nav>
         
-        <ul class="nav-links">
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="#">Historial</a></li>
-            <li class="dropdown">
-                <a href="#" class="dropdown-btn">Registros</a>
-                <ul class="dropdown-content">
-                    <li><a href="#">Alarmas</a></li> 
-                    <li><a href="#">Actividades</a></li>
-                    <li><a href="#">Citas</a></li>
-                    <li><a href="#">Medicamentos</a></li>
-                </ul>
-            </li>
-            <li><a href="#">Perfil</a></li>
-            <li><a href="#" id="Anomalias-btn">Anomalias</a></li>
-        </ul>
-    </nav>
-    
+        <!-- Contenido principal del dashboard -->
         <div class="dashboard-content">
-            <!-- Barra Lateral -->
+            <!-- Barra lateral con enlaces rápidos -->
             <aside class="sidebar">
                 <ul>
                     <li><a href="#">Resultados de Exámenes</a></li>
@@ -49,61 +53,109 @@
                     <li><a href="#">Estadísticas de Salud</a></li>
                 </ul>
             </aside>
-    
-            <!-- Panel Principal -->
 
+            <!-- Panel principal con botones y visualizaciones -->
             <main class="main-content">
 
-                <section class="resumen-salud">
+                <!-- Imagen de resumen de salud en la parte superior -->
+                <h1 class="Imagen_familia">
                     <img src="../assets/images/Familia_Paciente.png" alt="Imagen resumen de salud" class="imagen-resumen">
-                    <!-- Aquí irán detalles del estado de salud actual -->
-                </section>
+                </h1>
 
-                <section class="resumen-salud">
-                    <h2>Resumen de Salud</h2>
-                    <!-- Aquí irán detalles del estado de salud actual -->
-                </section>
+                <div class="dashboard-botones">
                 
-                <section class="graficas">
-                    <h2>Gráficas de Salud</h2>
-                    <!-- Gráficos como niveles de glucosa u otros indicadores -->
-                </section>
-                
-                <section class="citas-recientes">
-                    <h2>Últimas Citas</h2>
-                    <!-- Información de citas recientes -->
-                </section>
+                    <!-- Botón de Resumen de Salud -->
+                    <button class="boton-resumen" onclick="mostrarResumenSalud()">
+                        <h2>Resumen de Salud</h2>
+                    </button>
 
+                    <!-- Sección de Objetivos de Salud -->
+                    <section class="objetivos-salud">
+                        <h2>Objetivos de Salud</h2>
+                        
+                        <div class="objetivo-item">
+                            <h3>Glucosa en el Rango</h3>
+                            <div class="progreso">
+                                <div id="progreso-glucosa" class="barra-progreso"></div> <!-- Barra de progreso para la glucosa -->
+                            </div>
+                            <p id="mensaje-glucosa">Tu objetivo es mantener la glucosa entre 70 y 100 mg/dL</p> <!-- Mensaje explicativo -->
+                        </div>
+
+                        <div class="objetivo-item">
+                            <h3>Presión Arterial Saludable</h3>
+                            <div class="progreso">
+                                <div id="progreso-presion" class="barra-progreso"></div> <!-- Barra de progreso para presión arterial -->
+                            </div>
+                            <p id="mensaje-presion">Tu objetivo es mantener la presión arterial en 120/80 mmHg</p> <!-- Mensaje explicativo -->
+                        </div>
+
+                        <div class="objetivo-item">
+                            <h3>Frecuencia Cardíaca Normal</h3>
+                            <div class="progreso">
+                                <div id="progreso-fc" class="barra-progreso"></div> <!-- Barra de progreso para la frecuencia cardíaca -->
+                            </div>
+                            <p id="mensaje-fc">Tu objetivo es mantener la frecuencia cardíaca por debajo de 80 bpm</p> <!-- Mensaje explicativo -->
+                        </div>
+                    </section>
+
+                    <!-- Botón para ver gráficas de salud -->
+                    <button class="boton-graficas">
+                        <h2>Gráficas de Salud</h2>
+                    </button>
+                
+                    <!-- Botón para ver las últimas citas -->
+                    <button class="boton-citas" onclick="abrirModalCitas()">
+                        <h2>Últimas Citas</h2>
+                    </button>
+
+                    <!-- Modal para mostrar el historial de citas -->
+                    <div id="modalCitas" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="cerrarModalCitas()">&times;</span>
+                            <h2>Historial de Citas</h2>
+                            <ul class="lista-citas">
+                                <li><button class="cita-item" onclick="mostrarDetallesCita(1)">Cita 1</button></li>
+                                <li><button class="cita-item" onclick="mostrarDetallesCita(2)">Cita 2</button></li>
+                                <li><button class="cita-item" onclick="mostrarDetallesCita(3)">Cita 3</button></li>
+                                <li><button class="cita-item" onclick="mostrarDetallesCita(4)">Cita 4</button></li>
+                                <li><button class="cita-item" onclick="mostrarDetallesCita(5)">Cita 5</button></li>
+                            </ul>
+                            <div id="detalles-cita" class="detalles-cita"></div> <!-- Detalles de la cita seleccionada -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumen de la Semana -->
                 <section class="estadisticas-semana">
                     <h2>Resumen de la Semana</h2>
                     <div class="estadisticas-cards">
-                        <!-- Card de Glucosa -->
+                        <!-- Card con el promedio de glucosa -->
                         <div class="estadistica-card">
                             <h3>Glucosa Promedio</h3>
-                            <p>120 mg/dL</p> <!-- Aquí iría el dato de glucosa promedio -->
+                            <p>120 mg/dL</p> <!-- Datos de glucosa promedio -->
                         </div>
                 
-                        <!-- Card de Presión Arterial -->
+                        <!-- Card con el promedio de presión arterial -->
                         <div class="estadistica-card">
                             <h3>Presión Arterial Promedio</h3>
                             <p>120/80 mmHg</p> <!-- Datos promedio de presión -->
                         </div>
                 
-                        <!-- Card de Frecuencia Cardíaca -->
+                        <!-- Card con el promedio de frecuencia cardíaca -->
                         <div class="estadistica-card">
                             <h3>Frecuencia Cardíaca Promedio</h3>
                             <p>75 bpm</p> <!-- Datos de frecuencia cardíaca -->
                         </div>
                     </div>
                 
-                    <!-- Gráficos (si los tienes disponibles) -->
+                    <!-- Sección con los gráficos de salud -->
                     <section class="graficas">
                         <h3>Gráficas de Salud</h3>
                         <div class="grafico">
-                            <canvas id="grafico-glucosa"></canvas> <!-- Gráfico de Glucosa -->
+                            <canvas id="grafico-glucosa"></canvas> <!-- Gráfico de glucosa -->
                         </div>
                         <div class="grafico">
-                            <canvas id="grafico-peso"></canvas> <!-- Gráfico de Peso -->
+                            <canvas id="grafico-peso"></canvas> <!-- Gráfico de peso -->
                         </div>
                     </section>
                     
