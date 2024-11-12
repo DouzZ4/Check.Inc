@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de Exámenes</title>
+    <link rel="stylesheet" href="../assets/styles/Resultados_Examenes.css">
+    <link rel="stylesheet" href="../assets/styles/main.css">
+</head>
+<body>
+
+    <!-- Barra de navegación principal -->
+    <nav class="navbar">
+        <div class="check">
+            <label for="check">CHECK</label> <!-- Etiqueta de comprobación -->
+        </div>
+        
+        <ul class="nav-links"> <!-- Menú de navegación -->
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="#">Historial</a></li>
+            <li class="dropdown"> <!-- Menú desplegable para registros -->
+                <a href="#" class="dropdown-btn">Registros</a>
+                <ul class="dropdown-content">
+                    <li><a href="#">Alarmas</a></li> 
+                    <li><a href="#">Actividades</a></li>
+                    <li><a href="#">Citas</a></li>
+                    <li><a href="#">Medicamentos</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Perfil</a></li>
+            <li><a href="#" id="Anomalias-btn">Anomalias</a></li>
+        </ul>
+    </nav>
+<div class="contenido_pagina">
+    <h1>Resultados de Exámenes</h1>
+
+    <!-- Sección para mostrar el PDF actual -->
+    <section id="pdf-actual">
+        <h2>Resultado Actual</h2>
+        <!-- Aquí puedes insertar el visor de PDF -->
+        <embed src="../assets/examenes/resultado_actual.pdf" width="600" height="800" type="application/pdf">
+    </section>
+
+    <!-- Historial de Resultados Anteriores -->
+    <section id="historial-resultados">
+        <h2>Historial de Resultados</h2>
+        <ul>
+            <li><a href="../assets/examenes/resultado_01.pdf" target="_blank">Resultado del 2023-01-01</a></li>
+            <li><a href="../assets/examenes/resultado_02.pdf" target="_blank">Resultado del 2023-02-15</a></li>
+            <li><a href="../assets/examenes/resultado_03.pdf" target="_blank">Resultado del 2023-03-20</a></li>
+            <!-- Añade más enlaces según sea necesario -->
+        </ul>
+    </section>
+
+    <!-- Botón de regreso al dashboard -->
+    <button onclick="window.location.href='dashboard.html'">Volver al Dashboard</button>
+
+</div>
+</body>
+</html>

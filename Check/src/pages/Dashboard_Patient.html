@@ -47,7 +47,7 @@
             <!-- Barra lateral con enlaces rápidos -->
             <aside class="sidebar">
                 <ul>
-                    <li><a href="#">Resultados de Exámenes</a></li>
+                    <li><a href="../pages/Resultados_examenes.html">Resultados de Exámenes</a></li>
                     <li><a href="#">Medicamentos</a></li>
                     <li><a href="#">Citas Programadas</a></li>
                     <li><a href="#">Estadísticas de Salud</a></li>
@@ -64,39 +64,10 @@
 
                 <div class="dashboard-botones">
                 
-                    <!-- Botón de Resumen de Salud -->
-                    <button class="boton-resumen" onclick="mostrarResumenSalud()">
-                        <h2>Resumen de Salud</h2>
-                    </button>
-
-                    <!-- Sección de Objetivos de Salud -->
-                    <section class="objetivos-salud">
+                    <!-- Botón de Objetivos de Salud -->
+                    <button class="boton-resumen" onclick="toggleObjetivosSalud()">
                         <h2>Objetivos de Salud</h2>
-                        
-                        <div class="objetivo-item">
-                            <h3>Glucosa en el Rango</h3>
-                            <div class="progreso">
-                                <div id="progreso-glucosa" class="barra-progreso"></div> <!-- Barra de progreso para la glucosa -->
-                            </div>
-                            <p id="mensaje-glucosa">Tu objetivo es mantener la glucosa entre 70 y 100 mg/dL</p> <!-- Mensaje explicativo -->
-                        </div>
-
-                        <div class="objetivo-item">
-                            <h3>Presión Arterial Saludable</h3>
-                            <div class="progreso">
-                                <div id="progreso-presion" class="barra-progreso"></div> <!-- Barra de progreso para presión arterial -->
-                            </div>
-                            <p id="mensaje-presion">Tu objetivo es mantener la presión arterial en 120/80 mmHg</p> <!-- Mensaje explicativo -->
-                        </div>
-
-                        <div class="objetivo-item">
-                            <h3>Frecuencia Cardíaca Normal</h3>
-                            <div class="progreso">
-                                <div id="progreso-fc" class="barra-progreso"></div> <!-- Barra de progreso para la frecuencia cardíaca -->
-                            </div>
-                            <p id="mensaje-fc">Tu objetivo es mantener la frecuencia cardíaca por debajo de 80 bpm</p> <!-- Mensaje explicativo -->
-                        </div>
-                    </section>
+                    </button>
 
                     <!-- Botón para ver gráficas de salud -->
                     <button class="boton-graficas">
@@ -124,6 +95,33 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Sección de Objetivos de Salud (inicialmente oculta) -->
+                <section class="objetivos-salud" id="objetivosSalud" style="display: none;">
+                    <div class="objetivo-item">
+                        <h3>Glucosa en el Rango</h3>
+                        <div class="progreso">
+                            <div id="progreso-glucosa" class="barra-progreso"></div>
+                        </div>
+                        <p id="mensaje-glucosa">Tu objetivo es mantener la glucosa entre 70 y 100 mg/dL</p>
+                    </div>
+
+                    <div class="objetivo-item">
+                        <h3>Presión Arterial Saludable</h3>
+                        <div class="progreso">
+                            <div id="progreso-presion" class="barra-progreso"></div>
+                        </div>
+                        <p id="mensaje-presion">Tu objetivo es mantener la presión arterial en 120/80 mmHg</p>
+                    </div>
+
+                    <div class="objetivo-item">
+                        <h3>Frecuencia Cardíaca Normal</h3>
+                        <div class="progreso">
+                            <div id="progreso-fc" class="barra-progreso"></div>
+                        </div>
+                        <p id="mensaje-fc">Tu objetivo es mantener la frecuencia cardíaca por debajo de 80 bpm</p>
+                    </div>
+                </section>
 
                 <!-- Resumen de la Semana -->
                 <section class="estadisticas-semana">

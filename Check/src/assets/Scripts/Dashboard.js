@@ -145,3 +145,15 @@ function mostrarResumenSalud() {
     document.getElementById("mensaje-fc").innerText = 
         `Frecuencia Cardíaca: ${frecuenciaCardiaca} bpm (${progresoFC}% del objetivo alcanzado)`;
 }
+
+// Función para mostrar u ocultar la sección de Objetivos de Salud
+function toggleObjetivosSalud() {
+    const objetivosSalud = document.getElementById("objetivosSalud");
+
+    // Alterna la visibilidad
+    if (objetivosSalud.style.display === "none" || objetivosSalud.style.display === "") {
+        objetivosSalud.style.display = "block";
+    } else {
+        objetivosSalud.style.display = "none";
+    }
+}
