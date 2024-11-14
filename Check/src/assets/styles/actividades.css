@@ -1,0 +1,8 @@
+.tus {
+    color: #888888;
+    font-size: 24px;
+    margin-bottom: 5px;
+    margin-left: 30px;
+    position: relative; /* Asegura que top funcione */
+    margin-top: 20px;
+}
