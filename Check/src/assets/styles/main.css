@@ -38,7 +38,7 @@ body {
 
 .nav-links a {
     text-decoration: none;
-    color: white !important;
+    color: white;
     padding: 8px 6px;
     transition: background-color 0.3s;
 }
@@ -51,7 +51,7 @@ body {
 
 /* Botón de anomalías con un diseño diferente */
 #Anomalias-btn {
-    background-color: #F45501;
+    background-color: white;
     color: black;
     border-radius: 5px;
 }
