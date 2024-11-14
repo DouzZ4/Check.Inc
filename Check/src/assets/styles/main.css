@@ -11,12 +11,12 @@ body {
 }
 
 /* Barra de navegación personalizada */
-.navbar {
+.navbar  {
     position: sticky;
     top: 0;
     background-color: #3058a6 !important;
-    width: auto;
-    padding: 20px;
+    width: auto !important;
+    padding: 20px !important;
     display: flex;
     align-items: center;
     justify-content: space-between;
