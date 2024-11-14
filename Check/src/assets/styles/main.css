@@ -2,7 +2,7 @@
 
 /* Configuración del cuerpo de la página */
 body {
-    font-family: 'Quando', sans-serif !important;
+    font-family: 'Quando', bold !important;
     background-color: white;
     display: flex;
     flex-direction: column;
