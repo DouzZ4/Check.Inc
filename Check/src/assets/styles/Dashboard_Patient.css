@@ -1,7 +1,7 @@
 /* Reset: Reseteo básico de márgenes y fuentes */
 body {
     margin: 0; /* Elimina márgenes predeterminados */
-    font-family: Arial, sans-serif; /* Establece una fuente general */
+    
 }
 
 /* Estructura General: Configuración del contenedor principal y la disposición en columna */
