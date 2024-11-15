@@ -1,0 +1,29 @@
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+#listaMedicamentos {
+    margin-top: 20px;
+}
+
+.especificaciones {
+    margin-top: 30px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+#registroMedicamentoForm button {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
