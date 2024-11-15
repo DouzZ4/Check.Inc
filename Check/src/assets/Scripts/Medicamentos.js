@@ -1,22 +1,6 @@
 // Array para almacenar los medicamentos registrados
 let medicamentos = [];
 
-// Función para registrar un nuevo medicamento
-function registrarMedicamento() {
-    const nombre = document.getElementById('nombre').value;
-    const descripcion = document.getElementById('descripcion').value;
-
-    if (nombre && descripcion) {
-        // Crear objeto medicamento y agregarlo a la lista
-        const medicamento = { nombre, descripcion };
-        medicamentos.push(medicamento);
-
-        // Actualizar la lista visualmente
-        actualizarListaMedicamentos();
-        limpiarFormulario();
-    }
-}
-
 // Función para limpiar el formulario
 function limpiarFormulario() {
     document.getElementById('nombre').value = '';
@@ -42,4 +26,33 @@ function mostrarEspecificaciones(index) {
     const medicamento = medicamentos[index];
     document.getElementById('nombreMedicamento').textContent = `Nombre: ${medicamento.nombre}`;
     document.getElementById('descripcionMedicamento').textContent = `Descripción: ${medicamento.descripcion}`;
+}
+
+// Cargar medicamentos guardados en Local Storage al cargar la página
+window.onload = function () {
+    if (localStorage.getItem('medicamentos')) {
+        medicamentos = JSON.parse(localStorage.getItem('medicamentos'));
+        actualizarListaMedicamentos();
+    }
+};
+
+// Guardar medicamentos en Local Storage
+function guardarEnLocalStorage() {
+    localStorage.setItem('medicamentos', JSON.stringify(medicamentos));
+}
+
+// Modificar la función para registrar un nuevo medicamento
+function registrarMedicamento() {
+    const nombre = document.getElementById('nombre').value;
+    const descripcion = document.getElementById('descripcion').value;
+
+    if (nombre && descripcion) {
+        const medicamento = { nombre, descripcion };
+        medicamentos.push(medicamento);
+
+        // Actualizar la lista y guardar en Local Storage
+        actualizarListaMedicamentos();
+        guardarEnLocalStorage();
+        limpiarFormulario();
+    }
 }
