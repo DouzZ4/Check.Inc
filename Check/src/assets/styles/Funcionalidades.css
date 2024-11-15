@@ -1,11 +1,63 @@
+.Inicios {
+
+    color: #888888;
+    font-size: 20px;
+    
+   padding: 50px;
+    display:flex;
+}
 body {
     margin: 0;
 }
 
 h1  {
-font-size: 2.0em;
+font-size: 5.0em;
+
+padding: 50px;
+display: flex;
 }
 img {
     width: 1fr;
 
 }
+
+.Textos_primeras {
+
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; 
+    gap: 20px;
+    padding: 20px;
+    
+}
+.Imagenes_primeras {
+
+    justify-content: center;
+    display: flex;
+gap: 50px;
+    padding: 50px; 
+}
+
+.Texto_Segundas {
+
+    justify-content: center;
+    display: flex;
+gap: 10px;
+    padding: 20px;
+}
+
+.Imagenes_Segundas {
+
+    justify-content: center;
+    display: flex;
+gap: 50px;
+    padding: 50px; 
+}
+
+ 
+
+
+    .Primera_parte {
+       
+        
+    }
