@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registros</title>
+    <link rel="stylesheet" href="../assets/styles/main.css">
+    <link rel="stylesheet" href="../assets/styles/Dashboard_Patient.css">
+    <link rel="stylesheet" href="../assets/styles/Records.css">
+</head>
+<body>
+    <div class="dashboard">
+
+        <!-- Barra de navegación principal -->
+        <nav class="navbar">
+            <div class="check">
+                <label for="check">CHECK</label>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="Dashboard_Patient.html">Inicio</a></li>
+                <li><a href="#">Historial</a></li>
+                <li class="dropdown">
+                    <a href="Records.html" class="dropdown-btn">Registros</a>
+                </li>
+                <li><a href="#">Perfil</a></li>
+                <li><a href="#" id="Anomalias-btn">Anomalías</a></li>
+            </ul>
+        </nav>
+        
+        <div class="dashboard-content">
+            <!-- Barra lateral -->
+            <aside class="sidebar">
+                <ul>
+                    <li><a href="../pages/Resultados_examenes.html">Resultados de Exámenes</a></li>
+                    <li><a href="../pages/Drugs.html">Medicamentos</a></li>
+                    <li><a href="#" id="citasProgramadasBtn">Citas Programadas</a></li>
+                    <li><a href="#">Estadísticas de Salud</a></li>
+                </ul>
+            </aside>
+
+            <!-- Contenido principal -->
+            <main class="main-content">
+
+                <h1>Registros de Salud</h1>
+
+                <!-- Sección de Medicamentos -->
+                <section id="medicamentos">
+                    <h2>Medicamentos</h2>
+                    <button onclick="abrirModal('medicamentos')">Abrir Modal Medicamentos</button>
+                    <!-- Modal para Medicamentos -->
+                    <div id="modalMedicamentos" class="modal">
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <h2>Registrar Medicamento</h2>
+                            <form id="formMedicamentos">
+                                <!-- Campos del formulario -->
+                                <button type="submit">Registrar</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- Sección de Actividades -->
+                <section id="actividades">
+                    <h2>Actividades</h2>
+                    <button onclick="abrirModal('actividades')">Abrir Modal Actividades</button>
+                    <div id="modalActividades" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="cerrarModal('actividades')">&times;</span>
+                            <h3>Registrar Actividad</h3>
+                            <form id="formActividades">
+                                <label for="actividadNombre">Actividad:</label>
+                                <input type="text" id="actividadNombre" required>
+
+                                <label for="actividadFecha">Fecha:</label>
+                                <input type="date" id="actividadFecha" required>
+
+                                <label for="actividadHora">Hora:</label>
+                                <input type="time" id="actividadHora" required>
+
+                                <button type="submit">Guardar Actividad</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sección de Citas -->
+                <section id="citas">
+                    <h2>Citas</h2>
+                    <button onclick="abrirModal('citas')">Agregar Cita</button>
+                    <div id="modalCitas" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="cerrarModal('citas')">&times;</span>
+                            <h3>Registrar Cita</h3>
+                            <form id="formCitas">
+                                <label for="citaMedico">Médico:</label>
+                                <input type="text" id="citaMedico" required>
+
+                                <label for="citaFecha">Fecha:</label>
+                                <input type="date" id="citaFecha" required>
+
+                                <label for="citaHora">Hora:</label>
+                                <input type="time" id="citaHora" required>
+
+                                <label for="citaLugar">Lugar:</label>
+                                <input type="text" id="citaLugar" required>
+
+                                <label for="citaTipo">Tipo de Cita:</label>
+                                <input type="text" id="citaTipo" required>
+
+                                <button type="submit">Guardar Cita</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <script src="../assets/scripts/dashboard.js"></script>
+    <script src="../assets/scripts/main.js"></script>
+
+</body>
+</html>

@@ -151,12 +151,28 @@
                     </div>
                 
                     <!-- Sección con los gráficos de salud -->
-                    <section class="graficas">
-                        <h3>Gráficas de Salud</h3>
-                        <div class="grafico">
-                            <canvas id="grafico-glucosa"></canvas>
-                        </div>
-                    </section>
+                    <!-- Contenedor para las gráficas -->
+            <main class="main-content">
+                <h1>Dashboard de Pacientes</h1>
+                <div class="charts-container">
+
+                    <!-- Gráfica de barras -->
+                    <div class="chart">
+                        <h3>Frecuencia Cardiaca Semanal</h3>
+                        <canvas id="barChart"></canvas>
+                    </div>
+
+                    <!-- Gráfica de líneas -->
+                    <div class="chart">
+                        <h3>Niveles de Glucosa en el Tiempo</h3>
+                        <canvas id="lineChart"></canvas>
+                    </div>
+
+                    <!-- Gráfica de pastel -->
+                    <div class="chart">
+                        <h3>Distribución de Medicamentos</h3>
+                        <canvas id="pieChart"></canvas>
+                    </div>
                 </section>
             </main>
         </div>
