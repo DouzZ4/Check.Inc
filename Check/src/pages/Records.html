@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registros</title>
     <link rel="stylesheet" href="../assets/styles/main.css">
-    <link rel="stylesheet" href="../assets/styles/Dashboard_Patient.css">
     <link rel="stylesheet" href="../assets/styles/Records.css">
 </head>
 <body>
     <div class="dashboard">
 
-        <!-- Barra de navegación principal -->
+        <!-- Barra de navegación -->
         <nav class="navbar">
             <div class="check">
                 <label for="check">CHECK</label>
@@ -19,10 +18,8 @@
             
             <ul class="nav-links">
                 <li><a href="Dashboard_Patient.html">Inicio</a></li>
-                <li><a href="#">Historial</a></li>
-                <li class="dropdown">
-                    <a href="Records.html" class="dropdown-btn">Registros</a>
-                </li>
+                <li><a href="Resultados_examenes.html">Historial</a></li>
+                <li><a href="Records.html">Registros</a></li>
                 <li><a href="#">Perfil</a></li>
                 <li><a href="#" id="Anomalias-btn">Anomalías</a></li>
             </ul>
@@ -47,25 +44,31 @@
                 <!-- Sección de Medicamentos -->
                 <section id="medicamentos">
                     <h2>Medicamentos</h2>
-                    <button onclick="abrirModal('medicamentos')">Abrir Modal Medicamentos</button>
-                    <!-- Modal para Medicamentos -->
+                    <button onclick="abrirModal('medicamentos')">Agregar Medicamento</button>
                     <div id="modalMedicamentos" class="modal">
                         <div class="modal-content">
-                            <span class="close">&times;</span>
-                            <h2>Registrar Medicamento</h2>
+                            <span class="close" onclick="cerrarModal('medicamentos')">&times;</span>
+                            <h3>Registrar Medicamento</h3>
                             <form id="formMedicamentos">
-                                <!-- Campos del formulario -->
-                                <button type="submit">Registrar</button>
+                                <label for="medicamentoNombre">Nombre:</label>
+                                <input type="text" id="medicamentoNombre" required>
+
+                                <label for="medicamentoDosis">Dosis:</label>
+                                <input type="text" id="medicamentoDosis" required>
+
+                                <label for="medicamentoFrecuencia">Frecuencia:</label>
+                                <input type="text" id="medicamentoFrecuencia" required>
+
+                                <button type="submit">Guardar Medicamento</button>
                             </form>
                         </div>
                     </div>
-
                 </section>
 
                 <!-- Sección de Actividades -->
                 <section id="actividades">
                     <h2>Actividades</h2>
-                    <button onclick="abrirModal('actividades')">Abrir Modal Actividades</button>
+                    <button onclick="abrirModal('actividades')">Agregar Actividad</button>
                     <div id="modalActividades" class="modal">
                         <div class="modal-content">
                             <span class="close" onclick="cerrarModal('actividades')">&times;</span>
@@ -120,8 +123,7 @@
         </div>
     </div>
 
-    <script src="../assets/scripts/dashboard.js"></script>
-    <script src="../assets/scripts/main.js"></script>
-
+    <script src="../assets/scripts/Records.js"></script>
+    
 </body>
 </html>

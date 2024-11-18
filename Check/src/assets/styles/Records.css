@@ -1,113 +1,95 @@
-/* General de Records */
-.records-page {
-    font-family: 'Arial', sans-serif;
-    background-color: #f5f5f5;
+/* Estructura General: Configuración del contenedor principal y la disposición en columna */
+.dashboard {
+    display: flex;
+    flex-direction: column; /* Disposición vertical de los elementos */
+    height: 100vh; /* Asegura que el contenedor ocupe toda la altura de la ventana */
+}
+
+.dashboard-content {
+    display: flex; 
+    flex: 1; /* Asegura que ocupe todo el espacio disponible */
+    overflow: hidden; /* Previene el desbordamiento de contenido */
+}
+
+/* Panel Principal: Configuración de la sección principal de contenido */
+.main-content {
+    flex-grow: 1; /* Hace que esta sección crezca y ocupe el espacio restante */
+    padding: 20px;
+    background-color: #f4f4f4; /* Fondo gris claro */
+    overflow-y: auto; /* Habilita el desplazamiento vertical si el contenido es largo */
+}
+
+/* Encabezados principales */
+.main-content h1 {
     color: #333;
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
 }
 
-.records-page h1, 
-.records-page h2 {
-    color: #4CAF50;
-}
-
-/* Secciones */
-.records-page section {
-    margin-bottom: 30px;
-    padding: 20px;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.records-page section h2 {
-    margin-bottom: 15px;
+/* Encabezados de secciones */
+.main-content h2 {
+    color: #555;
     font-size: 1.5rem;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
 }
 
-.records-page section button {
-    margin-top: 10px;
-}
-
-/* Botones */
-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
+/* Botones generales */
+.main-content button {
+    background-color: #007bff; /* Azul llamativo */
+    color: #fff;
     padding: 10px 15px;
+    border: none;
     border-radius: 5px;
-    cursor: pointer;
     font-size: 1rem;
-    transition: background-color 0.3s;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-button:hover {
-    background-color: #45a049;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-}
-
-/* Modales */
-.modal {
-    display: none; /* Ocultar los modales por defecto */
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0,0,0); /* Fondo oscuro */
-    background-color: rgba(0,0,0,0.4); /* Fondo oscuro con opacidad */
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-
-/* Transiciones */
-@keyframes slideDown {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+.main-content button:hover {
+    background-color: #0056b3; /* Azul más oscuro al pasar el mouse */
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .records-page section {
-        padding: 15px;
-    }
+/* Formularios */
+.main-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
 
-    button {
-        font-size: 0.9rem;
-        padding: 8px 10px;
-    }
+/* Etiquetas */
+.main-content label {
+    font-weight: bold;
+    color: #444;
+}
 
-    .modal-content {
-        width: 95%;
-    }
+/* Campos de entrada */
+.main-content input[type="text"],
+.main-content input[type="date"],
+.main-content input[type="time"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Botón de formulario */
+.main-content form button {
+    align-self: flex-start;
+    background-color: #28a745; /* Verde para el botón de guardar */
+    padding: 10px 20px;
+}
+
+.main-content form button:hover {
+    background-color: #218838;
+}
+
+/* Espaciado entre secciones */
+.main-content section {
+    margin-bottom: 30px;
 }
