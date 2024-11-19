@@ -19,16 +19,25 @@ h1 {
     color: #777;
     margin-bottom: 10px;
 }
+<<<<<<< Updated upstream
 
 /* Sección de funcionalidades */
 .funcionalidades {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* Tres columnas */
     gap: 20px; /* Espaciado entre las tarjetas */
+=======
+.Textos_primeras {
+
+    justify-content: center;
+    display:column;
+gap: 10px;
+>>>>>>> Stashed changes
     padding: 20px;
     justify-items: center; /* Centra las tarjetas en cada celda */
 }
 
+<<<<<<< Updated upstream
 .tarjeta {
     background: #ffffff;
     border: 1px solid #ddd;
@@ -38,6 +47,14 @@ h1 {
     text-align: center;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s, box-shadow 0.3s;
+=======
+.Texto_Segundas {
+
+    justify-content: center;
+    display: flex;
+gap: 10px;
+    padding: 20px;
+>>>>>>> Stashed changes
 }
 
 .tarjeta img {
@@ -58,6 +75,7 @@ h1 {
     line-height: 1.5em;
 }
 
+<<<<<<< Updated upstream
 .tarjeta:hover {
     transform: scale(1.05);
     box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
@@ -76,3 +94,22 @@ h1 {
     }
 }
 
+=======
+    a {
+      
+        color:black;
+     font-size: 20px;
+    
+     padding: 50px;
+     display:flex;
+     justify-content:;
+        
+     }
+
+     p {
+
+        display: grid;
+    place-items: center; /* Alinear los elemento de forma horizontal y vertical utilizando el grid */
+    font-weight: normal;
+     }
+>>>>>>> Stashed changes
