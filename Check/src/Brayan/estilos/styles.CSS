@@ -98,12 +98,13 @@ justify-content: center;
 
 .I3{
     position: relative;
-    bottom: 550px;
     left: 80px;
-    max-width: 500px;
     width: auto;
     height: auto;
-    
+}
+img{
+    max-width: 100%;
+    height: auto;
 }
 
 /*barra espaciadore lateral*/
