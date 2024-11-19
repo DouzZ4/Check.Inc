@@ -1,19 +1,19 @@
-/*Cuerpo dela pagina*/
-
+/* Cuerpo de la página */
 body {
     margin: 0;
     font-family: 'Quando', bold !important;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    
+    padding: 0;
 }
+
 /* Barra de navegación personalizada */
 .navbar {
     position: sticky;
     top: 0;
     background-color: #3058a6 !important;
-    width: auto;
+    width: 100%;
     padding: 20px;
     display: flex;
     align-items: center;
@@ -21,167 +21,102 @@ body {
     color: white;
     z-index: 1000;
 }
-/* A1 asignacion de citas/ N1 nombre de usuario */
 
-.A1{
-
-    position: relative;
+/* Asignación de citas / Nombre de usuario */
+.A1 {
     display: block;
-    margin-right: 150px;
-    margin-left: 100px;
-    padding: 0px;
     text-align: center;
     color: #888888;
-    right: 5px;
-
-
+    margin: 0 100px;
 }
+
 .N1 {
-    position: relative;
     display: flex;
     margin-right: 100px;
     padding: 18px;
     border-radius: 100%;
-    right: 400px;
-    top: 30px;
+    justify-content: center;
 }
-    
-/*Programar cita P1 /cancelar cita C1*/
 
-.P1{
-    position: relative;
-display: flex;
-margin-right: 100px;
-padding: 18px;
-left: 170px;
-top: 10px;
-background-color: #3058a6;
-color: #ffffff;
-border-style: double;
-padding: 18px;
-border-radius: 15px 150px;
-width: 150px;
-justify-content: center;
+/* Programar cita P1 / Cancelar cita C1 */
+.P1, .C1 {
+    display: flex;
+    margin: 10px;
+    padding: 18px;
+    background-color: #3058a6;
+    color: #ffffff;
+    border-style: double;
+    border-radius: 15px 150px;
+    justify-content: center;
+    width: 150px;
+    text-align: center;
+    cursor: pointer;
+}
 
+.P1 {
+    margin-left: 170px;
 }
 
 .C1 {
-    position: relative;
-display: flex;
-margin-right: 100px;
-padding: 18px;
-left: 790px;
-bottom: 380px;
-background-color: #3058a6;
-color: #ffffff;
-border-style: double;
-padding: 18px;
-border-radius: 15px 150px;
-width: 150px;
-justify-content: center;
+    margin-left: 790px;
 }
 
-/*imagen programar cita I1/ Imagen Cancelar I2/ Imagen banner I3*/
-.I1{
-    position: relative;
-    left: 110px;
-    top: 30px;   
-     
-}
-
-.I2{
-
-    position: relative;
-    left: 750px;
-    bottom: 370px;
-}
-
-.I3{
-    position: relative;
-    left: 80px;
-    width: auto;
-    height: auto;
-}
-img{
+/* Imágenes de Programar cita I1 / Cancelar I2 / Banner I3 */
+.I1, .I2, .I3 {
     max-width: 100%;
     height: auto;
 }
 
-/*barra espaciadore lateral*/
+.I1 {
+    margin: 30px 0 0 110px;
+}
 
-::-webkit-scrollbar{
+.I2 {
+    margin: 0 0 0 750px;
+}
+
+.I3 {
+    margin: 30px auto;
+}
+
+/* Barra espaciadora lateral */
+::-webkit-scrollbar {
     width: 15px;
 }
-::-webkit-scrollbar-track{
-    background: white;
-}
-::-webkit-scrollbar-thumb{
+
+::-webkit-scrollbar-thumb {
     background: #3058a6;
     border-radius: 10px;
     border: 2px solid #F45501;
-
 }
-/*barra inferior*/
-.B1{
-    position: relative;
+
+/* Barra inferior */
+.B1 {
     color: #ffffff;
     background-color: #3058a6;
-    border: #888888;
     width: 100%;
-    bottom: 7px;
     padding: 12px 6px;
-    
-
+    text-align: center;
 }
 
-.B2{
-    position: relative;
-    text-align: right;
-    color: #ffffff;
-    background-color: #3058a6;
-    background-position: 200px;
-    border-width: 150px;
-    bottom: 20px;
-    max-inline-size: 750px;
-    left: 584px;
-    top: -69px;
-    padding: 12px 6px;
-
+/* Textos Programación y Cancelación (P2 y C2) */
+.P2, .C2 {
+    text-align: left;
+    margin: 30px;
 }
-/*Textos (M1 y M2) Programacion y cancelacion (P2 y C2)*/
-.P2{
 
-    position: relative;
-    left: 18PX;
-    bottom: 280px;
-    left: 180px;
-}
-.M1{
-    position: relative;
+.M1, .M2 {
     width: 350px;
-    left: 130px;
-    bottom:250px;
+    margin: 30px;
 }
-.C2{
-    position: relative;
-    left: 823px;
-    bottom: 526px;
-}
-.M2{
-    position: relative;
-    width: 350px;
-    left: 823px;
-    bottom: 497px;
-}
+
 /* Configuración de los enlaces de la barra de navegación */
 .nav-links {
     list-style: none;
     display: flex;
     margin: 0;
     padding: 0;
-    margin-left: 940px;
-   
-
+    margin-left: auto;
 }
 
 .nav-links li {
@@ -193,7 +128,6 @@ img{
     color: white !important;
     padding: 8px 6px;
     transition: background-color 0.3s;
-    
 }
 
 .nav-links a:hover {
@@ -207,7 +141,6 @@ img{
     background-color: #F45501;
     color: black;
     border-radius: 5px;
-    
 }
 
 /* Configuración del menú desplegable */
@@ -241,14 +174,12 @@ img{
 }
 
 .dropdown-content a:hover {
-    background-color: #F45501;
+    background-color: #F45501;
 }
 
-.Inicio{
+/* Estilos de la sección Inicio */
+.Inicio {
     font-size: 1.5em;
-    display: flex;
-    justify-content: center;
-
-    margin-right: 150px;
-
+    text-align: center;
+    margin: 20px 0;
 }
