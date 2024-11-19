@@ -1,35 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Metadatos de la página -->
-    <meta charset="UTF-8"> <!-- Define la codificación de caracteres -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Permite que la página sea responsiva en dispositivos móviles -->
-    <title>Document</title> <!-- Título de la página -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
     
     <!-- Enlaces a los archivos de estilo CSS -->
-    <link rel="stylesheet" href="../assets/styles/main.css"> <!-- Estilos generales -->
-    <link rel="stylesheet" href="../assets/styles/Dashboard_Patient.css"> <!-- Estilos específicos para el dashboard -->
+    <link rel="stylesheet" href="../assets/styles/main.css">
+    <link rel="stylesheet" href="../assets/styles/Dashboard_Patient.css">
 </head>
 <body>
 
-    <!-- Incluir los archivos JS -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="../assets/scripts/dashboard.js"></script>  <!-- Código específico del Dashboard -->
-    <script src="../assets/scripts/main.js"></script>  <!-- Código general -->
     <!-- Sección principal que contiene todo el dashboard -->
     <div class="dashboard">
 
         <!-- Barra de navegación principal -->
         <nav class="navbar">
             <div class="check">
-                <label for="check">CHECK</label> <!-- Etiqueta de comprobación -->
+                <label for="check">CHECK</label>
             </div>
             
-            <ul class="nav-links"> <!-- Menú de navegación -->
-                <li><a href="index.html">Inicio</a></li>
+            <ul class="nav-links">
+                <li><a href="Dashboard_Patient.html">Inicio</a></li>
                 <li><a href="#">Historial</a></li>
-                <li class="dropdown"> <!-- Menú desplegable para registros -->
-                    <a href="#" class="dropdown-btn">Registros</a>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-btn" aria-expanded="false">Registros</a>
                     <ul class="dropdown-content">
                         <li><a href="#">Alarmas</a></li> 
                         <li><a href="#">Actividades</a></li>
@@ -38,38 +33,51 @@
                     </ul>
                 </li>
                 <li><a href="#">Perfil</a></li>
-                <li><a href="#" id="Anomalias-btn">Anomalias</a></li>
+                <li><a href="#" id="Anomalias-btn">Anomalías</a></li>
             </ul>
         </nav>
         
-        <!-- Contenido principal del dashboard -->
         <div class="dashboard-content">
-            <!-- Barra lateral con enlaces rápidos -->
+            <!-- Barra lateral -->
             <aside class="sidebar">
                 <ul>
                     <li><a href="../pages/Resultados_examenes.html">Resultados de Exámenes</a></li>
                     <li><a href="../pages/Drugs.html">Medicamentos</a></li>
-                    <li><a href="#">Citas Programadas</a></li>
+                    <li><a href="#" id="citasProgramadasBtn">Citas Programadas</a></li>
                     <li><a href="#">Estadísticas de Salud</a></li>
                 </ul>
             </aside>
 
+            <!-- Modal para Citas Programadas -->
+            <div id="modalCitasProgramadas" class="modal">
+                <div class="modal-content">
+                    <button class="close" onclick="cerrarModalCitasProgramadas()" aria-label="Cerrar modal">&times;</button>
+                    <h2>Próxima Cita</h2>
+
+                    <!-- Calendario con detalles de la cita -->
+                    <div class="calendar">
+                        <h3>Fecha: <span id="fechaCita">10 de Diciembre, 2024</span></h3>
+                        <h3>Hora: <span id="horaCita">10:00 AM</span></h3>
+                        <h3>Lugar: <span id="lugarCita">Clínica XYZ</span></h3>
+                        <h3>Doctor: <span id="doctorCita">Dr. Juan Pérez</span></h3>
+                        <h3>Tipo de Cita: <span id="tipoCita">Consulta de seguimiento</span></h3>
+                    </div>
+                </div>
+            </div>
+
             <!-- Panel principal con botones y visualizaciones -->
             <main class="main-content">
-
-                <!-- Imagen de resumen de salud en la parte superior -->
+                <!-- Imagen de resumen de salud -->
                 <h1 class="Imagen_familia">
                     <img src="../assets/images/Familia_Paciente.png" alt="Imagen resumen de salud" class="imagen-resumen">
                 </h1>
 
                 <div class="dashboard-botones">
-                
-                    <!-- Botón de Objetivos de Salud -->
+                    <!-- Botones principales -->
                     <button class="boton-resumen" onclick="toggleObjetivosSalud()">
                         <h2>Objetivos de Salud</h2>
                     </button>
                 
-                    <!-- Botón para ver las últimas citas -->
                     <button class="boton-citas" onclick="abrirModalCitas()">
                         <h2>Últimas Citas</h2>
                     </button>
@@ -77,7 +85,7 @@
                     <!-- Modal para mostrar el historial de citas -->
                     <div id="modalCitas" class="modal">
                         <div class="modal-content">
-                            <span class="close" onclick="cerrarModalCitas()">&times;</span>
+                            <button class="close" onclick="cerrarModalCitas()" aria-label="Cerrar modal">&times;</button>
                             <h2>Historial de Citas</h2>
                             <ul class="lista-citas">
                                 <li><button class="cita-item" onclick="mostrarDetallesCita(1)">Cita 1</button></li>
@@ -93,6 +101,7 @@
 
                 <!-- Sección de Objetivos de Salud (inicialmente oculta) -->
                 <section class="objetivos-salud" id="objetivosSalud" style="display: none;">
+                    <!-- Objetivos individuales -->
                     <div class="objetivo-item">
                         <h3>Glucosa en el Rango</h3>
                         <div class="progreso">
@@ -142,21 +151,37 @@
                     </div>
                 
                     <!-- Sección con los gráficos de salud -->
-                    <section class="graficas">
-                        <h3>Gráficas de Salud</h3>
-                        <div class="grafico">
-                            <canvas id="grafico-glucosa"></canvas> <!-- Gráfico de glucosa -->
-                        </div>
-                        <div class="grafico">
-                            <canvas id="grafico-peso"></canvas> <!-- Gráfico de peso -->
-                        </div>
-                    </section>
-                    
+                    <!-- Contenedor para las gráficas -->
+            <main class="main-content">
+                <h1>Dashboard de Pacientes</h1>
+                <div class="charts-container">
+
+                    <!-- Gráfica de barras -->
+                    <div class="chart">
+                        <h3>Frecuencia Cardiaca Semanal</h3>
+                        <canvas id="barChart"></canvas>
+                    </div>
+
+                    <!-- Gráfica de líneas -->
+                    <div class="chart">
+                        <h3>Niveles de Glucosa en el Tiempo</h3>
+                        <canvas id="lineChart"></canvas>
+                    </div>
+
+                    <!-- Gráfica de pastel -->
+                    <div class="chart">
+                        <h3>Distribución de Medicamentos</h3>
+                        <canvas id="pieChart"></canvas>
+                    </div>
                 </section>
-                
             </main>
         </div>
     </div>
-    
+
+    <!-- Incluir los archivos JS al final para mejorar el rendimiento -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../assets/scripts/dashboard.js"></script>
+    <script src="../assets/scripts/main.js"></script>
+
 </body>
 </html>

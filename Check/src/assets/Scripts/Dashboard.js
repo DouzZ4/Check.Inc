@@ -157,3 +157,115 @@ function toggleObjetivosSalud() {
         objetivosSalud.style.display = "none";
     }
 }
+
+// Abrir el modal de citas programadas
+function abrirModalCitasProgramadas() {
+    document.getElementById("modalCitasProgramadas").style.display = "block";
+}
+
+// Cerrar el modal de citas programadas
+function cerrarModalCitasProgramadas() {
+    document.getElementById("modalCitasProgramadas").style.display = "none";
+}
+
+// Obtener elementos del DOM
+const modalCitasProgramadas = document.getElementById("modalCitasProgramadas");
+const citasProgramadasBtn = document.getElementById("citasProgramadasBtn");
+const closeModalCitas = document.querySelector(".modal .close");
+
+// Función para abrir el modal
+citasProgramadasBtn.onclick = function() {
+    modalCitasProgramadas.style.display = "block";
+}
+
+// Función para cerrar el modal
+closeModalCitas.onclick = function() {
+    modalCitasProgramadas.style.display = "none";
+}
+
+// Cerrar el modal si el usuario hace clic fuera de la ventana modal
+window.onclick = function(event) {
+    if (event.target == modalCitasProgramadas) {
+        modalCitasProgramadas.style.display = "none";
+    }
+}
+
+// Datos para la gráfica de barras
+const barCtx = document.getElementById('barChart').getContext('2d');
+new Chart(barCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
+        datasets: [{
+            label: 'Frecuencia Cardiaca (ppm)',
+            data: [70, 72, 68, 74, 80, 78, 75],
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Datos para la gráfica de líneas
+const lineCtx = document.getElementById('lineChart').getContext('2d');
+new Chart(lineCtx, {
+    type: 'line',
+    data: {
+        labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
+        datasets: [{
+            label: 'Nivel de Glucosa (mg/dL)',
+            data: [95, 110, 105, 120, 115, 100],
+            borderColor: 'rgba(153, 102, 255, 1)',
+            backgroundColor: 'rgba(153, 102, 255, 0.2)',
+            borderWidth: 2,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top'
+            }
+        }
+    }
+});
+
+// Datos para la gráfica de pastel
+const pieCtx = document.getElementById('pieChart').getContext('2d');
+new Chart(pieCtx, {
+    type: 'pie',
+    data: {
+        labels: ['Medicamento A', 'Medicamento B', 'Medicamento C'],
+        datasets: [{
+            label: 'Porcentaje',
+            data: [40, 35, 25],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top'
+            }
+        }
+    }
+});
