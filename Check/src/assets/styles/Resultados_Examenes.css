@@ -86,7 +86,7 @@ embed {
 /* Estilo del botón de regreso al dashboard */
 button {
     margin-top: 30px;
-    background-color: #4a90e2;
+    background-color: #3058a6;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -97,5 +97,5 @@ button {
 }
 
 button:hover {
-    background-color: #357ab8;
+    background-color: #F45501;
 }
