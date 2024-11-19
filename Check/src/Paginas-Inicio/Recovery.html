@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperación de Cuenta</title>
+    <link rel="stylesheet" href="../assets/styles/main.css">
+    <link rel="stylesheet" href="../assets/styles/Recovery.css">
+</head>
+<body>
+
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <div class="check">
+            <label for="check">CHECK</label>
+        </div>
+        <!-- Enlaces de navegación -->
+        <ul class="nav-links">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="#">Funcionalidades</a></li>
+            <li><a href="#">Testimonios</a></li>
+            <li><a href="#">Descargar</a></li>
+            <li><a href="#">Contacto</a></li>
+            <li><a href="Login.html">Ingresar</a></li>
+        </ul>
+    </nav>
+    
+    <div class="recovery-container">
+        <div class="recovery-card">
+            <h1>Recuperar Cuenta</h1>
+            <p>Ingresa tu correo electrónico registrado y te enviaremos las instrucciones para restablecer tu contraseña.</p>
+            <form id="recoveryForm">
+                <label for="email">Correo Electrónico</label>
+                <input type="email" id="email" placeholder="ejemplo@correo.com" required>
+                <button type="submit">Enviar Instrucciones</button>
+            </form>
+            <div class="links">
+                <a href="Login.html">Volver al Login</a>
+            </div>
+        </div>
+    </div>
+    <script src="../assets/scripts/Recovery.js"></script>
+</body>
+</html>
