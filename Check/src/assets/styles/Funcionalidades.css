@@ -20,8 +20,7 @@ img {
     width: 1fr;
 
 }
-
-.Textos_primeras {
+.Texto_primeras {
 
     display: flex;
     justify-content: center;
@@ -29,7 +28,7 @@ img {
     gap: 20px;
     padding: 20px;
     
-}
+} 
 .Imagenes_primeras {
 
     justify-content: center;
@@ -38,7 +37,7 @@ gap: 50px;
     padding: 50px; 
 }
 
-.Texto_Segundas {
+.Texto_segundas {
 
     justify-content: center;
     display: flex;
