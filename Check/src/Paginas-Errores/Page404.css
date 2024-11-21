@@ -1,16 +1,24 @@
+/* General Styles */
 body {
     margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
 }
+
+/* Contenedor Principal */
 .container {
     text-align: center;
     padding: 30px;
 }
 
+/* Estilo de los párrafos */
 p {
     font-size: 1.2em;
     color: #333;
 }
 
+/* Estilos para los botones */
 .buttons a {
     text-decoration: none;
     color: white;
@@ -19,17 +27,63 @@ p {
     border-radius: 5px;
     margin: 5px;
     transition: background-color 0.3s ease;
+    display: inline-block; /* Hacemos que los botones estén en línea por defecto */
 }
 
 .buttons a:hover {
-    background-color: #3058a6; /* Cambio de color en hover */
+    background-color: #3058a6;
 }
 
-
+/* Imagen de la página de error */
 .Img-Page404 {
     display: block;
-    margin: 20px auto; /* Centrar la imagen */
+    margin: 20px auto;
     width: 400px;
-    max-width: 100%; /* Hace que la imagen sea responsiva */
-    height: auto; /* Mantiene la proporción de la imagen */
+    max-width: 100%;
+    height: auto;
+}
+
+/* ===== Media Queries (Responsividad) ===== */
+
+/* Estilos para pantallas pequeñas (móviles) */
+@media (max-width: 576px) {
+    /* Ajustamos el tamaño de los párrafos */
+    p {
+        font-size: 1em;
+    }
+
+    /* Imagen */
+    .Img-Page404 {
+        width: 80%;
+    }
+
+    /* Estilos de los botones */
+    .buttons a {
+        width: 100%; /* Los botones ocupan el 100% del ancho */
+        padding: 12px 0; /* Espaciado interno ajustado */
+        display: block; /* Los botones se apilan verticalmente */
+    }
+
+    /* Contenedor */
+    .container {
+        padding: 10px;
+    }
+}
+
+/* Estilos para pantallas medianas (tabletas) */
+@media (max-width: 768px) {
+    .Img-Page404 {
+        width: 70%;
+    }
+
+    .buttons a {
+        padding: 10px 20px;
+    }
+}
+
+/* Estilos para pantallas grandes (escritorios) */
+@media (min-width: 1024px) {
+    .Img-Page404 {
+        width: 50%;
+    }
 }
