@@ -26,11 +26,9 @@
 <body>
     <!-- Barra de navegación -->
     <nav class="navbar">
-        <div class="check">
-            <label for="check">CHECK</label>
-        </div>
+        <button class="menu-toggle" id="menuToggle">CHECK &#9776;</button>
         <!-- Enlaces de navegación -->
-        <ul class="nav-links">
+        <ul class="nav-links" id="navLinks">
             <li><a href="index.html">Inicio</a></li>
             <li><a href="Functionality.html">Funcionalidades</a></li>
             <li><a href="#">Testimonios</a></li>
@@ -117,8 +115,9 @@
     
     <!-- jQuery (necesario para algunas funciones de Bootstrap) -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-    <!-- Bootstrap JS (contiene funcionalidades como modales y otros componentes dinámicos) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
+    <!-- JS de Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <!-- Script Navbar Hamburguesa-->
+    <script src="../assets/Scripts/Main.js"></script>
 </body>
 </html>

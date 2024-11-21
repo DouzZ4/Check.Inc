@@ -1,10 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Quando&display=swap');
 
+/* ===== Reset básico ===== */
 body {
-    margin: 0; /* Elimina los márgenes por defecto del body */
+    margin: 0;
+    font-family: 'Quando', sans-serif;
 }
 
-/* Contenedor principal centrado */
+/* ===== Contenedores principales ===== */
 .contenedor {
     display: flex;
     justify-content: center;
@@ -19,15 +21,15 @@ body {
     width: 75%;
 }
 
-/* Icono ajustable */
+/* ===== Icono ===== */
 .icono {
-    width: 300px; /* Ajusta el tamaño según tu preferencia */
+    width: 300px;
     height: auto;
     padding-right: 20px;
 }
 
-/* Estilo de botón */
-.Ingresar, .button2-m-2, .button2-m-2-2 {
+/* ===== Botones ===== */
+.button2-m-2, .button2-m-2-2 {
     background-color: black;
     color: white;
     border-radius: 5px;
@@ -41,7 +43,7 @@ body {
     background-color: #F45501;
 }
 
-/* Texto destacado */
+/* ===== Títulos y texto destacado ===== */
 .Che {
     font-size: 42px;
     color: #3058a6;
@@ -52,7 +54,6 @@ body {
     font-size: 25px;
 }
 
-/* Título centrado */
 .titulo-testi {
     display: flex;
     justify-content: center;
@@ -60,7 +61,19 @@ body {
     font-weight: normal;
 }
 
-/* Estilos de los testimonios */
+/* ===== Estilos para testimonios ===== */
+.testimonios-com {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+p {
+    color: black;
+}
+
 .testi {
     background-color: white;
     width: 280px;
@@ -76,7 +89,7 @@ body {
 .icon {
     display: flex;
     align-items: center;
-    margin-bottom: 20px; 
+    margin-bottom: 20px;
 }
 
 .icon img {
@@ -89,8 +102,6 @@ body {
 
 .ic p {
     color: black;
-    font-family: 'Quando';
-    margin: 0;
     font-size: 25px;
 }
 
@@ -99,24 +110,7 @@ body {
     font-size: 18px;
 }
 
-/* Contenedor de testimonios */
-.testimonios-com {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap; /* Permite que los testimonios se acomoden en varias filas */
-    gap: 20px;
-    padding: 20px;
-}
-
-/* Responsive para testimonios */
-@media (max-width: 768px) {
-    .testi {
-        width: 100%;
-        margin: 10px 0;
-    }
-}
-
-/* Wrapper con sombra */
+/* ===== Contenedor con sombra ===== */
 .Wrapper {
     background-color: #f0f0f0;
     font-size: 1.5em;
@@ -126,7 +120,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Acordeón */
+/* ===== Acordeón ===== */
 .accordion {
     background-color: white;
     border: 1px solid #ddd;
@@ -160,7 +154,7 @@ details[open] .accordion {
     background-color: #e0e0e0;
 }
 
-/* Contenedor y título principal */
+/* ===== Contenedor principal y título ===== */
 .container-my-5-text-center {
     display: flex;
     justify-content: center;
@@ -170,7 +164,7 @@ details[open] .accordion {
     color: #3058a6;
 }
 
-/* Tamaño y estilo de imagen */
+/* ===== Imágenes ===== */
 .div-my-5 {
     width: 500px;
 }
@@ -180,8 +174,39 @@ details[open] .accordion {
     max-width: 400px;
 }
 
-/* Estilo del título principal */
+/* ===== Título principal ===== */
 #titulos-home {
     color: #3058a6;
     font-size: 50px;
+}
+
+/* ===== Responsividad ===== */
+@media (max-width: 768px) {
+    .testi {
+        width: 100%;
+        margin: 10px 0;
+    }
+        /* Ajustar el diseño del subcontenedor */
+        .sub-contenedor {
+            flex-direction: column; /* Cambia de fila a columna en pantallas pequeñas */
+            align-items: center;
+        }
+    
+        /* Tamaño del ícono */
+        .icono {
+            width: 200px; /* Reduce el tamaño del ícono */
+            padding-right: 0; /* Elimina el espacio adicional */
+            margin-bottom: 15px; /* Espacio entre el ícono y el texto */
+        }
+    
+        /* Ajustar el texto */
+        .Che {
+            font-size: 28px; /* Reduce el tamaño del texto destacado */
+            text-align: center; /* Centra el texto */
+        }
+    
+        .leyenda {
+            font-size: 18px; /* Ajusta el tamaño del texto descriptivo */
+            text-align: center; /* Centra la leyenda también */
+        }    
 }

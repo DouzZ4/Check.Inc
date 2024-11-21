@@ -18,11 +18,9 @@
 <body>
     <!-- Barra de navegación -->
     <nav class="navbar">
-        <div class="check">
-            <label for="check">CHECK</label>
-        </div>
+        <button class="menu-toggle" id="menuToggle">CHECK &#9776;</button>
         <!-- Enlaces de navegación -->
-        <ul class="nav-links">
+        <ul class="nav-links" id="navLinks">
             <li><a href="index.html">Inicio</a></li>
             <li><a href="Functionality.html">Funcionalidades</a></li>
             <li><a href="#">Testimonios</a></li>
@@ -31,6 +29,8 @@
             <li><a href="Login.html" id="Ingresar_BTN">Ingresar</a></li>
         </ul>
     </nav>
+
+    
 
     <!-- Sección principal -->
     <section class="contenedor">
@@ -134,9 +134,9 @@
     </section>
     
     <!-- Footer -->
-    <footer class="footer py-4 bg-light text-center">
+    <footer class="footer">
         <div class="container">
-            <p>&copy; 2024 Check</p>
+            <p>&copy; 2024 Check.Inc</p>
             <ul class="social-icons list-inline">
                 <li class="list-inline-item"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
                 <li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
@@ -147,6 +147,9 @@
     
 
     <!-- JS de Bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+Z0lb1E6wBLTX2IOq00pBjYd15N9O" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <!-- Script Navbar Hamburguesa-->
+    <script src="../assets/Scripts/Main.js"></script>
+
 </body>
 </html>

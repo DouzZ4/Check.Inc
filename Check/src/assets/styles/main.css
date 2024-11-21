@@ -1,22 +1,42 @@
 @import url('https://fonts.googleapis.com/css2?family=Quando&display=swap');
 
-/* Configuración del cuerpo de la página */
+/* ===== Variables globales ===== */
+:root {
+    --primary-color: #3058a6;
+    --secondary-color: #F45501;
+    --text-color: black;
+    --background-color: white;
+}
+
+/* ===== Configuración global ===== */
 body {
-    font-family: 'Quando', bold !important;
-    background-color: white;
+    font-family: 'Quando', sans-serif !important;
+    background-color: var(--background-color);
+    color: var(--text-color);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     margin: 0;
 }
 
-/* Barra de navegación personalizada */
-.navbar  {
+main {
+    flex: 1; /* Asegura que el footer esté siempre al final */
+}
+
+/* ==== Imagenes ===== */
+img {
+    max-width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+
+/* ===== Barra de navegación ===== */
+.navbar {
     position: sticky;
     top: 0;
-    background-color: #3058a6 !important;
-    width: auto !important;
-    padding: 20px !important;
+    background-color: var(--primary-color);
+    padding: 10px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -24,43 +44,71 @@ body {
     z-index: 1000;
 }
 
-/* Configuración de los enlaces de la barra de navegación */
+.check {
+    flex: 0;
+}
+
 .nav-links {
     list-style: none;
     display: flex;
-    margin: 0;
+    margin: 0px;
+    margin-left: auto;
     padding: 0;
+    gap: 15px;
 }
 
 .nav-links li {
-    margin: 0;
+    margin: 5px;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: white;
+    padding: 8px 10px;
+    transition: background-color 0.3s ease;
 }
 
 .nav-links a {
     text-decoration: none;
     color: white;
     padding: 8px 6px;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .nav-links a:hover {
-    background-color: #F45501;
-    border-radius: 2px;
-    padding: 5px;
+    background-color: var(--secondary-color);
+    border-radius: 5px;
+    color: white;
 }
 
-/* Botón de anomalías con un diseño diferente */
-#Anomalias-btn {
-    background-color: white;
-    color: black;
-    border-radius: 5px;
+/* Botón de hamburguesa */
+.menu-toggle {
+    display: none; /* Oculto en pantallas grandes */
+    background: none;
+    border: none;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
 }
+
+/* ===== Botones personalizados ===== */
+#Anomalias-btn, 
 #Ingresar_BTN {
     background-color: white;
     color: black;
     border-radius: 5px;
+    padding: 8px 16px;
+    transition: background-color 0.3s, color 0.3s;
 }
-/* Configuración del menú desplegable */
+
+#Anomalias-btn:hover, 
+#Ingresar_BTN:hover {
+    background-color: var(--secondary-color);
+    color: white;
+    border: 1px solid white;
+}
+
+/* ===== Menú desplegable ===== */
 .dropdown {
     position: relative;
 }
@@ -68,9 +116,9 @@ body {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #3058a6;
-    box-shadow: 0px 8px 16px rgba(255, 255, 255, 0.2);
-    z-index: 1000;
+    background-color: var(--primary-color);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1050;
     list-style: none;
     padding: 0;
 }
@@ -84,29 +132,33 @@ body {
 }
 
 .dropdown-content a {
-    color: white !important;
+    color: var(--text-color);
     padding: 10px;
     display: block;
     text-decoration: none;
 }
 
 .dropdown-content a:hover {
-    background-color: #F45501;
+    background-color: var(--secondary-color);
 }
 
-/* Mostrar el dropdown al pasar el mouse */
 .dropdown:hover .dropdown-content {
     display: block;
 }
 
-/* Footer */
+/* ===== Footer ===== */
 .footer {
     background-color: black;
     color: white;
     text-align: center;
     width: 100%;
+    padding: 20px;
     position: relative;
     bottom: 0;
+}
+
+.container {
+    background-color: transparent;
 }
 
 .footer-content {
@@ -115,6 +167,7 @@ body {
 }
 
 .footer p {
+    color: white;
     margin: 10px 0;
     font-size: 14px;
 }
@@ -138,47 +191,87 @@ body {
 }
 
 .social-icons a:hover {
-    color: #f45501;
+    color: var(--secondary-color);
 }
 
-/* Botón de Ingreso */
-.Ingresar {
-    background-color: white;
-    color: black !important;
-    border-radius: 5px;
-    padding: 8px 16px;
-}
-
-.Ingresar:hover {
-    background-color: #F45501;
-    border-radius: 5px;
-}
-
-/* Barra Lateral: Estilo para el sidebar (barra lateral) */
+/* ===== Barra lateral ===== */
 .sidebar {
-    background-color: #222; /* Fondo oscuro para el sidebar */
-    color: white; /* Color del texto */
-    width: 15vw; /* Ancho de la barra lateral en términos relativos */
-    padding: 20px; /* Espaciado interno */
+    background-color: #222;
+    color: var(--text-color);
+    width: 15vw;
+    padding: 20px;
     display: flex;
-    flex-direction: column; /* Los elementos se apilan verticalmente */
+    flex-direction: column;
 }
 
 .sidebar ul {
-    list-style-type: none; /* Elimina los puntos de la lista */
-    padding: 0; /* Elimina el padding por defecto */
+    list-style-type: none;
+    padding: 0;
 }
 
 .sidebar ul li {
-    margin: 15px 0; /* Espaciado entre los ítems */
+    margin: 15px 0;
 }
 
 .sidebar ul li a {
-    color: white; /* Color del texto */
-    text-decoration: none; /* Elimina subrayado de los enlaces */
-    transition: color 0.3s ease; /* Transición suave al cambiar el color */
+    color: var(--text-color);
+    text-decoration: none;
+    transition: color 0.3s;
 }
 
 .sidebar ul li a:hover {
-    color: #ddd; /* Color cuando se pasa el ratón sobre el enlace */
+    color: #ddd;
+}
+
+/* ===== Media Queries (Responsividad) ===== */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar {
+        width: 100%;
+    }
+}
+
+/* Menú desplegable en pantallas pequeñas */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block; /* Mostrar el botón de hamburguesa */
+    }
+
+    .nav-links {
+        display: none; /* Ocultar el menú inicialmente */
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--primary-color);
+        position: absolute;
+        top: 100%; /* Debajo de la navbar */
+        left: 0;
+        padding: 10px 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+    }
+
+    .nav-links li {
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    .nav-links.show {
+        display: flex; /* Mostrar el menú cuando se active */
+    }
 }
