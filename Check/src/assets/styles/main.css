@@ -2,15 +2,14 @@
 
 /* Configuración del cuerpo de la página */
 body {
-    font-family: 'Quando', serif; 
+    font-family: 'Quando', bold !important;
     background-color: white;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    min-height: 100vh !important;
+    min-height: 100vh;
     margin: 0;
 }
- 
+
 /* Barra de navegación personalizada */
 .navbar  {
     position: sticky;
@@ -68,18 +67,12 @@ body {
 
 .dropdown-content {
     display: none;
-    position: static;
+    position: absolute;
     background-color: #3058a6;
     box-shadow: 0px 8px 16px rgba(255, 255, 255, 0.2);
     z-index: 1000;
     list-style: none;
     padding: 0;
-}
-
-@media (max-width: 768px) {
-    .dropdown-content {
-        display: block; /* Asegura que se vea correctamente */
-    }
 }
 
 .dropdown-content li {
@@ -113,7 +106,6 @@ body {
     text-align: center;
     width: 100%;
     position: relative;
-    margin-top: auto;
     bottom: 0;
 }
 
@@ -149,12 +141,24 @@ body {
     color: #f45501;
 }
 
+/* Botón de Ingreso */
+.Ingresar {
+    background-color: white;
+    color: black !important;
+    border-radius: 5px;
+    padding: 8px 16px;
+}
+
+.Ingresar:hover {
+    background-color: #F45501;
+    border-radius: 5px;
+}
+
 /* Barra Lateral: Estilo para el sidebar (barra lateral) */
 .sidebar {
     background-color: #222; /* Fondo oscuro para el sidebar */
     color: white; /* Color del texto */
-    width: 100%; /* Ocupa todo el ancho en pantallas pequeñas */
-    max-width: 250px; /* Define un límite para pantallas grandes */
+    width: 15vw; /* Ancho de la barra lateral en términos relativos */
     padding: 20px; /* Espaciado interno */
     display: flex;
     flex-direction: column; /* Los elementos se apilan verticalmente */
