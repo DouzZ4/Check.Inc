@@ -119,6 +119,85 @@
                     </div>
                 </section>
 
+                <!-- Sección de Glucosa -->
+                <section id="glucosa">
+                    <h2>Glucosa</h2>
+                    <button onclick="abrirModal('glucosa')">Agregar Registro de Glucosa</button>
+                    <div id="modalGlucosa" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="cerrarModal('glucosa')">&times;</span>
+                            <h3>Registrar Glucosa</h3>
+                            <form id="formGlucosa">
+                                <label for="glucosaNivel">Nivel de Glucosa (mg/dl):</label>
+                                <input type="number" id="glucosaNivel" required>
+
+                                <label for="glucosaFecha">Fecha:</label>
+                                <input type="date" id="glucosaFecha" required>
+
+                                <label for="glucosaHora">Hora:</label>
+                                <input type="time" id="glucosaHora" required>
+
+                                <button type="submit">Guardar Registro</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sección de Comidas -->
+                <section id="comidas">
+                    <h2>Comidas</h2>
+                    <button onclick="abrirModal('comidas')">Agregar Registro de Comida</button>
+                    <div id="modalComidas" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="cerrarModal('comidas')">&times;</span>
+                            <h3>Registrar Comida</h3>
+                            <form id="formComidas">
+                                <label for="comidaTipo">Comida:</label>
+                                <input type="text" id="comidaTipo" required>
+
+                                <label for="comidaHora">Hora:</label>
+                                <input type="time" id="comidaHora" required>
+
+                                <label for="comidaCalorias">Calorías:</label>
+                                <input type="number" id="comidaCalorias" required>
+
+                                <button type="submit">Guardar Registro</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sección de Muestras -->
+                <section id="muestras">
+                    <h2>Muestras</h2>
+                    <button onclick="abrirModal('muestras')">Agregar Muestra</button>
+                    <div id="modalMuestras" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="cerrarModal('muestras')">&times;</span>
+                            <h3>Registrar Muestra</h3>
+                            <form id="formMuestras">
+                                <label for="muestraTipo">Elegir Examen:</label>
+                                <select id="muestraTipo" required>
+                                    <option value="glucosaPlasma">Glucosa en plasma</option>
+                                    <option value="hemoglobinaA1c">Hemoglobina A1c</option>
+                                    <option value="pieDiabetico">Pie diabético</option>
+                                    <option value="cetonasOrina">Cetona en orina</option>
+                                    <option value="tsh">Hormona TSH</option>
+                                </select>
+
+                                <label for="muestraFecha">Fecha:</label>
+                                <input type="date" id="muestraFecha" required>
+
+                                <label for="muestraResultados">Resultados:</label>
+                                <textarea id="muestraResultados" rows="4" required></textarea>
+
+                                <button type="submit">Guardar Registro</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+
             </main>
         </div>
     </div>
