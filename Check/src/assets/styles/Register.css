@@ -6,11 +6,6 @@ body {
     flex: 1;
 }
 
-.img {
-    width: 550px;
-    margin: 40px auto;
-}
-
 .container {
     margin: 0 auto;
     display: flex;

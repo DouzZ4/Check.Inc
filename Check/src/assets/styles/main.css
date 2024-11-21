@@ -30,6 +30,15 @@ img {
     object-fit: contain;
 }
 
+.Logocheck {
+    max-width: 500px;
+    padding: 50px 50px 0px 50px;
+    display: flex;
+    flex-direction: column;
+    margin: 40px auto; /* Esto lo centra horizontalmente */
+    align-items: center; /* Esto lo centra verticalmente dentro del contenedor */
+}
+
 
 /* ===== Barra de navegación ===== */
 .navbar {
