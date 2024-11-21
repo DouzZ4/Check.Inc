@@ -190,29 +190,6 @@ window.onclick = function(event) {
     }
 }
 
-// Datos para la gráfica de barras
-const barCtx = document.getElementById('barChart').getContext('2d');
-new Chart(barCtx, {
-    type: 'bar',
-    data: {
-        labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
-        datasets: [{
-            label: 'Frecuencia Cardiaca (ppm)',
-            data: [70, 72, 68, 74, 80, 78, 75],
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
-});
-
 // Datos para la gráfica de líneas
 const lineCtx = document.getElementById('lineChart').getContext('2d');
 new Chart(lineCtx, {
@@ -265,6 +242,37 @@ new Chart(pieCtx, {
         plugins: {
             legend: {
                 position: 'top'
+            }
+        }
+    }
+});
+
+// Configuración del gráfico de frecuencia cardíaca
+const ctxFrecuencia = document.getElementById('grafico-frecuencia-cardiaca').getContext('2d');
+const graficoFrecuenciaCardiaca = new Chart(ctxFrecuencia, {
+    type: 'line', // Tipo de gráfico: línea
+    data: {
+        labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'], // Días de la semana
+        datasets: [{
+            label: 'Frecuencia Cardíaca (bpm)',
+            data: [72, 75, 78, 74, 76, 73, 75], // Datos de frecuencia cardíaca
+            borderColor: '#4CAF50', // Color de la línea
+            backgroundColor: 'rgba(76, 175, 80, 0.2)', // Fondo debajo de la línea
+            borderWidth: 2, // Grosor de la línea
+            tension: 0.4, // Suavizado de la línea
+        }]
+    },
+    options: {
+        responsive: true, // Se ajusta automáticamente al tamaño del contenedor
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top'
+            },
+        },
+        scales: {
+            y: {
+                beginAtZero: false // El eje Y no comienza desde cero
             }
         }
     }

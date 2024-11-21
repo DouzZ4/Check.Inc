@@ -206,7 +206,7 @@ img {
 /* ===== Barra lateral ===== */
 .sidebar {
     background-color: #222;
-    color: var(--text-color);
+    color: white;
     width: 15vw;
     padding: 20px;
     display: flex;
@@ -223,7 +223,7 @@ img {
 }
 
 .sidebar ul li a {
-    color: var(--text-color);
+    color: white;
     text-decoration: none;
     transition: color 0.3s;
 }

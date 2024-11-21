@@ -1,42 +1,53 @@
 /* Reset: Reseteo básico de márgenes y fuentes */
 body {
-    margin: 0; /* Elimina márgenes predeterminados */
-    
+    margin: 0;
 }
 
-/* Estructura General: Configuración del contenedor principal y la disposición en columna */
+/* Estructura General */
 .dashboard {
     display: flex;
-    flex-direction: column; /* Disposición vertical de los elementos */
-    height: 100vh; /* Asegura que el contenedor ocupe toda la altura de la ventana */
+    flex-direction: column;
+    height: 100vh;
 }
 
 .dashboard-content {
     display: flex; 
-    flex: 1; /* Asegura que ocupe todo el espacio disponible */
-    overflow: hidden; /* Previene el desbordamiento de contenido */
+    flex: 1; 
+    overflow: hidden; 
 }
 
-/* Panel Principal: Configuración de la sección principal de contenido */
 .main-content {
-    flex-grow: 1; /* Hace que esta sección crezca y ocupe el espacio restante */
+    flex-grow: 1;
     padding: 20px;
-    background-color: #f4f4f4; /* Fondo gris claro */
-    overflow-y: auto; /* Habilita el desplazamiento vertical si el contenido es largo */
+    background-color: #f4f4f4;
+    overflow-y: auto; 
 }
 
-/* Imagen en el Panel Principal: Estilo para la imagen de resumen de salud */
 .Imagen_familia img {
-    width: 100%;  /* Ajusta el tamaño de la imagen al 100% del contenedor */
-    height: auto; /* Mantiene la proporción de la imagen */
-    margin-top: 20px; /* Espaciado superior */
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
 }
 
-/* Botones del Dashboard: Estilo de los botones en el dashboard */
+.progreso {
+    background-color: #f0f0f0; 
+    border-radius: 8px;
+    height: 20px; 
+    margin-top: 10px;
+    overflow: hidden; 
+}
+
+.barra-progreso {
+    height: 100%;
+    background-color: #4CAF50; 
+    transition: width 0.5s ease;
+}
+
+/* Botones del Dashboard */
 .dashboard-botones {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Diseño en cuadrícula adaptable */
-    gap: 20px; /* Espaciado entre los botones */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Cuadrícula adaptable */
+    gap: 20px;
     padding: 20px;
 }
 
@@ -48,182 +59,148 @@ button {
     padding: 20px;
     border: none;
     border-radius: 8px;
-    background-color: #f0f0f0; /* Fondo gris claro */
-    cursor: pointer; /* Cambio de cursor al pasar sobre el botón */
-    transition: transform 0.3s ease, background-color 0.3s ease; /* Transición suave al hacer hover */
+    background-color: #f0f0f0; 
+    cursor: pointer; 
+    transition: transform 0.3s ease, background-color 0.3s ease; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Restaurado */
 }
 
 button:hover {
-    background-color: #e0e0e0; /* Fondo más oscuro al hacer hover */
-    transform: translateY(-5px); /* Efecto de elevación al hacer hover */
+    background-color: #e0e0e0; 
+    transform: translateY(-5px); 
 }
 
 button h2, button span {
-    margin: 10px 0; /* Espaciado entre los elementos dentro del botón */
-    color: #333; /* Color del texto */
+    margin: 10px 0; 
+    color: #333; 
+    text-align: center; /* Asegura que el texto esté centrado */
 }
 
-/* Imagen de Resumen de Salud: Estilo para la imagen redonda */
 .imagen-resumen {
-    max-width: 180px; /* Limita el tamaño máximo de la imagen */
-    max-height: 180px; /* Limita la altura máxima */
-    border-radius: 50%; /* Hace que la imagen sea redonda */
-    margin-bottom: 10px; /* Espaciado inferior */
+    max-width: 180px; 
+    max-height: 180px; 
+    border-radius: 50%;
+    margin-bottom: 10px;
 }
 
-/* Estadísticas de la Semana: Estilo para las estadísticas semanales */
-.estadisticas-semana {
-    margin-top: 40px; /* Espaciado superior */
-}
-
-.estadisticas-cards {
-    display: flex;
-    justify-content: space-between; /* Distribuye las tarjetas de manera uniforme */
-    gap: 20px; /* Espaciado entre las tarjetas */
-    margin-bottom: 20px; /* Espaciado inferior */
-}
-
-.estadistica-card {
-    background-color: #fff; /* Fondo blanco */
-    padding: 20px;
-    border-radius: 10px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para un efecto de profundidad */
-    width: 30%; /* Ajuste de ancho de las tarjetas */
-    text-align: center; /* Centra el contenido */
-}
-
-.estadistica-card h3 {
-    font-size: 20px;
-    color: #3058a6; /* Color de título */
-}
-
-.estadistica-card p {
-    font-size: 24px;
-    color: #333; /* Color de texto */
-    margin-top: 10px;
-}
-
-/* Sección de Gráficos: Estilo para los gráficos */
-.graficos {
-    margin-top: 30px; /* Espaciado superior */
-}
-
-.graficos canvas {
-    height: 300px; /* Ajusta la altura del gráfico */
-    background-color: #f0f0f0; /* Fondo gris claro */
-    border-radius: 10px; /* Bordes redondeados */
-    margin-top: 10px; /* Espaciado superior */
-}
-
-/* Modal Estilos: Configuración del modal para mostrar citas */
+/* Modal */
 .modal {
-    display: none; /* Oculto por defecto */
+    display: none; 
     position: fixed;
-    z-index: 1; /* Asegura que el modal esté encima de otros elementos */
-    padding-top: 100px; /* Espaciado superior */
+    z-index: 1; 
+    padding-top: 100px; 
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.4); /* Fondo semi-transparente */
+    background-color: rgba(0, 0, 0, 0.4); 
 }
 
 .modal-content {
-    background-color: #fefefe; /* Fondo blanco */
+    background-color: #fefefe; 
     margin: auto;
     padding: 20px;
-    border: 1px solid #888; /* Borde suave */
+    border: 1px solid #888; 
     width: 80%;
     max-width: 600px;
-    border-radius: 10px; /* Bordes redondeados */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra del modal */
+    border-radius: 10px; 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); 
 }
 
 .close {
-    color: #aaa; /* Color del botón de cerrar */
-    float: right; /* Lo coloca a la derecha */
+    color: #aaa; 
+    float: right; 
     font-size: 28px;
     font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-    color: black; /* Cambio de color al hacer hover o foco */
+    color: black; 
     text-decoration: none;
     cursor: pointer;
 }
 
 .lista-citas {
-    list-style-type: none; /* Elimina los puntos de la lista */
-    padding: 0; /* Elimina el padding */
+    list-style-type: none; 
+    padding: 0; 
 }
 
 .cita-item {
     width: 100%;
     padding: 10px;
-    background-color: #f0f0f0; /* Fondo gris claro */
+    background-color: white; 
     border: none;
     margin: 5px 0;
-    text-align: left; /* Alinea el texto a la izquierda */
-    cursor: pointer; /* Cursor de mano */
-    transition: background-color 0.3s ease; /* Transición suave al hacer hover */
+    text-align: left; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease;
 }
 
 .cita-item:hover {
-    background-color: #e0e0e0; /* Cambio de color al hacer hover */
+    background-color: #f44501; 
 }
 
 .detalles-cita {
-    margin-top: 20px; /* Espaciado superior */
+    margin-top: 20px; 
     padding: 15px;
-    background-color: #ffffff; /* Fondo blanco */
-    border-radius: 8px; /* Bordes redondeados */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
-}
-
-/* Objetivos de Salud: Estilo para los objetivos de salud del paciente */
-.objetivos-salud {
-    margin-top: 40px; /* Espaciado superior */
-    background-color: #fff; /* Fondo blanco */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
-}
-
-.objetivo-item {
-    margin-bottom: 30px; /* Espaciado inferior */
+    background-color: #ffffff; 
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
 }
 
 h3 {
-    color: #3058a6; /* Color del título */
-    font-size: 20px; /* Tamaño de fuente */
+    color: #3058a6;
+    font-size: 2em;
 }
 
-/* Barra de Progreso para los Objetivos de Salud */
-.progreso {
-    background-color: #f0f0f0; /* Fondo gris claro */
-    border-radius: 8px;
-    height: 20px; /* Altura de la barra */
-    margin-top: 10px;
-    overflow: hidden; /* Evita el desbordamiento de la barra */
+.graficos canvas {
+    max-height: 300px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    margin-top: 20px;
 }
 
-.barra-progreso {
-    height: 100%;
-    background-color: #4CAF50; /* Color verde para la barra de progreso */
-    transition: width 0.5s ease; /* Transición suave del progreso */
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .dashboard-content {
+        flex-direction: column; 
+    }
+
+    .dashboard-botones {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+    }
+
+    .estadisticas-cards {
+        flex-direction: column; 
+        gap: 10px; 
+    }
+
+    .estadistica-card {
+        width: 100%; 
+    }
 }
 
-/* Mensajes de Estado de Salud */
-#mensaje-glucosa, #mensaje-presion, #mensaje-fc {
-    color: #333;
-    font-size: 16px; /* Tamaño de texto más pequeño */
-    margin-top: 10px; /* Espaciado superior */
-}
+@media (max-width: 480px) {
+    .main-content {
+        padding: 10px; 
+    }
 
-/* Estilos para la sección de calendario */
-.calendar h3 {
-    margin: 10px 0;
-    font-weight: normal;
-    font-size: 1.2em;
+    button {
+        padding: 10px; 
+    }
+
+    button h2, button span {
+        font-size: 14px; 
+    }
+
+    .imagen-resumen {
+        max-width: 120px;
+        max-height: 120px;
+    }
+
+    .progreso {
+        height: 15px; 
+    }
 }
