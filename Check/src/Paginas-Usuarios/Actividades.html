@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividades Físicas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/styles/main.css">
+
+    <style>
+        /* Estilo para el calendario */
+        .calendar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .calendar-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3b5998;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 40px);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .calendar-day {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        .calendar-day.completed {
+            background-color: #3b5998;
+            color: white;
+        }
+
+        .calendar-day.rest {
+            background-color: #f5f5f5;
+            border: 2px solid #ccc;
+        }
+
+        .calendar-day.fire {
+            background-color: #ff7043;
+            color: white;
+        }
+
+        .streak-message {
+            margin-top: 10px;
+            font-size: 1rem;
+            color: #ff7043;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de navegación principal -->
+    <nav class="navbar navbar-expand-lg bg-primary text-white">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="#">CHECK</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="Dashboard_Patient.html">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="../Paginas-Usuarios/Profile.html">Perfil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="../Paginas-Usuarios/Records.html">Registros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="../Paginas-Usuarios/Historial.html">Historial Clínico</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#" id="citasProgramadasBtn">Citas Programadas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="../Paginas-Usuarios/Anomalias.html" id="Anomalias-btn">Anomalías</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-content">
+
+        <!-- Modal para Citas Programadas -->
+        <div id="modalCitasProgramadas" class="modal">
+            <div class="modal-content">
+                <button class="close" onclick="cerrarModalCitasProgramadas()" aria-label="Cerrar modal">&times;</button>
+                <h2>Próxima Cita</h2>
+
+                <!-- Calendario con detalles de la cita -->
+                <div class="calendar">
+                    <h3>Fecha: <span id="fechaCita">10 de Diciembre, 2024</span></h3>
+                    <h3>Hora: <span id="horaCita">10:00 AM</span></h3>
+                    <h3>Lugar: <span id="lugarCita">Clínica XYZ</span></h3>
+                    <h3>Doctor: <span id="doctorCita">Dr. Juan Pérez</span></h3>
+                    <h3>Tipo de Cita: <span id="tipoCita">Consulta de seguimiento</span></h3>
+                </div>
+            </div>
+        </div>
+    <main class="container mt-4">
+        <h2 class="text-center">Tus Actividades Físicas</h2>
+        <section class="d-flex justify-content-between flex-wrap mt-4">
+            <!-- Tarjetas de ejercicios -->
+            <div class="card text-center p-3" style="width: 18rem;">
+                <img src="../assets/images/Aerobicos.png" class="card-img-top" alt="Ejercicios Aeróbicos">
+                <div class="card-body">
+                    <h5 class="card-title">Ejercicios Aeróbicos</h5>
+                    <p class="card-text">Caminar, correr, nadar, bailar.</p>
+                    <button class="btn btn-primary">Explorar</button>
+                </div>
+            </div>
+            <div class="card text-center p-3" style="width: 18rem;">
+                <img src="../assets/images/Fuerza.png" class="card-img-top" alt="Ejercicios Fuerza">
+                <div class="card-body">
+                    <h5 class="card-title">Ejercicios Fuerza</h5>
+                    <p class="card-text">Pesas, planchas, sentadillas.</p>
+                    <button class="btn btn-primary">Explorar</button>
+                </div>
+            </div>
+            <div class="card text-center p-3" style="width: 18rem;">
+                <img src="../assets/images/Flexibilidad.png" class="card-img-top" alt="Ejercicios Flexibilidad">
+                <div class="card-body">
+                    <h5 class="card-title">Ejercicios Flexibilidad</h5>
+                    <p class="card-text">Yoga, pilates, estiramientos.</p>
+                    <button class="btn btn-primary">Explorar</button>
+                </div>
+            </div>
+            <div class="card text-center p-3" style="width: 18rem;">
+                <img src="../assets/images/Equilibrio.png" class="card-img-top" alt="Ejercicios Equilibrio">
+                <div class="card-body">
+                    <h5 class="card-title">Ejercicios Equilibrio</h5>
+                    <p class="card-text">Tai-chi, equilibrio dinámico.</p>
+                    <button class="btn btn-primary">Explorar</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Beneficios -->
+        <section class="mt-5">
+            <h3>Beneficios</h3>
+            <p>Mantente activo y registra tu ejercicio para reducir complicaciones y mejorar tu calidad de vida.</p>
+        </section>
+
+        <!-- Calendario de actividad física -->
+        <section class="mt-5">
+            <div class="d-flex align-items-center">
+                <div class="me-4">
+                    <!-- Crear tabla o íconos del calendario -->
+                    <table>
+                        <div class="container mt-5">
+                            <div class="calendar-container">
+                                <h3 class="calendar-title">Calendario de Actividad Física</h3>
+                                <div class="calendar-grid">
+                                    <div class="calendar-day completed">L</div>✅
+                                    <div class="calendar-day completed">M</div>✅
+                                    <div class="calendar-day fire">M</div>🔥
+                                    <div class="calendar-day completed">J</div>✅
+                                    <div class="calendar-day fire">V</div>🔥
+                                    <div class="calendar-day completed">S</div>✅
+                                    <div class="calendar-day fire">D</div>🔥
+                                </div>
+                                <p class="streak-message">¡Llevas una racha de 6 días! 🎉</p>
+                            </div>
+                        </div>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="bg-secondary text-white text-center py-3 mt-5">
+        <p>&copy; 2024 CHECK - Todos los derechos reservados</p>
+    </footer>
+    <script src="../assets/Scripts/Main.js"></script>
+</body>
+</html>

@@ -1,52 +1,177 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- CSS de Bootstrap para estilos responsivos y componentes prefabricados -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-
+    <title>Dashboard del Doctor</title>
+    <!-- Estilos -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/main.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/main.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/styles/main.css">
+    <style>
+        body { padding: 0; }
+        .container { max-width: 1200px; margin-top: 30px; }
+        .section { margin-bottom: 30px; }
+        .notificaciones, .historial-medicamentos, .notas-evolucion, .estadisticas-paciente { background-color: #f9f9f9; padding: 15px; border-radius: 8px; }
+        .calendario-citas { background-color: #e9ecef; padding: 15px; border-radius: 8px; }
+        .historial-consultas .accordion-button { font-size: 16px; }
+    </style>
 </head>
 <body>
-            <!-- Barra de navegación principal -->
-            <nav class="navbar navbar-expand-lg bg-primary text-white">
-                <div class="container-fluid">
-                    <a class="navbar-brand text-white" href="#">CHECK</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link text-white" href="Dashboard_Patient.html">Inicio</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" href="../Paginas-Usuarios/Profile.html">Perfil</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" href="../Paginas-Usuarios/Records.html">Registros</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" href="../Paginas-Usuarios/Historial.html">Historial Clínico</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" href="../Paginas-Usuarios/Drugs.html">Medicamentos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" href="#" id="citasProgramadasBtn">Citas Programadas</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" href="#" id="Anomalias-btn">Anomalías</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-            <!-- JS de Bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="../assets/Scripts/Main.js"></script>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg bg-primary text-white">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="#">CHECK</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="Dashboard_Doctor.html">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="../Paginas-Usuarios/Profile_Doctor.html">Perfil</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
+    <!-- Contenido -->
+    <div class="container">
+        <h1>Dashboard del Doctor</h1>
+
+        <!-- Buscador de Pacientes -->
+<div class="section buscar-paciente">
+    <label for="buscarPaciente">Buscar Paciente</label>
+    <input type="text" class="form-control" id="buscarPaciente" placeholder="Buscar por nombre o ID">
+</div>
+
+<!-- Sección de Historial de Consultas -->
+<div class="section historial-consultas">
+    <h3>Historial de Consultas</h3>
+    <div class="accordion" id="historialConsultasAccordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Consulta 1: 12 de Septiembre, 2024
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#historialConsultasAccordion">
+                <div class="accordion-body">
+                    Diagnóstico: Hipertensión <br>
+                    Medicamentos: Lisinopril, 10 mg <br>
+                    Notas: Aumentar actividad física
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sección de Notas de Evolución -->
+<div class="section notas-evolucion">
+    <h3>Notas de Evolución</h3>
+    <textarea class="form-control" rows="4" placeholder="Registrar evolución del paciente..."></textarea>
+    <button type="submit" class="btn btn-success mt-2">Guardar Notas</button>
+</div>
+
+<!-- Sección de Historial de Medicamentos -->
+<div class="section historial-medicamentos">
+    <h3>Historial de Medicamentos Recetados</h3>
+    <ul>
+        <li>Medicamento: Metformina - Dosis: 500 mg - Fecha: 01/11/2024</li>
+        <li>Medicamento: Lisinopril - Dosis: 10 mg - Fecha: 15/10/2024</li>
+    </ul>
+</div>
+
+<!-- Sección de Recordatorios -->
+<div class="section recordatorios">
+    <h3>Recordatorios</h3>
+    <input type="text" class="form-control" placeholder="Nuevo Recordatorio...">
+    <button class="btn btn-primary mt-2">Agregar Recordatorio</button>
+</div>
+
+<!-- Sección de Notificaciones -->
+<div class="section notificaciones">
+    <h3>Notificaciones</h3>
+    <div class="notificacion">
+        <p><strong>Paciente: Juan Pérez</strong> ha recibido su receta médica.</p>
+        <button class="btn btn-secondary">Marcar como leída</button>
+    </div>
+</div>
+
+<!-- Carga de Archivos (Ej. Resultados de Exámenes) -->
+<div class="section cargar-archivos">
+    <h3>Cargar Resultados de Exámenes</h3>
+    <input type="file" class="form-control" id="examen" accept="application/pdf">
+    <button class="btn btn-primary mt-2">Subir Examen</button>
+</div>
+
+
+        <!-- Gráfica de Evolución de Glucosa -->
+        <div class="section estadisticas-paciente">
+            <h3>Gráfica de Evolución de Glucosa</h3>
+            <canvas id="grafico-glucosa"></canvas>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Configuración del Calendario
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarEl = document.getElementById('calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: [
+                    {
+                        title: 'Cita con Juan Pérez',
+                        start: '2024-12-10',
+                        description: 'Consulta de seguimiento'
+                    },
+                    {
+                        title: 'Cita con María López',
+                        start: '2024-12-12',
+                        description: 'Revisión general'
+                    }
+                ]
+            });
+            calendar.render();
+        });
+
+        // Configuración del Gráfico de Glucosa
+        const ctx = document.getElementById('grafico-glucosa').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Niveles de Glucosa',
+                    data: [90, 95, 85, 88, 92, 93],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { title: { display: true, text: 'Meses' } },
+                    y: { title: { display: true, text: 'Glucosa (mg/dL)' }, min: 80, max: 100 }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
