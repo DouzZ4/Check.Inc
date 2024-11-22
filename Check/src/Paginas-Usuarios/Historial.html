@@ -47,6 +47,24 @@
                     </div>
                 </div>
             </nav>
+
+<!-- Modal para Citas Programadas -->
+<div id="modalCitasProgramadas" class="modal">
+    <div class="modal-content">
+        <button class="close" onclick="cerrarModalCitasProgramadas()" aria-label="Cerrar modal">&times;</button>
+        <h2>Próxima Cita</h2>
+
+        <!-- Calendario con detalles de la cita -->
+        <div class="calendar">
+            <h3>Fecha: <span id="fechaCita">10 de Diciembre, 2024</span></h3>
+            <h3>Hora: <span id="horaCita">10:00 AM</span></h3>
+            <h3>Lugar: <span id="lugarCita">Clínica XYZ</span></h3>
+            <h3>Doctor: <span id="doctorCita">Dr. Juan Pérez</span></h3>
+            <h3>Tipo de Cita: <span id="tipoCita">Consulta de seguimiento</span></h3>
+        </div>
+    </div>
+</div>
+
 <div class="contenido_pagina">
     <h1>Resultados de Exámenes</h1>
 

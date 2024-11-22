@@ -1,0 +1,142 @@
+/* Archivo: main.css */
+
+/* Estilos globales */
+body {
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #3058a6 !important;
+    padding: 1rem;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.navbar .form-select {
+    max-width: 300px;
+    border: 2px solid #f45501;
+    color: white;
+}
+
+.navbar .form-select:focus {
+    border-color: #f45501;
+    box-shadow: 0 0 5px #f45501;
+}
+
+/* Títulos principales */
+h1 {
+    color: #3058a6;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+h2, h3 {
+    color: #3058a6;
+    margin-bottom: 0.5rem;
+}
+
+#selectorPacientes {
+    background-color: #f45501 !important;
+    color: #3058a6;
+}
+
+#selectorPacientes:hover {
+    background-color: black !important;
+    color: #3058a6;
+}
+
+/* Contenedor principal */
+.container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 900px;
+    margin: auto;
+}
+
+/* Botón a los registros */
+.ButtonToRecords {
+    display: inline-block;
+    background-color: #f45501;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.ButtonToRecords a {
+    color: white;
+    text-decoration: none;
+}
+
+.ButtonToRecords:hover {
+    background-color: #c43f01;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Gráficos */
+#graficosPaciente {
+    background: #e7f0ff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+canvas {
+    max-width: 100%;
+    height: auto;
+    background: white;
+    border: 2px solid #3058a6;
+    border-radius: 8px;
+}
+
+/* Párrafos */
+p {
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.text-primary {
+    color: #3058a6 !important;
+}
+
+.text-secondary {
+    color: #555 !important;
+}
+
+/* Tablas (en caso de necesitar tablas en esta u otras páginas relacionadas) */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    text-align: left;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #3058a6;
+    color: white;
+}
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}

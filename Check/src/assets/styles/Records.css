@@ -38,7 +38,7 @@
 
 /* Botones generales */
 .main-content button {
-    background-color: #007bff; /* Azul llamativo */
+    background-color: #3058a6 !important; /* Azul llamativo */
     color: #fff;
     padding: 10px 15px;
     border: none;
