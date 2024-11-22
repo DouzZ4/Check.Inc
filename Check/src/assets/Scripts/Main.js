@@ -42,3 +42,35 @@ window.onclick = function(event) {
     }
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    const btnEnviarAnomalia = document.getElementById("btnEnviarAnomalia");
+
+    btnEnviarAnomalia.addEventListener("click", () => {
+        // Captura los valores del formulario
+        const tipoAnomalia = document.getElementById("tipoAnomalia").value;
+        const descripcionAnomalia = document.getElementById("descripcionAnomalia").value;
+        const fechaAnomalia = document.getElementById("fechaAnomalia").value;
+
+        if (tipoAnomalia && descripcionAnomalia && fechaAnomalia) {
+            // Procesa los datos (puedes enviarlos al servidor o almacenarlos)
+            const datosAnomalia = {
+                tipo: tipoAnomalia,
+                descripcion: descripcionAnomalia,
+                fecha: fechaAnomalia,
+            };
+
+            console.log("Datos de anomalía:", datosAnomalia);
+            alert("Anomalía registrada exitosamente.");
+
+            // Limpia el formulario
+            document.getElementById("formAnomalias").reset();
+
+            // Cierra el modal
+            const modalElement = document.querySelector("#modalAnomalias");
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            modal.hide();
+        } else {
+            alert("Por favor, completa todos los campos.");
+        }
+    });
+});

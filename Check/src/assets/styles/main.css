@@ -88,6 +88,21 @@ nav.navbar .nav-links li a {
     color: black !important;
 }
 
+/* Botón de anomalías */
+.btn.bg-warning {
+    font-weight: bold;
+    border: 2px solid #f45501;
+    color: #fff;
+}
+
+/* Encabezado del modal */
+.modal-header.bg-warning {
+    background-color: #f45501;
+    color: white;
+}
+
+
+
 /* ===== Responsividad ===== */
 @media (max-width: 768px) {
     .navbar-toggler {
