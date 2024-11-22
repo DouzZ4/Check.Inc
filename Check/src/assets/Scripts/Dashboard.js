@@ -277,3 +277,4 @@ const graficoFrecuenciaCardiaca = new Chart(ctxFrecuencia, {
         }
     }
 });
+

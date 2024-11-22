@@ -20,7 +20,7 @@
             <div class="container-fluid">
                 <a class="navbar-brand text-white" href="#">CHECK</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon text-white"></span>
+                    <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
@@ -37,51 +37,11 @@
                             <a class="nav-link text-white" href="../Paginas-Usuarios/Historial.html">Historial Clínico</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="../Paginas-Usuarios/Drugs.html">Medicamentos</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-white" href="#" id="citasProgramadasBtn">Citas Programadas</a>
                         </li>
-                        <!-- Botón de anomalías en la navbar -->
-                        <!-- Botón de anomalías en la navbar -->
-                        <button 
-                            class="btn btn-secondary bg-warning text-dark" 
-                            type="button" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#modalAnomalias">
-                            Anomalías
-                        </button>
-                                <!-- Modal para ingresar anomalías -->
-<div class="modal fade" id="modalAnomalias" tabindex="-1" aria-labelledby="modalAnomaliasLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-warning text-dark">
-                <h5 class="modal-title" id="modalAnomaliasLabel">Notificar Anomalía</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="formAnomalias">
-                    <div class="mb-3">
-                        <label for="tipoAnomalia" class="form-label">Tipo de Anomalía:</label>
-                        <input type="text" class="form-control" id="tipoAnomalia" placeholder="Ejemplo: Hipoglucemia">
-                    </div>
-                    <div class="mb-3">
-                        <label for="descripcionAnomalia" class="form-label">Descripción:</label>
-                        <textarea class="form-control" id="descripcionAnomalia" rows="3" placeholder="Ingrese detalles adicionales"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="fechaAnomalia" class="form-label">Fecha:</label>
-                        <input type="date" class="form-control" id="fechaAnomalia">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-warning" id="btnEnviarAnomalia">Enviar</button>
-            </div>
-        </div>
-    </div>
-</div>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="../Paginas-Usuarios/Anomalias.html" id="Anomalias-btn">Anomalías</a>
+                        </li>
                     </ul>
                 </div>
             </div>
