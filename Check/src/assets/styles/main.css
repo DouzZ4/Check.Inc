@@ -101,6 +101,17 @@ nav.navbar .nav-links li a {
     color: white;
 }
 
+footer {
+    background-color: black;
+    color: white !important;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: auto; /* Esto permite que el footer se mantenga abajo */
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
 
 
 /* ===== Responsividad ===== */

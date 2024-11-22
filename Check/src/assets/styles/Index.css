@@ -182,31 +182,62 @@ details[open] .accordion {
 
 /* ===== Responsividad ===== */
 @media (max-width: 768px) {
-    .testi {
-        width: 100%;
-        margin: 10px 0;
+    /* Botones */
+    .button2-m-2, .button2-m-2-2 {
+        font-size: 16px;
+        padding: 10px;
     }
-        /* Ajustar el diseño del subcontenedor */
-        .sub-contenedor {
-            flex-direction: column; /* Cambia de fila a columna en pantallas pequeñas */
-            align-items: center;
-        }
-    
-        /* Tamaño del ícono */
-        .icono {
-            width: 200px; /* Reduce el tamaño del ícono */
-            padding-right: 0; /* Elimina el espacio adicional */
-            margin-bottom: 15px; /* Espacio entre el ícono y el texto */
-        }
-    
-        /* Ajustar el texto */
-        .Che {
-            font-size: 28px; /* Reduce el tamaño del texto destacado */
-            text-align: center; /* Centra el texto */
-        }
-    
-        .leyenda {
-            font-size: 18px; /* Ajusta el tamaño del texto descriptivo */
-            text-align: center; /* Centra la leyenda también */
-        }    
+
+    /* Testimonios */
+    .testi {
+        width: 90%; /* Asegura que ocupe la mayoría de la pantalla */
+        margin: 10px auto;
+    }
+
+    /* Subcontenedor */
+    .sub-contenedor {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    /* Icono */
+    .icono {
+        width: 200px;
+        padding-right: 0;
+        margin-bottom: 15px;
+    }
+
+    /* Títulos */
+    .Che {
+        font-size: 28px;
+    }
+
+    .leyenda {
+        font-size: 18px;
+    }
+
+    /* Acordeón */
+    .accordion {
+        padding: 10px;
+    }
+
+    .accordion summary {
+        font-size: 1em;
+    }
+
+    /* Contenedor Wrapper */
+    .Wrapper {
+        padding: 15px;
+        font-size: 1.2em;
+    }
+
+    /* Imágenes */
+    .div-my-5 {
+        width: 100%;
+    }
+
+    .img-descarga, .imagen1 {
+        max-width: 300px;
+    }
 }
