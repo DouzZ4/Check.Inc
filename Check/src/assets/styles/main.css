@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Quando&display=swap');
-
 /* ===== Variables globales ===== */
 :root {
     --primary-color: #3058a6;
@@ -23,11 +21,113 @@ main {
     flex: 1; /* Asegura que el footer esté siempre al final */
 }
 
-/* ==== Imagenes ===== */
+/* ===== Imagenes ===== */
 img {
     max-width: 100%;
-    height: 100%;
+    height: auto;
     object-fit: contain;
+}
+
+/* ===== Barra de navegación ===== */
+nav.navbar {
+    position: sticky;
+    top: 0;
+    background-color: #3058a6 !important;
+    padding: 10px 20px;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white !important;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+.navbar-toggler {
+    display: none;
+    background: none;
+    border: 5px white;
+    font-size: 1.5rem;
+    color: #F45501;
+    cursor: pointer;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+    color: white !important;
+}
+
+.nav-links li {
+    margin: 5px;
+    color: white !important;
+}
+
+nav.navbar .nav-links li a {
+    text-decoration: none;
+    color: white !important;
+    padding: 8px 10px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-links li a:hover {
+    background-color: var(--secondary-color);
+    border-radius: 5px;
+    color: black !important;
+}
+
+/* ===== Responsividad ===== */
+@media (max-width: 768px) {
+    .navbar-toggler {
+        display: block; /* Mostrar el botón de hamburguesa */
+    }
+
+    .nav-links {
+        display: none; /* Ocultar el menú en pantallas pequeñas */
+        flex-direction: column;
+        position: absolute;
+        color: white !important;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--primary-color);
+        padding: 10px 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-links.show {
+        display: flex; /* Mostrar el menú cuando se active */
+    }
+
+    .nav-links li {
+        text-align: center;
+        margin: 10px 0;
+    }
+}
+
+/* ===== Botones personalizados ===== */
+#Anomalias-btn,
+#Ingresar_BTN {
+    background-color: white;
+    color: black !important;
+    border-radius: 5px;
+    padding: 8px 16px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#Anomalias-btn:hover,
+#Ingresar_BTN:hover {
+    background-color: var(--secondary-color);
+    color: white;
+    border: 1px solid white;
 }
 
 .Logocheck {
@@ -39,248 +139,11 @@ img {
     align-items: center; /* Esto lo centra verticalmente dentro del contenedor */
 }
 
-
-/* ===== Barra de navegación ===== */
-.navbar {
-    position: sticky;
-    top: 0;
-    background-color: var(--primary-color);
+.ButtonToRecords {
+    background-color: #F45501 !important;
+    color: white;
     padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: white;
-    z-index: 1000;
-}
-
-.check {
-    flex: 0;
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    margin: 0px;
-    margin-left: auto;
-    padding: 0;
-    gap: 15px;
-}
-
-.nav-links li {
-    margin: 5px;
-}
-
-.nav-links li a {
-    text-decoration: none;
-    color: white;
-    padding: 8px 10px;
-    transition: background-color 0.3s ease;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: white;
-    padding: 8px 6px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.nav-links a:hover {
-    background-color: var(--secondary-color);
-    border-radius: 5px;
-    color: white;
-}
-
-/* Botón de hamburguesa */
-.menu-toggle {
-    display: none; /* Oculto en pantallas grandes */
-    background: none;
-    border: none;
-    font-size: 30px;
-    color: white;
     cursor: pointer;
+    border-radius: 5px !important;
 }
 
-/* ===== Botones personalizados ===== */
-#Anomalias-btn, 
-#Ingresar_BTN {
-    background-color: white;
-    color: black;
-    border-radius: 5px;
-    padding: 8px 16px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-#Anomalias-btn:hover, 
-#Ingresar_BTN:hover {
-    background-color: var(--secondary-color);
-    color: white;
-    border: 1px solid white;
-}
-
-/* ===== Menú desplegable ===== */
-.dropdown {
-    position: relative;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: var(--primary-color);
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 1050;
-    list-style: none;
-    padding: 0;
-}
-
-.dropdown-content li {
-    border-bottom: 2px solid #ffffff;
-}
-
-.dropdown-content li:last-child {
-    border-bottom: none;
-}
-
-.dropdown-content a {
-    color: var(--text-color);
-    padding: 10px;
-    display: block;
-    text-decoration: none;
-}
-
-.dropdown-content a:hover {
-    background-color: var(--secondary-color);
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-/* ===== Footer ===== */
-.footer {
-    background-color: black;
-    color: white;
-    text-align: center;
-    width: 100%;
-    padding: 20px;
-    position: relative;
-    bottom: 0;
-}
-
-.container {
-    background-color: transparent;
-}
-
-.footer-content {
-    max-width: auto;
-    margin: 0 auto;
-}
-
-.footer p {
-    color: white;
-    margin: 10px 0;
-    font-size: 14px;
-}
-
-.social-icons {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-.social-icons li {
-    display: inline-block;
-}
-
-.social-icons a {
-    color: #ccc;
-    font-size: 20px;
-    transition: color 0.3s;
-}
-
-.social-icons a:hover {
-    color: var(--secondary-color);
-}
-
-/* ===== Barra lateral ===== */
-.sidebar {
-    background-color: #222;
-    color: white;
-    width: 15vw;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-.sidebar ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.sidebar ul li {
-    margin: 15px 0;
-}
-
-.sidebar ul li a {
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.sidebar ul li a:hover {
-    color: #ddd;
-}
-
-/* ===== Media Queries (Responsividad) ===== */
-@media (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-        padding: 10px;
-    }
-
-    .nav-links {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .sidebar {
-        width: 100%;
-        padding: 10px;
-    }
-}
-
-@media (max-width: 576px) {
-    .sidebar {
-        width: 100%;
-    }
-}
-
-/* Menú desplegable en pantallas pequeñas */
-@media (max-width: 768px) {
-    .menu-toggle {
-        display: block; /* Mostrar el botón de hamburguesa */
-    }
-
-    .nav-links {
-        display: none; /* Ocultar el menú inicialmente */
-        flex-direction: column;
-        width: 100%;
-        background-color: var(--primary-color);
-        position: absolute;
-        top: 100%; /* Debajo de la navbar */
-        left: 0;
-        padding: 10px 0;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        z-index: 999;
-    }
-
-    .nav-links li {
-        text-align: center;
-        margin: 10px 0;
-    }
-
-    .nav-links.show {
-        display: flex; /* Mostrar el menú cuando se active */
-    }
-}
