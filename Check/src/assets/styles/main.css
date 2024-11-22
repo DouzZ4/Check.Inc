@@ -1,4 +1,3 @@
-/* ===== Variables globales ===== */
 :root {
     --primary-color: #3058a6;
     --secondary-color: #F45501;
@@ -6,7 +5,6 @@
     --background-color: white;
 }
 
-/* ===== Configuración global ===== */
 body {
     font-family: 'Quando', sans-serif !important;
     background-color: var(--background-color);
@@ -18,21 +16,19 @@ body {
 }
 
 main {
-    flex: 1; /* Asegura que el footer esté siempre al final */
+    flex: 1;
 }
 
-/* ===== Imagenes ===== */
 img {
     max-width: 100%;
     height: auto;
     object-fit: contain;
 }
 
-/* ===== Barra de navegación ===== */
 nav.navbar {
     position: sticky;
     top: 0;
-    background-color: #3058a6 !important;
+    background-color: var(--primary-color) !important;
     padding: 10px 20px;
     z-index: 1000;
     display: flex;
@@ -57,7 +53,7 @@ nav.navbar {
     background: none;
     border: 5px white;
     font-size: 1.5rem;
-    color: #F45501;
+    color: var(--secondary-color);
     cursor: pointer;
 }
 
@@ -75,7 +71,7 @@ nav.navbar {
     color: white !important;
 }
 
-nav.navbar .nav-links li a {
+.nav-links li a {
     text-decoration: none;
     color: white !important;
     padding: 8px 10px;
@@ -88,16 +84,14 @@ nav.navbar .nav-links li a {
     color: black !important;
 }
 
-/* Botón de anomalías */
 .btn.bg-warning {
     font-weight: bold;
-    border: 2px solid #f45501;
+    border: 2px solid var(--secondary-color);
     color: #fff;
 }
 
-/* Encabezado del modal */
 .modal-header.bg-warning {
-    background-color: #f45501;
+    background-color: var(--secondary-color);
     color: white;
 }
 
@@ -106,22 +100,19 @@ footer {
     color: white !important;
     text-align: center;
     padding: 15px 0;
-    margin-top: auto; /* Esto permite que el footer se mantenga abajo */
+    margin-top: auto;
     width: 100%;
     position: relative;
     z-index: 1;
 }
 
-
-
-/* ===== Responsividad ===== */
 @media (max-width: 768px) {
     .navbar-toggler {
-        display: block; /* Mostrar el botón de hamburguesa */
+        display: block;
     }
 
     .nav-links {
-        display: none; /* Ocultar el menú en pantallas pequeñas */
+        display: none;
         flex-direction: column;
         position: absolute;
         color: white !important;
@@ -134,7 +125,7 @@ footer {
     }
 
     .nav-links.show {
-        display: flex; /* Mostrar el menú cuando se active */
+        display: flex;
     }
 
     .nav-links li {
@@ -143,7 +134,6 @@ footer {
     }
 }
 
-/* ===== Botones personalizados ===== */
 #Anomalias-btn,
 #Ingresar_BTN {
     background-color: white;
@@ -165,58 +155,28 @@ footer {
     padding: 50px 50px 0px 50px;
     display: flex;
     flex-direction: column;
-    margin: 40px auto; /* Esto lo centra horizontalmente */
-    align-items: center; /* Esto lo centra verticalmente dentro del contenedor */
+    margin: 40px auto;
+    align-items: center;
 }
 
-/* Modal */
 .modal {
-    display: none; 
+    display: none;
     position: fixed;
-    z-index: 1; 
-    padding-top: 100px; 
+    z-index: 1;
+    padding-top: 100px;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.4); 
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
-    background-color: #fefefe; 
+    background-color: #fefefe;
     margin: auto;
     padding: 20px;
-    border: 1px solid #888; 
+    border: 1px solid #888;
     width: 80%;
     max-width: 600px;
-    border-radius: 10px; 
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); 
-}
-
-.close {
-    color: #aaa; 
-    float: right; 
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black; 
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.card-header {
-    background-color: #f8f9fa;
-    font-weight: bold;
-}
-.card-body {
-    background-color: #f1f1f1;
-}
-.card {
-    margin-bottom: 20px;
-}
-.advice-section {
-    margin-top: 30px;
+    border-radius: 10px;
 }

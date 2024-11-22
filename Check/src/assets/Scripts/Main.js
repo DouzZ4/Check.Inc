@@ -25,19 +25,22 @@ const modalCitasProgramadas = document.getElementById("modalCitasProgramadas");
 const citasProgramadasBtn = document.getElementById("citasProgramadasBtn");
 const closeModalCitas = document.querySelector(".modal .close");
 
-// Función para abrir el modal
-citasProgramadasBtn.onclick = function() {
-    modalCitasProgramadas.style.display = "block";
+// Verifica si los elementos existen antes de asignar eventos
+if (citasProgramadasBtn) {
+    citasProgramadasBtn.onclick = function() {
+        modalCitasProgramadas.style.display = "block";
+    };
 }
 
-// Función para cerrar el modal
-closeModalCitas.onclick = function() {
-    modalCitasProgramadas.style.display = "none";
+if (closeModalCitas) {
+    closeModalCitas.onclick = function() {
+        modalCitasProgramadas.style.display = "none";
+    };
 }
 
 // Cerrar el modal si el usuario hace clic fuera de la ventana modal
 window.onclick = function(event) {
-    if (event.target == modalCitasProgramadas) {
+    if (event.target === modalCitasProgramadas) {
         modalCitasProgramadas.style.display = "none";
     }
-}
+};
