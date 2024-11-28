@@ -110,6 +110,10 @@ footer {
     color: white !important;
 }
 
+.footer li {
+    color: blue !important;
+}
+
 @media (max-width: 768px) {
     .navbar-toggler {
         display: block;
