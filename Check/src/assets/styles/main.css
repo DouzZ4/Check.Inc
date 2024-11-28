@@ -106,6 +106,10 @@ footer {
     z-index: 1;
 }
 
+.footer p {
+    color: white !important;
+}
+
 @media (max-width: 768px) {
     .navbar-toggler {
         display: block;
