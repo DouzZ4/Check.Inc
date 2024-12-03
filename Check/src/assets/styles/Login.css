@@ -1,103 +1,197 @@
-html, body {
+*,
+*:before,
+*:after{
+    padding: 0;
     margin: 0;
+    box-sizing: border-box;
 }
-
-.Container-Img-Logo {
-    display: flex;
-    justify-content: center;
-    padding-top: 40px; /* Reduce el espacio superior */
+body {
+    background-color: black;
 }
-
-.Img_logo {
-    max-width: 500px;
-    width: 100%;
-    height: 100%;
+.background{
+    width: 430px;
+    height: 520px;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    top: 50%;
 }
-
-.container {
-    height: 100%;
-    align-content: center;
-    padding-top: 40px; /* Reduce el espacio superior entre logo y card */
+.background .shape{
+    height: 200px;
+    width: 200px;
+    position: absolute;
+    border-radius: 50%;
 }
-
-.card {
-    height: 370px;
-    margin-top: 10px; /* Acerca la card al logo */
-    margin-bottom: auto;
+.shape:first-child{
+    background: linear-gradient(
+        #3058a6,
+        #f45501
+    );
+    left: -80px;
+    top: -80px;
+}
+.shape:last-child{
+    background: linear-gradient(
+        to right,
+        #f45501,
+        #3058a6
+    );
+    right: -30px;
+    bottom: -80px;
+}
+form{
+    height: 520px;
     width: 400px;
-    background-color: transparent;
-    backdrop-filter: blur(20px);
+    background-color:black;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    padding: 50px 35px;
+}
+form *{
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    outline: none;
+    border: none;
+}
+form h3{
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 42px;
+    text-align: center;
 }
 
-.social_icon span {
-    font-size: 60px;
-    margin-left: 10px;
-    color: #3058a6;
+label{
+    display: block;
+    margin-top: 30px;
+    font-size: 16px;
+    font-weight: 500;
 }
-
-.social_icon span:hover {
-    color: #f45501;
+input{
+    display: block;
+    height: 50px;
+    width: 100%;
+    background-color: rgba(255,255,255,0.07);
+    border-radius: 3px;
+    padding: 0 10px;
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 300;
+}
+::placeholder{
+    color: #e5e5e5;
+}
+button{
+    margin-top: 50px;
+    width: 100%;
+    background-color: #ffffff;
+    color: #080710;
+    padding: 15px 0;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-.card-header h3 {
-    color: black;
+button:hover {
+    background-color: #f45501;
+    color: white;
+}
+.social{
+  margin-top: 30px;
+  display: flex;
+}
+.social div{
+  background: red;
+  width: 150px;
+  border-radius: 3px;
+  padding: 5px 10px 10px 5px;
+  background-color: rgba(255,255,255,0.27);
+  color: #eaf0fb;
+  text-align: center;
+}
+.social div:hover{
+  background-color: rgba(255,255,255,0.47);
+}
+.social i{
+  margin-right: 4px;
+}
+/* Ajustes generales para pantallas pequeñas */
+@media (max-width: 768px) {
+    .background {
+        width: 100%;
+        height: auto;
+    }
+    .background .shape {
+        height: 150px;
+        width: 150px;
+    }
+    .background .shape:first-child {
+        left: -50px;
+        top: -50px;
+    }
+    .background .shape:last-child {
+        right: -20px;
+        bottom: -50px;
+    }
+    form {
+        width: 90%;
+        height: auto;
+        padding: 40px 20px;
+    }
+    form h3 {
+        font-size: 28px;
+        line-height: 36px;
+    }
+    label {
+        font-size: 14px;
+    }
+    input {
+        height: 45px;
+        font-size: 13px;
+    }
+    button {
+        padding: 12px 0;
+        font-size: 16px;
+    }
+    .social {
+        flex-direction: column;
+        align-items: center;
+    }
+    .social div {
+        width: 90%;
+        margin: 10px 0;
+    }
 }
 
-.social_icon {
-    position: absolute;
-    right: 20px;
-    top: -45px;
-}
-
-.input-group-prepend span {
-    margin: 5px;
-    width: 40px;
-    background-color: transparent;
-    backdrop-filter: blur(40px);
-    color: black;
-    border: 0 !important;
-}
-
-input:focus {
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-.remember {
-    color: black;
-}
-
-.remember input {
-    width: 20px;
-    height: 20px;
-    margin-left: 15px;
-    margin-right: 5px;
-}
-
-.login_btn {
-    margin: 5px;
-    color: black;
-    background-color: #3058a6;
-    width: 100px;
-}
-
-.login_btn:hover {
-    color: black;
-    background-color: #F45501;
-}
-
-.links {
-    color: black;
-}
-
-.links a {
-    margin-left: 4px;
-}
-
-.Registrarme_btn {
-    margin: 5px;
-    color: black;
-    background-color: #3058a6;
-    width: auto;
+/* Ajustes para pantallas muy pequeñas (teléfonos de 480px o menos) */
+@media (max-width: 480px) {
+    .background .shape {
+        height: 100px;
+        width: 100px;
+    }
+    .background .shape:first-child {
+        left: -30px;
+        top: -30px;
+    }
+    .background .shape:last-child {
+        right: -10px;
+        bottom: -30px;
+    }
+    form h3 {
+        font-size: 24px;
+    }
+    input {
+        height: 40px;
+        font-size: 12px;
+    }
+    button {
+        padding: 10px 0;
+        font-size: 14px;
+    }
 }
