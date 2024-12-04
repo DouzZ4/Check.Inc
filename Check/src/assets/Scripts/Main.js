@@ -44,3 +44,5 @@ window.onclick = function(event) {
         modalCitasProgramadas.style.display = "none";
     }
 };
+
+document.addEventListener("DOMContentLoaded", function() { fetch("../assets/Components/navbar.html") .then(response => response.text()) .then(data => { document.getElementById("navbar-container").innerHTML = data; }) .catch(error => console.error("Error cargando la barra de navegación:", error)); });
