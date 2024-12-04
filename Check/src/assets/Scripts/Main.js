@@ -46,3 +46,4 @@ window.onclick = function(event) {
 };
 
 document.addEventListener("DOMContentLoaded", function() { fetch("../assets/Components/navbar.html") .then(response => response.text()) .then(data => { document.getElementById("navbar-container").innerHTML = data; }) .catch(error => console.error("Error cargando la barra de navegación:", error)); });
+document.addEventListener("DOMContentLoaded", function() { fetch("../assets/Components/NavbarInicio.html") .then(response => response.text()) .then(data => { document.getElementById("NavbarInicio-container").innerHTML = data; }) .catch(error => console.error("Error cargando la barra de navegación:", error)); });
