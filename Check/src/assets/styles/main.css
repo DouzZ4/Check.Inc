@@ -1,3 +1,4 @@
+/* Variables globales */
 :root {
     --primary-color: #3058a6;
     --secondary-color: #F45501;
@@ -5,6 +6,7 @@
     --background-color: white;
 }
 
+/* Estilos generales */
 body {
     font-family: 'Quando', sans-serif !important;
     background-color: var(--background-color);
@@ -25,6 +27,7 @@ img {
     object-fit: contain;
 }
 
+/* Barra de navegación */
 nav.navbar {
     position: sticky;
     top: 0;
@@ -49,12 +52,22 @@ nav.navbar {
 }
 
 .navbar-toggler {
-    display: none;
+    display: block;
     background: none;
-    border: 5px white;
+    border: none;
     font-size: 1.5rem;
     color: var(--secondary-color);
     cursor: pointer;
+}
+
+.navbar-toggler-icon {
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    content: "";
+    background: no-repeat center center;
+    background-size: 100% 100%;
 }
 
 .nav-links {
@@ -84,62 +97,11 @@ nav.navbar {
     color: black !important;
 }
 
+/* Botones */
 .btn.bg-warning {
     font-weight: bold;
     border: 2px solid var(--secondary-color);
     color: #fff;
-}
-
-.modal-header.bg-warning {
-    background-color: var(--secondary-color);
-    color: white;
-}
-
-footer {
-    background-color: black;
-    color: white !important;
-    text-align: center;
-    padding: 15px 0;
-    margin-top: auto;
-    width: 100%;
-    position: relative;
-    z-index: 1;
-}
-
-.footer p {
-    color: white !important;
-}
-
-.footer li {
-    color: blue !important;
-}
-
-@media (max-width: 768px) {
-    .navbar-toggler {
-        display: block;
-    }
-
-    .nav-links {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        color: white !important;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background-color: var(--primary-color);
-        padding: 10px 0;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    }
-
-    .nav-links.show {
-        display: flex;
-    }
-
-    .nav-links li {
-        text-align: center;
-        margin: 10px 0;
-    }
 }
 
 #Anomalias-btn,
@@ -158,15 +120,28 @@ footer {
     border: 1px solid white;
 }
 
-.Logocheck {
-    max-width: 500px;
-    padding: 50px 50px 0px 50px;
-    display: flex;
-    flex-direction: column;
-    margin: 40px auto;
-    align-items: center;
+.modal-header.bg-warning {
+    background-color: var(--secondary-color);
+    color: white;
 }
 
+/* Footer */
+footer {
+    background-color: black;
+    color: white !important;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: auto;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.footer p {
+    color: white !important;
+}
+
+/* Modal */
 .modal {
     display: none;
     position: fixed;
@@ -187,4 +162,42 @@ footer {
     width: 80%;
     max-width: 600px;
     border-radius: 10px;
+}
+
+/* Logotipo */
+.Logocheck {
+    max-width: 500px;
+    padding: 50px 50px 0px 50px;
+    display: flex;
+    flex-direction: column;
+    margin: 40px auto;
+    align-items: center;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .navbar-toggler {
+        display: block;
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px; /* Ajustar la posición para evitar que se superponga con la barra de navegación */
+        left: 0;
+        width: 100%;
+        background-color: var(--primary-color);
+        padding: 10px 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-links.show {
+        display: flex;
+    }
+
+    .nav-links li {
+        text-align: center;
+        margin: 10px 0;
+    }
 }
