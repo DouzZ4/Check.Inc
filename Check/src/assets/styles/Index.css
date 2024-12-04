@@ -114,7 +114,7 @@ p {
 /* Responsividad */
 @media (max-width: 1200px) {
     .testi {
-        max-width: 90%; /* Adaptar el ancho máximo para pantallas grandes */
+        max-width: 100%; /* Adaptar el ancho máximo para pantallas grandes */
     }
 
     .icon img {
@@ -133,7 +133,7 @@ p {
 
 @media (max-width: 992px) {
     .testi {
-        max-width: 80%; /* Adaptar el ancho máximo para pantallas medianas */
+        max-width: 100%; /* Adaptar el ancho máximo para pantallas medianas */
     }
 
     .icon img {
