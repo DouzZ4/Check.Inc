@@ -76,7 +76,8 @@ p {
 
 .testi {
     background-color: white;
-    width: 280px;
+    width: 90%;
+    max-width: 400px; /* Limitar el ancho máximo */
     border-radius: 16px;
     margin: 0 30px;
     padding: 20px;
@@ -102,12 +103,97 @@ p {
 
 .ic p {
     color: black;
-    font-size: 25px;
+    font-size: 1.8vh;
 }
 
 #arroba {
     color: #888888;
-    font-size: 18px;
+    font-size: 1.5vh;
+}
+
+/* Responsividad */
+@media (max-width: 1200px) {
+    .testi {
+        max-width: 90%; /* Adaptar el ancho máximo para pantallas grandes */
+    }
+
+    .icon img {
+        width: 70px; /* Ajustar el tamaño de la imagen */
+        height: 70px;
+    }
+
+    .ic p {
+        font-size: 1.6vh;
+    }
+
+    #arroba {
+        font-size: 1.3vh;
+    }
+}
+
+@media (max-width: 992px) {
+    .testi {
+        max-width: 80%; /* Adaptar el ancho máximo para pantallas medianas */
+    }
+
+    .icon img {
+        width: 60px; /* Ajustar el tamaño de la imagen */
+        height: 60px;
+    }
+
+    .ic p {
+        font-size: 1.4vh;
+    }
+
+    #arroba {
+        font-size: 1.2vh;
+    }
+}
+
+@media (max-width: 768px) {
+    .testi {
+        max-width: 100%; /* Adaptar el ancho máximo para pantallas pequeñas */
+        margin: 10px auto;
+    }
+
+    .icon img {
+        width: 50px; /* Ajustar el tamaño de la imagen */
+        height: 50px;
+    }
+
+    .ic p {
+        font-size: 1.2vh;
+    }
+
+    #arroba {
+        font-size: 1vh;
+    }
+}
+
+@media (max-width: 576px) {
+    .testi {
+        max-width: 100%; /* Asegurar que ocupe todo el ancho disponible */
+        margin: 10px auto;
+    }
+
+    .icon {
+        flex-direction: column; /* Alinear verticalmente para pantallas muy pequeñas */
+        margin-bottom: 10px;
+    }
+
+    .icon img {
+        margin-right: 0; /* Eliminar margen derecho */
+        margin-bottom: 10px; /* Añadir margen inferior */
+    }
+
+    .ic p {
+        font-size: 1vh;
+        text-align: center; /* Centrar texto */
+    }
+
+    #arroba {
+        font-size: 0.8vh;
+    }
 }
 
 /* ===== Contenedor con sombra ===== */
@@ -190,7 +276,7 @@ details[open] .accordion {
 
     /* Testimonios */
     .testi {
-        width: 90%; /* Asegura que ocupe la mayoría de la pantalla */
+        width: 100%; /* Asegura que ocupe la mayoría de la pantalla */
         margin: 10px auto;
     }
 
