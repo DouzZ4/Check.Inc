@@ -1,6 +1,13 @@
-Usuarios 
-Medicamentos
-Anomalias
-Glucosa
-Recordatorios 
-Citas
+Módulo de Autenticación: Registro e inicio de sesión.
+
+Módulo de Registro de Glucosa: Permite ingresar, visualizar y editar los niveles de glucosa.
+
+Módulo de Medicamentos: Configuración y recordatorio de medicamentos.
+
+Módulo de Anomalías: Registro de eventos como hipoglucemia o hiperglucemia.
+
+Módulo de Recordatorios Automáticos: Configuración personalizada, notificaciones con sonido y vibración.
+
+Módulo de Historial: Visualización de registros completados o pendientes.
+
+Módulo de Gráficos: Representación visual de la evolución de la glucosa.
