@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../models/Usuario.php';
 
 // Conectamos a la base de datos
 $db = Conexion::conectar();
@@ -9,9 +10,8 @@ $db = Conexion::conectar();
 $query = "SELECT * FROM rol";
 $stmt = $db->prepare($query);
 $stmt->execute();
-$roles = $stmt->fetchAll(PDO::FETCH_ASSOC); // Cambiar $result a $roles
+$roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Procesar Formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $_POST['user'];
     $password = $_POST['password'];
@@ -22,24 +22,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $edad = $_POST['edad'];
     $idRol = $_POST['idRol'];
 
-    $query = "INSERT INTO Usuario (user, password, documento, nombres, apellidos, correo, edad, idRol) VALUES (:user, :password, :documento, :nombres, :apellidos, :correo, :edad, :idRol)";
-    $stmt = $db->prepare($query);
-    $stmt->bindParam(':user', $user);
-    $stmt->bindParam(':password', $password);
-    $stmt->bindParam(':documento', $documento);
-    $stmt->bindParam(':nombres', $nombres);
-    $stmt->bindParam(':apellidos', $apellidos);
-    $stmt->bindParam(':correo', $correo);
-    $stmt->bindParam(':edad', $edad);
-    $stmt->bindParam(':idRol', $idRol);
-    
-    if ($stmt->execute()) {
+    $usuario = new Usuario();
+    if ($usuario->registrarUsuario($user, $password, $documento, $nombres, $apellidos, $correo, $edad, $idRol)) {
         echo "<p>Usuario registrado exitosamente.</p>";
     } else {
         echo "<p>Error al registrar usuario.</p>";
     }
 }
-
 
 ?>
 
@@ -78,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label for="idRol">Rol:</label>
         <select id="idRol" name="idRol" required>
             <?php foreach ($roles as $rol): ?>
-                <option value="<?= $rol['idRol'] ?>"><?= $rol['nombre'] ?></option> <!-- Cambiar 'tipo' a 'nombreRol' -->
+                <option value="<?= $rol['idRol'] ?>"><?= $rol['nombre'] ?></option>
             <?php endforeach; ?>
         </select>
 
