@@ -6,18 +6,17 @@ require_once '../models/Usuario.php';
 class UsuarioController {
     private $conexion;
 
+    // Constructor que recibe la conexión a la base de datos.
     public function __construct($conexion) {
         $this->conexion = $conexion;
     }
 
-    // Método para registrar un usuario (paciente)
+    // Método para registrar un usuario (paciente).
     public function registrarUsuario($data) {
-        // Forzamos el rol a paciente (valor 2)
+        // Forzamos el rol a paciente (valor 2).
         $data['idRol'] = 2;
 
-        /* 
-         * Actualizamos la llamada a la fábrica.
-         * Notar que como ya eliminamos la dirección en el formulario, le pasamos un string vacío.
+        /* * Actualizamos la llamada a la fábrica.
          * La fábrica espera 8 parámetros (según nuestro modelo actualizado), en el siguiente orden:
          * ($nombres, $apellidos, $edad, $correo, $direccion, $username, $password, $id_rol)
          */
@@ -31,13 +30,13 @@ class UsuarioController {
             $data['idRol']
         );
 
-        // Validar el nombre de usuario
+        // Validar el nombre de usuario.
         $validacionUsuario = $usuario->validarUsuario();
         if ($validacionUsuario !== true) {
             return ["success" => false, "message" => $validacionUsuario];
         }
 
-        // Validar la contraseña
+        // Validar la contraseña.
         $validacionPassword = $usuario->validarPassword();
         if ($validacionPassword !== true) {
             $mensajeErrors = is_array($validacionPassword) ? implode(' ', $validacionPassword) : $validacionPassword;
@@ -45,7 +44,6 @@ class UsuarioController {
         }
 
         // Insertar el usuario en la base de datos.
-        // Nota: Se usa la columna "user" en la consulta, ya que "username" no existe en la tabla.
         $sql = "INSERT INTO usuario (nombres, apellidos, edad, correo, user, password, idRol) 
                 VALUES (:nombres, :apellidos, :edad, :correo, :user, :password, :idRol)";
         $stmt = $this->conexion->prepare($sql);
@@ -66,7 +64,7 @@ class UsuarioController {
         }
     }
 
-    // Método para el inicio de sesión
+    // Método para el inicio de sesión.
     public function loginUsuario($data) {
         if (isset($data['username']) && isset($data['password'])) {
             // Se consulta la columna 'user', ya que en la bd el campo se llama así.

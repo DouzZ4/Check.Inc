@@ -12,9 +12,9 @@ abstract class UsuarioAbstracto {
 
     // Se actualiza el constructor para recibir 5 parámetros.
     public function __construct($nombres, $apellidos, $edad, $username, $password) {
-        $this->nombres  = $nombres;
+        $this->nombres   = $nombres;
         $this->apellidos = $apellidos;
-        $this->edad     = $edad;
+        $this->edad      = $edad;
         $this->username = $username;
         $this->password = $password;
     }
@@ -47,22 +47,22 @@ class Usuario extends UsuarioAbstracto {
     // Validación de la contraseña: al menos 8 caracteres, incluir mayúsculas, minúsculas y un carácter especial.
     public function validarPassword(): bool|array {
         $errores = [];
-    
+
         // Verificar que la contraseña tenga al menos 8 caracteres.
         if (strlen($this->password) < 8) {
             $errores[] = "La contraseña debe tener al menos 8 caracteres.";
         }
-        
+
         // Verificar la presencia de letras minúsculas y mayúsculas.
         if (!preg_match('/[a-z]/', $this->password) || !preg_match('/[A-Z]/', $this->password)) {
             $errores[] = "La contraseña debe incluir mayúsculas y minúsculas.";
         }
-        
+
         // Verificar la presencia de al menos un carácter especial.
         if (!preg_match('/[\W_]/', $this->password)) {
             $errores[] = "La contraseña debe incluir al menos un carácter especial.";
         }
-        
+
         // Siempre se retorna un valor: true si no hay errores o un arreglo de errores si los hay.
         return empty($errores) ? true : $errores;
     }

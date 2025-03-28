@@ -60,9 +60,13 @@
     </header>
     <main>
         <?php
+        // Verifica si existe un mensaje en la sesión.
         if (isset($_SESSION['message'])) {
+            // Escapa el mensaje para evitar XSS.
             $msg = htmlspecialchars($_SESSION['message']);
+            // Muestra el mensaje dentro de un div con la clase 'mensaje'.
             echo "<div class='mensaje'>{$msg}</div>";
+            // Elimina el mensaje de la sesión para que no se muestre nuevamente.
             unset($_SESSION['message']);
         }
         ?>
