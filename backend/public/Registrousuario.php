@@ -31,7 +31,7 @@
           font-weight: bold;
           margin-bottom: 15px;
       }
-      form input, form select, form button {
+      form input, form button {
           width: 100%;
           padding: 10px;
           margin: 8px 0;
@@ -55,20 +55,44 @@
   </header>
   <main>
       <?php
-      // Mostrar mensaje flash almacenado en la sesión si existe.
+      // Mostrar mensaje flash, si existe
       if (isset($_SESSION['message'])) {
           $msg = htmlspecialchars($_SESSION['message']);
           echo "<div class='mensaje'>{$msg}</div>";
           unset($_SESSION['message']);
       }
       ?>
-      <form action="../routes/usuarioRoutes.php?register" method="POST">
-          <input type="text" name="nombres" placeholder="Nombres" required>
-          <input type="text" name="apellidos" placeholder="Apellidos" required>
-          <input type="number" name="edad" placeholder="Edad" required>
-          <input type="email" name="correo" placeholder="Correo Electrónico" required>
-          <input type="text" name="username" placeholder="Nombre de Usuario" required>
-          <input type="password" name="password" placeholder="Contraseña" required>
+      <form id="registroForm" action="../routes/usuarioRoutes.php?register" method="POST">
+          <!-- Campo para Nombres: permite solo letras y espacios (opcional el patrón, se puede ajustar según la preferencia) -->
+          <input type="text" name="nombres" placeholder="Nombres" 
+                 required pattern="[A-Za-zÀ-ÿ\s]+" 
+                 title="Ingrese solo letras y espacios" />
+                 
+          <!-- Campo para Apellidos -->
+          <input type="text" name="apellidos" placeholder="Apellidos" 
+                 required pattern="[A-Za-zÀ-ÿ\s]+" 
+                 title="Ingrese solo letras y espacios" />
+          
+          <!-- Campo para Edad -->
+          <input type="number" name="edad" placeholder="Edad" required min="1" title="Ingrese una edad válida" />
+          
+          <!-- Campo para Correo Electrónico -->
+          <input type="email" name="correo" placeholder="Correo Electrónico" required />
+          
+          <!-- Campo para Nombre de Usuario (mínimo 5 caracteres) -->
+          <input type="text" name="username" placeholder="Nombre de Usuario" 
+                 required minlength="5" 
+                 title="El nombre de usuario debe tener al menos 5 caracteres" />
+          
+          <!-- Campo para Contraseña:
+               - Mínimo 8 caracteres 
+               - Debe tener al menos una letra minúscula, una mayúscula y un carácter especial.
+               Se usa pattern para obligar ese formato y title para describir la condición. -->
+          <input type="password" name="password" placeholder="Contraseña" 
+                 required minlength="8"
+                 pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" 
+                 title="La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas y un carácter especial" />
+          
           <button type="submit">Registrar</button>
       </form>
   </main>
