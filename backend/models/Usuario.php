@@ -1,167 +1,70 @@
 <?php
-require_once '../config/database.php';
+// models/Usuario.php
 
-class Usuario {
-    private $conn;
-    private $table_name = "usuario";
+// Clase abstracta que define la estructura básica para un Usuario.
+// Ahora se incluyen los campos: nombres, apellidos y edad.
+abstract class UsuarioAbstracto {
+    protected $nombres;
+    protected $apellidos;
+    protected $edad;
+    protected $username;
+    protected $password;
 
-    // Propiedades privadas
-    private $idUsuario;
-    private $user;
-    private $password;
-    private $documento;
-    private $nombres;
-    private $apellidos;
-    private $correo;
-    private $edad;
-    private $idRol;
-
-    // Constructor para inicializar la conexión y opcionalmente los datos
-    public function __construct($db = null) {
-        $conexion = new Conexion();
-        $this->conn = $db ?: $conexion->conectar();
-    }
-
-    // Getters y setters para cada propiedad
-    public function getIdUsuario() {
-        return $this->idUsuario;
-    }
-
-    public function setIdUsuario($idUsuario) {
-        $this->idUsuario = $idUsuario;
-    }
-
-    public function getUser() {
-        return $this->user;
-    }
-
-    public function setUser($user) {
-        $this->user = $user;
-    }
-
-    public function getPassword() {
-        return $this->password;
-    }
-
-    public function setPassword($password) {
-        $this->password = password_hash($password, PASSWORD_DEFAULT);
-    }
-
-    public function getDocumento() {
-        return $this->documento;
-    }
-
-    public function setDocumento($documento) {
-        $this->documento = $documento;
-    }
-
-    public function getNombres() {
-        return $this->nombres;
-    }
-
-    public function setNombres($nombres) {
-        $this->nombres = $nombres;
-    }
-
-    public function getApellidos() {
-        return $this->apellidos;
-    }
-
-    public function setApellidos($apellidos) {
+    // Se actualiza el constructor para recibir 5 parámetros.
+    public function __construct($nombres, $apellidos, $edad, $username, $password) {
+        $this->nombres  = $nombres;
         $this->apellidos = $apellidos;
+        $this->edad     = $edad;
+        $this->username = $username;
+        $this->password = $password;
     }
 
-    public function getCorreo() {
-        return $this->correo;
+    // Método para validar el nombre de usuario (se implementa en la clase hija).
+    abstract public function validarUsuario();
+
+    // Método para validar la contraseña (se implementa en la clase hija).
+    abstract public function validarPassword();
+}
+
+// Clase concreta que extiende de UsuarioAbstracto e incluye propiedades adicionales.
+class Usuario extends UsuarioAbstracto {
+    private $correo;
+    private $id_rol;
+
+    // Se actualiza el constructor para recibir 8 parámetros:
+    // $nombres, $apellidos, $edad, $correo, $direccion, $username, $password, $id_rol
+    public function __construct($nombres, $apellidos, $edad, $correo, $username, $password, $id_rol) {
+        parent::__construct($nombres, $apellidos, $edad, $username, $password);
+        $this->correo    = $correo;
+        $this->id_rol    = $id_rol;
     }
 
-    public function setCorreo($correo) {
-        $this->correo = $correo;
+    // Validación del nombre de usuario: deben ser al menos 5 caracteres.
+    public function validarUsuario() {
+        return strlen($this->username) >= 5 ? true : "El nombre de usuario debe tener al menos 5 caracteres.";
     }
 
-    public function getEdad() {
-        return $this->edad;
-    }
-
-    public function setEdad($edad) {
-        $this->edad = $edad;
-    }
-
-    public function getIdRol() {
-        return $this->idRol;
-    }
-
-    public function setIdRol($idRol) {
-        $this->idRol = $idRol;
-    }
-
-    // Métodos (Ejemplo: Registrar usuario)
-    public function registrar() {
-        // Verificar si el usuario ya existe
-        $sqlCheck = "SELECT idUsuario FROM usuario WHERE user = :user";
-        $stmtCheck = $this->conn->prepare($sqlCheck);
-        $stmtCheck->bindParam(':user', $this->user);
-        $stmtCheck->execute();
-
-        if ($stmtCheck->fetch()) {
-            return ["message" => "❌ El nombre de usuario ya está en uso."];
+    // Validación de la contraseña: al menos 8 caracteres, incluir mayúsculas, minúsculas y un carácter especial.
+    public function validarPassword() {
+        $errores = [];
+        if (strlen($this->password) < 8) {
+            $errores[] = "La contraseña debe tener al menos 8 caracteres.";
         }
-
-        // Insertar usuario
-        $sql = "INSERT INTO usuario (user, password, documento, nombres, apellidos, correo, edad, idRol) 
-                VALUES (:user, :password, :documento, :nombres, :apellidos, :correo, :edad, :idRol)";
-        $stmt = $this->conn->prepare($sql);
-
-        $stmt->bindParam(':user', $this->user);
-        $stmt->bindParam(':password', $this->password);
-        $stmt->bindParam(':documento', $this->documento);
-        $stmt->bindParam(':nombres', $this->nombres);
-        $stmt->bindParam(':apellidos', $this->apellidos);
-        $stmt->bindParam(':correo', $this->correo);
-        $stmt->bindParam(':edad', $this->edad);
-        $stmt->bindParam(':idRol', $this->idRol);
-
-        if ($stmt->execute()) {
-            return ["message" => "✅ Usuario registrado correctamente."];
-        } else {
-            return ["message" => "❌ Error al registrar usuario."];
+        if (!preg_match('/[a-z]/', $this->password) || !preg_match('/[A-Z]/', $this->password)) {
+            $errores[] = "La contraseña debe incluir mayúsculas y minúsculas.";
         }
-    }
-    // 🔹 Obtener usuario por ID
-    public function obtenerPorId($idUsuario) {
-        $sql = "SELECT * FROM usuario WHERE idUsuario = :idUsuario";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':idUsuario', $idUsuario);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
-    // 🔹 Login del usuario
-    public function login($user, $password) {
-        $sql = "SELECT * FROM usuario WHERE user = :user";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':user', $user);
-        $stmt->execute();
-        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($usuario && password_verify($password, $usuario['password'])) {
-            return [
-                "message" => "✅ Inicio de sesión exitoso.",
-                "usuario" => [
-                    "idUsuario" => $usuario['idUsuario'],
-                    "user" => $usuario['user'],
-                    "nombres" => $usuario['nombres'],
-                    "apellidos" => $usuario['apellidos'],
-                    "correo" => $usuario['correo'],
-                    "edad" => $usuario['edad'],
-                    "idRol" => $usuario['idRol']
-                ]
-            ];
-        } else {
-            return ["message" => "❌ Usuario o contraseña incorrectos."];
+        if (!preg_match('/[\W_]/', $this->password)) {
+            $errores[] = "La contraseña debe incluir al menos un carácter especial.";
         }
+        return empty($errores) ? true : $errores;
     }
 }
-?>
+
+// Fábrica que facilita la creación de objetos Usuario.
+// Ahora acepta 8 parámetros en total.
+class UsuarioFactory {
+    public static function crearUsuario($nombres, $apellidos, $edad, $correo, $username, $password, $id_rol) {
+        return new Usuario($nombres, $apellidos, $edad, $correo,  $username, $password, $id_rol);
+    }
 }
 ?>

@@ -1,35 +1,47 @@
 <?php
+session_start();
 require_once '../controllers/UsuarioController.php';
+require_once '../config/database.php';
 
-// Inicializar el controlador
-$usuarioController = new UsuarioController();
+$conexion = new Conexion();
+$usuarioController = new UsuarioController($conexion->conectar());
 
-// Establecer encabezados comunes para las respuestas JSON
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-
-// Verificar el método HTTP utilizado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = json_decode(file_get_contents("php://input"), true) ?: $_POST; // Procesar JSON o datos del formulario
+    // Capturar datos enviados por el formulario
+    $data = $_POST;
 
-    // 🔹 Registrar usuario
+    // Registro de usuario
     if (isset($_GET['register'])) {
-        $usuarioController->registrarUsuario($data);
-        exit; // 🔥 Detener la ejecución tras la respuesta
-    }
-
-    // 🔹 Login de usuario
-    if (isset($_GET['login'])) {
-        $usuarioController->loginUsuario($data);
+        $resultado = $usuarioController->registrarUsuario($data);
+        if ($resultado["success"]) {
+            $_SESSION['message'] = $resultado["message"];
+            header("Location: ../public/login.php"); // Si es exitoso, redirige a login
+        } else {
+            $_SESSION['message'] = $resultado["message"];
+            header("Location: ../public/registroUsuario.php"); // Si falla, regresa al registro
+        }
         exit;
     }
 
-    // Si no se especifica una acción válida
-    echo json_encode(["message" => "❌ Acción no especificada."]);
+    // Login de usuario
+    if (isset($_GET['login'])) {
+        $resultado = $usuarioController->loginUsuario($data);
+        if ($resultado["success"]) {
+            $_SESSION['message'] = $resultado["message"];
+            header("Location: ../public/dashboard.php"); // Aquí podrías redirigir a un panel o dashboard
+        } else {
+            $_SESSION['message'] = $resultado["message"];
+            header("Location: ../public/login.php");
+        }
+        exit;
+    }
+
+    $_SESSION['message'] = "❌ Acción no especificada.";
+    header("Location: ../public/registroUsuario.php");
+    exit;
+} else {
+    http_response_code(405);
+    echo "❌ Método no permitido. Usa POST para este endpoint.";
     exit;
 }
-
-// Si se utiliza un método no permitido (ejemplo: GET para acciones POST)
-http_response_code(405); // Código 405: Método no permitido
-echo json_encode(["message" => "❌ Método no permitido. Usa POST para este endpoint."]);
 ?>
