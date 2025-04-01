@@ -8,14 +8,16 @@ abstract class UsuarioAbstracto {
     protected $apellidos;
     protected $edad;
     protected $username;
+    protected $documento;
     protected $password;
 
     // Se actualiza el constructor para recibir 5 parámetros.
-    public function __construct($nombres, $apellidos, $edad, $username, $password) {
+    public function __construct($nombres, $apellidos, $edad, $username, $documento, $password) {
         $this->nombres   = $nombres;
         $this->apellidos = $apellidos;
         $this->edad      = $edad;
         $this->username = $username;
+        $this->documento = $documento;
         $this->password = $password;
     }
 
@@ -33,8 +35,8 @@ class Usuario extends UsuarioAbstracto {
 
     // Se actualiza el constructor para recibir 8 parámetros:
     // $nombres, $apellidos, $edad, $correo, $direccion, $username, $password, $id_rol
-    public function __construct($nombres, $apellidos, $edad, $correo, $username, $password, $id_rol) {
-        parent::__construct($nombres, $apellidos, $edad, $username, $password);
+    public function __construct($nombres, $apellidos, $edad, $correo, $username, $documento, $password, $id_rol) {
+        parent::__construct($nombres, $apellidos, $edad, $username, $documento, $password);
         $this->correo    = $correo;
         $this->id_rol    = $id_rol;
     }
@@ -71,8 +73,8 @@ class Usuario extends UsuarioAbstracto {
 // Fábrica que facilita la creación de objetos Usuario.
 // Ahora acepta 8 parámetros en total.
 class UsuarioFactory {
-    public static function crearUsuario($nombres, $apellidos, $edad, $correo, $username, $password, $id_rol) {
-        return new Usuario($nombres, $apellidos, $edad, $correo,  $username, $password, $id_rol);
+    public static function crearUsuario($nombres, $apellidos, $edad, $correo, $username, $documento, $password, $id_rol) {
+        return new Usuario($nombres, $apellidos, $edad, $correo,  $username,$documento, $password, $id_rol);
     }
 }
 ?>

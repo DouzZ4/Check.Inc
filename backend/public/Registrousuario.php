@@ -78,7 +78,8 @@
             <input type="text" name="username" placeholder="Nombre de Usuario" 
                    required minlength="5" 
                    title="El nombre de usuario debe tener al menos 5 caracteres" />
-            
+            <input type="text" name="documento" placeholder="Documento (Cedula o Pasaporte)"  
+            required pattern="[0-9]{6,20}" title="Debe ser un numero entre 6 y 20 digitos, sin comas ni puntos " />
             <input type="password" name="password" placeholder="Contraseña" 
                    required minlength="8"
                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$" 

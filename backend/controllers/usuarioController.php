@@ -26,6 +26,7 @@ class UsuarioController {
             $data['edad'],
             $data['correo'],
             $data['username'],
+            $data['documento'],
             $data['password'],
             $data['idRol']
         );
@@ -44,8 +45,8 @@ class UsuarioController {
         }
 
         // Insertar el usuario en la base de datos.
-        $sql = "INSERT INTO usuario (nombres, apellidos, edad, correo, user, password, idRol) 
-                VALUES (:nombres, :apellidos, :edad, :correo, :user, :password, :idRol)";
+        $sql = "INSERT INTO usuario (nombres, apellidos, edad, correo, user,documento, password, idRol) 
+                VALUES (:nombres, :apellidos, :edad, :correo, :user,:documento, :password, :idRol)";
         $stmt = $this->conexion->prepare($sql);
 
         $stmt->bindParam(':nombres', $data['nombres']);
@@ -53,6 +54,7 @@ class UsuarioController {
         $stmt->bindParam(':edad', $data['edad']);
         $stmt->bindParam(':correo', $data['correo']);
         $stmt->bindParam(':user', $data['username']); // Se vincula al campo 'user'
+        $stmt->bindParam(':documento', $data['documento']); // Se vincula al campo 'documento'
         $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
         $stmt->bindParam(':password', $hashedPassword);
         $stmt->bindParam(':idRol', $data['idRol']);
