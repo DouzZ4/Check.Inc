@@ -1,10 +1,12 @@
 <?php
-require_once __DIR__ .'/config/database.php';
+require_once 'C:\xampp\htdocs\check.inc\backend\config\database.php';
 
-try {
-    $conexion = new Conexion(); 
-    echo "Conexión exitosa a la base de datos.";
-} catch (Exception $e) {
-    echo "Error al conectar a la base de datos: " . $e->getMessage();
+$conexion = new Conexion();
+$db = $conexion->conectar();
+
+if ($db) {
+    echo "Conexión exitosa!";
+} else {
+    echo "Error al conectar.";
 }
 ?>

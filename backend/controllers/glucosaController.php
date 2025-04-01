@@ -1,23 +1,50 @@
 <?php
-require_once '../models/glucosaModel.php';
+// controllers/GlucosaController.php
+
+require_once '../models/GlucosaModel.php';
 
 class GlucosaController {
-    private $model;
+    private $conn;
 
     public function __construct($db) {
-        $this->model = new GlucosaModel($db);
+        $this->conn = $db; // Conexión a la base de datos
     }
 
     public function crearRegistro($data): array {
-        if (!isset($data['idUsuario'], $data['nivelGlucosa'], $data['fechaHora'])) {
-            return ['status' => 'error', 'message' => 'Error al crear registro'];
+        try {
+            if (empty($data['idUsuario']) || empty($data['nivelGlucosa']) || empty($data['fechaHora'])) {
+                return ['status' => 'error', 'message' => 'Todos los campos son obligatorios.'];
+            }
+
+            // Crear objeto Glucosa usando la fábrica
+            $glucosa = GlucosaFactory::crearGlucosa($data['idUsuario'], $data['nivelGlucosa'], $data['fechaHora']);
+
+            $sql = "INSERT INTO glucosa (idUsuario, nivelGlucosa, fechaHora) VALUES (:idUsuario, :nivelGlucosa, :fechaHora)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':idUsuario', $glucosa->getIdUsuario());
+            $stmt->bindParam(':nivelGlucosa', $glucosa->getNivelGlucosa());
+            $stmt->bindParam(':fechaHora', $glucosa->getFechaHora());
+
+            if ($stmt->execute()) {
+                return ['status' => 'success', 'message' => 'Registro creado exitosamente.'];
+            } else {
+                return ['status' => 'error', 'message' => 'Error al crear el registro.'];
+            }
+        } catch (Exception $e) {
+            return ['status' => 'error', 'message' => $e->getMessage()];
         }
-        $resultado = $this->model->crearRegistro($data['idUsuario'], $data['nivelGlucosa'], $data['fechaHora']);
-        return $resultado ? ['status' => 'success', 'message' => 'Registro creado'] : ['status' => 'error', 'message' => 'Error al crear registro'];
     }
 
-    public function obtenerRegistros($idUsuario) {
-        return $this->model->obtenerRegistros($idUsuario);
+    public function obtenerRegistros($idUsuario): array {
+        try {
+            $sql = "SELECT * FROM glucosa WHERE idUsuario = :idUsuario ORDER BY fechaHora DESC";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':idUsuario', $idUsuario);
+            $stmt->execute();
+            return ['status' => 'success', 'data' => $stmt->fetchAll(PDO::FETCH_ASSOC)];
+        } catch (PDOException $e) {
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
     }
 }
 ?>

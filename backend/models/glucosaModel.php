@@ -1,66 +1,64 @@
 <?php
-class GlucosaModel {
+// models/GlucosaModel.php
+
+class Glucosa {
     private $idGlucosa;
     private $nivelGlucosa;
     private $fechaHora;
     private $idUsuario;
-    private $conn;
 
-    // Constructor para inicializar la conexión y los atributos opcionales
-    public function __construct($db, $idGlucosa = null, $nivelGlucosa = null, $fechaHora = null, $idUsuario = null) {
-        $this->conn = $db;
-        $this->idGlucosa = $idGlucosa;
+    public function __construct($idUsuario = null, $nivelGlucosa = null, $fechaHora = null) {
+        $this->idUsuario = $idUsuario;
         $this->nivelGlucosa = $nivelGlucosa;
         $this->fechaHora = $fechaHora;
-        $this->idUsuario = $idUsuario;
     }
 
-    // Getters y setters para cada propiedad
+    // Getters
     public function getIdGlucosa() {
         return $this->idGlucosa;
-    }
-
-    public function setIdGlucosa($idGlucosa) {
-        $this->idGlucosa = $idGlucosa;
-    }
-
-    public function getNivelGlucosa() {
-        return $this->nivelGlucosa;
-    }
-
-    public function setNivelGlucosa($nivelGlucosa) {
-        $this->nivelGlucosa = $nivelGlucosa;
-    }
-
-    public function getFechaHora() {
-        return $this->fechaHora;
-    }
-
-    public function setFechaHora($fechaHora) {
-        $this->fechaHora = $fechaHora;
     }
 
     public function getIdUsuario() {
         return $this->idUsuario;
     }
 
+    public function getNivelGlucosa() {
+        return $this->nivelGlucosa;
+    }
+
+    public function getFechaHora() {
+        return $this->fechaHora;
+    }
+
+    // Setters
     public function setIdUsuario($idUsuario) {
-        $this->idUsuario = $idUsuario;
+        if (is_numeric($idUsuario) && $idUsuario > 0) {
+            $this->idUsuario = $idUsuario;
+        } else {
+            throw new Exception("❌ El ID del usuario no es válido.");
+        }
     }
 
-    // Método para crear un nuevo registro usando los atributos
-    public function crearRegistro($idUsuario, $nivelGlucosa, $fechaHora) {
-        $sql = "INSERT INTO glucosa (idUsuario, nivelGlucosa, fechaHora) VALUES (?, ?, ?)";
-        $stmt = $this->conn->prepare($sql);
-        return $stmt->execute([$idUsuario, $nivelGlucosa, $fechaHora]);
+    public function setNivelGlucosa($nivelGlucosa) {
+        if ($nivelGlucosa > 0) {
+            $this->nivelGlucosa = $nivelGlucosa;
+        } else {
+            throw new Exception("❌ El nivel de glucosa debe ser un valor positivo.");
+        }
     }
 
-    // Método para obtener registros por usuario
-    public function obtenerRegistros($idUsuario) {
-        $query = "SELECT * FROM glucosa WHERE idUsuario = ? ORDER BY fechaHora DESC";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute([$idUsuario]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    public function setFechaHora($fechaHora) {
+        if (strtotime($fechaHora) !== false) {
+            $this->fechaHora = $fechaHora;
+        } else {
+            throw new Exception("❌ La fecha y hora no tienen un formato válido.");
+        }
+    }
+}
+
+class GlucosaFactory {
+    public static function crearGlucosa($idUsuario, $nivelGlucosa, $fechaHora) {
+        return new Glucosa($idUsuario, $nivelGlucosa, $fechaHora);
     }
 }
 ?>
