@@ -64,7 +64,7 @@ session_start();
         </div>
         <div>
             <?php if (isset($_SESSION['idUsuario'])): ?>
-                <span>Bienvenido, <?php echo htmlspecialchars($_SESSION['username']); ?>!</span>
+                <span>Bienvenido, <?php echo htmlspecialchars($_SESSION['user']); ?>!</span>
                 <a href="logout.php" class="button">Cerrar Sesión</a>
             <?php else: ?>
                 <a href="login.php" class="button">Iniciar Sesión</a>

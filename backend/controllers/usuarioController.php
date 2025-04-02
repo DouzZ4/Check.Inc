@@ -18,14 +18,14 @@ class UsuarioController {
 
         /* * Actualizamos la llamada a la fábrica.
          * La fábrica espera 8 parámetros (según nuestro modelo actualizado), en el siguiente orden:
-         * ($nombres, $apellidos, $edad, $correo, $direccion, $username, $password, $id_rol)
+         * ($nombres, $apellidos, $edad, $correo, $direccion, $user, $password, $id_rol)
          */
         $usuario = UsuarioFactory::crearUsuario(
             $data['nombres'],
             $data['apellidos'],
             $data['edad'],
             $data['correo'],
-            $data['username'],
+            $data['user'],
             $data['documento'],
             $data['password'],
             $data['idRol']
@@ -53,7 +53,7 @@ class UsuarioController {
         $stmt->bindParam(':apellidos', $data['apellidos']);
         $stmt->bindParam(':edad', $data['edad']);
         $stmt->bindParam(':correo', $data['correo']);
-        $stmt->bindParam(':user', $data['username']); // Se vincula al campo 'user'
+        $stmt->bindParam(':user', $data['user']); // Se vincula al campo 'user'
         $stmt->bindParam(':documento', $data['documento']); // Se vincula al campo 'documento'
         $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
         $stmt->bindParam(':password', $hashedPassword);
@@ -68,11 +68,11 @@ class UsuarioController {
 
     // Método para el inicio de sesión.
     public function loginUsuario($data) {
-        if (isset($data['username']) && isset($data['password'])) {
+        if (isset($data['user']) && isset($data['password'])) {
             // Se consulta la columna 'user', ya que en la bd el campo se llama así.
             $sql = "SELECT * FROM usuario WHERE user = :user";
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':user', $data['username']);
+            $stmt->bindParam(':user', $data['user']);
             $stmt->execute();
             $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 

@@ -74,10 +74,10 @@ session_start();
         ?>
         <form action="../routes/usuarioRoutes.php?login" method="POST">
             <label for="user">Usuario:</label>
-            <input type="text" id="user" name="username" required>
+            <input type="text" id="user" name="user" required>
             <label for="password">Contraseña:</label>
             <input type="password" id="password" name="password" required>
-            <button type="submit" onclick="window.location.href">Iniciar Sesión</button>
+            <button type="submit">Iniciar Sesión</button>
         </form>
     </main>
 </body>

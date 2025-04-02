@@ -75,7 +75,7 @@
             
             <input type="email" name="correo" placeholder="Correo Electrónico" required />
             
-            <input type="text" name="username" placeholder="Nombre de Usuario" 
+            <input type="text" name="user" placeholder="Nombre de Usuario" 
                    required minlength="5" 
                    title="El nombre de usuario debe tener al menos 5 caracteres" />
             <input type="text" name="documento" placeholder="Documento (Cedula o Pasaporte)"  
