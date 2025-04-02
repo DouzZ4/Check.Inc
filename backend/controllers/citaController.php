@@ -1,7 +1,8 @@
 <?php
 // controllers/citaController.php
 
-require_once '../models/CitasModel.php';
+require_once __DIR__ . '/../models/CitasModel.php';
+require_once __DIR__ . '/../models/Usuario.php';
 
 class CitaController {
     private $conn;
@@ -12,25 +13,21 @@ class CitaController {
 
     public function crearCita($data): array {
         try {
-            if (empty($data['fecha']) || empty($data['Hora']) || empty($data['motivo']) || empty($data['idUsuario'])) {
+            // Validación de campos obligatorios
+            if (empty($data['fecha']) || empty($data['hora']) || empty($data['motivo']) || empty($data['idUsuario'])) {
                 return ['status' => 'error', 'message' => 'Todos los campos son obligatorios.'];
             }
 
             // Crear objeto Cita usando la fábrica
-            $cita = CitasFactory::crearCita( $data['fecha'], $data['Hora'], $data['motivo'], $data['idUsuario']);
+            $cita = CitasFactory::crearCita($data['fecha'], $data['hora'], $data['motivo'], $data['idUsuario']);
 
-            $sql = "INSERT INTO citas (fecha, hora, motivo, idUsuario) VALUES (:fecha, :Hora, :motivo, :idUsuario)";
+            $sql = "INSERT INTO cita (fecha, hora, motivo, idUsuario) VALUES (:fecha, :hora, :motivo, :idUsuario)";
             $stmt = $this->conn->prepare($sql);
 
-                $fecha = $cita->getFecha();
-                $hora = $cita->getHora();
-                $motivo = $cita->getMotivo();
-                $idUsuario = $cita->getIdUsuario(); 
-
-                $stmt->bindParam(':fecha', $fecha);
-                $stmt->bindParam(':Hora', $hora);
-                $stmt->bindParam(':motivo', $motivo);
-                $stmt->bindParam(':idUsuario', $idUsuario);
+            $stmt->bindParam(':fecha', $cita->getFecha());
+            $stmt->bindParam(':hora', $cita->getHora());
+            $stmt->bindParam(':motivo', $cita->getMotivo());
+            $stmt->bindParam(':idUsuario', $cita->getIdUsuario());
 
             if ($stmt->execute()) {
                 return ['status' => 'success', 'message' => 'Cita creada exitosamente.'];
@@ -44,7 +41,7 @@ class CitaController {
 
     public function obtenerCitas($idUsuario): array {
         try {
-            $sql = "SELECT * FROM citas WHERE idUsuario = :idUsuario ORDER BY fecha DESC";
+            $sql = "SELECT * FROM cita WHERE idUsuario = :idUsuario ORDER BY fecha DESC";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':idUsuario', $idUsuario);
             $stmt->execute();
