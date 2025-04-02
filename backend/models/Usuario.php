@@ -45,7 +45,7 @@ class Usuario extends UsuarioAbstracto {
     }
 
     // Validación de la contraseña: incluye longitud, mayúsculas, minúsculas y caracteres especiales.
-    public function validarPassword(): bool|array {
+    public function validarPassword() {
         $errores = [];
 
         // Verifica que la contraseña tenga al menos 8 caracteres.
