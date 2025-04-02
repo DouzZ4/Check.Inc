@@ -1,38 +1,46 @@
 <?php 
-
-require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../models/Usuario.php';
-
+// models/CitasModel.php
 class Citas extends Usuario {
 
     protected $idCita;
     protected $fecha;
-    protected $hora;
+    protected $Hora;
     protected $motivo;
     protected $idUsuario; // ID del usuario que tiene la sesion activa
     
     // Constructor para crear una cita
-    public function __construct($idCita, $fecha, $hora, $motivo, $idUsuario) {
-        parent::__construct($idUsuario); // Llama al constructor de la clase Usuario
-        $this->idCita = $idCita;
+    public function __construct($fecha = null, $Hora = null, $motivo = null, $idUsuario = null) {
         $this->fecha = $fecha;
-        $this->hora = $hora;
+        $this->Hora = $Hora;
         $this->motivo = $motivo;
-        $this->idUsuario = $idUsuario; // Asigna el ID del usuario a la propiedad de la clase Citas
+        $this->idUsuario = $idUsuario; 
     }
 
     // Getters
+    public function getIdCita() {
+        return $this->idCita;
+    }
     public function getFecha() {
         return $this->fecha;
     }
-    public function gethora() {
-        return $this->hora;
+    public function getHora() {
+        return $this->Hora;
     }
     public function getMotivo() {
         return $this->motivo;
     }
+    public function getIdUsuario() {
+        return $this->idUsuario;
+    }
     
     // Setters
+    public function setIdUsuario($idUsuario) {
+        if (is_numeric($idUsuario) && $idUsuario > 0) {
+            $this->idUsuario = $idUsuario;
+        } else {
+            throw new Exception("❌ El ID del usuario no es válido.");
+        }
+    }
     public function setFecha($fecha) {
         if (strtotime($fecha) !== false) {
             $this->fecha = $fecha;
@@ -57,8 +65,8 @@ class Citas extends Usuario {
     }
 }
 class CitasFactory {
-    public static function crearCita($idCita, $fecha, $Hora, $motivo, $idUsuario) {
-        return new Citas($idCita, $fecha, $Hora, $motivo, $idUsuario);
+    public static function crearCita( $fecha, $Hora, $motivo, $idUsuario) {
+        return new Citas($fecha, $Hora, $motivo, $idUsuario);
     }
 }
 ?>

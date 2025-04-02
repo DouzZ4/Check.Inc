@@ -1,4 +1,6 @@
 <?php
+// routes/citasRoutes.php
+
 require_once "../config/database.php";
 require_once "../controllers/citaController.php";
 
@@ -14,7 +16,7 @@ $controller = new CitaController($conn);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
 
-    if (!isset($data['fecha'], $data['hora'], $data['motivo'])) {
+    if (!isset($data['fecha'], $data['hora'], $data['motivo'], $data['idUsuario'])) {
         echo json_encode(['status' => 'error', 'message' => 'Faltan datos obligatorios.']);
         exit;
     }
