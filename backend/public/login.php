@@ -75,7 +75,7 @@
             <input type="text" id="user" name="username" required>
             <label for="password">Contraseña:</label>
             <input type="password" id="password" name="password" required>
-            <button type="submit">Iniciar Sesión</button>
+            <button type="submit" onclick="window.location.href">Iniciar Sesión</button>
         </form>
     </main>
 </body>
