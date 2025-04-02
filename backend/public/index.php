@@ -60,6 +60,7 @@ session_start();
             <a href="index.php">Inicio</a>
             <?php if (isset($_SESSION['idUsuario'])): ?>
                 <a href="registroGlucosa.php">Registro de Glucosa</a>
+                <a href="RegistroCitas.php">Citas</a>
             <?php endif; ?>
         </div>
         <div>
