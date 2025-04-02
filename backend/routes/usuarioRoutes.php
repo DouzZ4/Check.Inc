@@ -12,6 +12,38 @@ $conexion = new Conexion();
 // Crea una instancia del controlador de Usuario, pasando la conexión a la base de datos.
 $usuarioController = new UsuarioController($conexion->conectar());
 
+require_once '../models/Usuario.php';
+
+if (isset($_GET['login']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // Verificar que se envíen los datos requeridos
+    if (empty($username) || empty($password)) {
+        $_SESSION['message'] = "Por favor, ingrese usuario y contraseña.";
+        header('Location: ../public/login.php');
+        exit;
+    }
+
+    // Validar usuario en la base de datos
+    $usuarioModel = new UsuarioModel();
+    $usuario = $usuarioModel->obtenerUsuarioPorUsername($username);
+
+    if ($usuario && password_verify($password, $usuario['password'])) {
+        // Establecer las variables de sesión
+        $_SESSION['idUsuario'] = $usuario['idUsuario'];
+        $_SESSION['username'] = $usuario['username'];
+
+        // Redirigir al dashboard o página de inicio
+        header('Location: ../public/registroGlucosa.php');
+    } else {
+        // Mostrar mensaje de error
+        $_SESSION['message'] = "Usuario o contraseña incorrectos.";
+        header('Location: ../public/login.php');
+    }
+    exit;
+}
+
 // Verifica si la petición es de tipo POST. Solo procesaremos peticiones POST.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Captura todos los datos enviados por el formulario en la variable $data.

@@ -69,6 +69,27 @@ class Usuario extends UsuarioAbstracto {
         return empty($errores) ? true : $errores;
     }
 }
+class UsuarioModel {
+    private $conn;
+
+    public function __construct() {
+        require_once '../config/database.php';
+        $conexion = new Conexion();
+        $this->conn = $conexion->conectar();
+    }
+
+    public function obtenerUsuarioPorUsername($username) {
+        try {
+            $sql = "SELECT * FROM usuario WHERE username = :username";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':username', $username);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC); // Devuelve los datos del usuario
+        } catch (PDOException $e) {
+            return null; // En caso de error
+        }
+    }
+}
 
 // Fábrica que facilita la creación de objetos Usuario.
 // Ahora acepta 8 parámetros en total.

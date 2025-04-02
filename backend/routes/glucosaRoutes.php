@@ -13,27 +13,25 @@ if (!$conn) {
 }
 
 $controller = new GlucosaController($conn);
-$method = $_SERVER['REQUEST_METHOD'];
-
-if ($method === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
 
-    if (!$data) {
-        echo json_encode(['status' => 'error', 'message' => 'Datos mal formateados o vacíos.']);
+    if (!isset($data['idUsuario'], $data['nivelGlucosa'], $data['fechaHora'])) {
+        echo json_encode(['status' => 'error', 'message' => 'Faltan datos obligatorios.']);
         exit;
     }
 
     $response = $controller->crearRegistro($data);
     echo json_encode($response);
-} elseif ($method === 'GET') {
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['idUsuario']) && is_numeric($_GET['idUsuario']) && $_GET['idUsuario'] > 0) {
         $idUsuario = $_GET['idUsuario'];
         $response = $controller->obtenerRegistros($idUsuario);
         echo json_encode($response);
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'ID de usuario no proporcionado o inválido.']);
+        echo json_encode(['status' => 'error', 'message' => 'ID de usuario no válido.']);
     }
-} else {
-    echo json_encode(['status' => 'error', 'message' => 'Método HTTP no soportado.']);
 }
 ?>

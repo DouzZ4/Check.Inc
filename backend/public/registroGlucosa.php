@@ -1,4 +1,11 @@
-<?php session_start(); ?>
+<?php
+session_start(); 
+if (!isset($_SESSION['idUsuario'])) {
+    $_SESSION['message'] = "Por favor, inicia sesión para acceder a la página.";
+    header('Location: login.php'); // Redirige al formulario de inicio de sesión
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -63,6 +70,10 @@
         .chart-container {
             margin-top: 40px;
         }
+        #message {
+            font-weight: bold;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -71,18 +82,24 @@
     </header>
     <main>
         <!-- Mostrar Mensaje de Éxito o Error -->
-        <?php
-        if (isset($_SESSION['message'])) {
-            echo "<p style='color: green; font-weight: bold;'>{$_SESSION['message']}</p>";
-            unset($_SESSION['message']);
-        }
-        ?>
+        <p id="message">
+            <?php
+            if (isset($_SESSION['message'])) {
+                echo $_SESSION['message'];
+                unset($_SESSION['message']);
+            }
+            ?>
+        </p>
 
         <!-- Formulario de Registro -->
         <h2>Registrar Nueva Medición</h2>
-        <form id="formGlucosa">
-            <input type="number" id="nivelGlucosa" placeholder="Nivel de Glucosa (mg/dL)" required min="1">
-            <input type="datetime-local" id="fechaHora" required>
+        <form id="formGlucosa" aria-labelledby="form-title">
+            <label for="nivelGlucosa">Nivel de Glucosa:</label>
+            <input type="number" id="nivelGlucosa" name="nivelGlucosa" placeholder="Nivel de Glucosa (mg/dL)" required min="1">
+
+            <label for="fechaHora">Fecha y Hora:</label>
+            <input type="datetime-local" id="fechaHora" name="fechaHora" required>
+
             <button type="button" onclick="registrarGlucosa()">Registrar</button>
         </form>
 
@@ -113,11 +130,17 @@
             const nivelGlucosa = document.getElementById('nivelGlucosa').value;
             const fechaHora = document.getElementById('fechaHora').value;
 
+            const idUsuario = <?php echo $_SESSION['idUsuario']; ?>; // Obtener dinámicamente el ID del usuario desde la sesión
+
             const data = {
-                idUsuario: 1, // Cambia según tu lógica de sesión
+                idUsuario, // Usar el ID dinámico
                 nivelGlucosa,
                 fechaHora
             };
+
+            const messageElement = document.getElementById('message'); // Elemento para mensajes
+            messageElement.textContent = "Registrando datos...";
+            messageElement.style.color = "blue";
 
             const response = await fetch('../routes/glucosaRoutes.php', {
                 method: 'POST',
@@ -126,7 +149,9 @@
             });
 
             const result = await response.json();
-            alert(result.message);
+            messageElement.textContent = result.message;
+            messageElement.style.color = result.status === 'success' ? "green" : "red";
+
             if (result.status === 'success') {
                 obtenerRegistros(); // Refrescar la tabla de registros
             }
@@ -134,13 +159,13 @@
 
         // Función para obtener registros
         async function obtenerRegistros() {
-            const idUsuario = 1; // Cambia según tu lógica de sesión
+            const idUsuario = <?php echo $_SESSION['idUsuario']; ?>; // Obtener dinámicamente el ID del usuario desde la sesión
 
             const response = await fetch(`../routes/glucosaRoutes.php?idUsuario=${idUsuario}`);
             const result = await response.json();
 
             const registrosTabla = document.getElementById('registrosTabla');
-            registrosTabla.innerHTML = ''; // Limpiar tabla
+            registrosTabla.innerHTML = ''; // Limpia la tabla
 
             if (result.status === 'success') {
                 const registros = result.data;
@@ -167,7 +192,12 @@
             const fechas = registros.map(r => r.fechaHora);
             const niveles = registros.map(r => r.nivelGlucosa);
 
-            const ctx = document.getElementById('graficoGlucosa').getContext('2d');
+            const canvas = document.getElementById('graficoGlucosa');
+            const ctx = canvas.getContext('2d');
+
+            // Limpiar datos anteriores
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
             new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -189,12 +219,8 @@
                         }
                     },
                     scales: {
-                        x: {
-                            title: { display: true, text: 'Fecha y Hora' }
-                        },
-                        y: {
-                            title: { display: true, text: 'Nivel de Glucosa (mg/dL)' }
-                        }
+                        x: { title: { display: true, text: 'Fecha y Hora' } },
+                        y: { title: { display: true, text: 'Nivel de Glucosa (mg/dL)' } }
                     }
                 }
             });
