@@ -19,15 +19,20 @@ class CitaController {
             }
 
             // Crear objeto Cita usando la fábrica
-            $cita = CitasFactory::crearCita($data['fecha'], $data['hora'], $data['motivo'], $data['idUsuario']);
+            $cita = CitasFactory::crearCita( $data['fecha'], $data['Hora'], $data['motivo'], $data['idUsuario']);
 
-            $sql = "INSERT INTO cita (fecha, hora, motivo, idUsuario) VALUES (:fecha, :hora, :motivo, :idUsuario)";
+            $sql = "INSERT INTO citas (fecha, hora, motivo, idUsuario) VALUES (:fecha, :Hora, :motivo, :idUsuario)";
             $stmt = $this->conn->prepare($sql);
 
-            $stmt->bindParam(':fecha', $cita->getFecha());
-            $stmt->bindParam(':hora', $cita->getHora());
-            $stmt->bindParam(':motivo', $cita->getMotivo());
-            $stmt->bindParam(':idUsuario', $cita->getIdUsuario());
+                $fecha = $cita->getFecha();
+                $hora = $cita->getHora();
+                $motivo = $cita->getMotivo();
+                $idUsuario = $cita->getIdUsuario(); 
+
+                $stmt->bindParam(':fecha', $fecha);
+                $stmt->bindParam(':Hora', $hora);
+                $stmt->bindParam(':motivo', $motivo);
+                $stmt->bindParam(':idUsuario', $idUsuario);
 
             if ($stmt->execute()) {
                 return ['status' => 'success', 'message' => 'Cita creada exitosamente.'];
