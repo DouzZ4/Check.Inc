@@ -11,17 +11,95 @@ if (!isset($_SESSION['idUsuario'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Citas</title>
+    <title>Gestión de Citas</title>
     <style>
-        /* Estilos... */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        nav {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1, h2 {
+            color: #4CAF50;
+        }
+        form input, form button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        form button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #45A049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            text-align: center;
+            padding: 10px;
+        }
+        table th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .message {
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: red;
+        }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Registro de Citas</h1>
-    </header>
-    <main>
-        <p id="message">
+    <nav>
+        <div>
+            <a href="index.php">Inicio</a>
+            <a href="RegistroCitas.php">Gestión de Citas</a>
+        </div>
+        <div>
+            <span>Bienvenido, <?php echo htmlspecialchars($_SESSION['user']); ?>!</span>
+            <a href="logout.php" style="margin-left: 15px;">Cerrar Sesión</a>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Gestión de Citas</h1>
+        <!-- Mostrar mensajes -->
+        <p id="message" class="message">
             <?php
             if (isset($_SESSION['message'])) {
                 echo $_SESSION['message'];
@@ -30,28 +108,17 @@ if (!isset($_SESSION['idUsuario'])) {
             ?>
         </p>
 
-        <h2>Registrar Cita</h2>
-<<<<<<< HEAD
+        <!-- Formulario para registrar citas -->
+        <h2>Registrar Nueva Cita</h2>
         <form id="citaForm">
-            <input type="date" id="fecha" placeholder="Fecha" required>
-            <input type="time" id="hora" placeholder="Hora" required>
-            <input type="text" id="motivo" placeholder="Motivo" required>
-=======
-        <form id="citaForm" aria-labelledby="form-title">
-            <label for="fecha">Fecha</label>
-            <input type="date" name="fecha" placeholder="Fecha" required>
-
-            <label for="hora">Hora</label>
-            <input type="time" name="hora" placeholder="hora" required>
-
-            <label for="motivo">Motivo</label>
-            <input type="text" name="motivo" placeholder="Motivo" required>
-
->>>>>>> 3189f05562512c1e767744ac870eb5aa108f7e61
-            <button type="button" onclick="registrarCita()">Registrar Cita</button>
+            <input type="date" id="fecha" required placeholder="Fecha">
+            <input type="time" id="hora" required placeholder="Hora">
+            <input type="text" id="motivo" required placeholder="Motivo">
+            <button type="button" onclick="registrarCita()">Registrar</button>
         </form>
 
-        <h2>Mis Citas</h2>
+        <!-- Tabla para mostrar citas -->
+        <h2>Historial de Citas</h2>
         <table>
             <thead>
                 <tr>
@@ -60,16 +127,14 @@ if (!isset($_SESSION['idUsuario'])) {
                     <th>Motivo</th>
                 </tr>
             </thead>
-<<<<<<< HEAD
-            <tbody id="citasTable"></tbody>
-=======
-            <tbody id="citasBody">
-                <!-- Aquí se llenan las citas con JavaScript -->
+            <tbody id="citasTable">
+                <!-- Las filas se generan dinámicamente con JavaScript -->
             </tbody>
->>>>>>> 3189f05562512c1e767744ac870eb5aa108f7e61
         </table>
-    </main>
+    </div>
+
     <script>
+        // Función para registrar una cita
         async function registrarCita() {
             const fecha = document.getElementById('fecha').value;
             const hora = document.getElementById('hora').value;
@@ -83,49 +148,49 @@ if (!isset($_SESSION['idUsuario'])) {
             });
 
             const result = await response.json();
-<<<<<<< HEAD
-            // Mensajes y actualización de tabla...
-=======
-            messageElement.textContent = result.message;
-            messageElement.style.color = result.status ==='success'? "green" : "red";
+            const messageElement = document.getElementById('message');
 
-            if (result.status ==='success') {
+            if (result.status === 'success') {
+                messageElement.textContent = result.message;
+                messageElement.style.color = "green";
                 obtenerCitas(); // Refrescar la tabla de citas
+            } else {
+                messageElement.textContent = result.message;
+                messageElement.style.color = "red";
             }
         }
 
-        // Función para obtener citas registradas
+        // Función para obtener citas del historial
         async function obtenerCitas() {
             const idUsuario = <?php echo $_SESSION['idUsuario']; ?>;
 
-            try {
-                const response = await fetch(`../routes/citasRoutes.php?idUsuario=${idUsuario}`);
-                const citas = await response.json();
+            const response = await fetch(`../routes/citasRoutes.php?idUsuario=${idUsuario}`);
+            const result = await response.json();
 
-                const citasBody = document.getElementById('citasBody');
-                citasBody.innerHTML = ''; // Limpia la tabla
+            const citasTable = document.getElementById('citasTable');
+            citasTable.innerHTML = ''; // Limpiar la tabla
 
-                if (citas.status === 'success') {
-                    const registros = citas.data; // Usa la respuesta JSON correctamente
-                    registros.forEach(registro => {
-                        const row = `
-                            <tr>
-                                <td>${registro.fecha}</td>
-                                <td>${registro.hora}</td>
-                                <td>${registro.motivo}</td>
-                            </tr>
-                        `;
-                        citasBody.innerHTML += row; // Usa el ID correcto de la tabla
-                    });
-                } else {
-                    alert(citas.message); // Muestra el mensaje de error si no es exitoso
-                }
-            } catch (error) {
-                console.error('Error al obtener las citas:', error);
-                alert('Hubo un error al obtener las citas.');
+            if (result.status === 'success') {
+                const citas = result.data;
+                citas.forEach(cita => {
+                    const row = `
+                        <tr>
+                            <td>${cita.fecha}</td>
+                            <td>${cita.hora}</td>
+                            <td>${cita.motivo}</td>
+                        </tr>
+                    `;
+                    citasTable.innerHTML += row;
+                });
+            } else {
+                const messageElement = document.getElementById('message');
+                messageElement.textContent = result.message;
+                messageElement.style.color = "red";
             }
->>>>>>> 3189f05562512c1e767744ac870eb5aa108f7e61
         }
+
+        // Obtener citas al cargar la página
+        window.onload = obtenerCitas;
     </script>
 </body>
 </html>
