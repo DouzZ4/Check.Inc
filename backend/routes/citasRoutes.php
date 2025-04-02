@@ -21,7 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $response = $controller->crearCita($data);
+    // Asegúrate de que las claves coincidan con las esperadas en el controlador
+    $response = $controller->crearCita([
+        'fecha' => $data['fecha'],
+        'hora' => $data['hora'],
+        'motivo' => $data['motivo'],
+        'idUsuario' => $data['idUsuario']
+    ]);
     echo json_encode($response);
 }
 

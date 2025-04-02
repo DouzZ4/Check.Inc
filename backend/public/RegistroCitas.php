@@ -99,7 +99,7 @@ if (!isset($_SESSION['idUsuario'])) {
             <input type="date" name="fecha" placeholder="Fecha" required>
 
             <label for="hora">Hora</label>
-            <input type="time" name="hora" placeholder="Hora" required>
+            <input type="time" name="hora" placeholder="hora" required>
 
             <label for="motivo">Motivo</label>
             <input type="text" name="motivo" placeholder="Motivo" required>
@@ -118,7 +118,7 @@ if (!isset($_SESSION['idUsuario'])) {
                     <th>Motivo</th>
                 </tr>
             </thead>
-            <tbody id="citasTable">
+            <tbody id="citasBody">
                 <!-- Aquí se llenan las citas con JavaScript -->
             </tbody>
         </table>
@@ -159,32 +159,35 @@ if (!isset($_SESSION['idUsuario'])) {
             }
         }
 
-        //Funcion para obtener Citas registradas
-
+        // Función para obtener citas registradas
         async function obtenerCitas() {
-            const idUsuario = <?php echo $_SESSION['idUsuario'];?>;
+            const idUsuario = <?php echo $_SESSION['idUsuario']; ?>;
 
-            const response = await fetch(`../routes/citasRoutes.php?idUsuario=${idUsuario}`);
-            const citas = await response.json();
+            try {
+                const response = await fetch(`../routes/citasRoutes.php?idUsuario=${idUsuario}`);
+                const citas = await response.json();
 
-            const citasTable = document.getElementById('citasTable');
-            citasTable.innerHTML = ''; // Limpia la tabla
+                const citasBody = document.getElementById('citasBody');
+                citasBody.innerHTML = ''; // Limpia la tabla
 
-            if (response.status === 'success') {
-                const registros = result.data;
-                registros.forEach(cita => {
-                    const row = `
-                        <tr>
-                            <td>${cita.idCita}</td>
-                            <td>${registro.fecha}</td>
-                            <td>${registro.hora}</td>
-                            <td>${registro.motivo}</td>
-                        </tr>
-                    `;
-                    registrosTabla.innerHTML += row;
-                });
-            } else {
-                alert(result.message);
+                if (citas.status === 'success') {
+                    const registros = citas.data; // Usa la respuesta JSON correctamente
+                    registros.forEach(registro => {
+                        const row = `
+                            <tr>
+                                <td>${registro.fecha}</td>
+                                <td>${registro.hora}</td>
+                                <td>${registro.motivo}</td>
+                            </tr>
+                        `;
+                        citasBody.innerHTML += row; // Usa el ID correcto de la tabla
+                    });
+                } else {
+                    alert(citas.message); // Muestra el mensaje de error si no es exitoso
+                }
+            } catch (error) {
+                console.error('Error al obtener las citas:', error);
+                alert('Hubo un error al obtener las citas.');
             }
         }
     </script>
