@@ -1,5 +1,9 @@
 <?php
 // models/CitasModel.php
+<<<<<<< HEAD
+=======
+class Citas {
+>>>>>>> 3189f05562512c1e767744ac870eb5aa108f7e61
 
 require_once __DIR__ . '/Usuario.php';
 
@@ -74,7 +78,11 @@ class Citas {
 }
 
 class CitasFactory {
+<<<<<<< HEAD
     public static function crearCita($fecha, $hora, $motivo, $idUsuario) {
+=======
+    public static function crearCita( $fecha, $hora, $motivo, $idUsuario) {
+>>>>>>> 3189f05562512c1e767744ac870eb5aa108f7e61
         return new Citas($fecha, $hora, $motivo, $idUsuario);
     }
 }

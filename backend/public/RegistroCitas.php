@@ -31,10 +31,23 @@ if (!isset($_SESSION['idUsuario'])) {
         </p>
 
         <h2>Registrar Cita</h2>
+<<<<<<< HEAD
         <form id="citaForm">
             <input type="date" id="fecha" placeholder="Fecha" required>
             <input type="time" id="hora" placeholder="Hora" required>
             <input type="text" id="motivo" placeholder="Motivo" required>
+=======
+        <form id="citaForm" aria-labelledby="form-title">
+            <label for="fecha">Fecha</label>
+            <input type="date" name="fecha" placeholder="Fecha" required>
+
+            <label for="hora">Hora</label>
+            <input type="time" name="hora" placeholder="hora" required>
+
+            <label for="motivo">Motivo</label>
+            <input type="text" name="motivo" placeholder="Motivo" required>
+
+>>>>>>> 3189f05562512c1e767744ac870eb5aa108f7e61
             <button type="button" onclick="registrarCita()">Registrar Cita</button>
         </form>
 
@@ -47,7 +60,13 @@ if (!isset($_SESSION['idUsuario'])) {
                     <th>Motivo</th>
                 </tr>
             </thead>
+<<<<<<< HEAD
             <tbody id="citasTable"></tbody>
+=======
+            <tbody id="citasBody">
+                <!-- Aquí se llenan las citas con JavaScript -->
+            </tbody>
+>>>>>>> 3189f05562512c1e767744ac870eb5aa108f7e61
         </table>
     </main>
     <script>
@@ -64,7 +83,48 @@ if (!isset($_SESSION['idUsuario'])) {
             });
 
             const result = await response.json();
+<<<<<<< HEAD
             // Mensajes y actualización de tabla...
+=======
+            messageElement.textContent = result.message;
+            messageElement.style.color = result.status ==='success'? "green" : "red";
+
+            if (result.status ==='success') {
+                obtenerCitas(); // Refrescar la tabla de citas
+            }
+        }
+
+        // Función para obtener citas registradas
+        async function obtenerCitas() {
+            const idUsuario = <?php echo $_SESSION['idUsuario']; ?>;
+
+            try {
+                const response = await fetch(`../routes/citasRoutes.php?idUsuario=${idUsuario}`);
+                const citas = await response.json();
+
+                const citasBody = document.getElementById('citasBody');
+                citasBody.innerHTML = ''; // Limpia la tabla
+
+                if (citas.status === 'success') {
+                    const registros = citas.data; // Usa la respuesta JSON correctamente
+                    registros.forEach(registro => {
+                        const row = `
+                            <tr>
+                                <td>${registro.fecha}</td>
+                                <td>${registro.hora}</td>
+                                <td>${registro.motivo}</td>
+                            </tr>
+                        `;
+                        citasBody.innerHTML += row; // Usa el ID correcto de la tabla
+                    });
+                } else {
+                    alert(citas.message); // Muestra el mensaje de error si no es exitoso
+                }
+            } catch (error) {
+                console.error('Error al obtener las citas:', error);
+                alert('Hubo un error al obtener las citas.');
+            }
+>>>>>>> 3189f05562512c1e767744ac870eb5aa108f7e61
         }
     </script>
 </body>
