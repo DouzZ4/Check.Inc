@@ -61,6 +61,7 @@ session_start();
             <?php if (isset($_SESSION['idUsuario'])): ?>
                 <a href="registroGlucosa.php">Registro de Glucosa</a>
                 <a href="RegistroCitas.php">Citas</a>
+                <a href="RegistroAnomalia.php">Anomalia</a>
             <?php endif; ?>
         </div>
         <div>
