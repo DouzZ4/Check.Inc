@@ -71,7 +71,7 @@ form input:focus {
 
 /* Botón principal del formulario (Registrar/Actualizar) */
 #submitButton {
-    background-color: #f45501; /* Naranja Principal */
+    background-color: #3058a6; /* Naranja Principal */
     color: white;
     border: none;
     cursor: pointer;
@@ -80,7 +80,7 @@ form input:focus {
      flex-grow: 1; /* Ocupa espacio disponible */
 }
 #submitButton:hover {
-    background-color: #d84a00; /* Naranja más oscuro */
+    background-color: #f45501; /* Naranja más oscuro */
 }
 
 /* Botón Cancelar (visible durante edición) */
@@ -146,7 +146,22 @@ table tbody tr:nth-child(even) {
     padding: 15px;
     border: 1px solid #eee;
     border-radius: 8px;
+
+    /* --- AÑADE ESTAS LÍNEAS --- */
+    position: relative; /* Importante para Chart.js responsivo */
+    height: 400px; /* Altura deseada - ¡AJUSTA ESTE VALOR! */
+    /* También puedes usar vh (altura relativa al viewport): */
+    /* height: 50vh; */ /* Ejemplo: 50% de la altura de la ventana */
+    width: 100%; /* Mantenlo para que use el ancho disponible */
+    /* --- FIN LÍNEAS AÑADIDAS --- */
 }
+
+/* Opcional: asegurar que el canvas no se desborde (aunque con maintainAspectRatio:false no debería) */
+#graficoGlucosa {
+   max-width: 100%;
+   /* max-height: 100%; */ /* No suele ser necesario si el contenedor tiene height */
+}
+
 
 
 /* --- Mensajes de Estado --- */
