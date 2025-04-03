@@ -1,196 +1,208 @@
 <?php
 session_start();
 if (!isset($_SESSION['idUsuario'])) {
-    $_SESSION['message'] = "Por favor, inicia sesión para acceder a la página.";
-    header('Location: login.php'); // Redirige al formulario de inicio de sesión
+    header('Location: login.php');
     exit;
 }
+$idUsuarioActual = $_SESSION['idUsuario'];
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Citas</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
-        nav {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-weight: bold;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        h1, h2 {
-            color: #4CAF50;
-        }
-        form input, form button {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-        form button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        form button:hover {
-            background-color: #45A049;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table th, table td {
-            border: 1px solid #ddd;
-            text-align: center;
-            padding: 10px;
-        }
-        table th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .message {
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: red;
-        }
-    </style>
+    <title>Registro de Citas</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/navbar.css">
 </head>
 <body>
-    <nav>
-        <div>
-            <a href="index.php">Inicio</a>
-            <a href="RegistroCitas.php">Gestión de Citas</a>
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-branding">
+            <div id="logo-placeholder">Logo Aquí</div>
+            <h1>Gestión de Citas</h1>
         </div>
-        <div>
-            <span>Bienvenido, <?php echo htmlspecialchars($_SESSION['user']); ?>!</span>
-            <a href="logout.php" style="margin-left: 15px;">Cerrar Sesión</a>
-        </div>
-    </nav>
-    <div class="container">
-        <h1>Gestión de Citas</h1>
-        <!-- Mostrar mensajes -->
-        <p id="message" class="message">
-            <?php
-            if (isset($_SESSION['message'])) {
-                echo $_SESSION['message'];
-                unset($_SESSION['message']);
-            }
-            ?>
-        </p>
-
-        <!-- Formulario para registrar citas -->
-        <h2>Registrar Nueva Cita</h2>
-        <form id="citaForm">
-            <input type="date" id="fecha" required placeholder="Fecha">
-            <input type="time" id="hora" required placeholder="Hora">
-            <input type="text" id="motivo" required placeholder="Motivo">
-            <button type="button" onclick="registrarCita()">Registrar</button>
+    </div>
+</nav>
+<main>
+    <div id="message"></div>
+    <section>
+        <h2 id="form-title-heading">Registrar Nueva Cita</h2>
+        <form id="formCita" onsubmit="event.preventDefault(); manejarSubmitFormulario();">
+            <input type="hidden" id="editId" value="">
+            <div>
+                <label for="fecha">Fecha:</label>
+                <input type="date" id="fecha" name="fecha" required>
+            </div>
+            <div>
+                <label for="hora">Hora:</label>
+                <input type="time" id="hora" name="hora" required>
+            </div>
+            <div>
+                <label for="motivo">Motivo:</label>
+                <input type="text" id="motivo" name="motivo" required>
+            </div>
+            <div id="form-buttons">
+                <button type="submit" id="submitButton">Registrar</button>
+                <button type="button" id="cancelButton" class="cancel-button" onclick="cancelarEdicion()" style="display: none;">Cancelar Edición</button>
+            </div>
         </form>
-
-        <!-- Tabla para mostrar citas -->
-        <h2>Historial de Citas</h2>
+    </section>
+    <section>
+        <h2>Listado de Citas</h2>
         <table>
             <thead>
                 <tr>
                     <th>Fecha</th>
                     <th>Hora</th>
                     <th>Motivo</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody id="citasTable">
-                <!-- Las filas se generan dinámicamente con JavaScript -->
-            </tbody>
+            <tbody id="tablaCitas"></tbody>
         </table>
-    </div>
+    </section>
+</main>
+<script>
+    const idUsuarioActual = <?php echo json_encode($idUsuarioActual); ?>;
+    const apiUrl = '../routes/citasRoutes.php';
+    const form = document.getElementById('formCita');
+    const editIdInput = document.getElementById('editId');
+    const submitButton = document.getElementById('submitButton');
+    const cancelButton = document.getElementById('cancelButton');
+    const tablaCitas = document.getElementById('tablaCitas');
+    const messageElement = document.getElementById('message');
 
-    <script>
-        // Función para registrar una cita
-        async function registrarCita() {
-            const fecha = document.getElementById('fecha').value;
-            const hora = document.getElementById('hora').value;
-            const motivo = document.getElementById('motivo').value;
-            const idUsuario = <?php echo $_SESSION['idUsuario']; ?>;
+    function mostrarMensaje(texto, tipo = 'info') {
+        messageElement.textContent = texto;
+        messageElement.className = `message-${tipo}`;
+    }
 
-            const response = await fetch('../routes/citasRoutes.php', {
+    function resetearFormulario() {
+        form.reset();
+        editIdInput.value = "";
+        submitButton.textContent = "Registrar";
+        cancelButton.style.display = 'none';
+    }
+
+    function manejarSubmitFormulario() {
+        const idParaEditar = editIdInput.value;
+        if (idParaEditar) {
+            actualizarCita(parseInt(idParaEditar));
+        } else {
+            crearCita();
+        }
+    }
+
+    async function crearCita() {
+        const data = {
+            idUsuario: idUsuarioActual,
+            fecha: document.getElementById('fecha').value,
+            hora: document.getElementById('hora').value,
+            motivo: document.getElementById('motivo').value
+        };
+        mostrarMensaje("Registrando cita...", "info");
+        try {
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ fecha, hora, motivo, idUsuario })
+                body: JSON.stringify(data)
             });
-
             const result = await response.json();
-            const messageElement = document.getElementById('message');
-
             if (result.status === 'success') {
-                messageElement.textContent = result.message;
-                messageElement.style.color = "green";
-                obtenerCitas(); // Refrescar la tabla de citas
+                mostrarMensaje(result.message, "success");
+                resetearFormulario();
+                cargarCitas();
             } else {
-                messageElement.textContent = result.message;
-                messageElement.style.color = "red";
+                mostrarMensaje(result.message, "error");
             }
+        } catch (error) {
+            mostrarMensaje("Error al registrar la cita.", "error");
         }
+    }
 
-        // Función para obtener citas del historial
-        async function obtenerCitas() {
-            const idUsuario = <?php echo $_SESSION['idUsuario']; ?>;
-
-            const response = await fetch(`../routes/citasRoutes.php?idUsuario=${idUsuario}`);
+    async function cargarCitas() {
+        try {
+            const response = await fetch(`${apiUrl}?idUsuario=${idUsuarioActual}`);
             const result = await response.json();
-
-            const citasTable = document.getElementById('citasTable');
-            citasTable.innerHTML = ''; // Limpiar la tabla
-
+            tablaCitas.innerHTML = '';
             if (result.status === 'success') {
-                const citas = result.data;
-                citas.forEach(cita => {
-                    const row = `
-                        <tr>
-                            <td>${cita.fecha}</td>
-                            <td>${cita.hora}</td>
-                            <td>${cita.motivo}</td>
-                        </tr>
+                result.data.forEach(cita => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${cita.fecha}</td>
+                        <td>${cita.hora}</td>
+                        <td>${cita.motivo}</td>
+                        <td>
+                            <button onclick="prepararEdicion(${cita.idCita}, '${cita.fecha}', '${cita.hora}', '${cita.motivo}')">Editar</button>
+                            <button onclick="eliminarCita(${cita.idCita})">Eliminar</button>
+                        </td>
                     `;
-                    citasTable.innerHTML += row;
+                    tablaCitas.appendChild(row);
                 });
             } else {
-                const messageElement = document.getElementById('message');
-                messageElement.textContent = result.message;
-                messageElement.style.color = "red";
+                mostrarMensaje(result.message, "error");
+            }
+        } catch (error) {
+            mostrarMensaje("Error al cargar las citas.", "error");
+        }
+    }
+
+    function prepararEdicion(idCita, fecha, hora, motivo) {
+        editIdInput.value = idCita;
+        document.getElementById('fecha').value = fecha;
+        document.getElementById('hora').value = hora;
+        document.getElementById('motivo').value = motivo;
+        submitButton.textContent = "Actualizar";
+        cancelButton.style.display = 'inline-block';
+    }
+
+    async function actualizarCita(idCita) {
+        const data = {
+            fecha: document.getElementById('fecha').value,
+            hora: document.getElementById('hora').value,
+            motivo: document.getElementById('motivo').value
+        };
+        mostrarMensaje("Actualizando cita...", "info");
+        try {
+            const response = await fetch(`${apiUrl}?idCita=${idCita}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            if (result.status === 'success') {
+                mostrarMensaje(result.message, "success");
+                resetearFormulario();
+                cargarCitas();
+            } else {
+                mostrarMensaje(result.message, "error");
+            }
+        } catch (error) {
+            mostrarMensaje("Error al actualizar la cita.", "error");
+        }
+    }
+
+    async function eliminarCita(idCita) {
+        if (confirm("¿Estás seguro de eliminar esta cita?")) {
+            mostrarMensaje("Eliminando cita...", "info");
+            try {
+                const response = await fetch(`${apiUrl}?idCita=${idCita}`, { method: 'DELETE' });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    mostrarMensaje(result.message, "success");
+                    cargarCitas();
+                } else {
+                    mostrarMensaje(result.message, "error");
+                }
+            } catch (error) {
+                mostrarMensaje("Error al eliminar la cita.", "error");
             }
         }
+    }
 
-        // Obtener citas al cargar la página
-        window.onload = obtenerCitas;
-    </script>
+    window.onload = cargarCitas;
+</script>
 </body>
 </html>
