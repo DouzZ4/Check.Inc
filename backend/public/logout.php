@@ -8,7 +8,7 @@ session_destroy(); // Destruye la sesión
 // Redirige a la página de inicio principal (index.php en la raíz)
 // Ajusta '/check.inc/' si tu proyecto no está en esa subcarpeta
 $baseUrl = '/check.inc'; // O define esto en un config global
-header('Location: ' . $baseUrl . '/index.php');
+header('Location: ' . $baseUrl . '/backend/public/index.php');
 // Alternativa si $baseUrl no está definido aquí:
 // header('Location: /check.inc/index.php');
 // O relativo (menos robusto):

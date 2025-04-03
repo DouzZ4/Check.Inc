@@ -6,7 +6,7 @@ session_start(); // Iniciar sesión al principio de todo
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - Sistema de Glucosa</title>
+    <title>Inicio - CHECK</title>
     <link rel="stylesheet" href="./Css/styles.css">
     <link rel="stylesheet" href="./Css/navbar.css">
     <link rel="stylesheet" href="./Css/index.css">
@@ -14,7 +14,7 @@ session_start(); // Iniciar sesión al principio de todo
 <body>
     <?php include __DIR__ . '/../includes/navbar.php'; ?>
     <div class="container">
-        <h1>Sistema de Gestión de Glucosa</h1>
+        <h1>CHECK</h1>
         <p>
             Bienvenido a la plataforma para registrar y monitorear tus niveles de glucosa en sangre.
             <?php if (!isset($_SESSION['idUsuario'])): ?>
