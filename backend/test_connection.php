@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '../config/Conexion.php';
+require_once __DIR__ . '../config/database.php';
 
 $conexion = new Conexion();
 $db = $conexion->conectar();
