@@ -119,7 +119,7 @@ class CitaModel {
     }
 
     //Actualiza una cita existente
-    public function ActualizarCita (int $idCita, array $data) {
+    public function ActualizarCita(int $idCita, array $data) {
         if (empty($data)) {
             return false; // No hay datos para actualizar
         }
@@ -128,9 +128,8 @@ class CitaModel {
         $params = [':idCita' => $idCita];
 
         foreach ($data as $columna => $valor) {
-            $placeholder = ":$columna";
-            $setParts[] = "`" . $columna . "` = " . $placeholder;
-            $params[$placeholder] = $valor;
+            $setParts[] = "`$columna` = :$columna";
+            $params[":$columna"] = $valor;
         }
 
         $sql = "UPDATE cita SET " . implode(", ", $setParts) . " WHERE idCita = :idCita";
