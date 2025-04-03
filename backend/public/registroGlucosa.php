@@ -18,7 +18,8 @@ $idUsuarioActual = $_SESSION['idUsuario'];
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="stylesheet" href="./css/styles.css">
-    <link rel="stylesheet" href="./css/navbar.css"> </head>
+    <link rel="stylesheet" href="./css/navbar.css">
+ </head>
 <body>
 
     <nav class="navbar">
