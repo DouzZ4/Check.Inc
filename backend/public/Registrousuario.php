@@ -13,18 +13,8 @@ session_start();
 
     </head>
 <body>
-    <?php // include 'path/to/navbar_component.php'; ?>
-    <nav class="navbar">
-         <div class="navbar-container">
-             <div class="navbar-branding">
-                 <div id="logo-placeholder">Logo Aquí</div>
-                 <h1>Control Glucosa</h1>
-             </div>
-             <div class="navbar-user-info">
-                 <a href="login.php" style="color: white;">Iniciar Sesión</a>
-             </div>
-         </div>
-     </nav>
+<?php include __DIR__ . '/../includes/navbar.php'; ?>
+    
 
     <main class="form-container"> <h2>Registro de Nuevo Paciente</h2>
 

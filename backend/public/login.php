@@ -11,17 +11,7 @@ session_start();
     <link rel="stylesheet" href="./css/login.css">
     <link rel="stylesheet" href="./css/navbar.css"> </head>
 <body>
-    <nav class="navbar">
-         <div class="navbar-container">
-             <div class="navbar-branding">
-                 <div id="logo-placeholder">Logo Aquí</div>
-                 <h1>Control Glucosa</h1>
-             </div>
-             <div class="navbar-user-info">
-                 <a href="registrousuario.php" style="color: white;">Registrarse</a>
-             </div>
-         </div>
-     </nav>
+<?php include __DIR__ . '/../includes/navbar.php'; ?>
 
     <main class="form-container login-container"> <h2>Iniciar Sesión</h2>
 

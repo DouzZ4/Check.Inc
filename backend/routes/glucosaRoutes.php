@@ -1,100 +1,160 @@
 <?php
 // routes/glucosaRoutes.php
 
-// Cabeceras CORS y Content-Type (como las tenías)
-header("Access-Control-Allow-Origin: *");
+// --- Cabeceras ---
+header("Access-Control-Allow-Origin: *"); // Ajusta en producción
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-// ... (resto de cabeceras y manejo de OPTIONS) ...
+header("Access-Control-Max-Age: 3600");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-// Requerir dependencias
+// Manejar solicitud OPTIONS preflight
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+// --- Dependencias ---
 require_once '../config/database.php'; // Para la conexión
 require_once '../models/GlucosaModel.php';   // Contiene GlucosaModel, Glucosa, GlucosaFactory
 require_once '../controllers/GlucosaController.php'; // El controlador refactorizado
 
-// --- Conexión a BD (como antes) ---
+// --- Conexión a BD ---
 try {
-    $db = new Conexion(); // O tu método de conexión
-    $conn = $db->conectar(); // Objeto PDO
-    // No es necesario setear ERRMODE aquí si el Modelo lo hace
+    $db = new Conexion();
+    $conn = $db->conectar();
 } catch (Exception $e) {
-    http_response_code(500);
+    http_response_code(503); // Service Unavailable
     echo json_encode(['status' => 'error', 'message' => 'Error de conexión DB: ' . $e->getMessage()]);
     exit;
 }
 
-// --- ¡CAMBIO IMPORTANTE! ---
-// 1. Instanciar el Modelo con la conexión
-$glucosaModel = new GlucosaModel($conn);
+// --- Inyección de Dependencias ---
+try {
+    $glucosaModel = new GlucosaModel($conn);
+    $controller = new GlucosaController($glucosaModel);
+} catch(Exception $e) {
+     http_response_code(500);
+     echo json_encode(['status' => 'error', 'message' => 'Error inicializando componentes: ' . $e->getMessage()]);
+     exit;
+}
 
-// 2. Instanciar el Controlador pasando el Modelo
-$controller = new GlucosaController($glucosaModel);
-// --- FIN CAMBIO IMPORTANTE ---
-
-
-// --- Enrutamiento (el switch/case como lo tenías antes) ---
+// --- Enrutamiento ---
 $method = $_SERVER['REQUEST_METHOD'];
 $response = ['status' => 'error', 'message' => 'Solicitud no válida o método no soportado.'];
 $http_status_code = 400;
 
+// Extraer IDs de parámetros GET (si existen)
+$idGlucosa = isset($_GET['idGlucosa']) && is_numeric($_GET['idGlucosa']) ? (int)$_GET['idGlucosa'] : null;
+$idUsuario = isset($_GET['idUsuario']) && is_numeric($_GET['idUsuario']) ? (int)$_GET['idUsuario'] : null;
+
+// Variable para datos de entrada (POST/PUT)
+$data = null;
+
 try {
     switch ($method) {
         case 'POST':
-            // ... (tu lógica para obtener $data de php://input) ...
-            // ... (validar JSON) ...
-            $response = $controller->crearRegistro($data); // Llamada al controller igual que antes
+            // --- CREAR Registro Glucosa (espera JSON) ---
+            $data = json_decode(file_get_contents("php://input"), true);
+
+            // Validar JSON recibido
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                $response = ["status" => false, "message" => "Error decodificando JSON: " . json_last_error_msg()];
+                $http_status_code = 400;
+                break; // Salir del switch
+            }
+            // Validar que $data sea un array (podría ser null si json_decode falla o lee 'null')
+            if (!is_array($data)) {
+                 $response = ["status" => false, "message" => "No se recibieron datos válidos en formato JSON."];
+                 $http_status_code = 400;
+                 break; // Salir del switch
+            }
+
+            // Llamar al controlador (que valida campos obligatorios dentro de $data)
+            $response = $controller->crearRegistro($data);
             $http_status_code = ($response['status'] === 'success') ? 201 : 400;
             break;
 
         case 'GET':
-             // ... (tu lógica para ver si es por idGlucosa o idUsuario) ...
-              if (isset($_GET['idGlucosa']) /*...*/) {
-                  $idGlucosa = (int)$_GET['idGlucosa'];
-                  $response = $controller->obtenerRegistroPorId($idGlucosa); // Llamada igual
-                  $http_status_code = ($response['status'] === 'success') ? 200 : (($response['message'] === 'Registro no encontrado.') ? 404 : 400);
-              } elseif (isset($_GET['idUsuario']) /*...*/) {
-                  $idUsuario = (int)$_GET['idUsuario'];
-                  $response = $controller->obtenerRegistros($idUsuario); // Llamada igual
-                  $http_status_code = ($response['status'] === 'success') ? 200 : 400;
-              } else {
-                 // ... (error por falta de parámetro) ...
-              }
+            // --- LEER Registros (por idGlucosa o idUsuario) ---
+            if ($idGlucosa !== null) {
+                $response = $controller->obtenerRegistroPorId($idGlucosa);
+                $http_status_code = ($response['status'] === 'success') ? 200 : (($response['message'] === 'Registro no encontrado.') ? 404 : 400);
+            } elseif ($idUsuario !== null) {
+                $response = $controller->obtenerRegistros($idUsuario);
+                $http_status_code = ($response['status'] === 'success') ? 200 : 400;
+            } else {
+               $response = ['status' => 'error', 'message' => 'Falta idUsuario o idGlucosa válido para GET.'];
+               $http_status_code = 400;
+            }
             break;
 
         case 'PUT':
-             // ... (tu lógica para obtener idGlucosa y $data) ...
-              if (isset($_GET['idGlucosa']) /*...*/) {
-                  $idGlucosa = (int)$_GET['idGlucosa'];
-                  // ... (obtener $data de php://input, validar JSON, validar $data no vacío) ...
-                  $response = $controller->actualizarRegistro($idGlucosa, $data); // Llamada igual
-                  // ... (tu lógica para http_status_code basada en la respuesta) ...
-              } else {
-                 // ... (error por falta de idGlucosa) ...
-              }
+            // --- ACTUALIZAR Registro Glucosa (espera JSON) ---
+            if ($idGlucosa !== null) {
+                 $data = json_decode(file_get_contents("php://input"), true);
+
+                 // Validar JSON recibido
+                 if (json_last_error() !== JSON_ERROR_NONE) {
+                     $response = ["status" => false, "message" => "Error decodificando JSON: " . json_last_error_msg()];
+                     $http_status_code = 400;
+                     break;
+                 }
+                 // Validar que $data sea array y no esté vacío para PUT
+                 if (!is_array($data) || empty($data)) {
+                      $response = ["status" => false, "message" => "No se recibieron datos válidos en formato JSON para actualizar."];
+                      $http_status_code = 400;
+                      break;
+                 }
+
+                 // Llamar al controlador
+                 $response = $controller->actualizarRegistro($idGlucosa, $data);
+
+                 // Establecer código HTTP
+                 if ($response['status'] === 'success') { $http_status_code = 200; }
+                 elseif ($response['status'] === 'info') { $http_status_code = 200; } // O podrías usar 304 Not Modified si no hubo cambios
+                 elseif (strpos($response['message'], 'no encontrado') !== false) { $http_status_code = 404; }
+                 // Aquí podrías añadir chequeo para 403 Forbidden si implementas autorización
+                 else { $http_status_code = 400; } // Otros errores (validación, etc.)
+
+            } else {
+                 $response = ['status' => 'error', 'message' => 'Se requiere idGlucosa en la URL (?idGlucosa=...) para actualizar.'];
+                 $http_status_code = 400;
+            }
             break;
 
         case 'DELETE':
-             // ... (tu lógica para obtener idGlucosa) ...
-              if (isset($_GET['idGlucosa']) /*...*/) {
-                  $idGlucosa = (int)$_GET['idGlucosa'];
-                  $response = $controller->eliminarRegistro($idGlucosa); // Llamada igual
-                  // ... (tu lógica para http_status_code basada en la respuesta) ...
-              } else {
-                  // ... (error por falta de idGlucosa) ...
-              }
+            // --- ELIMINAR Registro Glucosa ---
+            if ($idGlucosa !== null) {
+                 $response = $controller->eliminarRegistro($idGlucosa);
+
+                 // Establecer código HTTP
+                 if ($response['status'] === 'success') { $http_status_code = 200; } // OK (o 204 No Content)
+                 elseif ($response['status'] === 'info') { $http_status_code = 404; } // Not Found
+                 // Aquí podrías añadir chequeo para 403 Forbidden
+                 else { $http_status_code = 500; } // Error inesperado al eliminar
+
+            } else {
+                 $response = ['status' => 'error', 'message' => 'Se requiere idGlucosa en la URL (?idGlucosa=...) para eliminar.'];
+                 $http_status_code = 400;
+            }
             break;
 
         default:
-             // ... (error 405 Method Not Allowed) ...
+            $response = ['status' => 'error', 'message' => 'Método HTTP no soportado.'];
+            $http_status_code = 405; // Method Not Allowed
             break;
     }
 } catch (Exception $e) {
-    // Captura excepciones generales que puedan ocurrir en el router o controller
+    // --- Manejo General de Excepciones (Siempre devuelve JSON) ---
+    error_log("ERROR General en ruta Glucosa: " . $e->getMessage() . " en " . $e->getFile() . ":" . $e->getLine());
     $http_status_code = 500;
-    $response = ['status' => 'error', 'message' => 'Error inesperado en la ruta: ' . $e->getMessage()];
+    $response = ['status' => 'error', 'message' => 'Ocurrió un error interno en el servidor.'];
+    // Podrías añadir detalles del error en desarrollo:
+    // $response['details'] = $e->getMessage();
 }
 
-// --- Enviar Respuesta (igual que antes) ---
+// --- Enviar Respuesta Final JSON ---
 http_response_code($http_status_code);
 echo json_encode($response);
 

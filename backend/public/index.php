@@ -12,27 +12,7 @@ session_start(); // Iniciar sesión al principio de todo
     <link rel="stylesheet" href="./css/index.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-container">
-            <div class="navbar-branding">
-                <div id="logo-placeholder">Logo Aquí</div>
-                <h1>Control Glucosa</h1>
-            </div>
-            <div class="navbar-links"> <a href="index.php">Inicio</a>
-                 <?php if (isset($_SESSION['idUsuario'])): ?>
-                     <a href="./registroGlucosa.php">Registro Glucosa</a>
-                     <a href="./RegistroCitas.php">Citas</a> <a href="./public/RegistroAnomalia.php">Anomalia</a> <?php endif; ?>
-            </div>
-            <div class="navbar-user-info">
-                <?php if (isset($_SESSION['idUsuario'])): ?>
-                    <span>Bienvenido, <?php echo isset($_SESSION['nombreUsuario']) ? htmlspecialchars($_SESSION['nombreUsuario']) : 'Usuario'; ?>!</span>
-                    <a href="../routes/logout.php" class="button button-secondary" style="margin-left: 15px;">Cerrar Sesión</a>
-                <?php else: ?>
-                    <a href="./login.php" class="button">Iniciar Sesión</a>
-                <?php endif; ?>
-            </div>
-        </div>
-    </nav>
+    <?php include __DIR__ . '/../includes/navbar.php'; ?>
     <div class="container">
         <h1>Sistema de Gestión de Glucosa</h1>
         <p>
