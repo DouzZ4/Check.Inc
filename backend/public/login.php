@@ -1,4 +1,5 @@
 <?php
+// Iniciar sesión ANTES de cualquier salida HTML
 session_start();
 ?>
 <!DOCTYPE html>
@@ -6,79 +7,54 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio de Sesión</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #3058a6;
-            color: white;
-            text-align: center;
-            padding: 15px 0;
-        }
-        main {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .mensaje {
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        form label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        form input, form button {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        form button {
-            background-color: #3058a6;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        form button:hover {
-            background-color: #f45501;
-        }
-    </style>
-</head>
+    <title>Inicio de Sesión - Control Glucosa</title>
+    <link rel="stylesheet" href="./css/login.css">
+    <link rel="stylesheet" href="./css/navbar.css"> </head>
 <body>
-    <header>
-        <h1>Inicio de Sesión</h1>
-    </header>
-    <main>
+    <nav class="navbar">
+         <div class="navbar-container">
+             <div class="navbar-branding">
+                 <div id="logo-placeholder">Logo Aquí</div>
+                 <h1>Control Glucosa</h1>
+             </div>
+             <div class="navbar-user-info">
+                 <a href="registrousuario.php" style="color: white;">Registrarse</a>
+             </div>
+         </div>
+     </nav>
+
+    <main class="form-container login-container"> <h2>Iniciar Sesión</h2>
+
         <?php
-        // Verifica si existe un mensaje en la sesión.
+        // Mostrar mensaje flash de sesión (para errores de login o éxito de registro)
         if (isset($_SESSION['message'])) {
-            // Escapa el mensaje para evitar XSS.
+            $message_type = $_SESSION['message_type'] ?? 'info';
+            $message_class = 'message-' . htmlspecialchars($message_type);
             $msg = htmlspecialchars($_SESSION['message']);
-            // Muestra el mensaje dentro de un div con la clase 'mensaje'.
-            echo "<div class='mensaje'>{$msg}</div>";
-            // Elimina el mensaje de la sesión para que no se muestre nuevamente.
+            // Usar una clase contenedora para el mensaje
+            echo "<div class='message-box {$message_class}'>{$msg}</div>";
             unset($_SESSION['message']);
+            unset($_SESSION['message_type']);
         }
         ?>
-        <form action="../routes/usuarioRoutes.php?login" method="POST">
-            <label for="user">Usuario:</label>
-            <input type="text" id="user" name="user" required>
-            <label for="password">Contraseña:</label>
-            <input type="password" id="password" name="password" required>
-            <button type="submit">Iniciar Sesión</button>
+
+        <form id="loginForm" action="../routes/usuarioRoutes.php?login" method="POST">
+            <div class="form-group">
+                <label for="user">Nombre de Usuario:</label>
+                <input type="text" id="user" name="user" required autofocus> </div>
+
+            <div class="form-group">
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="submit-button">Iniciar Sesión</button>
+
+            <div class="register-link">
+                 ¿No tienes cuenta? <a href="registrousuario.php">Regístrate aquí</a>
+            </div>
         </form>
     </main>
-</body>
+
+     </body>
 </html>

@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(); // Iniciar sesión al principio de todo
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -7,84 +7,49 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio - Sistema de Glucosa</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
-        nav {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-weight: bold;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 10px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .button:hover {
-            background-color: #45A049;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/navbar.css">
+    <link rel="stylesheet" href="./css/index.css">
 </head>
 <body>
-    <nav>
-        <div>
-            <a href="index.php">Inicio</a>
-            <?php if (isset($_SESSION['idUsuario'])): ?>
-                <a href="registroGlucosa.php">Registro de Glucosa</a>
-                <a href="RegistroCitas.php">Citas</a>
-                <a href="RegistroAnomalia.php">Anomalia</a>
-            <?php endif; ?>
-        </div>
-        <div>
-            <?php if (isset($_SESSION['idUsuario'])): ?>
-                <span>Bienvenido, <?php echo htmlspecialchars($_SESSION['user']); ?>!</span>
-                <a href="logout.php" class="button">Cerrar Sesión</a>
-            <?php else: ?>
-                <a href="login.php" class="button">Iniciar Sesión</a>
-            <?php endif; ?>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-branding">
+                <div id="logo-placeholder">Logo Aquí</div>
+                <h1>Control Glucosa</h1>
+            </div>
+            <div class="navbar-links"> <a href="index.php">Inicio</a>
+                 <?php if (isset($_SESSION['idUsuario'])): ?>
+                     <a href="./registroGlucosa.php">Registro Glucosa</a>
+                     <a href="./RegistroCitas.php">Citas</a> <a href="./public/RegistroAnomalia.php">Anomalia</a> <?php endif; ?>
+            </div>
+            <div class="navbar-user-info">
+                <?php if (isset($_SESSION['idUsuario'])): ?>
+                    <span>Bienvenido, <?php echo isset($_SESSION['nombreUsuario']) ? htmlspecialchars($_SESSION['nombreUsuario']) : 'Usuario'; ?>!</span>
+                    <a href="../routes/logout.php" class="button button-secondary" style="margin-left: 15px;">Cerrar Sesión</a>
+                <?php else: ?>
+                    <a href="./login.php" class="button">Iniciar Sesión</a>
+                <?php endif; ?>
+            </div>
         </div>
     </nav>
     <div class="container">
         <h1>Sistema de Gestión de Glucosa</h1>
         <p>
-            Este sistema te ayuda a registrar y monitorear tus niveles de glucosa en sangre.
-            Inicia sesión o regístrate para comenzar.
+            Bienvenido a la plataforma para registrar y monitorear tus niveles de glucosa en sangre.
+            <?php if (!isset($_SESSION['idUsuario'])): ?>
+                 Por favor, inicia sesión o regístrate para acceder a todas las funcionalidades.
+            <?php else: ?>
+                 Navega usando el menú superior o accede directamente a tus registros.
+            <?php endif; ?>
         </p>
+
         <?php if (!isset($_SESSION['idUsuario'])): ?>
-            <a href="login.php" class="button">Iniciar Sesión</a>
-            <a href="registroUsuario.php" class="button">Registrarse</a>
+            <a href="./login.php" class="button">Iniciar Sesión</a>
+            <a href="./registrousuario.php" class="button button-secondary">Registrarse</a>
         <?php else: ?>
-            <a href="registroGlucosa.php" class="button">Ir al Registro de Glucosa</a>
-        <?php endif; ?>
+            <a href="./registroGlucosa.php" class="button">Ir al Registro de Glucosa</a>
+            <?php endif; ?>
     </div>
-</body>
+    </body>
 </html>
