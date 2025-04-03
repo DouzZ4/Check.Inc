@@ -17,14 +17,7 @@ $idUsuarioActual = $_SESSION['idUsuario'];
     <link rel="stylesheet" href="./css/navbar.css">
 </head>
 <body>
-<nav class="navbar">
-    <div class="navbar-container">
-        <div class="navbar-branding">
-            <div id="logo-placeholder">Logo Aquí</div>
-            <h1>Gestión de Citas</h1>
-        </div>
-    </div>
-</nav>
+<?php include __DIR__ . '/../includes/navbar.php'; ?>
 <main>
     <div id="message"></div>
     <section>
