@@ -79,7 +79,7 @@ try {
                     // ¡Éxito! Usuario logueado y variables de sesión creadas por el controller.
                     // Redirigir a la página principal de la aplicación (ej. registro de glucosa)
                     // Ajusta esta ruta según tu estructura
-                    header('Location: ../public/registroGlucosa.php'); // O dashboard.php, etc.
+                    header('Location: ../public/index.php'); // O dashboard.php, etc.
                     exit();
                 } else {
                     // Falló el login
