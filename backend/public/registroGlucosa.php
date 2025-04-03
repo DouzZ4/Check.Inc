@@ -18,7 +18,7 @@ $idUsuarioActual = $_SESSION['idUsuario'];
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="stylesheet" href="./css/styles.css">
-    <link rel="stylesheet" href="./css/navbar.css">
+    <link rel="stylesheet" href="./Css/navbar.css">
  </head>
 <body>
 
@@ -41,7 +41,7 @@ $idUsuarioActual = $_SESSION['idUsuario'];
 
                  <div>
                      <label for="nivelGlucosa">Nivel de Glucosa (mg/dL):</label>
-                     <input type="number" id="nivelGlucosa" name="nivelGlucosa" placeholder="Ej: 95" required min="1">
+                     <input type="number" id="nivelGlucosa" name="nivelGlucosa" placeholder="Ej: 95" required min="1" step="any">
                  </div>
 
                  <div>

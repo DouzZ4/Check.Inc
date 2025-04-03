@@ -7,9 +7,9 @@ session_start(); // Iniciar sesión al principio de todo
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio - Sistema de Glucosa</title>
-    <link rel="stylesheet" href="./css/styles.css">
-    <link rel="stylesheet" href="./css/navbar.css">
-    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./Css/styles.css">
+    <link rel="stylesheet" href="./Css/navbar.css">
+    <link rel="stylesheet" href="./Css/index.css">
 </head>
 <body>
     <?php include __DIR__ . '/../includes/navbar.php'; ?>

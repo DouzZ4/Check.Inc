@@ -6,13 +6,13 @@ $baseUrl = '/check.inc'; // Asegúrate que esta variable esté definida
 <nav class="navbar">
     <div class="navbar-container">
         <div class="navbar-branding">
-            <a href="<?php echo $baseUrl; ?>/index.php" style="text-decoration: none; display: flex; align-items: center;">
-                <div id="logo-placeholder">Logo</div>
-                <h1>Control Glucosa</h1>
+            <a href="<?php echo $baseUrl; ?>/backend/public/index.php" style="text-decoration: none; display: flex; align-items: center;">
+                <img src="<?php echo $baseUrl; ?>/backend/public/images/ICONO.png" alt="Logo Check" id="logo-navbar">
+                <h1>Check</h1>
             </a>
         </div>
         <div class="navbar-links">
-            <a href="<?php echo $baseUrl; ?>/index.php">Inicio</a>
+            <a href="<?php echo $baseUrl; ?>/backend/public/index.php">Inicio</a>
             <?php if (isset($_SESSION['idUsuario'])): ?>
                 <a href="<?php echo $baseUrl; ?>/backend/public/registroGlucosa.php">Registro Glucosa</a>
                 <a href="<?php echo $baseUrl; ?>/backend/public/registroCitas.php">Citas</a>
