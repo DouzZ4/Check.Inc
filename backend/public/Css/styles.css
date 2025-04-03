@@ -1,0 +1,167 @@
+ /* --- Reset Básico y Estilos Globales --- */
+ * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8; /* Un gris azulado claro */
+    color: #333;
+    line-height: 1.6;
+}
+
+
+
+
+/* --- Contenido Principal --- */
+main {
+    max-width: 850px; /* Un poco más ancho */
+    margin: 30px auto;
+    padding: 25px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #3058a6; /* Títulos en Azul */
+    margin-top: 25px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #f0f4f8;
+    padding-bottom: 5px;
+}
+h2:first-child {
+     margin-top: 0;
+}
+
+
+/* --- Formulario --- */
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+form input[type="number"],
+form input[type="datetime-local"],
+form button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px; /* Más espacio entre campos */
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+}
+
+/* Estilo específico para inputs al enfocarlos */
+form input:focus {
+    border-color: #3058a6;
+    outline: none;
+    box-shadow: 0 0 5px rgba(48, 88, 166, 0.3);
+}
+
+/* Contenedor de botones del formulario */
+#form-buttons {
+    display: flex; /* Para alinear botones si hay más de uno */
+    gap: 10px; /* Espacio entre botones */
+}
+
+/* Botón principal del formulario (Registrar/Actualizar) */
+#submitButton {
+    background-color: #f45501; /* Naranja Principal */
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+     flex-grow: 1; /* Ocupa espacio disponible */
+}
+#submitButton:hover {
+    background-color: #d84a00; /* Naranja más oscuro */
+}
+
+/* Botón Cancelar (visible durante edición) */
+.cancel-button {
+     background-color: #6c757d; /* Gris */
+     color: white;
+     border: none;
+     cursor: pointer;
+     transition: background-color 0.3s ease;
+     flex-grow: 1; /* Ocupa espacio disponible */
+}
+ .cancel-button:hover {
+     background-color: #5a6268;
+ }
+
+
+/* --- Tabla --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    text-align: center;
+    padding: 12px; /* Más padding */
+}
+
+table th {
+    background-color: #3058a6; /* Cabecera Azul */
+    color: white;
+    font-weight: bold;
+}
+
+/* Estilo para filas alternas (opcional) */
+table tbody tr:nth-child(even) {
+     background-color: #f8f9fa;
+}
+
+/* Botones de acción dentro de la tabla */
+.action-button {
+    padding: 6px 12px;
+    margin: 0 3px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    border: none;
+    color: white;
+    transition: opacity 0.3s ease;
+}
+.action-button:hover {
+     opacity: 0.85;
+}
+
+.edit-button { background-color: #f45501; /* Naranja */ }
+.delete-button { background-color: #dc3545; /* Rojo (mantenido para 'peligro') */ }
+
+
+/* --- Gráfico --- */
+.chart-container {
+    margin-top: 40px;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+}
+
+
+/* --- Mensajes de Estado --- */
+#message {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    display: none; /* Oculto por defecto, se muestra con JS */
+    text-align: center;
+    border: 1px solid transparent;
+}
+#message:not(:empty) { /* Mostrar solo si tiene contenido */
+    display: block;
+}
+.message-success { background-color: #d4edda; color: #155724; border-color: #c3e6cb;}
+.message-error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;}
+.message-info { background-color: #d1ecf1; color: #0c5460; border-color: #bee5eb;}
