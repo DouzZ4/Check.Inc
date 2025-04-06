@@ -1,5 +1,10 @@
 /* En backend/public/css/navbar.css (o styles.css) */
-
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
 /* --- Estilos del Navbar --- */
 .navbar {
     background-color: #3058a6; /* Azul Principal */

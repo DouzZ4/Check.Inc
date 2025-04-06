@@ -28,7 +28,7 @@ session_start();
         }
         ?>
 
-        <form id="loginForm" action="../routes/usuarioRoutes.php?login" method="POST">
+        <form id="loginForm" action="../routes/usuarioRoutes.php?action=login" method="POST">
             <div class="form-group">
                 <label for="user">Nombre de Usuario:</label>
                 <input type="text" id="user" name="user" required autofocus> </div>

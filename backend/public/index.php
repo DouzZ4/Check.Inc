@@ -29,6 +29,7 @@ session_start(); // Iniciar sesión al principio de todo
             <a href="./registrousuario.php" class="button button-secondary">Registrarse</a>
         <?php else: ?>
             <a href="./registroGlucosa.php" class="button">Ir al Registro de Glucosa</a>
+            <a href="./RegistroCitas.php" class="button">Ir al Registro de Citas</a>
             <?php endif; ?>
     </div>
     </body>

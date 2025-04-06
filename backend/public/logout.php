@@ -1,19 +1,31 @@
 <?php
 // backend/public/logout.php
+
+// Iniciar o reanudar la sesión
 session_start();
-session_unset(); // Limpia todas las variables de sesión
-session_destroy(); // Destruye la sesión
 
-// --- CORRECCIÓN DE REDIRECCIÓN ---
-// Redirige a la página de inicio principal (index.php en la raíz)
-// Ajusta '/check.inc/' si tu proyecto no está en esa subcarpeta
-$baseUrl = '/check.inc'; // O define esto en un config global
+// Limpiar todas las variables de sesión
+$_SESSION = array();
+
+// Expirar la cookie de sesión en el navegador
+if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(session_name(), '', time() - 42000, // Tiempo en el pasado
+        $params["path"], $params["domain"],
+        $params["secure"], $params["httponly"]
+    );
+}
+
+// Destruye la sesión en el servidor
+session_destroy();
+
+// Añade cabeceras anti-caché
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Pragma: no-cache");
+header("Expires: Sat, 01 Jan 2000 00:00:00 GMT"); // Fecha en el pasado
+
+// Redirigir a la página de inicio (o login)
+$baseUrl = '/check.inc';
 header('Location: ' . $baseUrl . '/backend/public/index.php');
-// Alternativa si $baseUrl no está definido aquí:
-// header('Location: /check.inc/index.php');
-// O relativo (menos robusto):
-// header('Location: ../../index.php');
-// --- FIN CORRECCIÓN ---
-
-exit; // Detiene la ejecución del script
+exit; // Detener ejecución
 ?>

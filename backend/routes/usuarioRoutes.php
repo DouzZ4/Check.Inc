@@ -1,15 +1,16 @@
 <?php
 // routes/usuarioRoutes.php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL); // Mantenlo para desarrollo, quítalo en producción
 
 // --- Cabeceras ---
-// Permitir métodos específicos, configurar tipo de contenido y CORS si es necesario
-header("Access-Control-Allow-Origin: *"); // Ajusta '*' a tu dominio en producción
+header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-// Manejar solicitud OPTIONS preflight (necesario para algunos requests CORS)
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     http_response_code(200);
     exit();
@@ -17,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 // --- Dependencias ---
 require_once '../config/database.php';
-require_once '../models/Usuario.php'; // Contiene Modelo, Entidad, Factory
+require_once '../models/Usuario.php';
 require_once '../controllers/UsuarioController.php';
 
 // --- Conexión a BD ---
@@ -25,7 +26,7 @@ try {
     $db = new Conexion();
     $conn = $db->conectar();
 } catch (Exception $e) {
-    http_response_code(503); // Service Unavailable
+    http_response_code(503);
     echo json_encode(["success" => false, "message" => "Error de conexión DB: " . $e->getMessage()]);
     exit;
 }
@@ -35,203 +36,113 @@ try {
     $usuarioModel = new UsuarioModel($conn);
     $usuarioController = new UsuarioController($usuarioModel);
 } catch(Exception $e) {
-     http_response_code(500); // Internal Server Error
+     http_response_code(500);
      echo json_encode(["success" => false, "message" => "Error inicializando componentes: " . $e->getMessage()]);
      exit;
 }
 
-
 // --- Enrutamiento Principal ---
 $method = $_SERVER['REQUEST_METHOD'];
-$response = ["success" => false, "message" => "Solicitud no válida."]; // Default response
-$http_status_code = 400; // Bad Request by default
+$response = ["success" => false, "message" => "Solicitud no válida."];
+$http_status_code = 400;
 
-// Determinar la acción (simplificado - una app real usaría un router más robusto)
-// Aquí asumimos que la URL base es para usuarios, y acciones específicas como login
-// podrían tener una ruta diferente o un parámetro 'action'.
-$action = $_GET['action'] ?? null; // Ejemplo: ?action=login, ?action=register
-
-$isLoginRequest = isset($_GET['login']);
-$isRegisterRequest = isset($_GET['register']);
-// Extraer ID si viene en la URL para PUT/DELETE/GET(single)
-$idUsuario = isset($_GET['idUsuario']) && is_numeric($_GET['idUsuario']) ? (int)$_GET['idUsuario'] : null;
+// --- Simplificar Detección de Acción ---
+// Usar el parámetro 'action' para POST, o el parámetro específico para otros métodos
+$action = $_GET['action'] ?? null; // Para POST: ?action=login o ?action=register
+$idUsuario = isset($_GET['idUsuario']) && is_numeric($_GET['idUsuario']) ? (int)$_GET['idUsuario'] : null; // Para GET(id), PUT, DELETE
 
 try {
     switch ($method) {
         case 'POST':
-            $data = null; // Inicializar $data
-             $action = $_GET['action'] ?? null; // Obtener acción
-
-             $data = $_POST;
+            $data = $_POST; // Leer datos del formulario
              if (empty($data)) {
-                  $response = ["success" => false, "message" => "No se recibieron datos del formulario."];
-                  $http_status_code = 400;
-                  break; // Salir del switch
+                 $response = ["success" => false, "message" => "No se recibieron datos del formulario."];
+                 $http_status_code = 400;
+                 break;
              }
 
-            // Diferenciar acción POST
-            if ($isLoginRequest) { // Detectado por ?login en la URL
+            // --- Usar $action para dirigir ---
+            if ($action === 'login') {
                 $response = $usuarioController->loginUsuario($data);
-
-                // --- MANEJO DE REDIRECCIÓN LOGIN ---
-                session_start(); // Asegurar que la sesión esté activa para guardar mensajes
+                // Iniciar sesión y redirigir (SIEMPRE redirige en login, éxito o fallo)
+                session_start();
                 if ($response['success']) {
-                    // ¡Éxito! Usuario logueado y variables de sesión creadas por el controller.
-                    // Redirigir a la página principal de la aplicación (ej. registro de glucosa)
-                    // Ajusta esta ruta según tu estructura
-                    header('Location: ../public/index.php'); // O dashboard.php, etc.
+                    // Controller ya guardó sesión, redirigir a página principal
+                    header('Location: ../public/index.php'); // Ajusta a tu página principal post-login
                     exit();
                 } else {
-                    // Falló el login
-                    $_SESSION['message'] = $response['message']; // Guardar mensaje de error
+                    // Falló login, redirigir de vuelta a login con mensaje
+                    $_SESSION['message'] = $response['message'];
                     $_SESSION['message_type'] = 'error';
-                    // Redirigir DE VUELTA a la página de login
-                    header('Location: ../public/login.php'); // Ajusta si es necesario
+                    header('Location: ../public/login.php');
                     exit();
                 }
-                // --- FIN MANEJO REDIRECCIÓN ---
 
-            } elseif ($isRegisterRequest) { // Detectado por ?register en la URL
+            } elseif ($action === 'register') {
+                // Llamar al controlador para registrar
                 $response = $usuarioController->registrarUsuario($data);
+                // Iniciar sesión y redirigir (SIEMPRE redirige en registro, éxito o fallo)
+                session_start();
+                $_SESSION['message'] = $response['message']; // Guardar mensaje
 
-                 // --- MANEJO DE REDIRECCIÓN REGISTRO ---
-                 session_start(); // Asegurar sesión
-                 $_SESSION['message'] = $response['message']; // Guardar mensaje (éxito o error)
+                if ($response['success']) {
+                    // Éxito registro -> Redirigir a login
+                    $_SESSION['message_type'] = 'success';
+                    header('Location: ../public/login.php');
+                    exit();
+                } else {
+                    // Fallo registro -> Redirigir DE VUELTA a registro
+                    $_SESSION['message_type'] = 'error';
+                    // Considera guardar los datos $_POST (menos password) en sesión para repoblar el form
+                    header('Location: ../public/registrousuario.php');
+                    exit();
+                }
 
-                 if ($response['success']) {
-                     $_SESSION['message_type'] = 'success';
-                     // Redirigir a login después de registro exitoso
-                     header('Location: ../public/login.php'); // Ajusta si es necesario
-                     exit();
-                 } else {
-                      $_SESSION['message_type'] = 'error';
-                      // Redirigir DE VUELTA a registro si falló (para mostrar error y reintentar)
-                      // Necesitarías también guardar los datos ingresados (excepto password) en sesión
-                      // para repoblar el formulario, o manejarlo de otra forma.
-                      // Por simplicidad ahora, solo redirigimos a registro vacío con error:
-                      header('Location: ../public/registrousuario.php'); // Ajusta si es necesario
-                      exit();
-                    }
-             } elseif ($action === 'register' /* || $action === null */ ) { // Ajusta condición si es necesario
-                 // --- CORRECCIÓN AQUÍ ---
-                 // Para registro desde el FORMULARIO HTML, leer desde $_POST
-                 $data = $_POST;
-                 if (empty($data)) {
-                      $response = ["success" => false, "message" => "No se recibieron datos del formulario de registro."];
-                      $http_status_code = 400;
-                      break; // Salir del switch
-                 }
-                 // --- FIN CORRECCIÓN ---
+            } else {
+                 // Si action no es 'login' ni 'register'
+                 $response = ["success" => false, "message" => "Acción POST no reconocida. Falta ?action=login o ?action=register"];
+                 $http_status_code = 400;
+                 // No hay redirección aquí, se enviará JSON
+            }
+            // No se necesita break aquí porque todos los caminos válidos usan exit()
+            break; // Break de seguridad al final de case POST
 
-                 $response = $usuarioController->registrarUsuario($data);
-                 // El controller ya valida campos dentro de $data
-                 $http_status_code = $response['success'] ? 201 : 400;
-
-                 // --- Opcional: Redirección después de registro exitoso (para forms HTML) ---
-                 if ($response['success']) {
-                     session_start(); // Asegurar sesión iniciada
-                     $_SESSION['message'] = $response['message'];
-                     $_SESSION['message_type'] = 'success';
-                     // Redirigir a login o a una página de éxito
-                     header('Location:../public/login.php'); // Ajusta la ruta según tu estructura para el login.php del frontend
-                     exit(); // Detener ejecución después de redirigir
-                 }
-                 // Si no fue exitoso, el script continuará y mostrará el JSON de error (o podrías redirigir con mensaje de error)
-
-
-             } else {
-                  $response = ["success" => false, "message" => "Acción POST no reconocida."];
-                  $http_status_code = 400;
-             }
-            break; // Fin de case 'POST'
+        // ... case 'GET', case 'PUT', case 'DELETE', default ...
+        // (El código para GET, PUT, DELETE que tenías antes está bien,
+        // asumiendo que esas acciones SÍ esperan/devuelven JSON usualmente)
 
         case 'GET':
-            // Podría ser para obtener perfil de usuario logueado, o un usuario específico por ID (admin?), etc.
-             // Ejemplo: Obtener datos de un usuario por ID (requiere método en Controller/Model)
-             /*
-             if ($idUsuario !== null) {
-                 // $response = $usuarioController->obtenerPerfilUsuario($idUsuario); // Necesitarías crear este método
-                 // $http_status_code = $response['success'] ? 200 : 404;
-             } else {
-                   // $response = $usuarioController->obtenerPerfilPropio(); // Obtener perfil del usuario logueado ($_SESSION)
-                   // $http_status_code = $response['success'] ? 200 : 401; // O 401 si no está logueado
-                    $response = ["success" => false, "message" => "Funcionalidad GET no implementada completamente."];
-                    $http_status_code = 501; // Not Implemented
-             }
-             */
              $response = ["success" => false, "message" => "Funcionalidad GET no implementada."];
-             $http_status_code = 501; // Not Implemented
-            break;
+             $http_status_code = 501;
+             break;
+         case 'PUT':
+             if ($idUsuario !== null) { $data = json_decode(file_get_contents("php://input"), true); /* ... */ $response = $usuarioController->actualizarUsuario($idUsuario, $data); /* ... */ }
+             else { /* Error falta id */ }
+             break;
+         case 'DELETE':
+              if ($idUsuario !== null) { $response = $usuarioController->eliminarUsuario($idUsuario); /* ... */ }
+              else { /* Error falta id */ }
+             break;
+         default:
+              $response = ["success" => false, "message" => "Método HTTP no soportado."];
+              $http_status_code = 405;
+              break;
 
-        case 'PUT':
-            // --- ACTUALIZAR Usuario ---
-            if ($idUsuario !== null) {
-                 $data = json_decode(file_get_contents("php://input"), true);
-                 if (json_last_error() !== JSON_ERROR_NONE) {
-                     $response = ["success" => false, "message" => "Error en JSON recibido."];
-                     $http_status_code = 400;
-                     break;
-                 }
-                 if (empty($data)) {
-                      $response = ["success" => false, "message" => "No se enviaron datos para actualizar."];
-                      $http_status_code = 400;
-                      break;
-                 }
+    } // Fin switch
 
-                 $response = $usuarioController->actualizarUsuario($idUsuario, $data);
-
-                 // Ajustar código HTTP según el resultado y la lógica de autorización (que debe estar en el controller)
-                 if ($response['success']) {
-                     $http_status_code = 200; // OK
-                 } elseif (strpos($response['message'], 'No autorizado') !== false) {
-                     $http_status_code = 403; // Forbidden
-                 } elseif (strpos($response['message'], 'No se encontró') !== false) {
-                      $http_status_code = 404; // Not Found
-                 } else {
-                      $http_status_code = 400; // Bad Request (ej. error de validación)
-                 }
-
-            } else {
-                 $response = ["success" => false, "message" => "Se requiere idUsuario en la URL (?idUsuario=...) para actualizar."];
-                 $http_status_code = 400;
-            }
-            break;
-
-        case 'DELETE':
-            // --- ELIMINAR Usuario ---
-            if ($idUsuario !== null) {
-                 $response = $usuarioController->eliminarUsuario($idUsuario);
-
-                 // Ajustar código HTTP según el resultado y la autorización
-                 if ($response['success']) {
-                     $http_status_code = 200; // OK (o 204 No Content si no devuelves body)
-                 } elseif (strpos($response['message'], 'No autorizado') !== false) {
-                     $http_status_code = 403; // Forbidden
-                 } elseif (strpos($response['message'], 'no exista') !== false || strpos($response['message'], 'No se pudo eliminar') !== false) {
-                      $http_status_code = 404; // Not Found (o 400/500 si falló por otra razón)
-                 } else {
-                       $http_status_code = 500; // Internal Server Error (si es error inesperado)
-                 }
-
-            } else {
-                 $response = ["success" => false, "message" => "Se requiere idUsuario en la URL (?idUsuario=...) para eliminar."];
-                 $http_status_code = 400;
-            }
-            break;
-
-        default:
-            $response = ["success" => false, "message" => "Método HTTP no soportado."];
-            $http_status_code = 405; // Method Not Allowed
-            break;
-    }
 } catch (Exception $e) {
-    // Captura cualquier excepción no manejada
-    error_log("Error general en usuarioRoutes: " . $e->getMessage());
-    $response = ["success" => false, "message" => "Ocurrió un error interno en el servidor."];
+    error_log("Error general en usuarioRoutes: " . $e->getMessage() . " en " . $e->getFile() . ":" . $e->getLine());
+    $response = ['status' => 'error', 'message' => 'Ocurrió un error interno en el servidor.']; // Cambiado 'status' a 'success' para consistencia
+    $response['success'] = false; // Asegurar success=false
     $http_status_code = 500;
+    // Para excepciones, sí devolvemos JSON
+    // header('Location: pagina_error_generico.php'); // O redirigir a página de error
+    // exit();
 }
 
-// --- Enviar Respuesta Final ---
+// --- Enviar Respuesta Final JSON ---
+// Esta parte solo se ejecutará si NO hubo una redirección con exit() antes
+// (ej. para PUT, DELETE, GET, o errores POST no reconocidos, o excepciones si no rediriges)
 http_response_code($http_status_code);
 echo json_encode($response);
 
