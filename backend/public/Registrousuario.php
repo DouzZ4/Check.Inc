@@ -31,7 +31,7 @@ session_start();
         }
         ?>
 
-        <form id="registroForm" action="../routes/usuarioRoutes.php?action=register" method="POST" novalidate> <div class="form-group">
+        <form id="registroForm" action="../routes/usuarioRoutes.php?action=register" method="POST"> <div class="form-group">
                 <label for="nombres">Nombres:</label>
                 <input type="text" id="nombres" name="nombres" placeholder="Ej: Ana María"
                        required pattern="[A-Za-zÀ-ÿ\s]+"
@@ -87,25 +87,6 @@ session_start();
 
         </form>
     </main>
-
-    <script>
-        // Ejemplo simple: Validación de confirmar contraseña si añades el campo
-        /*
-        const form = document.getElementById('registroForm');
-        const password = document.getElementById('password');
-        const confirmPassword = document.getElementById('password_confirm');
-
-        if (form && password && confirmPassword) {
-            form.addEventListener('submit', function(event) {
-                if (password.value !== confirmPassword.value) {
-                    alert("Las contraseñas no coinciden.");
-                    confirmPassword.focus();
-                    event.preventDefault(); // Detener el envío del formulario
-                }
-            });
-        }
-        */
-    </script>
 
 </body>
 </html>
