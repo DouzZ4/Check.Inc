@@ -173,3 +173,119 @@ table tbody tr:nth-child(even) {
 .message-success { background-color: #d4edda; color: #155724; border-color: #c3e6cb;}
 .message-error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;}
 .message-info { background-color: #d1ecf1; color: #0c5460; border-color: #bee5eb;}
+
+/* Estilo de tarjeta para secciones */
+.card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+
+/* Títulos de sección */
+.form-section h2, .table-section h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    color: #3058a6; /* Azul */
+}
+
+/* Estilos de Formulario (Ajusta según form.css si lo tienes) */
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+.form-group input[type="date"],
+.form-group input[type="time"],
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+.form-group textarea {
+    resize: vertical; /* Permitir redimensionar verticalmente */
+    min-height: 60px;
+}
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #3058a6;
+    outline: none;
+    box-shadow: 0 0 5px rgba(48, 88, 166, 0.3);
+}
+
+#formCita.editing { /* Estilo cuando se está editando */
+   border-left: 5px solid #f45501; /* Borde naranja a la izquierda */
+   padding-left: 15px; /* Espacio extra */
+   transition: border-left 0.3s ease-in-out;
+}
+
+/* Estilos Tabla Citas */
+.table-wrapper {
+    margin-top: 15px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: middle;
+}
+table th {
+    background-color: #3058a6; /* Azul */
+    color: white;
+    font-weight: bold;
+}
+table tbody tr:nth-child(even) {
+    background-color: #f8f9fa; /* Gris claro para filas pares */
+}
+table td:last-child { /* Columna de acciones */
+    text-align: center;
+    white-space: nowrap; /* Evitar que botones se partan */
+}
+
+/* Estilos para botones de acción (asegúrate que ya existen) */
+.action-button {
+    padding: 5px 10px;
+    margin: 2px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    border: none;
+    color: white;
+    transition: opacity 0.2s ease;
+}
+.action-button:hover { opacity: 0.85; }
+.edit-button { background-color: #f45501; /* Naranja */ }
+.delete-button { background-color: #dc3545; /* Rojo */ }
+
+/* Indicador de Carga */
+#loadingIndicator {
+    color: #3058a6;
+    font-weight: bold;
+}
+
+/* Mensajes (asegúrate que estas clases existen y tienen estilo) */
+.message-box-placeholder { min-height: 20px; margin-bottom: 15px;} /* Espacio aunque esté vacío */
+.message-box { /* Estilos base para la caja de mensaje */
+    padding: 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid transparent;
+}
+.message-success { background-color: #d4edda; color: #155724; border-color: #c3e6cb;}
+.message-error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;}
+.message-info { background-color: #d1ecf1; color: #0c5460; border-color: #bee5eb;}
