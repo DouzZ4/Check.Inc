@@ -54,7 +54,7 @@ session_start();
 
             <div class="form-group">
                  <label for="correo">Correo Electrónico:</label>
-                 <input type="email" id="correo" name="correo" placeholder="Ej: ana.perez@email.com" required />
+                 <input type="email" id="correo" name="correo" placeholder="Ej: ana.perez@email.com" required pattern=".+@.+\.com$" title="Por favor, ingresa una dirección de correo válida que termine en .com" />
             </div>
 
             <div class="form-group">
