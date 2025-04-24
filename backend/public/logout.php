@@ -1,5 +1,4 @@
 <?php
-// backend/public/logout.php
 
 // Iniciar o reanudar la sesión
 session_start();
@@ -10,7 +9,7 @@ $_SESSION = array();
 // Expirar la cookie de sesión en el navegador
 if (ini_get("session.use_cookies")) {
     $params = session_get_cookie_params();
-    setcookie(session_name(), '', time() - 42000, // Tiempo en el pasado
+    setcookie(session_name(), '', time() - 42000, 
         $params["path"], $params["domain"],
         $params["secure"], $params["httponly"]
     );

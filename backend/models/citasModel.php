@@ -157,8 +157,33 @@ class CitaModel {
             throw new Exception("❌ Error al eliminar la cita: " . $e->getMessage());
         }
     }
-    
-    
+
+// models/CitaModel.php
+
+// Podrías tener una entidad Cita.php también si quieres
+// require_once 'Cita.php';
+
+    public function contarTotalCitas(): int {
+        try {
+            // Asegúrate que el nombre de la tabla 'cita' sea correcto
+            $sql = "SELECT COUNT(*) FROM cita";
+            $stmt = $this->db->query($sql);
+            return (int)$stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Error en CitaModel::contarTotalCitas: " . $e->getMessage());
+            return 0;
+        }
+    }
+
+    // --- Aquí añadirías los métodos CRUD para Citas ---
+    // public function findByUsuario(int $idUsuario): array { ... }
+    // public function findById(int $idCita): ?array { ... }
+    // public function save(Cita $cita): bool { ... } // Asumiendo una entidad Cita
+    // public function update(int $idCita, array $data): bool { ... }
+    // public function delete(int $idCita): bool { ... }
+    // --- Fin Métodos CRUD (a implementar) ---
+
 }
+
 
 ?>

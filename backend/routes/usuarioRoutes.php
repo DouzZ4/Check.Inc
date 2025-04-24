@@ -5,7 +5,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL); // Mantenlo para desarrollo, quítalo en producción
 
 // --- Cabeceras ---
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: *"); // Ajusta '*' a tu dominio en producción
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Max-Age: 3600");
@@ -26,7 +26,7 @@ try {
     $db = new Conexion();
     $conn = $db->conectar();
 } catch (Exception $e) {
-    http_response_code(503);
+    http_response_code(503); // Service Unavailable
     echo json_encode(["success" => false, "message" => "Error de conexión DB: " . $e->getMessage()]);
     exit;
 }
@@ -36,7 +36,7 @@ try {
     $usuarioModel = new UsuarioModel($conn);
     $usuarioController = new UsuarioController($usuarioModel);
 } catch(Exception $e) {
-     http_response_code(500);
+     http_response_code(500); // Internal Server Error
      echo json_encode(["success" => false, "message" => "Error inicializando componentes: " . $e->getMessage()]);
      exit;
 }
@@ -46,10 +46,9 @@ $method = $_SERVER['REQUEST_METHOD'];
 $response = ["success" => false, "message" => "Solicitud no válida."];
 $http_status_code = 400;
 
-// --- Simplificar Detección de Acción ---
-// Usar el parámetro 'action' para POST, o el parámetro específico para otros métodos
-$action = $_GET['action'] ?? null; // Para POST: ?action=login o ?action=register
-$idUsuario = isset($_GET['idUsuario']) && is_numeric($_GET['idUsuario']) ? (int)$_GET['idUsuario'] : null; // Para GET(id), PUT, DELETE
+// Determinar la acción y el ID de usuario si aplica
+$action = $_GET['action'] ?? null;
+$idUsuario = isset($_GET['idUsuario']) && is_numeric($_GET['idUsuario']) ? (int)$_GET['idUsuario'] : null;
 
 try {
     switch ($method) {
@@ -63,65 +62,86 @@ try {
 
             // --- Usar $action para dirigir ---
             if ($action === 'login') {
-                $response = $usuarioController->loginUsuario($data);
-                // Iniciar sesión y redirigir (SIEMPRE redirige en login, éxito o fallo)
-                session_start();
+                $response = $usuarioController->loginUsuario($data); // Esta función ya guarda sesión si éxito
+
+                // --- INICIO: LÓGICA DE REDIRECCIÓN LOGIN (CORREGIDA) ---
                 if ($response['success']) {
-                    // Controller ya guardó sesión, redirigir a página principal
-                    header('Location: ../public/index.php'); // Ajusta a tu página principal post-login
-                    exit();
+                    // Asegurar que la sesión esté activa para leer el rol
+                    if (session_status() === PHP_SESSION_NONE) {
+                        session_start();
+                    }
+
+                    // Verificar el rol guardado en la sesión
+                    if (isset($_SESSION['rolUsuario'])) {
+                        if ($_SESSION['rolUsuario'] == 1) { // Asumiendo 1 = Admin
+                            // Redirigir al Dashboard de Admin
+                            header('Location: ../public/dashboard_admin.php');
+                            exit();
+                        } elseif ($_SESSION['rolUsuario'] == 2) { // Asumiendo 2 = Paciente
+                            // Redirigir a la página de Glucosa (o su dashboard)
+                            header('Location: ../public/registroGlucosa.php');
+                            exit();
+                        } else {
+                            // Rol desconocido, enviar a inicio genérico
+                            header('Location: ../../index.php'); // Ajusta si es necesario
+                            exit();
+                        }
+                    } else {
+                        // Error interno si no se guardó el rol
+                        error_log("Error crítico: rolUsuario no encontrado en sesión post-login para idUsuario: " . ($_SESSION['idUsuario'] ?? 'DESCONOCIDO'));
+                        if (session_status() === PHP_SESSION_NONE) { session_start(); }
+                        $_SESSION['message'] = 'Error interno al iniciar sesión (ERR_ROL).';
+                        $_SESSION['message_type'] = 'error';
+                        header('Location: ../public/login.php');
+                        exit();
+                    }
                 } else {
-                    // Falló login, redirigir de vuelta a login con mensaje
+                    // Falló el login (credenciales incorrectas, etc.)
+                     if (session_status() === PHP_SESSION_NONE) { session_start(); }
                     $_SESSION['message'] = $response['message'];
                     $_SESSION['message_type'] = 'error';
                     header('Location: ../public/login.php');
                     exit();
                 }
+                // --- FIN: LÓGICA DE REDIRECCIÓN LOGIN (CORREGIDA) ---
 
             } elseif ($action === 'register') {
-                // Llamar al controlador para registrar
                 $response = $usuarioController->registrarUsuario($data);
-                // Iniciar sesión y redirigir (SIEMPRE redirige en registro, éxito o fallo)
-                session_start();
-                $_SESSION['message'] = $response['message']; // Guardar mensaje
+                // --- MANEJO DE REDIRECCIÓN REGISTRO ---
+                if (session_status() === PHP_SESSION_NONE) { session_start(); }
+                $_SESSION['message'] = $response['message'];
 
                 if ($response['success']) {
-                    // Éxito registro -> Redirigir a login
                     $_SESSION['message_type'] = 'success';
                     header('Location: ../public/login.php');
                     exit();
                 } else {
-                    // Fallo registro -> Redirigir DE VUELTA a registro
                     $_SESSION['message_type'] = 'error';
-                    // Considera guardar los datos $_POST (menos password) en sesión para repoblar el form
                     header('Location: ../public/registrousuario.php');
                     exit();
                 }
+                 // --- FIN MANEJO REDIRECCIÓN REGISTRO ---
 
             } else {
-                 // Si action no es 'login' ni 'register'
                  $response = ["success" => false, "message" => "Acción POST no reconocida. Falta ?action=login o ?action=register"];
                  $http_status_code = 400;
-                 // No hay redirección aquí, se enviará JSON
+                 // No hay redirección aquí, se enviará JSON (ver final del script)
             }
-            // No se necesita break aquí porque todos los caminos válidos usan exit()
-            break; // Break de seguridad al final de case POST
+            // Añadimos break aquí por si el 'else' de acción no reconocida se ejecuta
+            break; // Fin de case 'POST'
 
-        // ... case 'GET', case 'PUT', case 'DELETE', default ...
-        // (El código para GET, PUT, DELETE que tenías antes está bien,
-        // asumiendo que esas acciones SÍ esperan/devuelven JSON usualmente)
-
-        case 'GET':
+        // ... case 'GET', case 'PUT', case 'DELETE', default ... (sin cambios respecto a la versión anterior)
+         case 'GET':
              $response = ["success" => false, "message" => "Funcionalidad GET no implementada."];
              $http_status_code = 501;
              break;
          case 'PUT':
-             if ($idUsuario !== null) { $data = json_decode(file_get_contents("php://input"), true); /* ... */ $response = $usuarioController->actualizarUsuario($idUsuario, $data); /* ... */ }
-             else { /* Error falta id */ }
+             if ($idUsuario !== null) { $data = json_decode(file_get_contents("php://input"), true); /* ... validación JSON ... */ $response = $usuarioController->actualizarUsuario($idUsuario, $data); /* ... ajustar $http_status_code ... */ }
+             else { $response = ["success" => false, "message" => "Se requiere idUsuario para PUT"]; $http_status_code = 400; }
              break;
          case 'DELETE':
-              if ($idUsuario !== null) { $response = $usuarioController->eliminarUsuario($idUsuario); /* ... */ }
-              else { /* Error falta id */ }
+              if ($idUsuario !== null) { $response = $usuarioController->eliminarUsuario($idUsuario); /* ... ajustar $http_status_code ... */ }
+              else { $response = ["success" => false, "message" => "Se requiere idUsuario para DELETE"]; $http_status_code = 400; }
              break;
          default:
               $response = ["success" => false, "message" => "Método HTTP no soportado."];
@@ -132,17 +152,12 @@ try {
 
 } catch (Exception $e) {
     error_log("Error general en usuarioRoutes: " . $e->getMessage() . " en " . $e->getFile() . ":" . $e->getLine());
-    $response = ['status' => 'error', 'message' => 'Ocurrió un error interno en el servidor.']; // Cambiado 'status' a 'success' para consistencia
-    $response['success'] = false; // Asegurar success=false
+    $response = ["success" => false, 'message' => 'Ocurrió un error interno en el servidor.'];
     $http_status_code = 500;
-    // Para excepciones, sí devolvemos JSON
-    // header('Location: pagina_error_generico.php'); // O redirigir a página de error
-    // exit();
 }
 
 // --- Enviar Respuesta Final JSON ---
-// Esta parte solo se ejecutará si NO hubo una redirección con exit() antes
-// (ej. para PUT, DELETE, GET, o errores POST no reconocidos, o excepciones si no rediriges)
+// Solo se ejecuta si no hubo un exit() por redirección o error fatal anterior
 http_response_code($http_status_code);
 echo json_encode($response);
 

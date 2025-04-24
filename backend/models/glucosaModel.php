@@ -202,5 +202,23 @@ class GlucosaModel {
              return false;
         }
     }
+    // Dentro de la clase GlucosaModel en models/GlucosaModel.php
+
+/**
+ * Cuenta el número total de registros de glucosa.
+ * @return int El número total de registros.
+ */
+public function contarTotalRegistros(): int {
+    try {
+        $sql = "SELECT COUNT(*) FROM glucosa";
+        $stmt = $this->db->query($sql); // Asumiendo que tu conexión se llama $db aquí
+        return (int)$stmt->fetchColumn();
+    } catch (PDOException $e) {
+        error_log("Error en GlucosaModel::contarTotalRegistros: " . $e->getMessage());
+        return 0;
+    }
+}
+
+// ... resto de métodos existentes ...
 }
 ?>

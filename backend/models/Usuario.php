@@ -182,6 +182,24 @@ class UsuarioModel {
              return false;
         }
     }
+    // Dentro de la clase UsuarioModel en models/Usuario.php
+
+/**
+ * Cuenta el número total de usuarios registrados.
+ * @return int El número total de usuarios.
+ */
+public function contarTotalUsuarios(): int {
+    try {
+        $sql = "SELECT COUNT(*) FROM usuario";
+        $stmt = $this->conn->query($sql); // query() es suficiente
+        return (int)$stmt->fetchColumn(); // fetchColumn() obtiene el valor de la primera columna (el COUNT)
+    } catch (PDOException $e) {
+        error_log("Error en UsuarioModel::contarTotalUsuarios: " . $e->getMessage());
+        return 0; // Devuelve 0 en caso de error
+    }
+}
+
+// ... resto de métodos existentes ...
 }
 
 class UsuarioFactory {
