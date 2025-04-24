@@ -27,7 +27,7 @@ $nombreAdminNav = $_SESSION['nombreUsuario'] ?? 'Admin';
 
         <div class="navbar-user-info">
             <span class="welcome-message">Admin: <?php echo htmlspecialchars($nombreAdminNav); ?></span>
-            <a href="<?php echo $baseUrl; ?>/backend/routes/logout.php" class="button button-logout">Cerrar Sesión</a>
+            <a href="<?php echo $baseUrl; ?>/backend/public/logout.php" class="button button-logout">Cerrar Sesión</a>
              </div>
 
     </div>
