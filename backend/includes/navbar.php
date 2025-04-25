@@ -16,6 +16,7 @@ $baseUrl = '/check.inc'; // Asegúrate que esta variable esté definida
             <?php if (isset($_SESSION['idUsuario'])): ?>
                 <a href="<?php echo $baseUrl; ?>/backend/public/registroGlucosa.php">Registro Glucosa</a>
                 <a href="<?php echo $baseUrl; ?>/backend/public/registroCitas.php">Registro Citas</a>
+                <a href="<?php echo $baseUrl; ?>/backend/routes/generar_reporte_pdf.php" target="_blank">Descargar Reporte</a>
             <?php endif; ?>
         </div>
         <div class="navbar-user-info">
