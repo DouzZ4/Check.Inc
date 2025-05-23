@@ -1,0 +1,164 @@
+/* En backend/public/css/navbar.css (o styles.css) */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+/* --- Estilos del Navbar --- */
+.navbar {
+    background-color: #3058a6; /* Azul Principal */
+    color: white;
+    padding: 10px 0; /* Padding vertical, horizontal gestionado por container */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+.navbar-container {
+    max-width: 1200px; /* O el ancho que prefieras */
+    margin: 0 auto; /* Centrar */
+    padding: 0 20px; /* Espaciado lateral */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Para responsividad */
+    gap: 15px; /* Espacio entre grupos de elementos */
+}
+
+.navbar-branding {
+    display: flex;
+    align-items: center;
+    /* Quitar el enlace de branding del flujo normal si es necesario */
+}
+
+.navbar-branding a { /* Estilo para el enlace del logo/título */
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    color: white; /* Asegurar que el título sea blanco */
+}
+.logo-navbar {
+    height: 50px; /* O el tamaño que necesites */
+    width: auto; /* Para mantener proporción */
+    margin-right: 10px;
+    filter:
+    drop-shadow(1px 1px 0 white) /* Sombra abajo-derecha */
+    drop-shadow(-1px -1px 0 white) /* Sombra arriba-izquierda */
+    drop-shadow(1px -1px 0 white) /* Sombra arriba-derecha */
+    drop-shadow(-1px 1px 0 white); /* Sombra abajo-izquierda */
+  }
+
+.navbar-branding h1 {
+    font-size: 1.4em;
+    margin: 0;
+    font-weight: bold;
+    white-space: nowrap; /* Evitar que el título se parta */
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espacio entre enlaces de navegación */
+    flex-grow: 1; /* Ocupa espacio si es necesario */
+    justify-content: center; /* Centrar enlaces principales */
+}
+
+.navbar-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500; /* Un poco menos grueso que bold */
+    padding: 5px 0;
+    position: relative;
+    transition: color 0.3s ease;
+}
+/* Efecto hover sutil para enlaces */
+.navbar-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: #f45501; /* Naranja */
+    transition: all 0.3s ease-out;
+    transform: translateX(-50%);
+}
+.navbar-links a:hover::after {
+    width: 100%;
+}
+.navbar-links a:hover {
+     color: #f0f4f8; /* Ligeramente más claro al pasar el ratón */
+}
+
+
+.navbar-user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre "Hola, X" y botones */
+}
+
+.navbar-user-info .welcome-message {
+    font-size: 0.95em;
+    margin-right: 5px; /* Pequeño espacio antes del botón */
+    white-space: nowrap;
+}
+
+/* --- Estilos para Botones en Navbar (y general si aplica) --- */
+.button { /* Clase genérica de botón */
+    display: inline-block;
+    padding: 8px 18px; /* Ajusta padding */
+    margin: 0; /* Quitar margen por defecto si se usa en flex/grid */
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9em; /* Ligeramente más pequeño en navbar */
+    border: none;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    white-space: nowrap;
+}
+.button:hover {
+    text-decoration: none; /* Asegurar que no haya subrayado */
+    transform: translateY(-1px); /* Ligero efecto al pasar el ratón */
+}
+
+.button-login, .button-register {
+    background-color: #f45501; /* Naranja */
+    color: white !important;
+}
+.button-login:hover, .button-register:hover {
+    background-color: #d84a00; /* Naranja oscuro */
+}
+
+.button-logout {
+    background-color: #6c757d; /* Gris oscuro */
+    color: white !important;
+}
+.button-logout:hover {
+    background-color: #5a6268; /* Gris más oscuro */
+}
+
+/* --- Responsividad Básica para Navbar --- */
+@media (max-width: 768px) {
+    .navbar-container {
+        flex-direction: column; /* Apilar elementos verticalmente */
+        align-items: stretch; /* Estirar elementos */
+        gap: 10px;
+    }
+    .navbar-links {
+        justify-content: center; /* Centrar enlaces */
+        order: 3; /* Poner enlaces al final */
+        flex-wrap: wrap; /* Permitir que los enlaces se ajusten */
+        padding: 10px 0;
+        gap: 15px;
+    }
+     .navbar-user-info {
+        justify-content: center; /* Centrar info de usuario */
+        order: 2; /* Poner info de usuario en medio */
+    }
+    .navbar-branding {
+         justify-content: center; /* Centrar logo y título */
+         order: 1;
+    }
+}

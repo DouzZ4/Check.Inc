@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      lang="es">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Inicio - CHECK</title>
+    <h:outputStylesheet library="css" name="styles.css" />
+    <h:outputStylesheet library="css" name="navbar.css"/>
+    <h:outputStylesheet library="css" name="index.css"/>
+</h:head>
+
+<h:body>
+    <ui:include src="includes/navbar.xhtml"/>
+    <div class="container">
+        <h1>CHECK</h1>
+        <h:panelGroup rendered="#{sesionBean.usuario == null}">
+            <p>Bienvenido. Por favor inicia sesión o regístrate.</p>
+            <h:form>
+                <h:commandLink value="Iniciar Sesión" action="login" styleClass="button"/>
+                <h:commandLink value="Registrarse" action="registroUsuario" styleClass="button button-secondary"/>
+            </h:form>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{sesionBean.usuario != null}">
+            <p>Bienvenido, navega por el menú o accede a tus registros.</p>
+            <h:form>
+                <h:commandLink value="Registro Glucosa" action="registroGlucosa" styleClass="button"/>
+                <h:commandLink value="Registro Citas" action="registroCitas" styleClass="button"/>
+            </h:form>
+        </h:panelGroup>
+    </div>
+</h:body>
+</html>
+
