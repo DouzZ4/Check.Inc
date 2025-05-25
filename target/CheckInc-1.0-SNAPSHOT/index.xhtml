@@ -19,8 +19,8 @@
         <h:panelGroup rendered="#{sesionBean.usuario == null}">
             <p>Bienvenido. Por favor inicia sesión o regístrate.</p>
             <h:form>
-                <h:commandLink value="Iniciar Sesión" action="login" styleClass="button"/>
-                <h:commandLink value="Registrarse" action="registroUsuario" styleClass="button button-secondary"/>
+                <h:link outcome="views/usuarios/login.xhtml" value="Iniciar Sesión" styleClass="button"/>
+                <h:link outcome="views/usuarios/registrousuario.xhtml" value="Registrarse" styleClass="button"/>
             </h:form>
         </h:panelGroup>
 
