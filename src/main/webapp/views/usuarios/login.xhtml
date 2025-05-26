@@ -6,7 +6,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Inicio de Sesión - Check</title>
-    <h:outputStylesheet library="css" name="styles.css" />
     <h:outputStylesheet library="css" name="navbar.css"/>
     <h:outputStylesheet library="css" name="login.css"/>
 
@@ -18,20 +17,18 @@
     <main class="form-container login-container">
         <h2>Iniciar Sesión</h2>
 
-        <!-- Mostrar mensajes de error o información -->
-        <h:messages globalOnly="true" layout="table" styleClass="message-box" />
-
         <h:form>
-            <div class="form-group">
+
+            <h:panelGrid columns="3" class="form-group">
                 <h:outputLabel for="user" value="Nombre de Usuario:" />
-                <h:inputText id="user" value="#{loginBean.username}" required="true" autofocus="true" />
-            </div>
-
-            <div class="form-group">
+                <h:inputText id="user" value="#{login.user}" required="true" requiredMessage="El campo usuario es obligatorio"/>
+                <h:message for="user" class="mensaje"/>
+                
                 <h:outputLabel for="password" value="Contraseña:" />
-                <h:inputSecret id="password" value="#{loginBean.password}" required="true" />
-            </div>
-
+                <h:inputSecret id="password" value="#{login.password}" required="true" requiredMessage="El campo contraseña es obligatorio"/>
+                <h:message for="password" class="mensaje"/>
+            </h:panelGrid>
+            
             <h:commandButton value="Iniciar Sesión" action="/index?faces-redirect=true" styleClass="submit-button" />
 
             <div class="register-link">
