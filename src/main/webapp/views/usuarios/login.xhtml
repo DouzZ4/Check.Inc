@@ -28,8 +28,8 @@
                 <h:inputSecret id="password" value="#{login.password}" required="true" requiredMessage="El campo contraseña es obligatorio"/>
                 <h:message for="password" class="mensaje"/>
             </h:panelGrid>
-            
-            <h:commandButton value="Iniciar Sesión" action="/index?faces-redirect=true" styleClass="submit-button" />
+<h:messages globalOnly="true" layout="table" style="color: red; font-weight: bold;" />
+            <h:commandButton value="Iniciar Sesión" action="#{login.iniciarSesion()}" styleClass="submit-button" />
 
             <div class="register-link">
                 ¿No tienes cuenta? 

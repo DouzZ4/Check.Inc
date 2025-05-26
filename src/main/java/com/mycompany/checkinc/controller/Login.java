@@ -4,15 +4,18 @@
  */
 package com.mycompany.checkinc.controller;
 
-import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import java.io.Serializable;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 /**
  *
  * @author angel
  */
-@Named(value = "login")
+@ManagedBean(name = "login")
 @SessionScoped
 public class Login implements Serializable {
 
@@ -35,9 +38,21 @@ public class Login implements Serializable {
         this.password = password;
     }
     
-    
-    
-    public Login() {
+public String iniciarSesion () {
+    if(user != null && password != null && user.equals("admin") && password.equals("clave123")){
+        return "/views/glucosa/registroglucosa.xhtml?faces-redirect=true";
+
+    } else {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuario y/o contraseña incorrectos", null);
+        fc.addMessage(null, fm);
+        return null;
     }
+}
+
     
+public Login() {
+    System.out.println("🚀 Bean Login creado");
+}
+
 }
