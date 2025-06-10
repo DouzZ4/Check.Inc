@@ -4,9 +4,12 @@
  */
 package com.sena.check_harold.controller;
 
+import com.sena.check_harold.entities.Usuario;
+import com.sena.check_harold.services.UsuarioFacadeLocal;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -19,8 +22,13 @@ import javax.servlet.http.HttpSession;
 @SessionScoped
 public class login implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private String usuario;
     private String contrasenna;
+    private Usuario user = new Usuario();
+    @EJB
+    private UsuarioFacadeLocal ufl;
 
     public String getUsuario() {
         return usuario;
@@ -39,7 +47,8 @@ public class login implements Serializable {
     }
     
     public String iniciarSesion(){
-        if(usuario.equals("admin")&& contrasenna.equals("clave123")){
+        this.user = this.ufl.iniciarSesion(usuario, contrasenna);
+        if(user.getIdUsuario()!=null){
             HttpSession sesion = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             sesion.setAttribute("usuario", usuario);
             return "inicio.xhtml?faces-redirect=true";
