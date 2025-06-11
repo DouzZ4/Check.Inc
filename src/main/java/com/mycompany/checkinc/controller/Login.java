@@ -4,8 +4,8 @@
  */
 package com.mycompany.checkinc.controller;
 
-import java.io.Serializable;
-import javax.faces.bean.ManagedBean;
+import javax.servlet.http.HttpSession;
+import javax.inject.Named;
 import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
 import javax.faces.application.FacesMessage;
@@ -15,7 +15,7 @@ import javax.faces.context.FacesContext;
  *
  * @author angel
  */
-@ManagedBean(name = "login")
+@Named(value = "login")
 @SessionScoped
 public class Login implements Serializable {
 
@@ -40,6 +40,8 @@ public class Login implements Serializable {
     
 public String iniciarSesion () {
     if(user != null && password != null && user.equals("admin") && password.equals("clave123")){
+        HttpSession sesion = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        sesion.setAttribute("user", user);
         return "/views/glucosa/registroglucosa.xhtml?faces-redirect=true";
 
     } else {
