@@ -1,0 +1,4 @@
+com\mycompany\checkinc\security\Filtro.class
+com\mycompany\checkinc\entities\JAXRSConfiguration.class
+com\mycompany\checkinc\controller\Login.class
+com\mycompany\checkinc\resources\JavaEE8Resource.class
