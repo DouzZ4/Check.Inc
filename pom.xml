@@ -41,14 +41,14 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Bean Validation (si usas validaciones con @NotNull, @Size, etc.) -->
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>2.0.1.Final</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- JAX-RS para clases como Application, Path, GET, Response -->
+<!-- Bean Validation (si usas validaciones con @NotNull, @Size, etc.) -->
+<dependency>
+    <groupId>javax.validation</groupId>
+    <artifactId>validation-api</artifactId>
+    <version>2.0.1.Final</version>
+    <scope>provided</scope>
+</dependency>
+<!-- JAX-RS para clases como Application, Path, GET, Response -->
 <dependency>
     <groupId>javax.ws.rs</groupId>
     <artifactId>javax.ws.rs-api</artifactId>
@@ -56,8 +56,26 @@
     <scope>provided</scope>
 </dependency>
 
-    </dependencies>
+<dependency>
+    <groupId>javax.servlet</groupId>
+    <artifactId>javax.servlet-api</artifactId>
+    <version>3.1.0</version>
+    <scope>provided</scope>
+</dependency>
 
+<dependency>
+
+    <groupId>javax.servlet</groupId>
+
+    <artifactId>javax.servlet-api</artifactId>
+
+    <version>4.0.1</version>
+
+    <scope>provided</scope>
+
+</dependency>
+
+</dependencies>
     <build>
         <plugins>
             <!-- Plugin de compilación -->
