@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 com\mycompany\checkinc\security\Filtro.class
 com\mycompany\checkinc\entities\JAXRSConfiguration.class
+=======
+com\mycompany\checkinc\entities\JAXRSConfiguration.class
+com\mycompany\checkinc\model\Usuario.class
+>>>>>>> 3909fe24fc2f205cb696ef5a2278a86c46e7d17c
 com\mycompany\checkinc\controller\Login.class
 com\mycompany\checkinc\resources\JavaEE8Resource.class

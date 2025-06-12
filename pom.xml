@@ -56,6 +56,7 @@
     <scope>provided</scope>
 </dependency>
 
+<<<<<<< HEAD
 <dependency>
     <groupId>javax.servlet</groupId>
     <artifactId>javax.servlet-api</artifactId>
@@ -63,6 +64,8 @@
     <scope>provided</scope>
 </dependency>
 
+=======
+>>>>>>> 3909fe24fc2f205cb696ef5a2278a86c46e7d17c
     </dependencies>
 
     <build>

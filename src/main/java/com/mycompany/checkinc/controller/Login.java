@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.mycompany.checkinc.controller;
 
 import javax.servlet.http.HttpSession;
@@ -8,6 +9,23 @@ import javax.faces.context.FacesContext;
 import javax.faces.bean.ManagedBean;
 
 @ManagedBean(name = "login")
+=======
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSF/JSFManagedBean.java to edit this template
+ */
+package com.mycompany.checkinc.controller;
+
+import javax.inject.Named;
+import javax.enterprise.context.SessionScoped;
+import java.io.Serializable;
+
+/**
+ *
+ * @author angel
+ */
+@Named(value = "login")
+>>>>>>> 3909fe24fc2f205cb696ef5a2278a86c46e7d17c
 @SessionScoped
 public class Login implements Serializable {
 
@@ -29,6 +47,7 @@ public class Login implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+<<<<<<< HEAD
 
     public String iniciarSesion() {
         if (user != null && password != null && user.equals("admin") && password.equals("clave123")) {
@@ -46,4 +65,12 @@ public class Login implements Serializable {
     public Login() {
         System.out.println("🚀 Bean Login creado");
     }
+=======
+    
+    
+    
+    public Login() {
+    }
+    
+>>>>>>> 3909fe24fc2f205cb696ef5a2278a86c46e7d17c
 }

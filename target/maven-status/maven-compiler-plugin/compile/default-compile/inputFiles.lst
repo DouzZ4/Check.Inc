@@ -1,4 +1,8 @@
 C:\Users\angel\OneDrive\Documentos\NetBeansProjects\CheckInc\src\main\java\com\mycompany\checkinc\controller\Login.java
 C:\Users\angel\OneDrive\Documentos\NetBeansProjects\CheckInc\src\main\java\com\mycompany\checkinc\entities\JAXRSConfiguration.java
 C:\Users\angel\OneDrive\Documentos\NetBeansProjects\CheckInc\src\main\java\com\mycompany\checkinc\resources\JavaEE8Resource.java
+<<<<<<< HEAD
 C:\Users\angel\OneDrive\Documentos\NetBeansProjects\CheckInc\src\main\java\com\mycompany\checkinc\security\Filtro.java
+=======
+C:\Users\angel\OneDrive\Documentos\NetBeansProjects\CheckInc\src\main\java\com\mycompany\checkinc\model\Usuario.java
+>>>>>>> 3909fe24fc2f205cb696ef5a2278a86c46e7d17c
