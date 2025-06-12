@@ -1,11 +1,220 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      lang="es">
     <h:head>
-        <title>Facelet Title</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Registro y Consulta de Glucosa</title>
+        <h:outputStylesheet library="css" name="navbar.css"/>
+        <h:outputStylesheet library="css" name="styles.css"/>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style type="text/css">
+            .chart-container {
+                position: relative;
+                height: 300px;
+                width: 100%;
+                margin: 20px 0;
+                padding: 10px;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            @media (min-width: 768px) {
+                .chart-container {
+                    height: 400px;
+                }
+            }
+        </style>
     </h:head>
+    
     <h:body>
-        Hello from Facelets
+        <ui:include src="/includes/navbar.xhtml"/>
+        
+        <main>
+            <h:messages globalOnly="true" styleClass="message-box" 
+                       infoClass="message-info" errorClass="message-error"/>
+                       
+            <section aria-labelledby="chart-heading" rendered="#{not empty registroGlucosa.registros}">
+                <h2 id="chart-heading">Tendencia de Glucosa</h2>
+                <div class="chart-container">
+                    <canvas id="glucoseChart"></canvas>
+                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const registros = JSON.parse('#{registroGlucosa.registrosJSONString}');
+                        const ctx = document.getElementById('glucoseChart').getContext('2d');
+                        
+                        const labels = registros.map(reg => {
+                            const date = new Date(reg.fechaHora);
+                            return date.toLocaleString();
+                        });
+                        
+                        const data = registros.map(reg => reg.nivelGlucosa);
+                        
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Nivel de Glucosa (mg/dL)',
+                                    data: data,
+                                    borderColor: '#2196F3',
+                                    backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                                    tension: 0.4,
+                                    fill: true
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: 'Historial de Niveles de Glucosa'
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        title: {
+                                            display: true,
+                                            text: 'Nivel de Glucosa (mg/dL)'
+                                        }
+                                    },
+                                    x: {
+                                        title: {
+                                            display: true,
+                                            text: 'Fecha y Hora'
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    });
+                </script>
+            </section>
+            
+            <section aria-labelledby="form-title-heading">
+                <h2 id="form-title-heading">#{registroGlucosa.editando ? 'Editar' : 'Registrar'} Medición</h2>
+                
+                <h:form id="formGlucosa">
+                    <h:inputHidden id="id" value="#{registroGlucosa.id}"/>
+                    
+                    <div class="form-group">
+                        <h:outputLabel for="nivelGlucosa" value="Nivel de Glucosa (mg/dL):"/>
+                        <h:inputText id="nivelGlucosa" value="#{registroGlucosa.nivelGlucosa}" required="true"
+                                   requiredMessage="Por favor ingrese el nivel de glucosa"
+                                   validatorMessage="Ingrese un valor válido mayor a 0">
+                            <f:validateDoubleRange minimum="1"/>
+                        </h:inputText>
+                        <h:message for="nivelGlucosa" styleClass="message error-message"/>
+                    </div>
+                    
+                    <div class="form-group">
+                        <h:outputLabel for="fechaHora" value="Fecha y Hora:"/>
+                        <h:inputText id="fechaHora" value="#{registroGlucosa.fechaHora}" required="true"
+                                   requiredMessage="Por favor ingrese la fecha y hora">
+                            <f:convertDateTime pattern="yyyy-MM-dd'T'HH:mm" type="localDateTime"/>
+                        </h:inputText>
+                        <h:message for="fechaHora" styleClass="message error-message"/>
+                    </div>
+                    
+                    <div id="form-buttons">
+                        <h:commandButton value="#{registroGlucosa.editando ? 'Actualizar' : 'Registrar'}" 
+                                       action="#{registroGlucosa.registrar}"
+                                       styleClass="submit-button"/>
+                        
+                        <h:commandButton value="Cancelar" 
+                                       action="#{registroGlucosa.cancelarEdicion}"
+                                       rendered="#{registroGlucosa.editando}"
+                                       immediate="true"
+                                       styleClass="cancel-button"/>
+                    </div>
+                </h:form>
+            </section>
+            
+            <section aria-labelledby="registros-heading">
+                <h2 id="registros-heading">Registros Anteriores</h2>
+                <div style="overflow-x: auto;">
+                    <h:form id="tablaForm">
+                        <h:dataTable value="#{registroGlucosa.registros}" var="registro"
+                                   styleClass="tabla-registros"
+                                   headerClass="tabla-header"
+                                   rowClasses="tabla-fila-par,tabla-fila-impar">
+                            
+                            <h:column>
+                                <f:facet name="header">ID</f:facet>
+                                #{registro.id}
+                            </h:column>
+                            
+                            <h:column>
+                                <f:facet name="header">Nivel (mg/dL)</f:facet>
+                                #{registro.nivelGlucosa}
+                            </h:column>
+                            
+                            <h:column>
+                                <f:facet name="header">Fecha y Hora</f:facet>
+                                <h:outputText value="#{registro.fechaHora}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                                </h:outputText>
+                            </h:column>
+                            
+                            <h:column>
+                                <f:facet name="header">Acciones</f:facet>
+                                <h:commandButton value="Editar" 
+                                               action="#{registroGlucosa.editar(registro)}"
+                                               styleClass="action-button edit-button"/>
+                                
+                                <h:commandButton value="Eliminar" 
+                                               action="#{registroGlucosa.eliminar(registro)}"
+                                               styleClass="action-button delete-button"
+                                               onclick="return confirm('¿Está seguro de eliminar este registro?');"/>
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
+                </div>
+            </section>
+            
+            <section aria-labelledby="grafico-heading" class="chart-container">
+                <h2 id="grafico-heading">Gráfico de Glucosa</h2>
+                <canvas id="graficoGlucosa" aria-label="Gráfico de evolución del nivel de glucosa"></canvas>
+            </section>
+        </main>
+        
+        <h:outputScript>
+            document.addEventListener('DOMContentLoaded', function() {
+                var ctx = document.getElementById('graficoGlucosa').getContext('2d');
+                var registros = #{registroGlucosa.registros}; // Aquí necesitarás convertir los datos a JSON
+                
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: registros.map(r => new Date(r.fechaHora).toLocaleString()),
+                        datasets: [{
+                            label: 'Nivel de Glucosa',
+                            data: registros.map(r => r.nivelGlucosa),
+                            borderColor: '#3058a6',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Nivel de Glucosa (mg/dL)'
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+        </h:outputScript>
     </h:body>
 </html>

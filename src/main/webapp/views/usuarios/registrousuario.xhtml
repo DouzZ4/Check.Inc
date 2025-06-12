@@ -1,11 +1,105 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      lang="es">
     <h:head>
-        <title>Facelet Title</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Registro de Paciente - Control Glucosa</title>
+        <h:outputStylesheet library="css" name="navbar.css"/>
+        <h:outputStylesheet library="css" name="form.css"/>
+        <h:outputStylesheet library="css" name="styles.css"/>
     </h:head>
+    
     <h:body>
-        Hello from Facelets
+        <ui:include src="/includes/navbar.xhtml"/>
+        
+        <main class="form-container">
+            <h2>Registro de Nuevo Paciente</h2>
+            
+            <h:form id="registroForm">
+                <h:messages globalOnly="true" styleClass="message-box" 
+                           infoClass="message-info" errorClass="message-error"/>
+                
+                <div class="form-group">
+                    <h:outputLabel for="nombres" value="Nombres:"/>
+                    <h:inputText id="nombres" value="#{registroUsuario.nombres}" required="true"
+                               requiredMessage="Por favor ingrese sus nombres"
+                               validatorMessage="Ingrese solo letras y espacios">
+                        <f:validateRegex pattern="[A-Za-zÀ-ÿ\s]+"/>
+                    </h:inputText>
+                    <h:message for="nombres" styleClass="message error-message"/>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="apellidos" value="Apellidos:"/>
+                    <h:inputText id="apellidos" value="#{registroUsuario.apellidos}" required="true"
+                               requiredMessage="Por favor ingrese sus apellidos"
+                               validatorMessage="Ingrese solo letras y espacios">
+                        <f:validateRegex pattern="[A-Za-zÀ-ÿ\s]+"/>
+                    </h:inputText>
+                    <h:message for="apellidos" styleClass="message error-message"/>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="edad" value="Edad:"/>
+                    <h:inputText id="edad" value="#{registroUsuario.edad}" required="true"
+                               requiredMessage="Por favor ingrese su edad"
+                               validatorMessage="Ingrese una edad válida entre 1 y 120">
+                        <f:validateLongRange minimum="1" maximum="120"/>
+                    </h:inputText>
+                    <h:message for="edad" styleClass="message error-message"/>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="correo" value="Correo Electrónico:"/>
+                    <h:inputText id="correo" value="#{registroUsuario.correo}" required="true"
+                               requiredMessage="Por favor ingrese su correo electrónico"
+                               validatorMessage="Ingrese un correo electrónico válido que termine en .com">
+                        <f:validateRegex pattern=".+@.+\.com$"/>
+                    </h:inputText>
+                    <h:message for="correo" styleClass="message error-message"/>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="username" value="Nombre de Usuario:"/>
+                    <h:inputText id="username" value="#{registroUsuario.username}" required="true"
+                               requiredMessage="Por favor ingrese un nombre de usuario"
+                               validatorMessage="El nombre de usuario debe tener al menos 5 caracteres">
+                        <f:validateLength minimum="5"/>
+                    </h:inputText>
+                    <h:message for="username" styleClass="message error-message"/>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="documento" value="Documento (Cédula):"/>
+                    <h:inputText id="documento" value="#{registroUsuario.documento}" required="true"
+                               requiredMessage="Por favor ingrese su número de documento"
+                               validatorMessage="El documento debe tener entre 6 y 20 dígitos">
+                        <f:validateRegex pattern="[0-9]{6,20}"/>
+                    </h:inputText>
+                    <h:message for="documento" styleClass="message error-message"/>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="password" value="Contraseña:"/>
+                    <h:inputSecret id="password" value="#{registroUsuario.password}" required="true"
+                               requiredMessage="Por favor ingrese una contraseña"
+                               validatorMessage="La contraseña debe tener al menos 8 caracteres, incluyendo mayúscula, minúscula y símbolo especial">
+                        <f:validateRegex pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$"/>
+                    </h:inputSecret>
+                    <h:message for="password" styleClass="message error-message"/>
+                </div>
+
+                <h:commandButton value="Registrarme" action="#{registroUsuario.registrar}" 
+                               styleClass="submit-button"/>
+
+                <div class="login-link">
+                    ¿Ya tienes cuenta? <h:link value="Inicia Sesión aquí" outcome="login"/>
+                </div>
+            </h:form>
+        </main>
     </h:body>
 </html>
