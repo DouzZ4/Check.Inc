@@ -1,11 +1,37 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
-</html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-branding">
+            <h:link outcome="/index.xhtml" style="text-decoration: none;" >
+<h:graphicImage library="images" name="ICONO.png" alt="Logo Check" styleClass="logo-navbar" />
+<h1>CHECK</h1>
+            </h:link>
+        </div>
+        <div class="navbar-links">
+            <h:link outcome="/index.xhtml" value="Inicio" />
+            <h:panelGroup rendered="#{login.username != null}">
+                <h:link outcome="registroGlucosa" value="Registro Glucosa" />
+                <h:link outcome="registroCitas" value="Registro Citas" />
+            </h:panelGroup>
+        </div>
+        <div class="navbar-user-info">
+            <h:panelGroup rendered="#{login.username != null}">
+                <span class="welcome-message">
+                    Hola, #{login.username.username}
+                </span>
+                <h:form>
+                    <h:commandLink action="#{login.username}" value="Cerrar Sesión" styleClass="button button-logout"/>
+                </h:form>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{login.username.username == null}">
+                <h:link outcome="login" value="Iniciar Sesión" styleClass="button-login"/>
+                <h:link outcome="registrousuario" value="Registrarse" styleClass="button-register"/>
+            </h:panelGroup>
+        </div>
+    </div>
+</nav>
+
+</ui:composition>

@@ -7,9 +7,10 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Inicio - CHECK</title>
-    <h:outputStylesheet library="css" name="styles.css" />
     <h:outputStylesheet library="css" name="navbar.css"/>
     <h:outputStylesheet library="css" name="index.css"/>
+    <h:outputStylesheet library="css" name="styles.css"/>
+
 </h:head>
 
 <h:body>
@@ -18,26 +19,22 @@
     <div class="container">
         <h1>CHECK</h1>
         
-        <h:panelGroup rendered="#{login.user == null}">
-            <p>Bienvenido. Por favor inicia sesión o regístrate.</p>
-            <h:form>
-                <h:commandButton value="Iniciar Sesión" 
-                                 action="/views/usuarios/login?faces-redirect=true" 
-                                 styleClass="button"/>
-                                 
-                <h:commandButton value="Registrarse" 
-                                 action="/views/usuarios/registrousuario?faces-redirect=true" 
-                                 styleClass="button"/>
-            </h:form>
-        </h:panelGroup>
+        <h:form>
+    <h:panelGroup rendered="#{login.username == null}">
+        <p>Bienvenido. Por favor inicia sesión o regístrate.</p>
 
-        <h:panelGroup rendered="#{login.user != null}">
-            <p>Bienvenido, navega por el menú o accede a tus registros.</p>
-            <h:form>
-                <h:commandLink value="Registro Glucosa" action="registroGlucosa" styleClass="button"/>
-                <h:commandLink value="Registro Citas" action="registroCitas" styleClass="button"/>
-            </h:form>
-        </h:panelGroup>
+        <h:commandButton value="Iniciar Sesión" action="login" styleClass="button"/>
+        <h:commandButton value="Registrarse" action="registrousuario" styleClass="button"/>
+    </h:panelGroup>
+
+    <h:panelGroup rendered="#{login.username != null}">
+        <p>Bienvenido, navega por el menú o accede a tus registros.</p>
+
+        <h:commandLink value="Registro Glucosa" action="registroGlucosa" styleClass="button"/>
+        <h:commandLink value="Registro Citas" action="registroCitas" styleClass="button"/>
+        <h:commandLink value="Descargar Reporte" action="descargarReporte" styleClass="button"/>
+    </h:panelGroup>
+</h:form>
     </div>
 </h:body>
 </html>
