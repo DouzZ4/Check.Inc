@@ -20,14 +20,14 @@
         <h1>CHECK</h1>
         
         <h:form>
-    <h:panelGroup rendered="#{login.username == null}">
+    <h:panelGroup rendered="#{!login.loggedIn}">
         <p>Bienvenido. Por favor inicia sesión o regístrate.</p>
 
         <h:commandButton value="Iniciar Sesión" action="login" styleClass="button"/>
         <h:commandButton value="Registrarse" action="registrousuario" styleClass="button"/>
     </h:panelGroup>
 
-    <h:panelGroup rendered="#{login.username != null}">
+    <h:panelGroup rendered="#{login.loggedIn}">
         <p>Bienvenido, navega por el menú o accede a tus registros.</p>
 
         <h:commandLink value="Registro Glucosa" action="registroGlucosa" styleClass="button"/>

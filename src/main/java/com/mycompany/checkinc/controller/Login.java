@@ -4,15 +4,13 @@
  */
 package com.mycompany.checkinc.controller;
 
-import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
-/**
- *
- * @author angel
- */
-@Named(value = "login")
+@ManagedBean(name = "login")
 @SessionScoped
 public class Login implements Serializable {
     private String username;
@@ -33,24 +31,21 @@ public class Login implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public boolean isLoggedIn() {
+    }    public boolean isLoggedIn() {
         return loggedIn;
     }
 
     public String iniciarSesion() {
-        // Simulación de autenticación
         if ("admin".equals(username) && "1234".equals(password)) {
             loggedIn = true;
-            return "/views/dashboard?faces-redirect=true"; // Redirige al dashboard
+            return "registroGlucosa"; 
         } else {
-            loggedIn = false;
-            return null; // No redirige, el usuario debe intentar de nuevo
+            FacesContext fc = FacesContext.getCurrentInstance(); 
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de autenticación", "Usuario o contraseña incorrectos");
+            fc.addMessage(null, fm);
+            return null; 
         }
-    }
-
-    public String cerrarSesion() {
+    }    public String cerrarSesion() {
         loggedIn = false;
         username = null;
         password = null;

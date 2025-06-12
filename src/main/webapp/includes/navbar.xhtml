@@ -12,21 +12,21 @@
         </div>
         <div class="navbar-links">
             <h:link outcome="/index.xhtml" value="Inicio" />
-            <h:panelGroup rendered="#{login.username != null}">
+            <h:panelGroup rendered="#{login.loggedIn}">
                 <h:link outcome="registroGlucosa" value="Registro Glucosa" />
                 <h:link outcome="registroCitas" value="Registro Citas" />
             </h:panelGroup>
         </div>
         <div class="navbar-user-info">
-            <h:panelGroup rendered="#{login.username != null}">
+            <h:panelGroup rendered="#{login.loggedIn}">
                 <span class="welcome-message">
-                    Hola, #{login.username.username}
+                    Hola, #{login.username}
                 </span>
                 <h:form>
-                    <h:commandLink action="#{login.username}" value="Cerrar Sesión" styleClass="button button-logout"/>
+                    <h:commandLink action="#{login.cerrarSesion}" value="Cerrar Sesión" styleClass="button button-logout"/>
                 </h:form>
             </h:panelGroup>
-            <h:panelGroup rendered="#{login.username.username == null}">
+            <h:panelGroup rendered="#{!login.loggedIn}">
                 <h:link outcome="login" value="Iniciar Sesión" styleClass="button-login"/>
                 <h:link outcome="registrousuario" value="Registrarse" styleClass="button-register"/>
             </h:panelGroup>
