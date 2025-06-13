@@ -4,19 +4,25 @@
  */
 package com.mycompany.checkinc.controller;
 
+import com.mycompany.checkinc.entities.Usuario;
+import com.mycompany.checkinc.services.UsuarioFacadeLocal;
 import java.io.Serializable;
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 @ManagedBean(name = "login")
 @SessionScoped
 public class Login implements Serializable {
     private String username;
     private String password;
-    private boolean loggedIn;
-
+    private Usuario user = new Usuario();
+    @EJB
+    private UsuarioFacadeLocal ufl;
+    
     public String getUsername() {
         return username;
     }
@@ -31,24 +37,20 @@ public class Login implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }    public boolean isLoggedIn() {
-        return loggedIn;
-    }
+    }   
+    
 
-    public String iniciarSesion() {
-        if ("admin".equals(username) && "1234".equals(password)) {
-            loggedIn = true;
-            return "registroGlucosa"; 
-        } else {
-            FacesContext fc = FacesContext.getCurrentInstance(); 
-            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de autenticación", "Usuario o contraseña incorrectos");
+    public String iniciarSesion(){
+        this.user = this.ufl.iniciarSesion(username, password);
+        if(user.getIdUsuario()!=null){
+            HttpSession sesion = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+            sesion.setAttribute("username", username);
+            return "index.xhtml?faces-redirect=true";
+        }else {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR,"Usuario y/o contraseña incorrectos","MSG_INFO");
             fc.addMessage(null, fm);
-            return null; 
+            return null;
         }
-    }    public String cerrarSesion() {
-        loggedIn = false;
-        username = null;
-        password = null;
-        return "/index?faces-redirect=true"; // Redirige al inicio
     }
 }
