@@ -37,10 +37,19 @@ public class Filtro implements Filter{
         HttpSession sesion = solicitud.getSession();
         String rutaSolicitud = solicitud.getRequestURI();
         String raiz = solicitud.getContextPath();
-        
+//validaciones:        
+//1. validar sesion
         boolean validarSesion = ((sesion!=null) && (sesion.getAttribute("username")!=null));
+        //2. Solicitud login
+        boolean validarRutaLogin = ((rutaSolicitud.equals(raiz + "/")) || (rutaSolicitud.equals(raiz + "/login.xhtml")));
+        //3. cargue contenido estatico
+        boolean validarContenido = rutaSolicitud.contains("/resources");
         
-        boolean validarRutaLogin = ((rutaSolicitud.equals(raiz + "/"))
+        if(validarSesion || validarRutaLogin || validarContenido){
+            chain.doFilter(request, response);
+        }else{
+            respuesta.sendRedirect(raiz);
+        }
         
     }
 
