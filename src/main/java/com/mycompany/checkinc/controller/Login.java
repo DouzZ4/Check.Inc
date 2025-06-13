@@ -9,6 +9,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 @ManagedBean(name = "login")
 @SessionScoped
@@ -16,6 +17,7 @@ public class Login implements Serializable {
     private String username;
     private String password;
     private boolean loggedIn;
+    private Integer idUsuario; 
 
     public String getUsername() {
         return username;
@@ -31,24 +33,49 @@ public class Login implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }    public boolean isLoggedIn() {
+    }
+
+    public boolean isLoggedIn() {
         return loggedIn;
     }
 
+    public Integer getIdUsuario() {
+        return idUsuario;
+    }
+
     public String iniciarSesion() {
-        if ("admin".equals(username) && "1234".equals(password)) {
+        // TODO: Reemplazar con consulta real a la base de datos
+        if (username.equals("admin") && password.equals("1234")) {
             loggedIn = true;
-            return "registroGlucosa"; 
+            idUsuario = 1; // TODO: Obtener el ID real del usuario desde la base de datos
+            
+            HttpSession sesion = (HttpSession) FacesContext.getCurrentInstance()
+                    .getExternalContext().getSession(true);
+            sesion.setAttribute("username", username);
+            sesion.setAttribute("idUsuario", idUsuario);
+            
+            return "/views/registros/registroGlucosa?faces-redirect=true";
         } else {
-            FacesContext fc = FacesContext.getCurrentInstance(); 
-            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de autenticación", "Usuario o contraseña incorrectos");
-            fc.addMessage(null, fm);
-            return null; 
+            FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                    "Error de autenticación", 
+                    "Usuario o contraseña incorrectos"));
+            return null;
         }
-    }    public String cerrarSesion() {
+    }
+
+    public String cerrarSesion() {
         loggedIn = false;
         username = null;
         password = null;
-        return "/index?faces-redirect=true"; // Redirige al inicio
+        idUsuario = null;
+        
+        HttpSession sesion = (HttpSession) FacesContext.getCurrentInstance()
+                .getExternalContext().getSession(false);
+        if (sesion != null) {
+            sesion.invalidate();
+        }
+        
+        return "/index?faces-redirect=true";
     }
 }

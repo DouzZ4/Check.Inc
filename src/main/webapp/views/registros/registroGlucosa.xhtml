@@ -3,7 +3,6 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui"
       lang="es">
     <h:head>
         <meta charset="UTF-8"/>
@@ -118,7 +117,7 @@
                         <h:outputLabel for="fechaHora" value="Fecha y Hora:"/>
                         <h:inputText id="fechaHora" value="#{registroGlucosa.fechaHora}" required="true"
                                    requiredMessage="Por favor ingrese la fecha y hora">
-                            <f:convertDateTime pattern="yyyy-MM-dd'T'HH:mm" type="localDateTime"/>
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                         </h:inputText>
                         <h:message for="fechaHora" styleClass="message error-message"/>
                     </div>
@@ -159,7 +158,7 @@
                             <h:column>
                                 <f:facet name="header">Fecha y Hora</f:facet>
                                 <h:outputText value="#{registro.fechaHora}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                                 </h:outputText>
                             </h:column>
                             
@@ -179,26 +178,7 @@
                 </div>
             </section>
             
-            <section aria-labelledby="grafico-heading" class="chart-container">
-                <h2 id="grafico-heading">Gráfico de Glucosa</h2>
-                <canvas id="graficoGlucosa" aria-label="Gráfico de evolución del nivel de glucosa"></canvas>
-            </section>
         </main>
-        
-        <h:outputScript>
-            document.addEventListener('DOMContentLoaded', function() {
-                var ctx = document.getElementById('graficoGlucosa').getContext('2d');
-                var registros = #{registroGlucosa.registros}; // Aquí necesitarás convertir los datos a JSON
-                
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: registros.map(r => new Date(r.fechaHora).toLocaleString()),
-                        datasets: [{
-                            label: 'Nivel de Glucosa',
-                            data: registros.map(r => r.nivelGlucosa),
-                            borderColor: '#3058a6',
-                            tension: 0.1
                         }]
                     },
                     options: {
