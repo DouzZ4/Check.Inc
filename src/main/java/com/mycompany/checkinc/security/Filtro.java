@@ -11,25 +11,22 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author angel
- */
-public class Filtro implements Filter{
+public class Filtro implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        // No se requiere inicialización
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest solicitud = (HttpServletRequest) request;
         HttpServletResponse respuesta = (HttpServletResponse) response;
+        
         respuesta.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         respuesta.setHeader("Pragma", "no-cache");
         respuesta.setDateHeader("Expires", 0);
@@ -37,24 +34,29 @@ public class Filtro implements Filter{
         HttpSession sesion = solicitud.getSession();
         String rutaSolicitud = solicitud.getRequestURI();
         String raiz = solicitud.getContextPath();
-//validaciones:        
-//1. validar sesion
-        boolean validarSesion = ((sesion!=null) && (sesion.getAttribute("username")!=null));
-        //2. Solicitud login
-        boolean validarRutaLogin = ((rutaSolicitud.equals(raiz + "/")) || (rutaSolicitud.equals(raiz + "/login.xhtml")));
-        //3. cargue contenido estatico
-        boolean validarContenido = rutaSolicitud.contains("/resources");
         
-        if(validarSesion || validarRutaLogin || validarContenido){
+        // Validaciones:
+        // 1. Validar sesión
+        boolean validarSesion = ((sesion != null) && (sesion.getAttribute("username") != null));
+        
+        // 2. Solicitud login y registro
+        boolean validarRutaPublica = rutaSolicitud.contains("/views/usuarios/login.xhtml") ||
+                                    rutaSolicitud.contains("/views/usuarios/registrousuario.xhtml") ||
+                                    rutaSolicitud.equals(raiz + "/") ||
+                                    rutaSolicitud.equals(raiz + "/index.xhtml");
+        
+        // 3. Validar recursos estáticos
+        boolean validarRecursos = rutaSolicitud.contains("/resources/");
+        
+        if (validarSesion || validarRutaPublica || validarRecursos) {
             chain.doFilter(request, response);
-        }else{
-            respuesta.sendRedirect(raiz);
+        } else {
+            respuesta.sendRedirect(raiz + "/views/usuarios/login.xhtml");
         }
-        
     }
 
     @Override
     public void destroy() {
+        // No se requieren acciones de limpieza
     }
-    
 }

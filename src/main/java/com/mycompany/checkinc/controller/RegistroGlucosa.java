@@ -1,4 +1,4 @@
-package com.mycompany.checkinc.controller;
+/* package com.mycompany.checkinc.controller;
 
 import com.mycompany.checkinc.entities.Glucosa;
 import com.mycompany.checkinc.entities.Usuario;
@@ -74,7 +74,7 @@ public class RegistroGlucosa implements Serializable {
     
     // Métodos de acción
     public void registrar() {
-        if (!login.isLoggedIn()) {
+        if (login.iniciarSesion() == null) {
             addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe iniciar sesión para registrar");
             return;
         }
@@ -162,4 +162,4 @@ public class RegistroGlucosa implements Serializable {
         json.append("]");
         return json.toString();
     }
-}
+}*/

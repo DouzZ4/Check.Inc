@@ -13,9 +13,7 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <jsf.version>2.2.20</jsf.version>
-        <primefaces.version>12.0.0</primefaces.version>
+        <maven.compiler.target>1.8</maven.compiler.target>        <jsf.version>2.2.20</jsf.version>
     </properties>
     
     <dependencies>
@@ -39,13 +37,6 @@
             <artifactId>jsf-impl</artifactId>
             <version>${jsf.version}</version>
             <scope>provided</scope>
-        </dependency>
-        
-        <!-- PrimeFaces -->
-        <dependency>
-            <groupId>org.primefaces</groupId>
-            <artifactId>primefaces</artifactId>
-            <version>${primefaces.version}</version>
         </dependency>
         
         <!-- CDI API -->

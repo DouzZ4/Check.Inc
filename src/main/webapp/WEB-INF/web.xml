@@ -9,12 +9,6 @@
         <param-value>Development</param-value>
     </context-param>
     
-    <!-- Configuración de temas PrimeFaces -->
-    <context-param>
-        <param-name>primefaces.THEME</param-name>
-        <param-value>saga</param-value>
-    </context-param>
-    
     <!-- Configuración adicional de JSF -->
     <context-param>
         <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
@@ -77,13 +71,45 @@
     
     <!-- Configuración de seguridad -->
     <security-constraint>
-        <display-name>Prevent direct access to XHTML files</display-name>
+        <display-name>SSL Protection</display-name>
         <web-resource-collection>
-            <web-resource-name>XHTML files</web-resource-name>
+            <web-resource-name>Protected Area</web-resource-name>
             <url-pattern>/views/*</url-pattern>
             <http-method>GET</http-method>
             <http-method>POST</http-method>
         </web-resource-collection>
-        <auth-constraint />
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
     </security-constraint>
+
+    <!-- Excepciones para páginas públicas -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Public Pages</web-resource-name>
+            <url-pattern>/views/usuarios/login.xhtml</url-pattern>
+            <url-pattern>/views/usuarios/registrousuario.xhtml</url-pattern>
+            <url-pattern>/index.xhtml</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+    </security-constraint>
+
+    <!-- MIME Types para PrimeIcons -->
+    <mime-mapping>
+        <extension>eot</extension>
+        <mime-type>application/vnd.ms-fontobject</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>woff2</extension>
+        <mime-type>font/woff2</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>woff</extension>
+        <mime-type>font/woff</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ttf</extension>
+        <mime-type>application/x-font-ttf</mime-type>
+    </mime-mapping>
 </web-app>
