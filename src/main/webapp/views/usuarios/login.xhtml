@@ -19,7 +19,7 @@
         <h2>Iniciar Sesión</h2>
 
         <h:form>
-            <h:panelGroup rendered="#{!login.loggedIn}">
+            <h:panelGroup rendered="#{login.username == null}">
                 <div class="form-group">
                     <label for="username">Nombre de Usuario:</label>
                     <h:inputText id="username" value="#{login.username}" required="true" requiredMessage="Este campo es obligatorio"/>
@@ -40,9 +40,9 @@
                 </div>
             </h:panelGroup>
 
-            <h:panelGroup rendered="#{login.loggedIn}">
+            <h:panelGroup rendered="#{login.username != null}">
                 <p>¡Bienvenido #{login.username}! Accede a tu <h:link value="Dashboard" outcome="dashboard"/>.</p>
-                <h:commandButton value="Cerrar Sesión" action="#{login.cerrarSesion}" styleClass="submit-button"/>
+                <h:commandButton value="Cerrar Sesión"  styleClass="submit-button"/>
             </h:panelGroup>
         </h:form>
     </main>
