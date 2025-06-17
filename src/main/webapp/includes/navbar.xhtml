@@ -28,10 +28,11 @@
             <h:panelGroup rendered="#{not empty login.username}">
                 <span class="welcome-message">Hola, #{login.username}</span>
                 <h:form styleClass="logout-form">
-                    <h:commandLink value="Cerrar Sesión" action="#{login.logout}" 
-                                 styleClass="button-logout" immediate="true">
-                        <f:ajax render="@form" execute="@form"/>
-                    </h:commandLink>
+                    <h:commandButton value="Cerrar Sesión" 
+                                   action="#{login.logout}" 
+                                   styleClass="button-logout">
+                        <f:ajax render="@all"/>
+                    </h:commandButton>
                 </h:form>
             </h:panelGroup>
             
