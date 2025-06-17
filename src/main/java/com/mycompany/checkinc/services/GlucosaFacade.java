@@ -5,12 +5,9 @@
 package com.mycompany.checkinc.services;
 
 import com.mycompany.checkinc.entities.Glucosa;
-import com.mycompany.checkinc.entities.Usuario;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 /**
  *
@@ -31,12 +28,4 @@ public class GlucosaFacade extends AbstractFacade<Glucosa> implements GlucosaFac
         super(Glucosa.class);
     }
     
-    @Override
-    public List<Glucosa> findByUsuario(Usuario usuario) {
-        TypedQuery<Glucosa> query = em.createQuery(
-            "SELECT g FROM Glucosa g WHERE g.idUsuario = :usuario ORDER BY g.fechaHora DESC",
-            Glucosa.class);
-        query.setParameter("usuario", usuario);
-        return query.getResultList();
-    }
 }

@@ -28,7 +28,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     public UsuarioFacade() {
         super(Usuario.class);
     }
-
+    
     @Override
     public Usuario iniciarSesion(String username, String password) {
         Query query = em.createQuery("SELECT U FROM Usuario U Where U.user=:username AND U.password=:password");
@@ -40,6 +40,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
             
         }
         Usuario userVacio = new Usuario();
-        return userVacio;    }
+        return userVacio;    
+    }
     
 }

@@ -144,11 +144,21 @@ body {
 }
 
 .button-logout {
-    background-color: #6c757d; /* Gris oscuro */
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #6c757d; /* Gray color */
     color: white !important;
+    text-decoration: none !important; /* Remove underline */
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
 }
 .button-logout:hover {
-    background-color: #5a6268; /* Gris más oscuro */
+    background-color: #dc3545 !important; /* Red color on hover */
+    text-decoration: none !important;
 }
 
 /* --- Responsividad Básica para Navbar --- */
