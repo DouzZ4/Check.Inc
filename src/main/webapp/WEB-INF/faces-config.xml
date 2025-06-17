@@ -21,7 +21,7 @@
         </navigation-case>
         <navigation-case>
             <from-outcome>registroCitas</from-outcome>
-            <to-view-id>/views/registros/Citas.xhtml</to-view-id>
+            <to-view-id>/views/registros/registroCitas.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>

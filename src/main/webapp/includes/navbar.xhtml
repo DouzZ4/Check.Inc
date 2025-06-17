@@ -18,8 +18,8 @@
             <h:link outcome="/index" value="Inicio" styleClass="nav-link"/>
             
             <h:panelGroup rendered="#{not empty login.username}">
-                <h:link outcome="registroGlucosa" value="Registro Glucosa" styleClass="nav-link"/>
-                <h:link outcome="registroCitas" value="Registro Citas" styleClass="nav-link"/>
+                <h:link outcome="/views/registros/registroGlucosa" value="Registro Glucosa" styleClass="nav-link"/>
+                <h:link outcome="/views/registros/registroCitas" value="Registro Citas" styleClass="nav-link"/>
             </h:panelGroup>
         </div>
         
@@ -36,8 +36,8 @@
             </h:panelGroup>
             
             <h:panelGroup rendered="#{empty login.username}">
-                <h:link outcome="login" value="Iniciar Sesión" styleClass="button-login"/>
-                <h:link outcome="registrousuario" value="Registrarse" styleClass="button-register"/>
+                <h:link outcome="/views/usuarios/login" value="Iniciar Sesión" styleClass="button-login"/>
+                <h:link outcome="/views/usuarios/registrousuario" value="Registrarse" styleClass="button-register"/>
             </h:panelGroup>
         </div>
     </div>

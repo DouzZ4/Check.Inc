@@ -71,15 +71,15 @@
     
     <!-- Configuración de seguridad -->
     <security-constraint>
-        <display-name>SSL Protection</display-name>
+        <display-name>Protected Area</display-name>
         <web-resource-collection>
-            <web-resource-name>Protected Area</web-resource-name>
+            <web-resource-name>Protected Resources</web-resource-name>
             <url-pattern>/views/*</url-pattern>
             <http-method>GET</http-method>
             <http-method>POST</http-method>
         </web-resource-collection>
         <user-data-constraint>
-            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+            <transport-guarantee>NONE</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
 
@@ -90,6 +90,9 @@
             <url-pattern>/views/usuarios/login.xhtml</url-pattern>
             <url-pattern>/views/usuarios/registrousuario.xhtml</url-pattern>
             <url-pattern>/index.xhtml</url-pattern>
+            <url-pattern>/javax.faces.resource/*</url-pattern>
+            <url-pattern>/resources/*</url-pattern>
+            <url-pattern>/error/*</url-pattern>
             <http-method>GET</http-method>
             <http-method>POST</http-method>
         </web-resource-collection>
