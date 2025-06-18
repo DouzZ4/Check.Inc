@@ -41,7 +41,7 @@ public class Filtro implements Filter {
         if (session != null && session.getAttribute("usuario") != null) {
             chain.doFilter(request, response);
         } else {
-            res.sendRedirect(req.getContextPath() + "/views/usuarios/login.xhtml");
+            res.sendRedirect(req.getContextPath() + "/index.xhtml");
         }
     }
 
