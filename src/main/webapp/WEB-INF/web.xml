@@ -33,27 +33,8 @@
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
 
-    <!-- Listener para CDI -->
-    <listener>
-        <listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
-    </listener>
-    
-    <!-- Configuración de sesión -->
-    <session-config>
-        <session-timeout>30</session-timeout>
-        <cookie-config>
-            <http-only>true</http-only>
-            <secure>false</secure>
-        </cookie-config>
-        <tracking-mode>COOKIE</tracking-mode>
-    </session-config>
-    
-    <!-- Página de inicio -->
-    <welcome-file-list>
-        <welcome-file>index.xhtml</welcome-file>
-    </welcome-file-list>
-    
-    <!-- Filtro de seguridad -->    <filter>
+    <!-- Filtro de seguridad -->
+    <filter>
         <filter-name>Filtro</filter-name>
         <filter-class>com.mycompany.checkinc.security.Filtro</filter-class>
     </filter>
@@ -72,45 +53,6 @@
         <location>/error/500.xhtml</location>
     </error-page>
     
-    <!-- Configuración de seguridad -->    <!-- Configuración de seguridad para recursos públicos -->
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>Public Resources</web-resource-name>
-            <url-pattern>/javax.faces.resource/*</url-pattern>
-            <url-pattern>/resources/*</url-pattern>
-            <url-pattern>/views/usuarios/login.xhtml</url-pattern>
-            <url-pattern>/views/usuarios/registrousuario.xhtml</url-pattern>
-            <url-pattern>/index.xhtml</url-pattern>
-            <url-pattern>/error/*</url-pattern>
-        </web-resource-collection>
-    </security-constraint>
-    
-    <!-- Configuración de seguridad para recursos protegidos -->
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>Protected Resources</web-resource-name>
-            <url-pattern>/*</url-pattern>
-        </web-resource-collection>
-        <user-data-constraint>
-            <transport-guarantee>NONE</transport-guarantee>
-        </user-data-constraint>
-    </security-constraint>
-
-    <!-- Excepciones para páginas públicas -->
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>Public Pages</web-resource-name>
-            <url-pattern>/views/usuarios/login.xhtml</url-pattern>
-            <url-pattern>/views/usuarios/registrousuario.xhtml</url-pattern>
-            <url-pattern>/index.xhtml</url-pattern>
-            <url-pattern>/javax.faces.resource/*</url-pattern>
-            <url-pattern>/resources/*</url-pattern>
-            <url-pattern>/error/*</url-pattern>
-            <http-method>GET</http-method>
-            <http-method>POST</http-method>
-        </web-resource-collection>
-    </security-constraint>
-
     <!-- MIME Types para PrimeIcons -->
     <mime-mapping>
         <extension>eot</extension>
