@@ -8,6 +8,12 @@
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
+
+    <!-- Configuración de CDI -->
+    <context-param>
+        <param-name>javax.faces.ENABLE_CDI_RESOLVER_CHAIN</param-name>
+        <param-value>true</param-value>
+    </context-param>
     
     <!-- Servlet de JSF -->
     <servlet>
@@ -16,11 +22,21 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     
-    <!-- Una sola regla de mapeo para JSF -->
+    <!-- Mapeo para JSF -->
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
+
+    <!-- Welcome File -->
+    <welcome-file-list>
+        <welcome-file>index.xhtml</welcome-file>
+    </welcome-file-list>
+
+    <!-- Listener para CDI -->
+    <listener>
+        <listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
+    </listener>
     
     <!-- Configuración de sesión -->
     <session-config>
