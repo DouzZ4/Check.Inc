@@ -10,8 +10,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.NoResultException;
 
 /**
@@ -20,7 +18,6 @@ import javax.persistence.NoResultException;
  */
 @Stateless
 public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFacadeLocal {
-    private static final Logger logger = Logger.getLogger(UsuarioFacade.class.getName());
 
     @PersistenceContext(unitName = "com.mycompany_CheckInc_war_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -33,20 +30,40 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     public UsuarioFacade() {
         super(Usuario.class);
     }
-    
-    @Override
+      @Override
     public Usuario iniciarSesion(String username, String password) {
         try {
-            // Buscar usuario por nombre de usuario
+            System.out.println("UsuarioFacade: Intentando login para usuario: " + username);
+            
+            // Buscar usuario solo por nombre de usuario
             Query query = em.createQuery("SELECT u FROM Usuario u WHERE u.user = :username");
             query.setParameter("username", username);
             
             Usuario usuario = (Usuario) query.getSingleResult();
+            System.out.println("UsuarioFacade: Usuario encontrado: " + usuario.getUser());
+            System.out.println("UsuarioFacade: Password almacenado: " + usuario.getPassword());
+              // Verificar la contraseña
+            String storedPassword = usuario.getPassword();
+            boolean passwordMatch;
+              // Si la contraseña está en texto plano
+            if (!storedPassword.startsWith("$2")) {
+                System.out.println("UsuarioFacade: Contraseña en texto plano, comparando directamente");
+                System.out.println("UsuarioFacade: Contraseña ingresada (longitud=" + password.length() + "): '" + password + "'");
+                System.out.println("UsuarioFacade: Contraseña almacenada (longitud=" + storedPassword.length() + "): '" + storedPassword + "'");
+                password = password.trim();
+                storedPassword = storedPassword.trim();
+                passwordMatch = password.equals(storedPassword);
+            } else {
+                System.out.println("UsuarioFacade: Contraseña hasheada, verificando con bcrypt");
+                passwordMatch = PasswordUtils.verifyPassword(password, storedPassword);
+            }
             
-            // Verificar la contraseña usando la utilidad que maneja tanto bcrypt como texto plano
-            if (usuario != null && PasswordUtils.verifyPassword(password, usuario.getPassword())) {
-                // Si la contraseña no está hasheada, actualizarla
-                if (!usuario.getPassword().startsWith("$2")) {
+            System.out.println("UsuarioFacade: Verificación de contraseña: " + passwordMatch);
+            
+            if (passwordMatch) {
+                // Si la contraseña está en texto plano, actualizarla a hash
+                if (!storedPassword.startsWith("$2")) {
+                    System.out.println("UsuarioFacade: Actualizando contraseña a formato hash");
                     usuario.setPassword(PasswordUtils.hashPassword(password));
                     em.merge(usuario);
                 }
@@ -54,44 +71,32 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
             }
             
         } catch (NoResultException e) {
-            logger.log(Level.INFO, "Intento de inicio de sesión fallido para usuario no existente: {0}", username);
+            System.out.println("UsuarioFacade: Usuario no encontrado: " + username);
+            return null;
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error durante la verificación de inicio de sesión", e);
+            System.out.println("UsuarioFacade: Error durante el login: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
         
+        System.out.println("UsuarioFacade: Contraseña incorrecta para usuario: " + username);
         return null;
     }
-    
+
     @Override
     public void create(Usuario usuario) {
-        try {
-            // Hashear la contraseña antes de guardar
-            String hashedPassword = PasswordUtils.hashPassword(usuario.getPassword());
-            usuario.setPassword(hashedPassword);
-            
-            super.create(usuario);
-            
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error al crear usuario", e);
-            throw e;
-        }
+        // Hashear la contraseña antes de guardar
+        usuario.setPassword(PasswordUtils.hashPassword(usuario.getPassword()));
+        super.create(usuario);
     }
-    
+
     @Override
     public void edit(Usuario usuario) {
-        try {
-            // Si la contraseña ha cambiado y no está hasheada, hashearla
-            String currentPassword = usuario.getPassword();
-            if (currentPassword != null && !currentPassword.startsWith("$2")) {
-                String hashedPassword = PasswordUtils.hashPassword(currentPassword);
-                usuario.setPassword(hashedPassword);
-            }
-            
-            super.edit(usuario);
-            
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error al actualizar usuario", e);
-            throw e;
+        // Si la contraseña cambió (no es un hash), hashearla
+        String password = usuario.getPassword();
+        if (password != null && !password.startsWith("$2")) {
+            usuario.setPassword(PasswordUtils.hashPassword(password));
         }
+        super.edit(usuario);
     }
 }

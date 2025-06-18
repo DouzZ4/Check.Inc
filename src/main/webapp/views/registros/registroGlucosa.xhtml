@@ -8,8 +8,8 @@
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>Registro y Consulta de Glucosa</title>
-        <h:outputStylesheet library="css" name="navbar.css"/>
-        <h:outputStylesheet library="css" name="styles.css"/>
+        <h:outputStylesheet name="css/navbar.css"/>
+        <h:outputStylesheet name="css/styles.css"/>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <style type="text/css">
             .chart-container {
@@ -177,24 +177,6 @@
                     </h:form>
                 </div>
             </section>
-            
         </main>
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Nivel de Glucosa (mg/dL)'
-                                }
-                            }
-                        }
-                    }
-                });
-            });
-        </h:outputScript>
     </h:body>
 </html>

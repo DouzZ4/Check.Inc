@@ -11,10 +11,12 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+@WebFilter("/*")
 public class Filtro implements Filter {
 
     @Override
@@ -24,35 +26,48 @@ public class Filtro implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest solicitud = (HttpServletRequest) request;
-        HttpServletResponse respuesta = (HttpServletResponse) response;
-        
-        respuesta.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-        respuesta.setHeader("Pragma", "no-cache");
-        respuesta.setDateHeader("Expires", 0);
-        
-        HttpSession sesion = solicitud.getSession();
-        String rutaSolicitud = solicitud.getRequestURI();
-        String raiz = solicitud.getContextPath();
-        
-        // Validaciones:
-        // 1. Validar sesión
-        boolean validarSesion = ((sesion != null) && (sesion.getAttribute("username") != null));
-        
-        // 2. Solicitud login y registro
-        boolean validarRutaPublica = rutaSolicitud.contains("/views/usuarios/login.xhtml") ||
-                                    rutaSolicitud.contains("/views/usuarios/registrousuario.xhtml") ||
-                                    rutaSolicitud.equals(raiz + "/") ||
-                                    rutaSolicitud.equals(raiz + "/index.xhtml");
-        
-        // 3. Validar recursos estáticos
-        boolean validarRecursos = rutaSolicitud.contains("/resources/");
-        
-        if (validarSesion || validarRutaPublica || validarRecursos) {
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse res = (HttpServletResponse) response;
+        String path = req.getRequestURI().substring(req.getContextPath().length());
+
+        // Si es un recurso estático o página pública, permitir acceso
+        if (isPublicResource(path)) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        // Verificar autenticación para el resto de páginas
+        HttpSession session = req.getSession(false);
+        if (session != null && session.getAttribute("usuario") != null) {
             chain.doFilter(request, response);
         } else {
-            respuesta.sendRedirect(raiz + "/views/usuarios/login.xhtml");
+            res.sendRedirect(req.getContextPath() + "/views/usuarios/login.xhtml");
         }
+    }
+
+    private boolean isPublicResource(String path) {
+        // Recursos públicos (CSS, JS, imágenes, etc.)
+        if (path.startsWith("/resources/") ||
+            path.startsWith("/javax.faces.resource/")) {
+            return true;
+        }
+
+        // Páginas públicas
+        String[] publicPages = {
+            "/views/usuarios/login.xhtml",
+            "/views/usuarios/registrousuario.xhtml",
+            "/index.xhtml",
+            "/error/404.xhtml",
+            "/error/500.xhtml"
+        };
+
+        for (String page : publicPages) {
+            if (path.equals(page)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

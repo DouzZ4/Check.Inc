@@ -9,17 +9,6 @@
         <param-value>Development</param-value>
     </context-param>
     
-    <!-- Configuración adicional de JSF -->
-    <context-param>
-        <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
-        <param-value>true</param-value>
-    </context-param>
-    
-    <context-param>
-        <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
-        <param-value>true</param-value>
-    </context-param>
-    
     <!-- Servlet de JSF -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
@@ -27,6 +16,7 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     
+    <!-- Una sola regla de mapeo para JSF -->
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
@@ -47,16 +37,13 @@
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
     
-    <!-- Filtro de seguridad -->
-    <filter>
+    <!-- Filtro de seguridad -->    <filter>
         <filter-name>Filtro</filter-name>
-        <filter-class>security.Filtro</filter-class>
+        <filter-class>com.mycompany.checkinc.security.Filtro</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>Filtro</filter-name>
-        <url-pattern>/views/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
+        <url-pattern>/*</url-pattern>
     </filter-mapping>
     
     <!-- Configuración de error pages -->
@@ -69,14 +56,24 @@
         <location>/error/500.xhtml</location>
     </error-page>
     
-    <!-- Configuración de seguridad -->
+    <!-- Configuración de seguridad -->    <!-- Configuración de seguridad para recursos públicos -->
     <security-constraint>
-        <display-name>Protected Area</display-name>
+        <web-resource-collection>
+            <web-resource-name>Public Resources</web-resource-name>
+            <url-pattern>/javax.faces.resource/*</url-pattern>
+            <url-pattern>/resources/*</url-pattern>
+            <url-pattern>/views/usuarios/login.xhtml</url-pattern>
+            <url-pattern>/views/usuarios/registrousuario.xhtml</url-pattern>
+            <url-pattern>/index.xhtml</url-pattern>
+            <url-pattern>/error/*</url-pattern>
+        </web-resource-collection>
+    </security-constraint>
+    
+    <!-- Configuración de seguridad para recursos protegidos -->
+    <security-constraint>
         <web-resource-collection>
             <web-resource-name>Protected Resources</web-resource-name>
-            <url-pattern>/views/*</url-pattern>
-            <http-method>GET</http-method>
-            <http-method>POST</http-method>
+            <url-pattern>/*</url-pattern>
         </web-resource-collection>
         <user-data-constraint>
             <transport-guarantee>NONE</transport-guarantee>
