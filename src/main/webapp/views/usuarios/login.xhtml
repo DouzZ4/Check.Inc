@@ -37,7 +37,7 @@
                     ¿No tienes cuenta? <h:link value="Regístrate aquí" outcome="registrousuario"/>
                 </div>
             </h:panelGroup>            <h:panelGroup rendered="#{login.authenticated}">
-                <p>¡Bienvenido #{login.username}! Accede a tu <h:link value="Dashboard" outcome="Dashboard.xhtml"/>.</p>
+                <p>¡Bienvenido #{login.username}! Accede a tu <h:link value="Dashboard" outcome="/inicioGestion.xhtml?faces-redirect=true"/>.</p>
                 <h:commandButton value="Cerrar Sesión" action="#{login.logout}" styleClass="submit-button"/>
             </h:panelGroup>
         </h:form>
