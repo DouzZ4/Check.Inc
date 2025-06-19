@@ -3,6 +3,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
       lang="es">
     <h:head>
         <meta charset="UTF-8"/>
@@ -19,6 +20,11 @@
         <main>
             <h:messages globalOnly="true" styleClass="message-box" 
                        infoClass="message-info" errorClass="message-error"/>
+            
+            <section aria-labelledby="chart-heading" rendered="#{not empty registroGlucosa.registros}">
+                <h2 id="chart-heading">Tendencia de Glucosa</h2>
+                <p:lineChart id="glucoseChart" model="#{registroGlucosa.lineChartModel}" style="width:100%;height:400px"/>
+            </section>
             
             <section aria-labelledby="form-title-heading">
                 <h2 id="form-title-heading">#{registroGlucosa.editando ? 'Editar' : 'Registrar'} Medición</h2>
@@ -38,11 +44,11 @@
                     
                     <div class="form-group">
                         <h:outputLabel for="fechaHora" value="Fecha y Hora:"/>
-                        <h:inputText id="fechaHora" value="#{registroGlucosa.fechaHora}" required="true"
-                                   requiredMessage="Por favor ingrese la fecha y hora">
-                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                        </h:inputText>
+                        <p:datePicker id="fechaHora" value="#{registroGlucosa.fechaHora}" required="true"
+                                   requiredMessage="Por favor ingrese la fecha y hora"
+                                   showTime="true" pattern="dd/MM/yyyy HH:mm" locale="es"/>
                         <h:message for="fechaHora" styleClass="message error-message"/>
+                        <h:commandButton value="Ahora" action="#{registroGlucosa.setFechaHoraNow}" immediate="true" styleClass="now-button"/>
                     </div>
                     
                     <div id="form-buttons">
