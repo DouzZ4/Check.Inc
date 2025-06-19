@@ -30,6 +30,13 @@ public class Filtro implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
         String path = req.getRequestURI().substring(req.getContextPath().length());
 
+        // Cabeceras anti-caché para páginas protegidas
+        if (!isPublicResource(path)) {
+            res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+            res.setHeader("Pragma", "no-cache");
+            res.setDateHeader("Expires", 0);
+        }
+
         // Si es un recurso estático o página pública, permitir acceso
         if (isPublicResource(path)) {
             chain.doFilter(request, response);
@@ -41,7 +48,10 @@ public class Filtro implements Filter {
         if (session != null && session.getAttribute("usuario") != null) {
             chain.doFilter(request, response);
         } else {
-            res.sendRedirect(req.getContextPath() + "/index.xhtml");
+            if (session != null) {
+                session.invalidate(); // Cierra la sesión si existe
+            }
+            res.sendRedirect(req.getContextPath() + "/views/usuarios/login.xhtml");
         }
     }
 

@@ -38,6 +38,13 @@
             <artifactId>jbcrypt</artifactId>
             <version>0.4</version>
         </dependency>
+
+        <!-- PrimeFaces para componentes avanzados JSF -->
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>13.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
