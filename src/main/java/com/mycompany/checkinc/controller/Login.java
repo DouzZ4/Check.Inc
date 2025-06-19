@@ -92,4 +92,10 @@ public class Login implements Serializable {    private String username;
         
         return "/index.xhtml?faces-redirect=true";
     }
+      
+    //Cierre de Sesion
+    public String cerrarSesion(){
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "index.xhtml?faces-redirect=true";
+    }
 }
