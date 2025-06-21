@@ -1,17 +1,39 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
 
     <body>
-
         <ui:composition template="./../../TemplateSitio.xhtml">
-
             <ui:define name="content">
-                content
+                <h1>Contenido de citas</h1>
+
+                <h:form>
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>Id Cita</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Motivo</th>
+                                <th>Id Usuario</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ui:repeat value="#{controllerCita.obtenerCitas()}" var="cita">
+                                <tr>
+                                    <td>#{cita.idCita}</td>
+                                    <td>#{cita.fecha}</td>
+                                    <td>#{cita.hora}</td>
+                                    <td>#{cita.motivo}</td>
+                                    <td>#{cita.idUsuario}</td>
+                                </tr>
+                            </ui:repeat>
+                        </tbody>
+                    </table>
+                </h:form>
             </ui:define>
-
         </ui:composition>
-
     </body>
 </html>
