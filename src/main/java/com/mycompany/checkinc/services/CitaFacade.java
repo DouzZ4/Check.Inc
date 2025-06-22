@@ -5,6 +5,7 @@
 package com.mycompany.checkinc.services;
 
 import com.mycompany.checkinc.entities.Cita;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,4 +29,9 @@ public class CitaFacade extends AbstractFacade<Cita> implements CitaFacadeLocal 
         super(Cita.class);
     }
     
+    public List<Cita> findByUsuario(com.mycompany.checkinc.entities.Usuario usuario) {
+        return em.createQuery("SELECT c FROM Cita c WHERE c.idUsuario = :usuario ORDER BY c.fecha DESC, c.hora DESC", Cita.class)
+                .setParameter("usuario", usuario)
+                .getResultList();
+    }
 }

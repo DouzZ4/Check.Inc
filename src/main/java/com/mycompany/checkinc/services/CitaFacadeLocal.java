@@ -29,4 +29,5 @@ public interface CitaFacadeLocal {
 
     int count();
     
+    List<Cita> findByUsuario(com.mycompany.checkinc.entities.Usuario usuario);
 }

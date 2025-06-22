@@ -51,7 +51,7 @@ public class Filtro implements Filter {
             if (session != null) {
                 session.invalidate(); // Cierra la sesión si existe
             }
-            res.sendRedirect(req.getContextPath() + "/views/usuarios/login.xhtml");
+            res.sendRedirect(req.getContextPath() + "/index.xhtml");
         }
     }
 

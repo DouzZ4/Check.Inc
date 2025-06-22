@@ -21,7 +21,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <ui:repeat value="#{controllerCita.obtenerCitas()}" var="cita">
+                            <ui:repeat value="#{controllerCita.obtenerCitasUsuarioSesion()}" var="cita">
                                 <tr>
                                     <td>#{cita.idCita}</td>
                                     <td>#{cita.fecha}</td>
