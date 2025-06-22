@@ -49,6 +49,15 @@ public class ControllerCita implements Serializable {
     UsuarioFacadeLocal ufl;
 
     /**
+     * Clave de sesión para el usuario autenticado.
+     */
+    private static final String SESSION_USER_KEY = "usuario";
+    /**
+     * Ruta de la vista de creación de cita.
+     */
+    private static final String CREAR_CITA_VIEW = "/views/registros/Citas/crearCitas.xhtml?faces-redirect=true";
+
+    /**
      * Devuelve la cita actual en edición o creación.
      * @return cita actual
      */
@@ -72,7 +81,7 @@ public class ControllerCita implements Serializable {
         LOGGER.info("Ejecutando crearCitaP1()");
         try {
             cita = new Cita();
-            String path = "/views/registros/Citas/crearCitas.xhtml?faces-redirect=true";
+            String path = CREAR_CITA_VIEW;
             LOGGER.log(Level.INFO, "Redirigiendo a: {0}", path);
             return path;
         } catch (Exception e) {
@@ -86,10 +95,9 @@ public class ControllerCita implements Serializable {
      * Muestra mensajes de éxito o error en la interfaz.
      */
     public void crearCitaP2() {
-        // Asigna el usuario de sesión directamente antes de crear la cita
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
-        Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
+        Usuario usuarioSesion = (Usuario) session.getAttribute(SESSION_USER_KEY);
         if (usuarioSesion != null) {
             cita.setIdUsuario(usuarioSesion);
             try {
@@ -112,11 +120,10 @@ public class ControllerCita implements Serializable {
      * @return lista de citas del usuario en sesión, o vacía si no hay usuario
      */
     public List<Cita> obtenerCitas() {
-        // Solo retorna las citas del usuario en sesión
         try {
             FacesContext facesContext = FacesContext.getCurrentInstance();
             HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
-            Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
+            Usuario usuarioSesion = (Usuario) session.getAttribute(SESSION_USER_KEY);
             if (usuarioSesion != null) {
                 List<Cita> citas = cfl.findByUsuario(usuarioSesion);
                 LOGGER.log(Level.INFO, "Número de citas encontradas para usuario {0}: {1}", new Object[]{usuarioSesion.getUser(), citas.size()});
@@ -139,13 +146,13 @@ public class ControllerCita implements Serializable {
     }
 
     /**
-     * Devuelve el usuario autenticado actual (de la sesión).
+     * Devuelve el usuario autenticado current (de la sesión).
      * @return usuario en sesión, o un usuario vacío si no hay sesión
      */
     public Usuario getUser() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
-        Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
+        Usuario usuarioSesion = (Usuario) session.getAttribute(SESSION_USER_KEY);
         return usuarioSesion != null ? usuarioSesion : new Usuario();
     }
 
