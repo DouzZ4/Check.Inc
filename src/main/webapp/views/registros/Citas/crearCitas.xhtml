@@ -26,11 +26,8 @@
                             </h:inputText>
                             <h:outputLabel value="Motivo:" for="motivo" />
                             <h:inputTextarea rows="4" cols="30" id="motivo" value="#{controllerCita.cita.motivo}" title="Motivo" required="true" requiredMessage="The Motivo field is required."/>
-                            <h:outputLabel value="IdUsuario:" for="idUsuario" />
-                            <h:selectOneMenu id="idUsuario" value="#{controllerCita.cita.idUsuario}" title="IdUsuario" required="true" requiredMessage="The IdUsuario field is required.">
-                                <!-- TODO: update below reference to list of available items-->
-                                <f:selectItems value="#{controllerCita.obtenerIdUsuarioSesion}"/>
-                            </h:selectOneMenu>
+                            <h:outputLabel value="Usuario:" for="usuario" />
+                            <h:outputText id="usuario" value="#{controllerCita.user.nombres}" />
                         </h:panelGrid>
                         <h:commandButton value="Registrar" />
                     </h:form>
