@@ -10,59 +10,5 @@
        Pruebas
        <f:view>
 
-
-           <h:form>
-               <h1><h:outputText value="List"/></h1>
-               <h:dataTable value="#{controllerMedicamento.obtenerMedicamento()}" var="item">
-                   <h:column>
-                       <f:facet name="header">
-                           <h:outputText value="IdMedicamento"/>
-                       </f:facet>
-                       <h:outputText value="#{item.idMedicamento}"/>
-                   </h:column>
-                   <h:column>
-                       <f:facet name="header">
-                           <h:outputText value="Nombre"/>
-                       </f:facet>
-                       <h:outputText value="#{item.nombre}"/>
-                   </h:column>
-                   <h:column>
-                       <f:facet name="header">
-                           <h:outputText value="Dosis"/>
-                       </f:facet>
-                       <h:outputText value="#{item.dosis}"/>
-                   </h:column>
-                   <h:column>
-                       <f:facet name="header">
-                           <h:outputText value="Frecuencia"/>
-                       </f:facet>
-                       <h:outputText value="#{item.frecuencia}"/>
-                   </h:column>
-                   <h:column>
-                       <f:facet name="header">
-                           <h:outputText value="FechaInicio"/>
-                       </f:facet>
-                       <h:outputText value="#{item.fechaInicio}">
-                           <f:convertDateTime pattern="MM/dd/yyyy" />
-                       </h:outputText>
-                   </h:column>
-                   <h:column>
-                       <f:facet name="header">
-                           <h:outputText value="FechaFin"/>
-                       </f:facet>
-                       <h:outputText value="#{item.fechaFin}">
-                           <f:convertDateTime pattern="MM/dd/yyyy" />
-                       </h:outputText>
-                   </h:column>
-                   <h:column>
-                       <f:facet name="header">
-                           <h:outputText value="IdUsuario"/>
-                       </f:facet>
-                       <h:outputText value="#{item.idUsuario.idUsuario}"/>
-                   </h:column>
-               </h:dataTable>
-           </h:form>
-       </f:view>
-
     </h:body>
 </html>

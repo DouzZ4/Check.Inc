@@ -11,10 +11,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpSession;
 
 @ManagedBean(name = "controllerCita")
 @ViewScoped
@@ -25,7 +27,6 @@ public class ControllerCita implements Serializable {
 
     Cita cita = new Cita();
     Usuario user = new Usuario();
-    List<SelectItem> listaUsuario;
     @EJB
     CitaFacadeLocal cfl;
     @EJB
@@ -39,16 +40,39 @@ public class ControllerCita implements Serializable {
         this.cita = cita;
     }
 
+    public Integer obtenerIdUsuarioSesion() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+        Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
+        if (usuarioSesion != null) {
+            this.user = usuarioSesion; // Asigna el usuario de sesión a la variable user
+            return user.getIdUsuario();
+        }
+        return null;
+    }
+
     public String crearCitaP1() {
         LOGGER.info("Ejecutando crearCitaP1()");
         try {
             cita = new Cita();
-            String path = "views/registros/Citas/crearCitas.xhtml?faces-redirect=true";
+            String path = "/views/registros/Citas/crearCitas.xhtml?faces-redirect=true";
             LOGGER.log(Level.INFO, "Redirigiendo a: {0}", path);
             return path;
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error en crearCitaP1", e);
             return null; // JSF mostrará un error claro
+        }
+    }
+
+    public void crearCitaP2() {
+        cita.setIdUsuario(user);
+        try {
+            this.cfl.create(cita);
+            FacesContext fc = FacesContext.getCurrentInstance();
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cita Registrada Correctamente", "MSG_INFO");
+            fc.addMessage(null, fm);
+        } catch (Exception e) {
+
         }
     }
 
@@ -101,19 +125,6 @@ public class ControllerCita implements Serializable {
 
     public void setUser(Usuario user) {
         this.user = user;
-    }
-
-    public List<SelectItem> listarUsuario() {
-        listaUsuario = new ArrayList<>();
-        try {
-            for (Usuario user : this.ufl.findAll()) {
-                SelectItem item = new SelectItem(user.getIdUsuario(),user.getUser());
-                listaUsuario.add(item);
-            }
-            return listaUsuario;
-        } catch (Exception e){
-             return null;
-        }
     }
 
 }

@@ -46,4 +46,12 @@ public class controllerMedicamento implements Serializable {
     public controllerMedicamento() {
     }
     
+    public String crearMedicamentoP1(){
+        med = new Medicamento();
+        return "/views/registros/Medicamentos/crearMedicamentos.xhtml?faces-redirect=true";
+    }
+    
+    public void crearMedicamentoP2(){
+        
+    }
 }

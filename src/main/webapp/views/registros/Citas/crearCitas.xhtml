@@ -10,7 +10,32 @@
         <ui:composition template="./../../TemplateSitio.xhtml">
 
             <ui:define name="content">
-                Crear Cita
+                <f:view>
+                    <h:form>
+                        <h1><h:outputText value="Crear Cita"/></h1>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="IdCita:" for="idCita" />
+                            <h:inputText id="idCita" value="#{controllerCita.cita.idCita}" title="IdCita" required="true" requiredMessage="The IdCita field is required."/>
+                            <h:outputLabel value="Fecha:" for="fecha" />
+                            <h:inputText id="fecha" value="#{controllerCita.cita.fecha}" title="Fecha" required="true" requiredMessage="The Fecha field is required.">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:inputText>
+                            <h:outputLabel value="Hora:" for="hora" />
+                            <h:inputText id="hora" value="#{controllerCita.cita.hora}" title="Hora" required="true" requiredMessage="The Hora field is required.">
+                                <f:convertDateTime pattern="HH:mm:ss" />
+                            </h:inputText>
+                            <h:outputLabel value="Motivo:" for="motivo" />
+                            <h:inputTextarea rows="4" cols="30" id="motivo" value="#{controllerCita.cita.motivo}" title="Motivo" required="true" requiredMessage="The Motivo field is required."/>
+                            <h:outputLabel value="IdUsuario:" for="idUsuario" />
+                            <h:selectOneMenu id="idUsuario" value="#{controllerCita.cita.idUsuario}" title="IdUsuario" required="true" requiredMessage="The IdUsuario field is required.">
+                                <!-- TODO: update below reference to list of available items-->
+                                <f:selectItems value="#{controllerCita.obtenerIdUsuarioSesion}"/>
+                            </h:selectOneMenu>
+                        </h:panelGrid>
+                        <h:commandButton value="Registrar" />
+                    </h:form>
+                </f:view>
+
             </ui:define>
         </ui:composition>
     </body>
