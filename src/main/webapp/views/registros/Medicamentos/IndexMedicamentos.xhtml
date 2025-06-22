@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../../TemplateSitio.xhtml">
+
+            <ui:define name="content">
+                <h1>Medicamentos</h1>
+                <h:form>
+                    <h:commandButton value="Registrar Medicamento"/>
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>Id Medicamento</th>
+                                <th>Nombre</th>
+                                <th>Dosis</th>
+                                <th>Frecuencia</th>
+                                <th>Fecha Inicio</th>
+                                <th>Fecha Fin</th>
+                                <th>Id Usuario</th>
+                        </thead>
+                        <tbody>
+                            <ui:repeat value="#{controllerMedicamento.obtenerMedicamento()}" var="Medicamento">
+                                <tr>
+                                    <td>#{Medicamento.idMedicamento}</td>
+                                    <td>#{Medicamento.nombre}</td>
+                                    <td>#{Medicamento.dosis}</td>
+                                    <td>#{Medicamento.frecuencia}</td>
+                                    <td>#{Medicamento.fechaInicio}</td>
+                                    <td>#{Medicamento.fechafin}</td>
+                                    <td>#{Medicamento.idUsuario}</td>
+                                </tr>
+                            </ui:repeat>
+                        </tbody>
+                    </table>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

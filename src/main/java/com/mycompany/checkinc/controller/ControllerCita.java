@@ -3,7 +3,9 @@ package com.mycompany.checkinc.controller;
 import com.mycompany.checkinc.entities.Cita;
 import com.mycompany.checkinc.entities.Usuario;
 import com.mycompany.checkinc.services.CitaFacadeLocal;
+import com.mycompany.checkinc.services.UsuarioFacadeLocal;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
@@ -12,6 +14,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 @ManagedBean(name = "controllerCita")
 @ViewScoped
@@ -19,11 +22,14 @@ public class ControllerCita implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger(ControllerCita.class.getName());
     private static final long serialVersionUID = 1L;
-    
-    private Cita cita = new Cita();
-    
+
+    Cita cita = new Cita();
+    Usuario user = new Usuario();
+    List<SelectItem> listaUsuario;
     @EJB
-    private CitaFacadeLocal cfl;
+    CitaFacadeLocal cfl;
+    @EJB
+    UsuarioFacadeLocal ufl;
 
     public Cita getCita() {
         return cita;
@@ -32,7 +38,20 @@ public class ControllerCita implements Serializable {
     public void setCita(Cita cita) {
         this.cita = cita;
     }
-    
+
+    public String crearCitaP1() {
+        LOGGER.info("Ejecutando crearCitaP1()");
+        try {
+            cita = new Cita();
+            String path = "views/registros/Citas/crearCitas.xhtml?faces-redirect=true";
+            LOGGER.log(Level.INFO, "Redirigiendo a: {0}", path);
+            return path;
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error en crearCitaP1", e);
+            return null; // JSF mostrará un error claro
+        }
+    }
+
     public List<Cita> obtenerCitas() {
         try {
             List<Cita> citas = cfl.findAll();
@@ -43,7 +62,7 @@ public class ControllerCita implements Serializable {
             return Collections.emptyList(); // Nunca retornar null
         }
     }
-    
+
     public List<Cita> obtenerCitasPorUsuario(Usuario usuario) {
         try {
             return cfl.findByUsuario(usuario);
@@ -52,7 +71,7 @@ public class ControllerCita implements Serializable {
             return Collections.emptyList();
         }
     }
-    
+
     public List<Cita> obtenerCitasUsuarioSesion() {
         LOGGER.log(Level.INFO, "Invocando obtenerCitasUsuarioSesion() (ControllerCita)");
         try {
@@ -75,4 +94,26 @@ public class ControllerCita implements Serializable {
     public ControllerCita() {
         // Constructor vacío requerido por JSF
     }
+
+    public Usuario getUser() {
+        return user;
+    }
+
+    public void setUser(Usuario user) {
+        this.user = user;
+    }
+
+    public List<SelectItem> listarUsuario() {
+        listaUsuario = new ArrayList<>();
+        try {
+            for (Usuario user : this.ufl.findAll()) {
+                SelectItem item = new SelectItem(user.getIdUsuario(),user.getUser());
+                listaUsuario.add(item);
+            }
+            return listaUsuario;
+        } catch (Exception e){
+             return null;
+        }
+    }
+
 }
