@@ -19,6 +19,7 @@
         <h2>Iniciar Sesión</h2>
 
         <h:form>
+            <h:messages globalOnly="true" styleClass="message-box" infoClass="message-info" errorClass="message-error"/>
             <h:panelGroup rendered="#{login.username == null}">
                 <div class="form-group">
                     <label for="username">Nombre de Usuario:</label>

@@ -60,6 +60,9 @@ public class Login implements Serializable {    private String username;
                 HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
                 session.setAttribute("usuario", user);
                 this.authenticated = true;
+                // Mantener mensajes tras redirección
+                context.getExternalContext().getFlash().setKeepMessages(true);
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡Bienvenido " + user.getNombres()+ "!", null));
                 return "/views/registros/registroGlucosa.xhtml?faces-redirect=true";
             } else {
                 this.username = null;

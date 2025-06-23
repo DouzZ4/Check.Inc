@@ -5,6 +5,7 @@
 package com.mycompany.checkinc.services;
 
 import com.mycompany.checkinc.entities.Medicamento;
+import com.mycompany.checkinc.entities.Usuario;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -29,4 +30,5 @@ public interface MedicamentoFacadeLocal {
 
     int count();
     
+    List<Medicamento> findByUsuario(Usuario usuario);
 }

@@ -61,14 +61,14 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
             }
         } catch (NoResultException e) {
             System.out.println("UsuarioFacade: Usuario no encontrado: " + username);
-            throw new IllegalArgumentException("Usuario o contraseña incorrectos");
+            return null;
         } catch (Exception e) {
             System.out.println("UsuarioFacade: Error durante el login: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("Error inesperado durante el login: " + e.getMessage());
         }
         System.out.println("UsuarioFacade: Contraseña incorrecta para usuario: " + username);
-        throw new IllegalArgumentException("Usuario o contraseña incorrectos");
+        return null;
     }
 
     @Override

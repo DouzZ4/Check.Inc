@@ -29,6 +29,7 @@ public class CitaFacade extends AbstractFacade<Cita> implements CitaFacadeLocal 
         super(Cita.class);
     }
     
+    @Override
     public List<Cita> findByUsuario(com.mycompany.checkinc.entities.Usuario usuario) {
         return em.createQuery("SELECT c FROM Cita c WHERE c.idUsuario = :usuario ORDER BY c.fecha DESC, c.hora DESC", Cita.class)
                 .setParameter("usuario", usuario)

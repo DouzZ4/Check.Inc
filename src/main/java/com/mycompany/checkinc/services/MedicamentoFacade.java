@@ -5,6 +5,7 @@
 package com.mycompany.checkinc.services;
 
 import com.mycompany.checkinc.entities.Medicamento;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,4 +29,10 @@ public class MedicamentoFacade extends AbstractFacade<Medicamento> implements Me
         super(Medicamento.class);
     }
     
+    @Override
+    public List<Medicamento> findByUsuario(com.mycompany.checkinc.entities.Usuario usuario) {
+        return em.createQuery("SELECT m FROM Medicamento m WHERE m.idUsuario = :usuario ORDER BY m.fechaInicio", Medicamento.class)
+                .setParameter("usuario", usuario)
+                .getResultList();
+    }
 }
