@@ -47,8 +47,6 @@ public class Login implements Serializable {    private String username;
     }    public String iniciarSesion() {
         this.authenticated = false;
         FacesContext context = FacesContext.getCurrentInstance();
-        
-        // Validación básica
         if (username == null || username.trim().isEmpty() || 
             password == null || password.trim().isEmpty()) {
             context.addMessage(null, new FacesMessage(
@@ -56,26 +54,30 @@ public class Login implements Serializable {    private String username;
                 "Usuario y contraseña son requeridos", null));
             return null;
         }
-
-        // Intento de inicio de sesión
-        Usuario user = ufl.iniciarSesion(username.trim(), password);
-        
-        // Si el inicio de sesión fue exitoso
-        if (user != null && user.getIdUsuario() != null) {
-            HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-            // Guardar el usuario completo en la sesión
-            session.setAttribute("usuario", user);
-            this.authenticated = true;
-            return "/views/registros/registroGlucosa.xhtml?faces-redirect=true";
+        try {
+            Usuario user = ufl.iniciarSesion(username.trim(), password);
+            if (user != null && user.getIdUsuario() != null) {
+                HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+                session.setAttribute("usuario", user);
+                this.authenticated = true;
+                return "/views/registros/registroGlucosa.xhtml?faces-redirect=true";
+            } else {
+                this.username = null;
+                this.password = null;
+                context.addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, 
+                    "Usuario o contraseña incorrectos", null));
+                return null;
+            }
+        } catch (IllegalArgumentException ex) {
+            context.addMessage(null, new FacesMessage(
+                FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
+            return null;
+        } catch (Exception ex) {
+            context.addMessage(null, new FacesMessage(
+                FacesMessage.SEVERITY_ERROR, "Error inesperado al iniciar sesión: " + ex.getMessage(), null));
+            return null;
         }
-        
-        // Si falló el inicio de sesión
-        this.username = null;
-        this.password = null;
-        context.addMessage(null, new FacesMessage(
-            FacesMessage.SEVERITY_ERROR, 
-            "Usuario o contraseña incorrectos", null));
-        return null;
     }
       public String logout() {
         FacesContext context = FacesContext.getCurrentInstance();

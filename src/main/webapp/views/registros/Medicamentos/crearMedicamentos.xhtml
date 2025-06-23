@@ -31,9 +31,7 @@
                                 <f:convertDateTime pattern="MM/dd/yyyy" />
                             </h:inputText>
                             <h:outputLabel value="IdUsuario:" for="idUsuario" />
-                            <h:selectOneMenu id="idUsuario" value="#{controllerMedicamento.med.idUsuario}" title="IdUsuario" required="true" requiredMessage="The IdUsuario field is required."/>
-                                <f:selectItems value="#{fixme}"/>
-                            </h:selectOneMenu>
+                            <!-- Selector de usuario eliminado, el usuario se asigna automáticamente desde la sesión en el backend -->
                         </h:panelGrid>
                         <h:commandButton value="Registrar" />
                     </h:form>

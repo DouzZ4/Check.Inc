@@ -47,12 +47,7 @@
                         <h:message for="fechaFin" styleClass="message error-message"/>
                     </div>
                     <div class="form-group">
-                        <h:outputLabel for="idUsuario" value="Usuario:"/>
-                        <h:selectOneMenu id="idUsuario" value="#{controllerMedicamento.med.idUsuario}" required="true"
-                                         requiredMessage="Seleccione un usuario">
-                            <f:selectItems value="#{controllerMedicamento.usuarios}" var="usuario" itemValue="#{usuario}" itemLabel="#{usuario.nombres}"/>
-                        </h:selectOneMenu>
-                        <h:message for="idUsuario" styleClass="message error-message"/>
+                        <!-- Selector de usuario eliminado, el usuario se asigna automáticamente desde la sesión en el backend -->
                     </div>
                     <div id="form-buttons">
                         <h:commandButton value="#{controllerMedicamento.editando ? 'Actualizar' : 'Registrar'}" 

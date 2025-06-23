@@ -63,9 +63,9 @@ public class controllerMedicamento implements Serializable {
         try {
             return this.mfl.findAll();
         } catch (Exception e) {
-
+            System.err.println("Error al obtener medicamentos: " + e.getMessage());
         }
-        return null;
+        return java.util.Collections.emptyList();
     }
 
     public controllerMedicamento() {
@@ -84,6 +84,12 @@ public class controllerMedicamento implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             if (editando) {
+                if (med.getIdMedicamento() == null) {
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se puede actualizar: ID nulo", null));
+                    System.err.println("Intento de actualizar medicamento sin ID");
+                    return;
+                }
+                System.out.println("Actualizando medicamento: " + med);
                 mfl.edit(med);
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Medicamento actualizado", null));
             } else {
@@ -93,6 +99,7 @@ public class controllerMedicamento implements Serializable {
                 if (usuarioSesion != null) {
                     med.setIdUsuario(usuarioSesion);
                 }
+                System.out.println("Registrando nuevo medicamento: " + med);
                 mfl.create(med);
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Medicamento registrado", null));
             }
@@ -100,11 +107,21 @@ public class controllerMedicamento implements Serializable {
             editando = false;
         } catch (Exception e) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar", e.getMessage()));
+            System.err.println("Error al guardar medicamento: " + e.getMessage());
         }
     }
 
     public void editar(Medicamento m) {
-        this.med = m;
+        // Copia profunda para evitar problemas de referencia y asegurar que el ID se mantenga
+        Medicamento copia = new Medicamento();
+        copia.setIdMedicamento(m.getIdMedicamento());
+        copia.setNombre(m.getNombre());
+        copia.setDosis(m.getDosis());
+        copia.setFrecuencia(m.getFrecuencia());
+        copia.setFechaInicio(m.getFechaInicio());
+        copia.setFechaFin(m.getFechaFin());
+        copia.setIdUsuario(m.getIdUsuario());
+        this.med = copia;
         this.editando = true;
     }
 
