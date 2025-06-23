@@ -3,7 +3,7 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-<nav class="navbar">
+<nav class="navbar" role="navigation" aria-label="Menú principal">
     <div class="navbar-container">
         <!-- Branding/Logo Section -->
         <div class="navbar-branding">
@@ -12,22 +12,20 @@
                 <h1>CHECK</h1>
             </h:link>
         </div>
-        
         <!-- Main Navigation Links -->
-        <div class="navbar-links">
-            <h:link outcome="/index" value="Inicio" styleClass="nav-link"/>
-            
-            <h:panelGroup rendered="#{not empty login.username}">
-                <h:link outcome="/views/registros/registroGlucosa" value="Registro Glucosa" styleClass="nav-link"/>
-                <h:link outcome="/views/registros/registroCitas" value="Registro Citas" styleClass="nav-link"/>
-            </h:panelGroup>
-        </div>
-        
+        <ul class="navbar-links" style="list-style:none;display:flex;gap:18px;margin:0;padding:0;align-items:center;">
+            <li><h:link outcome="/index" value="Inicio" styleClass="nav-link"/></li>
+            <ui:fragment rendered="#{not empty login.username}">
+                <li><h:link outcome="/views/registros/Citas/IndexCitas.xhtml" value="Citas" styleClass="nav-link"/></li>
+                <li><h:link outcome="/views/registros/Medicamentos/IndexMedicamentos.xhtml" value="Medicamentos" styleClass="nav-link"/></li>
+                <li><h:link outcome="/views/registros/registroGlucosa" value="Glucosa" styleClass="nav-link"/></li>
+            </ui:fragment>
+        </ul>
         <!-- User Area -->
-        <div class="navbar-user-info">
+        <div class="navbar-user-info" style="display:flex;align-items:center;gap:10px;">
             <h:panelGroup rendered="#{not empty login.username}">
-                <span class="welcome-message">Hola, #{login.username}</span>
-                <h:form styleClass="logout-form">
+                <span class="welcome-message" style="font-weight:bold;">Hola, #{login.username}</span>
+                <h:form styleClass="logout-form" style="display:inline;">
                     <h:commandButton value="Cerrar Sesión" 
                                    action="#{login.logout}" 
                                    styleClass="button-logout">
@@ -35,7 +33,6 @@
                     </h:commandButton>
                 </h:form>
             </h:panelGroup>
-            
             <h:panelGroup rendered="#{empty login.username}">
                 <h:link outcome="/views/usuarios/login" value="Iniciar Sesión" styleClass="button-login"/>
                 <h:link outcome="/views/usuarios/registrousuario" value="Registrarse" styleClass="button-register"/>

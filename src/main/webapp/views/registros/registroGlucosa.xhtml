@@ -1,37 +1,23 @@
-<!DOCTYPE html>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      lang="es">
-    <h:head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Registro y Consulta de Glucosa</title>
-        <h:outputStylesheet name="css/navbar.css"/>
-        <h:outputStylesheet name="css/styles.css"/>
-        <link rel="shortcut icon" href="#{request.contextPath}/resources/images/ICONO.png"/>
-    </h:head>
-    
-    <h:body>
-        <ui:include src="/includes/navbar.xhtml"/>
-        
-        <main>
-            <h:messages globalOnly="true" styleClass="message-box" 
-                       infoClass="message-info" errorClass="message-error"/>
-            
+      lang="es" xml:lang="es">
+    <ui:composition template="/views/TemplateSitio.xhtml">
+        <ui:define name="title">Registro y Consulta de Glucosa</ui:define>
+        <ui:define name="content">
+            <h:messages globalOnly="true" styleClass="message-box" infoClass="message-info" errorClass="message-error"/>
             <section aria-labelledby="chart-heading" rendered="#{not empty registroGlucosa.registros}">
                 <h2 id="chart-heading">Tendencia de Glucosa</h2>
                 <p:lineChart id="glucoseChart" model="#{registroGlucosa.lineChartModel}" style="width:100%;height:400px"/>
             </section>
-            
             <section aria-labelledby="form-title-heading">
                 <h2 id="form-title-heading">#{registroGlucosa.editando ? 'Editar' : 'Registrar'} Medición</h2>
-                
                 <h:form id="formGlucosa">
                     <h:inputHidden id="id" value="#{registroGlucosa.id}"/>
-                    
                     <div class="form-group">
                         <h:outputLabel for="nivelGlucosa" value="Nivel de Glucosa (mg/dL):"/>
                         <h:inputText id="nivelGlucosa" value="#{registroGlucosa.nivelGlucosa}" required="true"
@@ -41,7 +27,6 @@
                         </h:inputText>
                         <h:message for="nivelGlucosa" styleClass="message error-message"/>
                     </div>
-                    
                     <div class="form-group">
                         <h:outputLabel for="fechaHora" value="Fecha y Hora:"/>
                         <p:datePicker id="fechaHora" value="#{registroGlucosa.fechaHora}" required="true"
@@ -50,17 +35,13 @@
                         <h:message for="fechaHora" styleClass="message error-message"/>
                         <h:commandButton value="Ahora" action="#{registroGlucosa.setFechaHoraNow}" immediate="true" styleClass="now-button"/>
                     </div>
-                    
                     <div id="form-buttons">
                         <h:commandButton value="#{registroGlucosa.editando ? 'Actualizar' : 'Registrar'}" 
                                        action="#{registroGlucosa.registrar}"
                                        styleClass="submit-button"/>
-                        
                         <h:commandButton value="Cancelar" 
                                        action="#{registroGlucosa.cancelarEdicion}"
-                                       rendered="#{registroGlucosa.editando}"
-                                       immediate="true"
-                                       styleClass="cancel-button"/>
+                                       immediate="true" styleClass="cancel-button"/>
                     </div>
                 </h:form>
             </section>
@@ -106,6 +87,6 @@
                     </h:form>
                 </div>
             </section>
-        </main>
-    </h:body>
+        </ui:define>
+    </ui:composition>
 </html>

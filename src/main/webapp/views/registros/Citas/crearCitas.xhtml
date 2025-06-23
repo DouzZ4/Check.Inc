@@ -4,38 +4,34 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
       lang="es" xml:lang="es">
     <head>
         <title>Crear Cita | CheckInc</title>
     </head>
     <body>
-
         <ui:composition template="./../../TemplateSitio.xhtml">
-
             <ui:define name="content">
                 <f:view>
                     <h:form>
                         <h1><h:outputText value="Crear Cita"/></h1>
-                        <h:panelGrid columns="2">
-                            <h:outputLabel value="IdCita:" for="idCita" />
-                            <h:inputText id="idCita" value="#{controllerCita.cita.idCita}" title="IdCita" required="true" requiredMessage="The IdCita field is required."/>
+                        <div style="max-width:400px;margin:0 auto;">
+                        <h:panelGrid columns="2" styleClass="form-table" columnClasses="form-label,form-input">
                             <h:outputLabel value="Fecha:" for="fecha" />
-                            <h:inputText id="fecha" value="#{controllerCita.cita.fecha}" title="Fecha" required="true" requiredMessage="The Fecha field is required.">
-                                <f:convertDateTime pattern="MM/dd/yyyy" />
-                            </h:inputText>
+                            <p:calendar id="fecha" value="#{controllerCita.cita.fecha}" pattern="dd/MM/yyyy" required="true" requiredMessage="La fecha es obligatoria" styleClass="input-field"/>
                             <h:outputLabel value="Hora:" for="hora" />
-                            <h:inputText id="hora" value="#{controllerCita.cita.hora}" title="Hora" required="true" requiredMessage="The Hora field is required.">
-                                <f:convertDateTime pattern="HH:mm:ss" />
-                            </h:inputText>
+                            <h:inputText id="hora" value="#{controllerCita.cita.hora}" title="Hora" required="true" requiredMessage="La hora es obligatoria." styleClass="input-field"/>
                             <h:outputLabel value="Motivo:" for="motivo" />
-                            <h:inputTextarea rows="4" cols="30" id="motivo" value="#{controllerCita.cita.motivo}" title="Motivo" required="true" requiredMessage="The Motivo field is required."/>
+                            <h:inputTextarea rows="4" cols="30" id="motivo" value="#{controllerCita.cita.motivo}" title="Motivo" required="true" requiredMessage="El motivo es obligatorio." styleClass="input-field"/>
                             <h:outputLabel value="Usuario:" for="usuario" />
-                            <h:outputText id="usuario" value="#{controllerCita.user.nombres}" />
+                            <h:outputText id="usuario" value="#{controllerCita.user.nombres}" styleClass="input-field"/>
                         </h:panelGrid>
-                        <h:commandButton value="Registrar" />
+                        </div>
+                        <div style="text-align:center;margin-top:20px;">
+                            <h:commandButton value="Registrar" styleClass="button" />
+                        </div>
                     </h:form>
                 </f:view>
-
             </ui:define>
         </ui:composition>
     </body>

@@ -13,9 +13,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import org.primefaces.model.charts.ChartData;
-import org.primefaces.model.charts.line.LineChartModel;
-import org.primefaces.model.charts.line.LineChartDataSet;
 
 @ManagedBean(name = "registroGlucosa")
 @ViewScoped
@@ -34,7 +31,7 @@ public class RegistroGlucosa implements Serializable {
     private Date fechaHora;
     private List<Glucosa> registros;
     private boolean editando;
-    private LineChartModel lineChartModel;
+    private org.primefaces.model.charts.line.LineChartModel lineChartModel;
     
     public RegistroGlucosa() {
         this.fechaHora = new Date();
@@ -55,23 +52,54 @@ public class RegistroGlucosa implements Serializable {
     }
 
     private void initLineChart() {
-        lineChartModel = new LineChartModel();
-        ChartData data = new ChartData();
-        LineChartDataSet dataSet = new LineChartDataSet();
+        org.primefaces.model.charts.line.LineChartModel model = new org.primefaces.model.charts.line.LineChartModel();
+        org.primefaces.model.charts.ChartData data = new org.primefaces.model.charts.ChartData();
+        org.primefaces.model.charts.line.LineChartDataSet dataSet = new org.primefaces.model.charts.line.LineChartDataSet();
+
         java.util.List<Object> values = new java.util.ArrayList<>();
         java.util.List<String> labels = new java.util.ArrayList<>();
         if (registros != null) {
-            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm");
+            java.text.SimpleDateFormat sdfShort = new java.text.SimpleDateFormat("dd/MM"); // Eje X
+            java.text.SimpleDateFormat sdfFull = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm"); // Tooltip
             for (Glucosa g : registros) {
+                // El valor sigue siendo numérico, pero la etiqueta del eje X es corta
                 values.add(g.getNivelGlucosa());
-                labels.add(sdf.format(g.getFechaHora()));
+                // La etiqueta del eje X es corta
+                labels.add(sdfShort.format(g.getFechaHora()));
+                // Guardamos la fecha completa en el label del dataset para el tooltip (truco visual)
+            }
+            // Truco: mostrar la fecha completa en el label del dataset (esto aparece en el tooltip)
+            if (!registros.isEmpty()) {
+                dataSet.setLabel("Nivel de Glucosa (" + sdfFull.format(registros.get(registros.size()-1).getFechaHora()) + ")");
             }
         }
         dataSet.setData(values);
         dataSet.setLabel("Nivel de Glucosa");
+        dataSet.setFill(true);
+        dataSet.setBorderColor("#3058a6"); // Azul fuerte
+        dataSet.setBackgroundColor("rgba(48,88,166,0.15)"); // Relleno suave
+        dataSet.setPointBackgroundColor("#f45501"); // Naranja para los puntos
+        dataSet.setPointRadius(5);
+        dataSet.setPointHoverRadius(7);
+        dataSet.setTension(0.4); // Línea suavizada
+        dataSet.setShowLine(true);
+
         data.setLabels(labels);
         data.addChartDataSet(dataSet);
-        lineChartModel.setData(data);
+        model.setData(data);
+
+        // Opciones del gráfico
+        org.primefaces.model.charts.line.LineChartOptions options = new org.primefaces.model.charts.line.LineChartOptions();
+        options.setResponsive(true);
+        options.setLegend(new org.primefaces.model.charts.optionconfig.legend.Legend());
+        options.getLegend().setDisplay(true);
+        options.getLegend().setPosition("top");
+        options.setTitle(new org.primefaces.model.charts.optionconfig.title.Title());
+        options.getTitle().setDisplay(true);
+        options.getTitle().setText("Tendencia de Glucosa");
+        model.setOptions(options);
+
+        this.lineChartModel = model;
     }
     
     // Getters y Setters
@@ -89,7 +117,7 @@ public class RegistroGlucosa implements Serializable {
     public boolean isEditando() { return editando; }
     public void setEditando(boolean editando) { this.editando = editando; }
 
-    public LineChartModel getLineChartModel() {
+    public org.primefaces.model.charts.line.LineChartModel getLineChartModel() {
         return lineChartModel;
     }
 

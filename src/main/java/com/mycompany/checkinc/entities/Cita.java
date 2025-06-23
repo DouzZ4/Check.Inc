@@ -141,7 +141,7 @@ public class Cita implements Serializable {
 
     @Override
     public String toString() {
-        return "com.mycompany.checkinc.entities.Cita[ idCita=" + idCita + " ]";
+        return "idCita=" + idCita + " ";
     }
     
 }

@@ -35,9 +35,9 @@
                                     <td>#{Medicamento.nombre}</td>
                                     <td>#{Medicamento.dosis}</td>
                                     <td>#{Medicamento.frecuencia}</td>
-                                    <td>#{Medicamento.fechaInicio}</td>
-                                    <td>#{Medicamento.fechaFin}</td>
-                                    <td>#{Medicamento.idUsuario.idUsuario}</td>
+                                    <td><h:outputText value="#{Medicamento.fechaInicio}"><f:convertDateTime pattern="dd/MM/yyyy"/></h:outputText></td>
+                                    <td><h:outputText value="#{Medicamento.fechaFin}"><f:convertDateTime pattern="dd/MM/yyyy"/></h:outputText></td>
+                                    <td>#{Medicamento.idUsuario.nombres}</td>
                                 </tr>
                             </ui:repeat>
                         </tbody>

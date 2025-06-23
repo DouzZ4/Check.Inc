@@ -1,59 +1,38 @@
-<!DOCTYPE html>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      lang="es">
-<h:head>    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Inicio - CHECK</title>
-    <h:outputStylesheet name="css/navbar.css"/>
-    <h:outputStylesheet name="css/index.css"/>
-    <h:outputStylesheet name="css/styles.css"/>
-    <link rel="shortcut icon" href="#{request.contextPath}/resources/images/ICONO.png"/>
-</h:head>
-
-<h:body>
-    <ui:include src="includes/navbar.xhtml"/>
-    
-    <div class="container">
-        <h1>CHECK</h1>
-        
-        <h:panelGroup rendered="#{empty login.username}">
-            <p>Bienvenido. Por favor inicia sesión o regístrate.</p>
-            
-            <div class="button-group">
-                <h:form>
-                    <h:commandButton value="Iniciar Sesión" action="/views/usuarios/login?faces-redirect=true" 
-                                   styleClass="button"/>
-                </h:form>
-                
-                <h:form>
-                    <h:commandButton value="Registrarse" action="/views/usuarios/registrousuario?faces-redirect=true" 
-                                   styleClass="button"/>
-                </h:form>
-            </div>
-        </h:panelGroup>
-
-        <h:panelGroup rendered="#{not empty login.username}">
-            <p>Bienvenido, #{login.username}. Navega por el menú o accede a tus registros.</p>
-            
-            <div class="button-group">
-                <h:form>
-                    <h:commandLink value="Registro Glucosa" action="registroGlucosa?faces-redirect=true" 
-                                 styleClass="button"/>
-                </h:form>
-                
-                <h:form>
-                    <h:commandLink value="Registro Citas" action="registroCitas?faces-redirect=true" 
-                                 styleClass="button"/>
-                </h:form>
-                
-                <h:form>
-                    <h:commandLink value="Prueba" action="/views/inicioGestion.xhtml?faces-redirect=true" 
-                                 styleClass="button"/>
-                </h:form>
-            </div>
-        </h:panelGroup>
-    </div>
-</h:body>
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      lang="es" xml:lang="es">
+    <ui:composition template="/views/TemplateSitio.xhtml">
+        <ui:define name="title">Inicio - CHECK</ui:define>
+        <ui:define name="content">
+            <h1>CHECK</h1>
+            <h:panelGroup rendered="#{empty login.username}">
+                <p>Bienvenido. Por favor inicia sesión o regístrate.</p>
+                <div class="button-group">
+                    <h:form>
+                        <h:commandButton value="Iniciar Sesión" action="/views/usuarios/login?faces-redirect=true" styleClass="button"/>
+                    </h:form>
+                    <h:form>
+                        <h:commandButton value="Registrarse" action="/views/usuarios/registrousuario?faces-redirect=true" styleClass="button"/>
+                    </h:form>
+                </div>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{not empty login.username}">
+                <p>Bienvenido, #{login.username}. Navega por el menú o accede a tus registros.</p>
+                <div class="button-group">
+                    <h:form>
+                        <h:commandLink value="Registro Glucosa" action="views/registros/registroGlucosa.xhtml?faces-redirect=true" styleClass="button"/>
+                    </h:form>
+                    <h:form>
+                        <h:commandLink value="Registro Citas" action="views/registros/registroCitas.xhtml?faces-redirect=true" styleClass="button"/>
+                    </h:form>
+                    <h:form>
+                        <h:commandLink value="Prueba" action="/views/inicioGestion.xhtml?faces-redirect=true" styleClass="button"/>
+                    </h:form>
+                </div>
+            </h:panelGroup>
+        </ui:define>
+    </ui:composition>
 </html>

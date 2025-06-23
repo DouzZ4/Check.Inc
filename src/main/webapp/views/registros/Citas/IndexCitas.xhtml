@@ -2,8 +2,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      lang="es" xml:lang="es">
+    <head>
+        <title>Lista de Citas | CheckInc</title>
+    </head>
     <body>
         <ui:composition template="./../../TemplateSitio.xhtml">
             <ui:define name="content">
@@ -18,17 +22,17 @@
                                 <th>Fecha</th>
                                 <th>Hora</th>
                                 <th>Motivo</th>
-                                <th>Id Usuario</th>
+                                <th>Usuario</th>
                             </tr>
                         </thead>
                         <tbody>
                             <ui:repeat value="#{controllerCita.obtenerCitas()}" var="cita">
                                 <tr>
                                     <td>#{cita.idCita}</td>
-                                    <td>#{cita.fecha}</td>
-                                    <td>#{cita.hora}</td>
+                                    <td><h:outputText value="#{cita.fecha}"><f:convertDateTime pattern="dd/MM/yyyy"/></h:outputText></td>
+                                    <td><h:outputText value="#{cita.hora}"><f:convertDateTime pattern="HH:mm"/></h:outputText></td>
                                     <td>#{cita.motivo}</td>
-                                    <td>#{cita.idUsuario}</td>
+                                    <td>#{cita.idUsuario.nombres}</td>
                                 </tr>
                             </ui:repeat>
                         </tbody>
