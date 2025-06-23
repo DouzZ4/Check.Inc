@@ -38,8 +38,9 @@ body {
     color: white; /* Asegurar que el título sea blanco */
 }
 .logo-navbar {
-    height: 50px; /* O el tamaño que necesites */
+    height: 50px !important; /* O el tamaño que necesites */
     width: auto; /* Para mantener proporción */
+    max-height: 50px;
     margin-right: 10px;
     filter:
     drop-shadow(1px 1px 0 white) /* Sombra abajo-derecha */
@@ -90,21 +91,10 @@ body {
      color: #f0f4f8; /* Ligeramente más claro al pasar el ratón */
 }
 
-
 .navbar-user-info {
     display: flex;
     align-items: center;
-    gap: 10px; /* Espacio entre "Hola, X" y botones */
-}
-
-.navbar-user-info .welcome-message {
-    font-size: 0.95em;
-    margin-right: 5px; /* Pequeño espacio antes del botón */
-    white-space: nowrap;
-}
-
-/* --- Estilos para Botones en Navbar (y general si aplica) --- */
-.button { /* Clase genérica de botón */
+    gap: 10px;
     display: inline-block;
     padding: 8px 18px; /* Ajusta padding */
     margin: 0; /* Quitar margen por defecto si se usa en flex/grid */
@@ -116,27 +106,59 @@ body {
     font-size: 0.9em; /* Ligeramente más pequeño en navbar */
     border: none;
     transition: background-color 0.3s ease, transform 0.1s ease;
-    white-space: nowrap;
+    white-space: nowrap;/* Espacio entre "Hola, X" y botones */
 }
-.button:hover {
-    text-decoration: none; /* Asegurar que no haya subrayado */
-    transform: translateY(-1px); /* Ligero efecto al pasar el ratón */
+
+.navbar-user-info .welcome-message {
+    font-size: 0.95em;
+    margin-right: 5px; /* Pequeño espacio antes del botón */
+    white-space: nowrap;
 }
 
 .button-login, .button-register {
-    background-color: #f45501; /* Naranja */
-    color: white !important;
-}
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 10px 5px;
+            background-color: #f45501; /* Naranja Principal */
+            color: white !important; /* Forzar color blanco en enlace */
+            text-decoration: none;
+            border-radius: 5px;
+            border: none; /* Quitar borde si se usa en <button> */
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #d84a00; /* Naranja más oscuro */
+            text-decoration: none;
+        }
+        /* Botón secundario (ej. Registrarse si ya hay Iniciar Sesión) */
+        .button-secondary {
+             background-color: #5a6268; /* Gris */
+        }
+         .button-secondary:hover {
+             background-color: #4a4f54;
+         }
 .button-login:hover, .button-register:hover {
     background-color: #d84a00; /* Naranja oscuro */
 }
 
 .button-logout {
-    background-color: #6c757d; /* Gris oscuro */
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #6c757d; /* Gray color */
     color: white !important;
+    text-decoration: none !important; /* Remove underline */
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
 }
 .button-logout:hover {
-    background-color: #5a6268; /* Gris más oscuro */
+    background-color: #dc3545 !important; /* Red color on hover */
+    text-decoration: none !important;
 }
 
 /* --- Responsividad Básica para Navbar --- */
@@ -162,28 +184,3 @@ body {
          order: 1;
     }
 }
-
-        .button { /* Estilo para botones de acción en esta página */
-            display: inline-block;
-            padding: 12px 25px;
-            margin: 10px 5px;
-            background-color: #f45501; /* Naranja Principal */
-            color: white !important; /* Forzar color blanco en enlace */
-            text-decoration: none;
-            border-radius: 5px;
-            border: none; /* Quitar borde si se usa en <button> */
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-        .button:hover {
-            background-color: #d84a00; /* Naranja más oscuro */
-            text-decoration: none;
-        }
-        /* Botón secundario (ej. Registrarse si ya hay Iniciar Sesión) */
-        .button-secondary {
-             background-color: #5a6268; /* Gris */
-        }
-         .button-secondary:hover {
-             background-color: #4a4f54;
-         }

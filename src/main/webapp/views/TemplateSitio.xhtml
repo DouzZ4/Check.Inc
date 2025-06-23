@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      lang="es" xml:lang="es">
+
+    <h:head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title><ui:insert name="title">CheckInc</ui:insert></title>
+        <h:outputStylesheet name="css/navbar.css"/>
+        <h:outputStylesheet name="css/index.css"/>
+        <h:outputStylesheet name="css/styles.css"/>
+        <link rel="shortcut icon" href="#{request.contextPath}/resources/images/ICONO.png"/>
+        <style>
+            body {
+                min-height: 100vh;
+                background: linear-gradient(120deg, #e0eaff 0%, #f7ffe0 100%);
+                /* Puedes ajustar los colores para lograr el efecto deseado */
+            }
+            .container {
+                background: rgba(255,255,255,0.95);
+                border-radius: 16px;
+                box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+                padding: 32px 24px;
+                margin-top: 32px;
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+        <ui:include src="/includes/navbar.xhtml"/>
+        <div class="container">
+            <ui:insert name="content">Content</ui:insert>
+        </div>
+        <footer style="text-align:center; margin-top:40px; color:#888; font-size:0.95em;">
+            &copy; 2025 CheckInc. Todos los derechos reservados.
+        </footer>
+    </h:body>
+
+</html>

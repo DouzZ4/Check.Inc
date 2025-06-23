@@ -1,40 +1,48 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-<h:head>
-    <meta charset="UTF-8" />
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      lang="es">
+<h:head>    <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Inicio de Sesión - Check</title>
-    <h:outputStylesheet library="css" name="navbar.css"/>
+    <title>Inicio de Sesión - Control Glucosa</title>    <h:outputStylesheet library="css" name="navbar.css"/>
     <h:outputStylesheet library="css" name="login.css"/>
+    <h:outputStylesheet library="css" name="styles.css"/>
+    <link rel="shortcut icon" href="#{request.contextPath}/resources/images/ICONO.png"/>
 
 </h:head>
 
 <h:body>
-    <ui:include src="../../includes/navbar.xhtml" />
+    <ui:include src="/includes/navbar.xhtml"/>
 
     <main class="form-container login-container">
         <h2>Iniciar Sesión</h2>
 
         <h:form>
+            <h:messages globalOnly="true" styleClass="message-box" infoClass="message-info" errorClass="message-error"/>
+            <h:panelGroup rendered="#{login.username == null}">
+                <div class="form-group">
+                    <label for="username">Nombre de Usuario:</label>
+                    <h:inputText id="username" value="#{login.username}" required="true" requiredMessage="Este campo es obligatorio"/>
+                    <h:message for="username" styleClass="message"/>
+                </div>
 
-            <h:panelGrid columns="3" class="form-group">
-                <h:outputLabel for="user" value="Nombre de Usuario:" />
-                <h:inputText id="user" value="#{login.user}" required="true" requiredMessage="El campo usuario es obligatorio"/>
-                <h:message for="user" class="mensaje"/>
-                
-                <h:outputLabel for="password" value="Contraseña:" />
-                <h:inputSecret id="password" value="#{login.password}" required="true" requiredMessage="El campo contraseña es obligatorio"/>
-                <h:message for="password" class="mensaje"/>
-            </h:panelGrid>
-            
-            <h:commandButton value="Iniciar Sesión" action="/index?faces-redirect=true" styleClass="submit-button" />
+                <div class="form-group">
+                    <label for="password">Contraseña:</label>
+                    <h:inputSecret id="password" value="#{login.password}" required="true"
+                                   requiredMessage="Debe ingresar una contraseña"/>
+                    <h:message for="password" styleClass="message"/>
+                </div>
 
-            <div class="register-link">
-                ¿No tienes cuenta? 
-        <h:link outcome="/views/usuarios/registrousuario" value="Regístrate aquí" />
-            </div>
+                <h:commandButton value="Iniciar Sesión" action="#{login.iniciarSesion}" styleClass="submit-button"/>
+
+                <div class="register-link">
+                    ¿No tienes cuenta? <h:link value="Regístrate aquí" outcome="registrousuario"/>
+                </div>
+            </h:panelGroup>            <h:panelGroup rendered="#{login.authenticated}">
+                <p>¡Bienvenido #{login.username}! Accede a tu <h:link value="Dashboard" outcome="/inicioGestion.xhtml?faces-redirect=true"/>.</p>
+                <h:commandButton value="Cerrar Sesión" action="#{login.logout}" styleClass="submit-button"/>
+            </h:panelGroup>
         </h:form>
     </main>
 </h:body>

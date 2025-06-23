@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>404 - Página no encontrada</title>
+        <h:outputStylesheet library="css" name="styles.css"/>
+        <style type="text/css">
+            .error-container {
+                text-align: center;
+                padding: 40px;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            .error-code {
+                font-size: 72px;
+                color: #e74c3c;
+                margin-bottom: 20px;
+            }
+            .error-message {
+                font-size: 24px;
+                color: #2c3e50;
+                margin-bottom: 30px;
+            }
+            .home-link {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #3498db;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                transition: background-color 0.3s;
+            }
+            .home-link:hover {
+                background-color: #2980b9;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <div class="error-container">
+            <div class="error-code">404</div>
+            <div class="error-message">Lo sentimos, la página que buscas no existe.</div>
+            <h:link outcome="/index" styleClass="home-link">
+                Volver al inicio
+            </h:link>
+        </div>
+    </h:body>
+</html>

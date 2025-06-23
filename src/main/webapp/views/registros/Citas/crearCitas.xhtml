@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      lang="es" xml:lang="es">
+    <head>
+        <title>Crear Cita | CheckInc</title>
+    </head>
+    <body>
+        <ui:composition template="./../../TemplateSitio.xhtml">
+            <ui:define name="content">
+                <f:view>
+                    <h:form>
+                        <h1><h:outputText value="Crear Cita"/></h1>
+                        <div style="max-width:400px;margin:0 auto;">
+                        <h:panelGrid columns="2" styleClass="form-table" columnClasses="form-label,form-input">
+                            <h:outputLabel value="Fecha:" for="fecha" />
+                            <p:calendar id="fecha" value="#{controllerCita.cita.fecha}" pattern="dd/MM/yyyy" required="true" requiredMessage="La fecha es obligatoria" styleClass="input-field"/>
+                            <h:outputLabel value="Hora:" for="hora" />
+                            <h:inputText id="hora" value="#{controllerCita.cita.hora}" title="Hora" required="true" requiredMessage="La hora es obligatoria." styleClass="input-field"/>
+                            <h:outputLabel value="Motivo:" for="motivo" />
+                            <h:inputTextarea rows="4" cols="30" id="motivo" value="#{controllerCita.cita.motivo}" title="Motivo" required="true" requiredMessage="El motivo es obligatorio." styleClass="input-field"/>
+                            <h:outputLabel value="Usuario:" for="usuario" />
+                            <h:outputText id="usuario" value="#{controllerCita.user.nombres}" styleClass="input-field"/>
+                        </h:panelGrid>
+                        </div>
+                        <div style="text-align:center;margin-top:20px;">
+                            <h:commandButton value="Registrar" styleClass="button" />
+                        </div>
+                    </h:form>
+                </f:view>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

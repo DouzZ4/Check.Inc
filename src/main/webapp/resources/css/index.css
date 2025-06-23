@@ -25,4 +25,27 @@ body {
              color: #555;
          }
 
-      
+        .button { /* Estilo para botones de acción en esta página */
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 10px 5px;
+            background-color: #f45501; /* Naranja Principal */
+            color: white !important; /* Forzar color blanco en enlace */
+            text-decoration: none;
+            border-radius: 5px;
+            border: none; /* Quitar borde si se usa en <button> */
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #d84a00; /* Naranja más oscuro */
+            text-decoration: none;
+        }
+        /* Botón secundario (ej. Registrarse si ya hay Iniciar Sesión) */
+        .button-secondary {
+             background-color: #5a6268; /* Gris */
+        }
+         .button-secondary:hover {
+             background-color: #4a4f54;
+         }

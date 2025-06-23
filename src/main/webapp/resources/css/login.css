@@ -4,12 +4,14 @@ body {
     margin: 0;
     padding: 0;
 }
+
 header {
     background-color: #3058a6;
     color: white;
     text-align: center;
     padding: 15px 0;
 }
+
 main {
     max-width: 400px;
     margin: 50px auto;
@@ -18,16 +20,20 @@ main {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
+/* Ajuste para evitar que otros estilos afecten los botones */
 .mensaje {
     text-align: center;
     font-weight: bold;
     margin-bottom: 15px;
 }
+
 form label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
 }
+
 form input, form button {
     width: 100%;
     padding: 10px;
@@ -35,12 +41,18 @@ form input, form button {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+/* Corrección para los botones */
 form button {
-    background-color: #3058a6;
-    color: white;
+    background-color: #3058a6 !important;
+    color: white !important;
     border: none;
     cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
 }
+
+/* Color de hover para los botones en login */
 form button:hover {
-    background-color: #f45501;
+    background-color: #f45501 !important;
 }
