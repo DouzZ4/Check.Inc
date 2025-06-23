@@ -5,47 +5,119 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       lang="es" xml:lang="es">
-    <head>
-        <title>Medicamentos | CheckInc</title>
-    </head>
-    <body>
-
-        <ui:composition template="./../../TemplateSitio.xhtml">
-
-            <ui:define name="content">
-                <h1>Medicamentos</h1>
-                <h:form>
-                    <h:commandButton value="Registrar Medicamento" action="#{controllerMedicamento.crearMedicamentoP1()}"/>
-                    <table border="1">
-                        <thead>
-                            <tr>
-                                <th>Id Medicamento</th>
-                                <th>Nombre</th>
-                                <th>Dosis</th>
-                                <th>Frecuencia</th>
-                                <th>Fecha Inicio</th>
-                                <th>Fecha Fin</th>
-                                <th>Id Usuario</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <ui:repeat value="#{controllerMedicamento.obtenerMedicamento()}" var="Medicamento">
-                                <tr>
-                                    <td>#{Medicamento.idMedicamento}</td>
-                                    <td>#{Medicamento.nombre}</td>
-                                    <td>#{Medicamento.dosis}</td>
-                                    <td>#{Medicamento.frecuencia}</td>
-                                    <td><h:outputText value="#{Medicamento.fechaInicio}"><f:convertDateTime pattern="dd/MM/yyyy"/></h:outputText></td>
-                                    <td><h:outputText value="#{Medicamento.fechaFin}"><f:convertDateTime pattern="dd/MM/yyyy"/></h:outputText></td>
-                                    <td>#{Medicamento.idUsuario.nombres}</td>
-                                </tr>
-                            </ui:repeat>
-                        </tbody>
-                    </table>
+    <ui:composition template="./../../TemplateSitio.xhtml">
+        <ui:define name="content">
+            <h:messages globalOnly="true" styleClass="message-box" infoClass="message-info" errorClass="message-error"/>
+            <section aria-labelledby="form-title-heading">
+                <h2 id="form-title-heading">#{controllerMedicamento.editando ? 'Editar' : 'Registrar'} Medicamento</h2>
+                <h:form id="formMedicamento">
+                    <h:inputHidden id="id" value="#{controllerMedicamento.med.idMedicamento}"/>
+                    <div class="form-group">
+                        <h:outputLabel for="nombre" value="Nombre:"/>
+                        <h:inputText id="nombre" value="#{controllerMedicamento.med.nombre}" required="true"
+                                   requiredMessage="Por favor ingrese el nombre"/>
+                        <h:message for="nombre" styleClass="message error-message"/>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel for="dosis" value="Dosis:"/>
+                        <h:inputText id="dosis" value="#{controllerMedicamento.med.dosis}" required="true"
+                                   requiredMessage="Por favor ingrese la dosis"/>
+                        <h:message for="dosis" styleClass="message error-message"/>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel for="frecuencia" value="Frecuencia:"/>
+                        <h:inputText id="frecuencia" value="#{controllerMedicamento.med.frecuencia}" required="true"
+                                   requiredMessage="Por favor ingrese la frecuencia"/>
+                        <h:message for="frecuencia" styleClass="message error-message"/>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel for="fechaInicio" value="Fecha Inicio:"/>
+                        <h:inputText id="fechaInicio" value="#{controllerMedicamento.med.fechaInicio}" required="true"
+                                   requiredMessage="Por favor ingrese la fecha de inicio">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:inputText>
+                        <h:message for="fechaInicio" styleClass="message error-message"/>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel for="fechaFin" value="Fecha Fin:"/>
+                        <h:inputText id="fechaFin" value="#{controllerMedicamento.med.fechaFin}" required="true"
+                                   requiredMessage="Por favor ingrese la fecha de fin">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:inputText>
+                        <h:message for="fechaFin" styleClass="message error-message"/>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel for="idUsuario" value="Usuario:"/>
+                        <h:selectOneMenu id="idUsuario" value="#{controllerMedicamento.med.idUsuario}" required="true"
+                                         requiredMessage="Seleccione un usuario">
+                            <f:selectItems value="#{controllerMedicamento.usuarios}" var="usuario" itemValue="#{usuario}" itemLabel="#{usuario.nombres}"/>
+                        </h:selectOneMenu>
+                        <h:message for="idUsuario" styleClass="message error-message"/>
+                    </div>
+                    <div id="form-buttons">
+                        <h:commandButton value="#{controllerMedicamento.editando ? 'Actualizar' : 'Registrar'}" 
+                                       action="#{controllerMedicamento.registrar}"
+                                       styleClass="submit-button"/>
+                        <h:commandButton value="Cancelar" 
+                                       action="#{controllerMedicamento.cancelarEdicion}"
+                                       immediate="true" styleClass="cancel-button"/>
+                    </div>
                 </h:form>
-            </ui:define>
-
-        </ui:composition>
-
-    </body>
+            </section>
+            <section aria-labelledby="registros-heading">
+                <h2 id="registros-heading">Registros de Medicamentos</h2>
+                <div style="overflow-x: auto;">
+                    <h:form id="tablaForm">
+                        <h:dataTable value="#{controllerMedicamento.obtenerMedicamento()}" var="medicamento"
+                                   styleClass="tabla-registros"
+                                   headerClass="tabla-header"
+                                   rowClasses="tabla-fila-par,tabla-fila-impar">
+                            <h:column>
+                                <f:facet name="header">ID</f:facet>
+                                #{medicamento.idMedicamento}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Nombre</f:facet>
+                                #{medicamento.nombre}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Dosis</f:facet>
+                                #{medicamento.dosis}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Frecuencia</f:facet>
+                                #{medicamento.frecuencia}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Fecha Inicio</f:facet>
+                                <h:outputText value="#{medicamento.fechaInicio}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Fecha Fin</f:facet>
+                                <h:outputText value="#{medicamento.fechaFin}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Usuario</f:facet>
+                                #{medicamento.idUsuario.nombres}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Acciones</f:facet>
+                                <h:commandButton value="Editar" 
+                                               action="#{controllerMedicamento.editar(medicamento)}"
+                                               styleClass="action-button edit-button"/>
+                                <h:commandButton value="Eliminar" 
+                                               action="#{controllerMedicamento.eliminar(medicamento)}"
+                                               styleClass="action-button delete-button"
+                                               onclick="return confirm('¿Está seguro de eliminar este medicamento?');"/>
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
+                </div>
+            </section>
+        </ui:define>
+    </ui:composition>
 </html>
