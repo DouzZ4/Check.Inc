@@ -1,7 +1,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
 
 <nav class="navbar" role="navigation" aria-label="Menú principal">
     <div class="navbar-container">
@@ -18,7 +19,14 @@
             <ui:fragment rendered="#{not empty login.username}">
                 <li><h:link outcome="/views/registros/Citas/IndexCitas.xhtml" value="Citas" styleClass="nav-link"/></li>
                 <li><h:link outcome="/views/registros/Medicamentos/IndexMedicamentos.xhtml" value="Medicamentos" styleClass="nav-link"/></li>
-                <li><h:link outcome="/views/registros/registroGlucosa" value="Glucosa" styleClass="nav-link"/></li>
+                <li><h:link outcome="/views/registros/registroGlucosa.xhtml" value="Glucosa" styleClass="nav-link"/></li>
+                <li>
+                     <h:form>
+                            <p:commandButton value="Descargar Reporte" action="#{reporteBean.descargarReporteDinamico}" ajax="false" icon="pi pi-download"/>
+                    </h:form>
+                </li>
+
+
             </ui:fragment>
         </ul>
         <!-- User Area -->
