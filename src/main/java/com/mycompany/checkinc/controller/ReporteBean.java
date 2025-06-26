@@ -10,8 +10,12 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.mycompany.checkinc.entities.Cita;
+import com.mycompany.checkinc.entities.Glucosa;
 import com.mycompany.checkinc.entities.Medicamento;
 import com.mycompany.checkinc.entities.Usuario;
+import com.mycompany.checkinc.services.CitaFacadeLocal;
+import com.mycompany.checkinc.services.GlucosaFacadeLocal;
 import com.mycompany.checkinc.services.MedicamentoFacadeLocal;
 import com.mycompany.checkinc.services.UsuarioFacadeLocal;
 import java.io.IOException;
@@ -37,6 +41,12 @@ public class ReporteBean implements Serializable {
 
     @EJB
     private MedicamentoFacadeLocal medicamentoFacade;
+    
+    @EJB
+    private GlucosaFacadeLocal glucosaFacade;
+
+    @EJB
+    private CitaFacadeLocal citaFacade;
 
     public void exportarCSV() throws IOException {
         exportar("text/csv", "usuarios.csv", ",");
@@ -130,11 +140,11 @@ public class ReporteBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         String viewId = context.getViewRoot().getViewId();
 
-        if (viewId.contains("glucosa")) {
+        if (viewId.contains("registroGlucosa")) {
             exportarGlucosaPDF();
-        } else if (viewId.contains("Medicamentos")) {
+        } else if (viewId.contains("IndexMedicamentos")) {
             exportarMedicamentosPDF();
-        } else if (viewId.contains("Citas")) {
+        } else if (viewId.contains("IndexCitas")) {
             exportarCitasPDF();
         } else {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
@@ -203,12 +213,123 @@ public class ReporteBean implements Serializable {
     }
 
     private void exportarGlucosaPDF() throws IOException {
-        // Aquí va la lógica para exportar glucosa
-    }
+    FacesContext context = FacesContext.getCurrentInstance();
+    HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
 
-    private void exportarCitasPDF() throws IOException {
-        // Aquí va la lógica para exportar citas
+    response.setContentType("application/pdf");
+    response.setHeader("Content-Disposition", "attachment; filename=\"glucosa.pdf\"");
+
+    Document document = new Document();
+    try {
+        PdfWriter.getInstance(document, response.getOutputStream());
+        document.open();
+
+        Font titleFont = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
+        Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+        Font cellFont = new Font(Font.FontFamily.HELVETICA, 11);
+
+        Paragraph title = new Paragraph("Niveles de Glucosa Registrados", titleFont);
+        title.setAlignment(Element.ALIGN_CENTER);
+        title.setSpacingAfter(20f);
+        document.add(title);
+
+        PdfPTable table = new PdfPTable(3);
+        table.setWidthPercentage(100);
+        table.setWidths(new int[]{1, 2, 3});
+
+        String[] headers = {"ID", "Nivel de Glucosa", "Fecha y Hora"};
+        for (String header : headers) {
+            PdfPCell cell = new PdfPCell(new Phrase(header, headerFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            table.addCell(cell);
+        }
+
+        // Obtener usuario desde sesión
+        Usuario usuario = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
+        if (usuario == null) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario no autenticado"));
+            return;
+        }
+
+        // Obtener los registros de glucosa del usuario
+        List<Glucosa> registros = glucosaFacade.findByUsuario(usuario);
+
+        for (Glucosa g : registros) {
+            table.addCell(new Phrase(String.valueOf(g.getIdGlucosa()), cellFont));
+            table.addCell(new Phrase(String.valueOf(g.getNivelGlucosa()), cellFont));
+            table.addCell(new Phrase(g.getFechaHora().toString(), cellFont));
+        }
+
+        document.add(table);
+    } catch (DocumentException e) {
+        e.printStackTrace();
+    } finally {
+        document.close();
+        context.responseComplete();
     }
+}
+
+
+   private void exportarCitasPDF() throws IOException {
+    FacesContext context = FacesContext.getCurrentInstance();
+    HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
+
+    response.setContentType("application/pdf");
+    response.setHeader("Content-Disposition", "attachment; filename=\"citas.pdf\"");
+
+    Document document = new Document();
+    try {
+        PdfWriter.getInstance(document, response.getOutputStream());
+        document.open();
+
+        Font titleFont = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
+        Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+        Font cellFont = new Font(Font.FontFamily.HELVETICA, 11);
+
+        Paragraph title = new Paragraph("Citas Registradas", titleFont);
+        title.setAlignment(Element.ALIGN_CENTER);
+        title.setSpacingAfter(20f);
+        document.add(title);
+
+        PdfPTable table = new PdfPTable(4);
+        table.setWidthPercentage(100);
+        table.setWidths(new int[]{1, 3, 3, 3});
+
+        String[] headers = {"ID", "Motivo", "Fecha", "Hora"};
+        for (String header : headers) {
+            PdfPCell cell = new PdfPCell(new Phrase(header, headerFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            table.addCell(cell);
+        }
+
+        // Obtener usuario desde sesión
+        Usuario usuario = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
+        if (usuario == null) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario no autenticado"));
+            return;
+        }
+
+        // Obtener las citas del usuario
+        List<Cita> citas = citaFacade.findByUsuario(usuario);
+
+        for (Cita c : citas) {
+            table.addCell(new Phrase(String.valueOf(c.getIdCita()), cellFont));
+            table.addCell(new Phrase(c.getMotivo(), cellFont));
+            table.addCell(new Phrase(c.getFecha().toString(), cellFont));
+            table.addCell(new Phrase(c.getHora().toString(), cellFont));
+        }
+
+        document.add(table);
+    } catch (DocumentException e) {
+        e.printStackTrace();
+    } finally {
+        document.close();
+        context.responseComplete();
+    }
+}
+
 
     private MenuModel model;
 
