@@ -27,8 +27,6 @@ public class RegistroUsuario implements Serializable {
     private int documento;
     private String password;
 
-    // Getters y setters omitidos por brevedad...
-
     public String registrar() {
     try {
         if (usuarioFacade.findByUser(username) != null) {
