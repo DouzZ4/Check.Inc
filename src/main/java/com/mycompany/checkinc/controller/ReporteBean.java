@@ -335,6 +335,7 @@ private PdfPCell estilizarCelda(String texto, Font font, BaseColor bgColor) {
 
         List<Glucosa> registros = glucosaFacade.findByUsuario(usuario);
         for (Glucosa g : registros) {
+            table.addCell(new Phrase(g.getIdGlucosa().toString(), cellFont));
             table.addCell(new Phrase(String.valueOf(g.getNivelGlucosa()), cellFont));
             table.addCell(new Phrase(g.getFechaHora().toString(), cellFont));
         }
