@@ -23,6 +23,13 @@ public class Login implements Serializable {    private String username;
     @EJB
     private UsuarioFacadeLocal ufl;
     
+    public String irALogin() {
+        return "/views/usuarios/login.xhtml?faces-redirect=true";
+    }
+
+    public String irARegistro() {
+        return "/views/usuarios/registrousuario.xhtml?faces-redirect=true";
+    }
     // Getters y setters
     public String getUsername() {
         return username;

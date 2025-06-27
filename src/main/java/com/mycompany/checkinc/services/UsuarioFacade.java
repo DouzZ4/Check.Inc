@@ -87,4 +87,16 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         }
         super.edit(usuario);
     }
+
+    @Override
+public Usuario findByUser(String user) {
+    try {
+        Query query = em.createQuery("SELECT u FROM Usuario u WHERE u.user = :user");
+        query.setParameter("user", user);
+        return (Usuario) query.getSingleResult();
+    } catch (NoResultException e) {
+        return null;
+    }
+}
+
 }

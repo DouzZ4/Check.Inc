@@ -26,8 +26,11 @@ public interface UsuarioFacadeLocal {
     List<Usuario> findAll();
 
     List<Usuario> findRange(int[] range);
+    
+    Usuario findByUser(String user); 
 
     int count();
     
     Usuario iniciarSesion(String username, String password);
 }
+
