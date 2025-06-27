@@ -1,26 +1,82 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      lang="es" xml:lang="es">
-    <body>
-        <ui:composition template="./TemplateSitio.xhtml">
-            <ui:define name="content">
-                <h1 style="text-align:center; color:#3058a6; margin-bottom:30px;">Panel de Gestión</h1>
-                <div style="display:flex; justify-content:center; gap:40px; flex-wrap:wrap;">
-                    <div style="background:#fff; border-radius:10px; box-shadow:0 2px 8px #0001; padding:30px 40px; min-width:220px; text-align:center;">
-                        <h2 style="color:#3058a6;">Citas</h2>
-                        <p>Consulta y administra tus citas médicas.</p>
-                        <h:link outcome="/views/registros/Citas/IndexCitas.xhtml" styleClass="button" value="Ir a Citas"/>
-                    </div>
-                    <div style="background:#fff; border-radius:10px; box-shadow:0 2px 8px #0001; padding:30px 40px; min-width:220px; text-align:center;">
-                        <h2 style="color:#3058a6;">Medicamentos</h2>
-                        <p>Consulta y administra tus medicamentos.</p>
-                        <h:link outcome="/views/registros/Medicamentos/IndexMedicamentos.xhtml" styleClass="button" value="Ir a Medicamentos"/>
-                    </div>
-                </div>
-            </ui:define>
-        </ui:composition>
-    </body>
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      lang="es">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Panel de Administración - Control Glucosa</title>
+    <h:outputStylesheet library="css" name="navbar.css"/>
+    <h:outputStylesheet library="css" name="styles.css"/>
+    <style>
+        .dashboard-container { padding: 20px 30px; }
+        .welcome-admin { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin-top: 20px; }
+        .dashboard-card { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+        .dashboard-card h3 { margin-top: 0; margin-bottom: 15px; color: #3058a6; }
+        .dashboard-card .stat-number { font-size: 2.5em; font-weight: bold; color: #f45501; display: block; margin-bottom: 10px; }
+        .dashboard-card p { margin-bottom: 5px; color: #555; }
+        .dashboard-card .card-link { display: inline-block; margin-top: 15px; padding: 8px 15px; background-color: #3058a6; color: white !important; text-decoration: none; border-radius: 4px; transition: background-color 0.3s ease; }
+        .dashboard-card .card-link:hover { background-color: #24437c; }
+        .error-stats { color: red; font-style: italic; }
+    </style>
+</h:head>
+
+<h:body>
+    <ui:include src="/includes/navbar.xhtml"/>
+
+    <main class="dashboard-container">
+        <h1 class="welcome-admin">Panel de Administración</h1>
+        <h:panelGroup rendered="#{login.usuarioActual != null}">
+            <p>Bienvenido de nuevo, <strong>#{login.usuarioActual.nombres}</strong>.</p>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{dashboardAdminBean.errorStats != null}">
+            <p class="error-stats">#{dashboardAdminBean.errorStats}</p>
+        </h:panelGroup>
+
+        <div class="dashboard-grid">
+
+            <div class="dashboard-card">
+                <h3>Estadísticas Rápidas</h3>
+                <p>Usuarios Registrados:</p>
+                <span class="stat-number">#{dashboardAdminBean.totalUsuarios}</span>
+                <p>Registros Glucosa:</p>
+                <span class="stat-number">#{dashboardAdminBean.totalRegistrosGlucosa}</span>
+                <p>Citas Programadas:</p>
+                <span class="stat-number">#{dashboardAdminBean.totalCitas}</span>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Gestionar Usuarios</h3>
+                <p>Ver, editar o eliminar cuentas de usuario.</p>
+                <h:link outcome="admin_gestionar_usuarios.xhtml" styleClass="card-link" value="Ir a Gestión de Usuarios"/>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Ver Registros Globales</h3>
+                <p>Consultar todos los registros del sistema.</p>
+                <h:link outcome="admin_ver_registros.xhtml">
+                    <f:param name="tipo" value="glucosa"/>
+                    <h:outputText value="Ver Registros Glucosa" styleClass="card-link"/>
+                </h:link>
+                <br/>
+                <h:link outcome="admin_ver_registros.xhtml">
+                    <f:param name="tipo" value="citas"/>
+                    <h:outputText value="Ver Registros Citas" styleClass="card-link"/>
+                </h:link>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Configuración</h3>
+                <p>Ajustes generales del sistema.</p>
+                <h:link outcome="admin_configuracion.xhtml" styleClass="card-link" value="Ir a Configuración"/>
+            </div>
+
+        </div>
+    </main>
+</h:body>
 </html>
