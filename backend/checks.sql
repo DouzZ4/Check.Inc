@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-06-2025 a las 16:22:52
+-- Tiempo de generación: 04-07-2025 a las 18:13:25
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `checkinc`
+-- Base de datos: `checks`
 --
 
 -- --------------------------------------------------------
@@ -61,6 +61,8 @@ CREATE TABLE `cita` (
 --
 
 INSERT INTO `cita` (`idCita`, `fecha`, `hora`, `motivo`, `idUsuario`) VALUES
+(1, '2025-07-10', '09:00:00', 'Control mensual de glucosa', 1),
+(2, '2025-07-12', '10:30:00', 'Revisión de medicamentos', 2),
 (3, '2025-04-02', '18:45:00', 'fgfgfgf', 15),
 (4, '2025-04-02', '17:45:00', 'fgfgfgf', 15),
 (5, '2025-04-03', '18:16:00', 'nose', 15),
@@ -68,6 +70,11 @@ INSERT INTO `cita` (`idCita`, `fecha`, `hora`, `motivo`, `idUsuario`) VALUES
 (7, '2025-04-07', '21:26:00', 'asdadsdas', 15),
 (8, '2025-04-01', '21:15:00', 'nose', 15),
 (9, '2025-04-06', '22:48:00', 'nose', 15),
+(15, '2025-07-15', '08:45:00', 'Chequeo general', 3),
+(16, '2025-07-18', '11:00:00', 'Consulta nutricional', 4),
+(17, '2025-07-20', '13:15:00', 'Examen de laboratorio', 5),
+(18, '2025-07-25', '16:30:00', 'Consulta psicológica', 2),
+(19, '2025-07-22', '15:00:00', 'Revisión de historial', 1),
 (20, '2025-04-10', '09:00:00', 'Control anual Dr. López', 1),
 (21, '2025-04-11', '11:30:00', 'Examen de sangre', 3),
 (22, '2025-04-15', '16:00:00', 'Consulta nutricionista', 5),
@@ -78,11 +85,17 @@ INSERT INTO `cita` (`idCita`, `fecha`, `hora`, `motivo`, `idUsuario`) VALUES
 (27, '2025-05-05', '09:30:00', 'Entrega resultados análisis', 1),
 (28, '2025-05-10', '17:00:00', 'Consulta seguimiento', 8),
 (29, '2025-05-15', '10:45:00', 'Podólogo', 7),
+(30, '2025-07-27', '07:30:00', 'Evaluación de presión', 3),
+(31, '2025-07-28', '09:45:00', 'Renovación de fórmula', 4),
+(32, '2025-07-30', '14:00:00', 'Resultados de análisis', 5),
 (34, '2025-04-01', '22:46:00', 'Revision semanal', 40),
 (35, '2025-04-25', '10:00:00', 'Control general', 1),
 (36, '2025-04-25', '09:00:00', 'Control trimestral diabetes', 1),
 (37, '2025-05-10', '11:30:00', 'Consulta nutricionista', 1),
-(38, '2025-05-05', '15:00:00', 'Consulta general', 2);
+(38, '2025-05-05', '15:00:00', 'Consulta general', 2),
+(39, '2025-06-03', '13:38:00', 'nose', 1),
+(40, '2025-06-03', '13:38:00', 'nose', 1),
+(41, '2025-06-03', '13:38:00', 'nose', 1);
 
 -- --------------------------------------------------------
 
@@ -102,8 +115,17 @@ CREATE TABLE `glucosa` (
 --
 
 INSERT INTO `glucosa` (`idGlucosa`, `nivelGlucosa`, `fechaHora`, `idUsuario`) VALUES
+(1, 110.5, '2025-07-01 08:00:00', 1),
+(2, 98.3, '2025-07-01 20:00:00', 1),
+(3, 135, '2025-07-02 07:45:00', 2),
+(4, 120.2, '2025-07-02 19:30:00', 2),
+(5, 145.7, '2025-07-03 09:15:00', 3),
+(6, 130.6, '2025-07-03 21:10:00', 3),
+(7, 110, '2025-07-04 08:30:00', 4),
+(8, 105.4, '2025-07-04 20:20:00', 4),
+(9, 125.9, '2025-07-05 10:00:00', 5),
+(10, 115.3, '2025-07-05 22:15:00', 5),
 (13, 77, '2025-04-01 19:11:00', 1),
-(14, 120.5, '2025-04-01 19:16:00', 1),
 (15, 70, '2025-03-31 23:10:00', 15),
 (16, 70.6, '2025-03-31 23:10:00', 15),
 (17, 55, '2025-04-03 17:03:00', 15),
@@ -111,26 +133,30 @@ INSERT INTO `glucosa` (`idGlucosa`, `nivelGlucosa`, `fechaHora`, `idUsuario`) VA
 (20, 76.5322, '2025-04-06 18:55:00', 15),
 (22, 22, '2025-03-31 21:13:00', 15),
 (23, 26, '2025-04-02 21:47:00', 15),
-(24, 95.5, '2025-04-01 08:00:00', 1),
 (25, 110, '2025-04-01 08:30:00', 2),
-(26, 145.2, '2025-04-01 12:30:00', 1),
+(26, 76, '2025-04-01 12:30:00', 1),
 (27, 88, '2025-04-02 07:45:00', 3),
 (28, 120.8, '2025-04-02 14:00:00', 4),
 (29, 92.1, '2025-04-03 08:15:00', 1),
 (30, 160.5, '2025-04-03 19:00:00', 5),
 (31, 105, '2025-04-04 09:00:00', 2),
 (32, 75, '2025-04-05 11:00:00', 6),
-(33, 130, '2025-04-06 13:15:00', 1),
+(33, 70, '2025-04-06 13:15:00', 1),
 (36, 213, '2025-04-07 22:27:00', 40),
 (37, 467, '2025-04-15 22:30:00', 40),
 (38, 33, '2025-04-09 19:27:00', 40),
-(41, 105.5, '2025-04-18 08:00:00', 1),
-(42, 130, '2025-04-18 12:30:00', 1),
+(41, 78, '2025-04-18 08:00:00', 1),
+(42, 76, '2025-04-18 12:30:00', 1),
 (43, 115.8, '2025-04-19 07:45:00', 1),
 (44, 145.2, '2025-04-19 13:00:00', 1),
 (45, 95, '2025-04-19 09:00:00', 2),
 (46, 110.3, '2025-04-19 14:00:00', 2),
-(47, 105.5, '2025-04-21 19:30:00', 1);
+(47, 105.5, '2025-04-21 19:30:00', 1),
+(48, 76.5, '2025-06-19 04:43:00', 1),
+(49, 76.5, '2025-06-19 04:43:00', 1),
+(50, 78, '2025-06-11 05:07:00', 1),
+(51, 75, '2025-06-23 15:10:00', 1),
+(52, 76, '2025-06-25 16:04:00', 1);
 
 -- --------------------------------------------------------
 
@@ -153,8 +179,28 @@ CREATE TABLE `medicamento` (
 --
 
 INSERT INTO `medicamento` (`idMedicamento`, `nombre`, `dosis`, `frecuencia`, `fechaInicio`, `fechaFin`, `idUsuario`) VALUES
-(1, 'Metformina', '850 mg', '2 veces al día', '2024-01-15', '2025-12-31', 1),
-(2, 'Glibenclamida', '5 mg', '1 vez al día (mañana)', '2024-06-01', '2025-06-01', 1);
+(1, 'Metformina', '500mg', '2 veces al día', '2025-06-01', '2025-08-01', 1),
+(2, 'Glibenclamida', '5 mg', '1 vez al día (mañana)', '2024-06-01', '2025-06-01', 1),
+(3, 'Glibenclamida2', '5 mg', '1 vez al día (mañana)', '2024-05-31', '2025-05-31', 1),
+(4, 'Glibenclamida3', '5 mg', '1 vez al día (mañana)', '2024-05-31', '2025-05-31', 1),
+(5, 'Glibenclamida3', '5 mg', '1 vez al día (mañana)', '2024-05-31', '2025-05-31', 1),
+(6, 'Glibenclamida3', '5 mg', '1 vez al día (mañana)', '2024-05-31', '2025-05-31', 1),
+(7, 'Glibenclamida5', '5 mg', '1 vez al día (mañana)', '2024-05-31', '2025-05-31', 1),
+(8, 'Glibenclamida5', '5 mg', '1 vez al día (mañana)', '2024-05-31', '2025-05-31', 1),
+(9, 'metmorfina', 'nose', 'NOSE', '2025-05-21', '2025-06-21', 1),
+(10, 'Glibenclamida26', '5 mg', '1 vez al día (mañana)', '2024-05-30', '2025-05-30', 1),
+(11, 'Glibenclami', '5 mg', '1 vez al día (mañana)', '2024-05-29', '2025-05-29', 1),
+(12, 'Glibenclam', 'nose', 'nose', '2025-06-23', '2025-07-16', 1),
+(13, 'Glibenclam2', 'nose', 'nose', '2025-05-06', '2025-06-23', 1),
+(14, 'Januvia', '100mg', 'Cada 12 horas', '2025-06-20', '2025-09-20', 2),
+(15, 'Lantus', '15U', 'Noche', '2025-06-25', '2025-09-25', 3),
+(16, 'Byetta', '10mcg', 'Cada comida', '2025-07-01', '2025-10-01', 3),
+(17, 'Actos', '30mg', '1 vez al día', '2025-07-05', '2025-09-05', 4),
+(18, 'Trulicity', '0.75mg', 'Cada semana', '2025-07-10', '2025-10-10', 4),
+(19, 'Farxiga', '10mg', '1 vez al día', '2025-07-15', '2025-09-15', 5),
+(20, 'Invokana', '100mg', '1 vez al día', '2025-07-20', '2025-10-20', 5),
+(22, 'Insulina', '10U', 'Antes del desayuno', '2025-06-10', '2025-09-10', 1),
+(23, 'Glipizida', '5mg', '1 vez al día', '2025-06-15', '2025-08-15', 2);
 
 -- --------------------------------------------------------
 
@@ -267,9 +313,9 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`idUsuario`, `user`, `password`, `documento`, `nombres`, `apellidos`, `correo`, `edad`, `idRol`) VALUES
-(1, 'carlosg', 'pass1234', 1001234567, 'Carlos', 'Gómez', 'carlos.gomez@example.com', 30, 2),
+(1, 'carlosg', '$2a$10$OQHjlgrDQjBjL1qbK6he1Ow.OFcE3SE1zbcmYgxkRJierbLd3MnRS', 1001234567, 'Carlos', 'Gómez', 'carlos.gomez@example.com', 30, 2),
 (2, 'anam', 'clave5678', 1007654321, 'Ana', 'Martínez', 'ana.martinez@example.com', 25, 2),
-(3, 'luisf', 'segura9012', 1012345678, 'Luis', 'Fernández', 'luis.fernandez@example.com', 40, 1),
+(3, 'luisf', '$2a$10$mGfPkrh.PdHrXV9HfHHmPeExO1j3jJpCl38vgcigPzjN2aUOWyJEG', 1012345678, 'Luis', 'Fernández', 'luis.fernandez@example.com', 40, 1),
 (4, 'marial', 'password2024', 1018765432, 'María', 'López', 'maria.lopez@example.com', 35, 2),
 (5, 'javierr', 'passabcd', 1023456789, 'Javier', 'Rodríguez', 'javier.rodriguez@example.com', 28, 1),
 (6, 'sofiap', 'claveqwerty', 1029876543, 'Sofía', 'Pérez', 'sofia.perez@example.com', 32, 2),
@@ -411,19 +457,19 @@ ALTER TABLE `anomalia`
 -- AUTO_INCREMENT de la tabla `cita`
 --
 ALTER TABLE `cita`
-  MODIFY `idCita` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `idCita` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT de la tabla `glucosa`
 --
 ALTER TABLE `glucosa`
-  MODIFY `idGlucosa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `idGlucosa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT de la tabla `medicamento`
 --
 ALTER TABLE `medicamento`
-  MODIFY `idMedicamento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idMedicamento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `notificacion`

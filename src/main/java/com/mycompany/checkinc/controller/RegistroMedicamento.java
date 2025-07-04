@@ -35,6 +35,13 @@ public class RegistroMedicamento implements Serializable {
     private List<Medicamento> registros;
     private boolean editando;
     
+    // --- Filtros y orden dinámico ---
+    private String filtroNombre;
+    private String filtroDosis;
+    private String filtroFrecuencia;
+    private String campoOrden = "nombre";
+    private boolean ascendente = true;
+
     public RegistroMedicamento() {
         this.fechaInicio = new Date();
         this.fechaFin = new Date();
@@ -76,6 +83,51 @@ public class RegistroMedicamento implements Serializable {
     public boolean isEditando() { return editando; }
     public void setEditando(boolean editando) { this.editando = editando; }
     
+    // Filtros y orden dinámico
+    public String getFiltroNombre() { return filtroNombre; }
+    public void setFiltroNombre(String filtroNombre) { this.filtroNombre = filtroNombre; }
+    public String getFiltroDosis() { return filtroDosis; }
+    public void setFiltroDosis(String filtroDosis) { this.filtroDosis = filtroDosis; }
+    public String getFiltroFrecuencia() { return filtroFrecuencia; }
+    public void setFiltroFrecuencia(String filtroFrecuencia) { this.filtroFrecuencia = filtroFrecuencia; }
+    public String getCampoOrden() { return campoOrden; }
+    public void setCampoOrden(String campoOrden) { this.campoOrden = campoOrden; }
+    public boolean isAscendente() { return ascendente; }
+    public void setAscendente(boolean ascendente) { this.ascendente = ascendente; }
+
+    public List<Medicamento> getRegistrosFiltradosYOrdenados() {
+        if (registros == null) return java.util.Collections.emptyList();
+        java.util.stream.Stream<Medicamento> stream = registros.stream();
+        if (filtroNombre != null && !filtroNombre.isEmpty()) {
+            stream = stream.filter(m -> m.getNombre() != null && m.getNombre().toLowerCase().contains(filtroNombre.toLowerCase()));
+        }
+        if (filtroDosis != null && !filtroDosis.isEmpty()) {
+            stream = stream.filter(m -> m.getDosis() != null && m.getDosis().toLowerCase().contains(filtroDosis.toLowerCase()));
+        }
+        if (filtroFrecuencia != null && !filtroFrecuencia.isEmpty()) {
+            stream = stream.filter(m -> m.getFrecuencia() != null && m.getFrecuencia().toLowerCase().contains(filtroFrecuencia.toLowerCase()));
+        }
+        java.util.Comparator<Medicamento> comparator;
+        switch (campoOrden) {
+            case "dosis":
+                comparator = java.util.Comparator.comparing(m -> m.getDosis() != null ? m.getDosis().toLowerCase() : "");
+                break;
+            case "frecuencia":
+                comparator = java.util.Comparator.comparing(m -> m.getFrecuencia() != null ? m.getFrecuencia().toLowerCase() : "");
+                break;
+            default:
+                comparator = java.util.Comparator.comparing(m -> m.getNombre() != null ? m.getNombre().toLowerCase() : "");
+        }
+        if (!ascendente) {
+            comparator = comparator.reversed();
+        }
+        return stream.sorted(comparator).collect(java.util.stream.Collectors.toList());
+    }
+
+    public void aplicarFiltrosOrden() {
+        // No es necesario implementar nada, el getter hace todo
+    }
+
     // Métodos de acción
     public void registrar() {
         Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(USUARIO_SESSION_KEY);

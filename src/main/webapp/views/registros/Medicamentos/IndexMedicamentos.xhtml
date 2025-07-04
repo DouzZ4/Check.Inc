@@ -61,47 +61,69 @@
             <section aria-labelledby="registros-heading">
                 <h2 id="registros-heading">Registros de Medicamentos</h2>
                 <div style="overflow-x: auto;">
+                    <h:form id="filtrosForm">
+                        <div class="filtros-medicamentos">
+                            <h:outputLabel for="filtroNombre" value="Filtrar por Nombre:"/>
+                            <h:inputText id="filtroNombre" value="#{registroMedicamento.filtroNombre}">
+                                <f:ajax render="tablaForm" execute="@this"/>
+                            </h:inputText>
+                            <h:outputLabel for="filtroDosis" value="Filtrar por Dosis:"/>
+                            <h:inputText id="filtroDosis" value="#{registroMedicamento.filtroDosis}">
+                                <f:ajax render="tablaForm" execute="@this"/>
+                            </h:inputText>
+                            <h:outputLabel for="filtroFrecuencia" value="Filtrar por Frecuencia:"/>
+                            <h:inputText id="filtroFrecuencia" value="#{registroMedicamento.filtroFrecuencia}">
+                                <f:ajax render="tablaForm" execute="@this"/>
+                            </h:inputText>
+                            <h:outputLabel for="campoOrden" value="Ordenar por:"/>
+                            <h:selectOneMenu id="campoOrden" value="#{registroMedicamento.campoOrden}">
+                                <f:selectItem itemValue="nombre" itemLabel="Nombre"/>
+                                <f:selectItem itemValue="dosis" itemLabel="Dosis"/>
+                                <f:selectItem itemValue="frecuencia" itemLabel="Frecuencia"/>
+                            </h:selectOneMenu>
+                            <h:selectOneMenu id="ascendente" value="#{registroMedicamento.ascendente}">
+                                <f:selectItem itemValue="true" itemLabel="A-Z"/>
+                                <f:selectItem itemValue="false" itemLabel="Z-A"/>
+                            </h:selectOneMenu>
+                            <h:commandButton value="Aplicar" action="#{registroMedicamento.aplicarFiltrosOrden}" styleClass="filtro-boton">
+                                <f:ajax render="tablaForm" execute="@form"/>
+                            </h:commandButton>
+                        </div>
+                    </h:form>
                     <h:form id="tablaForm">
-                        <h:dataTable value="#{registroMedicamento.registros}" var="medicamento"
+                        <h:dataTable value="#{registroMedicamento.registrosFiltradosYOrdenados}" var="medicamento"
                                    styleClass="tabla-registros"
                                    headerClass="tabla-header"
                                    rowClasses="tabla-fila-par,tabla-fila-impar">                        
-                            
                             <h:column>
                                 <f:facet name="header">Nombre</f:facet>
                                 #{medicamento.nombre}
                             </h:column>
-                            
                             <h:column>
                                 <f:facet name="header">Dosis</f:facet>
                                 #{medicamento.dosis}
                             </h:column>
-                            
                             <h:column>
                                 <f:facet name="header">Frecuencia</f:facet>
                                 #{medicamento.frecuencia}
                             </h:column>
-                            
                             <h:column>
                                 <f:facet name="header">Fecha Inicio</f:facet>
                                 <h:outputText value="#{medicamento.fechaInicio}">
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText>
                             </h:column>
-                            
                             <h:column>
                                 <f:facet name="header">Fecha Fin</f:facet>
                                 <h:outputText value="#{medicamento.fechaFin}">
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText>
                             </h:column>
-                            
                             <h:column>
                                 <f:facet name="header">Acciones</f:facet>
                                 <h:commandButton value="Editar" 
                                                action="#{registroMedicamento.editar(medicamento)}"
                                                styleClass="action-button edit-button"/>
-                                
                                 <h:commandButton value="Eliminar" 
                                                action="#{registroMedicamento.eliminar(medicamento)}"
                                                styleClass="action-button delete-button"
