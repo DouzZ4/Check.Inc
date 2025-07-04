@@ -55,7 +55,6 @@
                             <h:inputText id="filtroNivel" value="#{registroGlucosa.filtroNivel}">
                                 <f:ajax render="tablaForm" execute="@this"/>
                             </h:inputText>
-                            <!-- Puedes agregar más filtros aquí si lo deseas -->
                         </div>
                     </h:form>
                     <h:form id="tablaForm">
@@ -63,11 +62,6 @@
                                    styleClass="tabla-registros"
                                    headerClass="tabla-header"
                                    rowClasses="tabla-fila-par,tabla-fila-impar">
-                            
-                            <h:column>
-                                <f:facet name="header">ID</f:facet>
-                                #{registro.idGlucosa}
-                            </h:column>
                             
                             <h:column>
                                 <f:facet name="header">Nivel (mg/dL)</f:facet>
