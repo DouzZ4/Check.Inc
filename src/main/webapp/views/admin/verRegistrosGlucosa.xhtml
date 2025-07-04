@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      lang="es">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Registros Glucosa - Admin</title>
+    <h:outputStylesheet library="css" name="navbar.css"/>
+    <h:outputStylesheet library="css" name="styles.css"/>
+    <style>
+        .dashboard-container { padding: 20px 30px; }
+        .welcome-admin { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+        .placeholder { color: #888; font-size: 1.2em; margin-top: 40px; text-align: center; }
+    </style>
+</h:head>
+<h:body>
+    <ui:include src="/includes/navbar.xhtml"/>
+    <main class="dashboard-container">
+        <h1 class="welcome-admin">Registros de Glucosa</h1>
+        <div class="placeholder">
+            Aquí se mostrarán los registros de glucosa para el administrador.
+        </div>
+    </main>
+</h:body>
+</html>

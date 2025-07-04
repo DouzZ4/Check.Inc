@@ -22,7 +22,7 @@
             <!-- Si el usuario está autenticado y es ADMIN -->
             <ui:fragment rendered="#{not empty login.usuarioActual and login.usuarioActual.idRol.idRol == 1}">
                 <li><h:link outcome="/views/inicioGestion" value="Dashboard" styleClass="nav-link"/></li>
-                <li><h:link outcome="/views/admin/gestionarUsuarios" value="Usuarios" styleClass="nav-link"/></li>
+                <li><h:link outcome="/views/admin_gestionar_usuarios.xhtml" value="Usuarios" styleClass="nav-link"/></li>
                 <li><h:link outcome="/views/admin/verRegistrosGlucosa" value="Registros Glucosa" styleClass="nav-link"/></li>
                 <li><h:link outcome="/views/admin/verRegistrosCitas" value="Registros Citas" styleClass="nav-link"/></li>
             </ui:fragment>

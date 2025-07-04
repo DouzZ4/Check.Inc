@@ -339,3 +339,139 @@ table td:last-child {
     color: #3058a6;
     font-weight: bold;
 }
+
+/* --- Filtros de tablas (Glucosa, Citas, Medicamentos) --- */
+.filtros-glucosa, .filtros-citas, .filtros-medicamentos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px 24px;
+    align-items: flex-end;
+    background: #f0f4f8;
+    border-radius: 8px;
+    padding: 18px 20px 10px 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(48, 88, 166, 0.07);
+}
+.filtros-glucosa label,
+.filtros-citas label,
+.filtros-medicamentos label {
+    font-weight: 600;
+    color: #3058a6;
+    margin-bottom: 4px;
+}
+.filtros-glucosa input[type="text"],
+.filtros-citas input[type="text"],
+.filtros-medicamentos input[type="text"] {
+    border: 1.5px solid #b6c6e3;
+    border-radius: 5px;
+    padding: 7px 12px;
+    font-size: 1em;
+    background: #fff;
+    transition: border-color 0.2s;
+}
+.filtros-glucosa input[type="text"]:focus,
+.filtros-citas input[type="text"]:focus,
+.filtros-medicamentos input[type="text"]:focus {
+    border-color: #3058a6;
+    outline: none;
+}
+.filtros-glucosa select,
+.filtros-citas select,
+.filtros-medicamentos select {
+    border: 1.5px solid #b6c6e3;
+    border-radius: 5px;
+    padding: 7px 12px;
+    font-size: 1em;
+    background: #fff;
+    transition: border-color 0.2s;
+}
+.filtros-glucosa select:focus,
+.filtros-citas select:focus,
+.filtros-medicamentos select:focus {
+    border-color: #3058a6;
+    outline: none;
+}
+.filtros-glucosa .filtro-boton,
+.filtros-citas .filtro-boton,
+.filtros-medicamentos .filtro-boton {
+    background-color: #3058a6;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 18px;
+    font-weight: 600;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-left: 10px;
+}
+.filtros-glucosa .filtro-boton:hover,
+.filtros-citas .filtro-boton:hover,
+.filtros-medicamentos .filtro-boton:hover {
+    background-color: #223a6b;
+}
+.filtros-medicamentos {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    grid-template-rows: repeat(5, auto);
+    gap: 10px 18px;
+    align-items: center;
+    background: #f0f4f8;
+    border-radius: 8px;
+    padding: 18px 20px 10px 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(48, 88, 166, 0.07);
+    max-width: 700px;
+}
+.filtros-medicamentos label {
+    justify-self: end;
+    margin-bottom: 0;
+    font-weight: 600;
+    color: #3058a6;
+}
+.filtros-medicamentos input,
+.filtros-medicamentos select {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Agrupación para input de nombre y selector A-Z en la misma línea */
+.filtros-medicamentos .filtro-nombre-orden {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    width: 100%;
+    grid-row: 1;
+    grid-column: 2;
+}
+.filtros-medicamentos .filtro-nombre-orden input {
+    flex: 2 1 0;
+    min-width: 0;
+}
+.filtros-medicamentos .filtro-nombre-orden select {
+    flex: 1 1 0;
+    min-width: 90px;
+    max-width: 120px;
+}
+.filtros-medicamentos label[for="filtroNombre"] { grid-row: 1; grid-column: 1; }
+.filtros-medicamentos #filtroNombre { display: none; } /* Ocultamos el input individual, solo se usará dentro del contenedor */
+.filtros-medicamentos #ascendente { display: none; } /* Ocultamos el select individual, solo se usará dentro del contenedor */
+
+@media (max-width: 700px) {
+    .filtros-medicamentos {
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+        max-width: 100%;
+    }
+    .filtros-medicamentos label,
+    .filtros-medicamentos input,
+    .filtros-medicamentos select {
+        grid-column: 1 !important;
+        justify-self: stretch !important;
+    }
+    .filtros-medicamentos .filtro-nombre-orden {
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+    }
+}

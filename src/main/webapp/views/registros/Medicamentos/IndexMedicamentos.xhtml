@@ -64,9 +64,16 @@
                     <h:form id="filtrosForm">
                         <div class="filtros-medicamentos">
                             <h:outputLabel for="filtroNombre" value="Filtrar por Nombre:"/>
-                            <h:inputText id="filtroNombre" value="#{registroMedicamento.filtroNombre}">
-                                <f:ajax render="tablaForm" execute="@this"/>
-                            </h:inputText>
+                            <div class="filtro-nombre-orden">
+                                <h:inputText id="filtroNombre" value="#{registroMedicamento.filtroNombre}">
+                                    <f:ajax render="tablaForm" execute="@this"/>
+                                </h:inputText>
+                                <h:selectOneMenu id="ascendente" value="#{registroMedicamento.ascendente}">
+                                    <f:selectItem itemValue="true" itemLabel="A-Z"/>
+                                    <f:selectItem itemValue="false" itemLabel="Z-A"/>
+                                    <f:ajax render="tablaForm" execute="@this"/>
+                                </h:selectOneMenu>
+                            </div>
                             <h:outputLabel for="filtroDosis" value="Filtrar por Dosis:"/>
                             <h:inputText id="filtroDosis" value="#{registroMedicamento.filtroDosis}">
                                 <f:ajax render="tablaForm" execute="@this"/>
@@ -80,11 +87,6 @@
                                 <f:selectItem itemValue="nombre" itemLabel="Nombre"/>
                                 <f:selectItem itemValue="dosis" itemLabel="Dosis"/>
                                 <f:selectItem itemValue="frecuencia" itemLabel="Frecuencia"/>
-                                <f:ajax render="tablaForm" execute="@this"/>
-                            </h:selectOneMenu>
-                            <h:selectOneMenu id="ascendente" value="#{registroMedicamento.ascendente}">
-                                <f:selectItem itemValue="true" itemLabel="A-Z"/>
-                                <f:selectItem itemValue="false" itemLabel="Z-A"/>
                                 <f:ajax render="tablaForm" execute="@this"/>
                             </h:selectOneMenu>
                         </div>
