@@ -80,14 +80,13 @@
                                 <f:selectItem itemValue="nombre" itemLabel="Nombre"/>
                                 <f:selectItem itemValue="dosis" itemLabel="Dosis"/>
                                 <f:selectItem itemValue="frecuencia" itemLabel="Frecuencia"/>
+                                <f:ajax render="tablaForm" execute="@this"/>
                             </h:selectOneMenu>
                             <h:selectOneMenu id="ascendente" value="#{registroMedicamento.ascendente}">
                                 <f:selectItem itemValue="true" itemLabel="A-Z"/>
                                 <f:selectItem itemValue="false" itemLabel="Z-A"/>
+                                <f:ajax render="tablaForm" execute="@this"/>
                             </h:selectOneMenu>
-                            <h:commandButton value="Aplicar" action="#{registroMedicamento.aplicarFiltrosOrden}" styleClass="filtro-boton">
-                                <f:ajax render="tablaForm" execute="@form"/>
-                            </h:commandButton>
                         </div>
                     </h:form>
                     <h:form id="tablaForm">

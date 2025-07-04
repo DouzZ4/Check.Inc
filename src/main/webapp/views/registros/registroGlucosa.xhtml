@@ -49,8 +49,17 @@
             <section aria-labelledby="registros-heading">
                 <h2 id="registros-heading">Registros Anteriores</h2>
                 <div style="overflow-x: auto;">
+                    <h:form id="filtrosForm">
+                        <div class="filtros-glucosa">
+                            <h:outputLabel for="filtroNivel" value="Filtrar por Nivel:"/>
+                            <h:inputText id="filtroNivel" value="#{registroGlucosa.filtroNivel}">
+                                <f:ajax render="tablaForm" execute="@this"/>
+                            </h:inputText>
+                            <!-- Puedes agregar más filtros aquí si lo deseas -->
+                        </div>
+                    </h:form>
                     <h:form id="tablaForm">
-                        <h:dataTable value="#{registroGlucosa.registros}" var="registro"
+                        <h:dataTable value="#{registroGlucosa.registrosFiltrados}" var="registro"
                                    styleClass="tabla-registros"
                                    headerClass="tabla-header"
                                    rowClasses="tabla-fila-par,tabla-fila-impar">

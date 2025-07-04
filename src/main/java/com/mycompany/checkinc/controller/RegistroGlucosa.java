@@ -33,6 +33,20 @@ public class RegistroGlucosa implements Serializable {
     private boolean editando;
     private org.primefaces.model.charts.line.LineChartModel lineChartModel;
     
+    // --- Filtro y método filtrado para nivel de glucosa ---
+    private String filtroNivel;
+    public String getFiltroNivel() { return filtroNivel; }
+    public void setFiltroNivel(String filtroNivel) { this.filtroNivel = filtroNivel; }
+
+    public List<Glucosa> getRegistrosFiltrados() {
+        if (registros == null) return java.util.Collections.emptyList();
+        java.util.stream.Stream<Glucosa> stream = registros.stream();
+        if (filtroNivel != null && !filtroNivel.isEmpty()) {
+            stream = stream.filter(g -> String.valueOf(g.getNivelGlucosa()).contains(filtroNivel));
+        }
+        return stream.collect(java.util.stream.Collectors.toList());
+    }
+    
     public RegistroGlucosa() {
         this.fechaHora = new Date();
     }

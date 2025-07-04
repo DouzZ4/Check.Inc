@@ -50,11 +50,20 @@
             <section aria-labelledby="registros-heading">
                 <h2 id="registros-heading">Citas Programadas</h2>
                 <div style="overflow-x: auto;">
-                    <h:form id="tablaForm">
-                        <h:dataTable value="#{registroCita.registros}" var="cita"
-                                   styleClass="tabla-registros"
-                                   headerClass="tabla-header"
-                                   rowClasses="tabla-fila-par,tabla-fila-impar">
+                    <h:form id="filtrosForm">
+            <div class="filtros-citas">
+                <h:outputLabel for="filtroMotivo" value="Filtrar por Motivo:"/>
+                <h:inputText id="filtroMotivo" value="#{registroCita.filtroMotivo}">
+                    <f:ajax render="tablaForm" execute="@this"/>
+                </h:inputText>
+                <!-- Puedes agregar más filtros aquí si lo deseas -->
+            </div>
+        </h:form>
+        <h:form id="tablaForm">
+            <h:dataTable value="#{registroCita.registrosFiltrados}" var="cita"
+                       styleClass="tabla-registros"
+                       headerClass="tabla-header"
+                       rowClasses="tabla-fila-par,tabla-fila-impar">
                       
                             <h:column>
                                 <f:facet name="header">Fecha</f:facet>

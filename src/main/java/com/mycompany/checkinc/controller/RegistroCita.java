@@ -33,6 +33,20 @@ public class RegistroCita implements Serializable {
     private List<Cita> registros;
     private boolean editando;
     
+    // --- Filtro y método filtrado para motivo ---
+    private String filtroMotivo;
+    public String getFiltroMotivo() { return filtroMotivo; }
+    public void setFiltroMotivo(String filtroMotivo) { this.filtroMotivo = filtroMotivo; }
+
+    public List<Cita> getRegistrosFiltrados() {
+        if (registros == null) return java.util.Collections.emptyList();
+        java.util.stream.Stream<Cita> stream = registros.stream();
+        if (filtroMotivo != null && !filtroMotivo.isEmpty()) {
+            stream = stream.filter(c -> c.getMotivo() != null && c.getMotivo().toLowerCase().contains(filtroMotivo.toLowerCase()));
+        }
+        return stream.collect(java.util.stream.Collectors.toList());
+    }
+    
     public RegistroCita() {
         this.fecha = new Date();
         this.hora = new Date();
