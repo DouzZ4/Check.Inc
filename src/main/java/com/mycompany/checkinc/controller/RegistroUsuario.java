@@ -3,7 +3,6 @@ package com.mycompany.checkinc.controller;
 import com.mycompany.checkinc.entities.Usuario;
 import com.mycompany.checkinc.entities.Rol;
 import com.mycompany.checkinc.services.UsuarioFacadeLocal;
-import com.mycompany.checkinc.util.PasswordUtils;
 import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -24,7 +23,7 @@ public class RegistroUsuario implements Serializable {
     private int edad;
     private String correo;
     private String username;
-    private int documento;
+    private String documento;
     private String password;
 
     public String registrar() {
@@ -41,8 +40,10 @@ public class RegistroUsuario implements Serializable {
         nuevo.setEdad(edad);
         nuevo.setCorreo(correo);
         nuevo.setUser(username);
-        nuevo.setDocumento(documento);
-        nuevo.setPassword(PasswordUtils.hashPassword(password)); // Aquí se aplica el hash
+        // Convertir documento a int al guardar
+        nuevo.setDocumento(Integer.parseInt(documento));
+        // Guardar la contraseña tal cual, el hash se aplica en el facade
+        nuevo.setPassword(password);
         nuevo.setIdRol(new Rol(2)); // Rol 2: paciente/usuario
 
         usuarioFacade.create(nuevo);
@@ -76,8 +77,8 @@ public class RegistroUsuario implements Serializable {
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 
-    public int getDocumento() { return documento; }
-    public void setDocumento(int documento) { this.documento = documento; }
+    public String getDocumento() { return documento; }
+    public void setDocumento(String documento) { this.documento = documento; }
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
