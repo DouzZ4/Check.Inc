@@ -38,13 +38,55 @@ public class RegistroCita implements Serializable {
     public String getFiltroMotivo() { return filtroMotivo; }
     public void setFiltroMotivo(String filtroMotivo) { this.filtroMotivo = filtroMotivo; }
 
+    // --- Filtros adicionales y orden para la vista ---
+    private String filtroFecha;
+    private String filtroHora;
+    private boolean ascendente = true;
+    public String getFiltroFecha() { return filtroFecha; }
+    public void setFiltroFecha(String filtroFecha) { this.filtroFecha = filtroFecha; }
+    public String getFiltroHora() { return filtroHora; }
+    public void setFiltroHora(String filtroHora) { this.filtroHora = filtroHora; }
+    public boolean isAscendente() { return ascendente; }
+    public void setAscendente(boolean ascendente) { this.ascendente = ascendente; }
+
     public List<Cita> getRegistrosFiltrados() {
         if (registros == null) return java.util.Collections.emptyList();
         java.util.stream.Stream<Cita> stream = registros.stream();
         if (filtroMotivo != null && !filtroMotivo.isEmpty()) {
             stream = stream.filter(c -> c.getMotivo() != null && c.getMotivo().toLowerCase().contains(filtroMotivo.toLowerCase()));
         }
-        return stream.collect(java.util.stream.Collectors.toList());
+        if (filtroFecha != null && !filtroFecha.isEmpty()) {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
+            stream = stream.filter(c -> {
+                String fecha = c.getFecha() != null ? sdf.format(c.getFecha()) : "";
+                return fecha.contains(filtroFecha);
+            });
+        }
+        if (filtroHora != null && !filtroHora.isEmpty()) {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
+            stream = stream.filter(c -> {
+                String hora = c.getHora() != null ? sdf.format(c.getHora()) : "";
+                return hora.contains(filtroHora);
+            });
+        }
+        java.util.Comparator<Cita> comparator = java.util.Comparator.comparing(
+            c -> {
+                // Combina fecha y hora para ordenar correctamente
+                java.util.Calendar cal = java.util.Calendar.getInstance();
+                cal.setTime(c.getFecha() != null ? c.getFecha() : new java.util.Date(0));
+                if (c.getHora() != null) {
+                    java.util.Calendar horaCal = java.util.Calendar.getInstance();
+                    horaCal.setTime(c.getHora());
+                    cal.set(java.util.Calendar.HOUR_OF_DAY, horaCal.get(java.util.Calendar.HOUR_OF_DAY));
+                    cal.set(java.util.Calendar.MINUTE, horaCal.get(java.util.Calendar.MINUTE));
+                }
+                return cal.getTime();
+            }
+        );
+        if (!ascendente) {
+            comparator = comparator.reversed();
+        }
+        return stream.sorted(comparator).collect(java.util.stream.Collectors.toList());
     }
     
     public RegistroCita() {

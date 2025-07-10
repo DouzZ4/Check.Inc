@@ -450,30 +450,35 @@ table td:last-child {
 }
 .filtros-medicamentos .filtro-nombre-orden select {
     flex: 1 1 0;
-    min-width: 90px;
-    max-width: 120px;
+    min-width: 120px;
+    max-width: 180px;
+    background: #f0f4f8;
+    border: 2px solid #b6c6e3;
+    border-radius: 6px;
+    padding: 8px 32px 8px 12px;
+    font-size: 1em;
+    color: #3058a6;
+    font-weight: 600;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%233058a6" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 18px 18px;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
-.filtros-medicamentos label[for="filtroNombre"] { grid-row: 1; grid-column: 1; }
-.filtros-medicamentos #filtroNombre { display: none; } /* Ocultamos el input individual, solo se usará dentro del contenedor */
-.filtros-medicamentos #ascendente { display: none; } /* Ocultamos el select individual, solo se usará dentro del contenedor */
-
-@media (max-width: 700px) {
-    .filtros-medicamentos {
-        grid-template-columns: 1fr;
-        grid-template-rows: none;
-        max-width: 100%;
-    }
-    .filtros-medicamentos label,
-    .filtros-medicamentos input,
-    .filtros-medicamentos select {
-        grid-column: 1 !important;
-        justify-self: stretch !important;
-    }
-    .filtros-medicamentos .filtro-nombre-orden {
-        flex-direction: column;
-        gap: 8px;
-        align-items: stretch;
-    }
+.filtro-nombre-orden select:focus {
+    border-color: #3058a6;
+    box-shadow: 0 0 0 2px #b6c6e3;
+    outline: none;
+}
+.filtro-nombre-orden select:hover {
+    border-color: #3058a6;
+    background-color: #eaf0fa;
+}
+.filtro-nombre-orden {
+    gap: 18px;
 }
 
 /* --- Estilos Adicionales --- */

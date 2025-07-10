@@ -38,13 +38,42 @@ public class RegistroGlucosa implements Serializable {
     public String getFiltroNivel() { return filtroNivel; }
     public void setFiltroNivel(String filtroNivel) { this.filtroNivel = filtroNivel; }
 
+    // --- Filtros adicionales y orden para la vista ---
+    private String filtroFecha;
+    private String filtroHora;
+    private boolean ascendente = true;
+    public String getFiltroFecha() { return filtroFecha; }
+    public void setFiltroFecha(String filtroFecha) { this.filtroFecha = filtroFecha; }
+    public String getFiltroHora() { return filtroHora; }
+    public void setFiltroHora(String filtroHora) { this.filtroHora = filtroHora; }
+    public boolean isAscendente() { return ascendente; }
+    public void setAscendente(boolean ascendente) { this.ascendente = ascendente; }
+
     public List<Glucosa> getRegistrosFiltrados() {
         if (registros == null) return java.util.Collections.emptyList();
         java.util.stream.Stream<Glucosa> stream = registros.stream();
         if (filtroNivel != null && !filtroNivel.isEmpty()) {
             stream = stream.filter(g -> String.valueOf(g.getNivelGlucosa()).contains(filtroNivel));
         }
-        return stream.collect(java.util.stream.Collectors.toList());
+        if (filtroFecha != null && !filtroFecha.isEmpty()) {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
+            stream = stream.filter(g -> {
+                String fecha = sdf.format(g.getFechaHora());
+                return fecha.contains(filtroFecha);
+            });
+        }
+        if (filtroHora != null && !filtroHora.isEmpty()) {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
+            stream = stream.filter(g -> {
+                String hora = sdf.format(g.getFechaHora());
+                return hora.contains(filtroHora);
+            });
+        }
+        java.util.Comparator<Glucosa> comparator = java.util.Comparator.comparing(Glucosa::getFechaHora);
+        if (!ascendente) {
+            comparator = comparator.reversed();
+        }
+        return stream.sorted(comparator).collect(java.util.stream.Collectors.toList());
     }
     
     public RegistroGlucosa() {
