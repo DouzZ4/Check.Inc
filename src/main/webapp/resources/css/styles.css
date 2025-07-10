@@ -475,3 +475,23 @@ table td:last-child {
         align-items: stretch;
     }
 }
+
+/* --- Estilos Adicionales --- */
+.logo-img {
+    max-width: 100%;
+    max-height: 180px;
+    width: auto;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    object-fit: contain;
+    box-sizing: border-box;
+}
+
+.hero-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 200px;
+    overflow: hidden;
+}
