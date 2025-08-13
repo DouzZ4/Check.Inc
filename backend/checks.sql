@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-08-2025 a las 07:10:28
+-- Tiempo de generación: 13-08-2025 a las 16:01:20
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -266,7 +266,7 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`idUsuario`, `user`, `password`, `documento`, `nombres`, `apellidos`, `correo`, `edad`, `idRol`, `tipoDiabetes`, `esInsulodependiente`) VALUES
-(1, 'carlosg', '$2a$10$OQHjlgrDQjBjL1qbK6he1Ow.OFcE3SE1zbcmYgxkRJierbLd3MnRS', 1001234567, 'Carlos', 'Gómez', 'carlos.gomez@example.com', 30, 2, 'Tipo 1', 0),
+(1, 'carlosg', '$2a$10$OQHjlgrDQjBjL1qbK6he1Ow.OFcE3SE1zbcmYgxkRJierbLd3MnRS', 1001234567, 'Carlos', 'Gómez', 'carlos.gomez@example.com', 30, 2, 'Tipo 1', 1),
 (2, 'anam', 'clave5678', 1007654321, 'Ana', 'Martínez', 'ana.martinez@example.com', 25, 2, NULL, 0),
 (3, 'luisf', '$2a$10$mGfPkrh.PdHrXV9HfHHmPeExO1j3jJpCl38vgcigPzjN2aUOWyJEG', 1012345678, 'Luis', 'Fernández', 'luis.fernandez@example.com', 40, 1, NULL, 0),
 (4, 'marial', 'password2024', 1018765432, 'María', 'López', 'maria.lopez@example.com', 35, 2, NULL, 0),

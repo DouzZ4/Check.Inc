@@ -27,31 +27,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author davidalonso
+ * @author angel
  */
 @Entity
-@Table(name = "notificacion")
+@Table(name = "alerta")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Notificacion.findAll", query = "SELECT n FROM Notificacion n"),
-    @NamedQuery(name = "Notificacion.findByIdNotificacion", query = "SELECT n FROM Notificacion n WHERE n.idNotificacion = :idNotificacion"),
-    @NamedQuery(name = "Notificacion.findByTipo", query = "SELECT n FROM Notificacion n WHERE n.tipo = :tipo"),
-    @NamedQuery(name = "Notificacion.findByFechaHora", query = "SELECT n FROM Notificacion n WHERE n.fechaHora = :fechaHora"),
-    @NamedQuery(name = "Notificacion.findByEstado", query = "SELECT n FROM Notificacion n WHERE n.estado = :estado")})
-public class Notificacion implements Serializable {
+    @NamedQuery(name = "Alerta.findAll", query = "SELECT a FROM Alerta a"),
+    @NamedQuery(name = "Alerta.findByIdAlerta", query = "SELECT a FROM Alerta a WHERE a.idAlerta = :idAlerta"),
+    @NamedQuery(name = "Alerta.findByTipo", query = "SELECT a FROM Alerta a WHERE a.tipo = :tipo"),
+    @NamedQuery(name = "Alerta.findByFechaHora", query = "SELECT a FROM Alerta a WHERE a.fechaHora = :fechaHora"),
+    @NamedQuery(name = "Alerta.findByVisto", query = "SELECT a FROM Alerta a WHERE a.visto = :visto")})
+public class Alerta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idNotificacion")
-    private Integer idNotificacion;
-    @Basic(optional = false)
-    @NotNull
-    @Lob
-    @Size(min = 1, max = 65535)
-    @Column(name = "mensaje")
-    private String mensaje;
+    @Column(name = "idAlerta")
+    private Integer idAlerta;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -59,47 +53,41 @@ public class Notificacion implements Serializable {
     private String tipo;
     @Basic(optional = false)
     @NotNull
+    @Lob
+    @Size(min = 1, max = 65535)
+    @Column(name = "contenido")
+    private String contenido;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "fechaHora")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaHora;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "estado")
-    private String estado;
+    @Column(name = "visto")
+    private Boolean visto;
     @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Usuario idUsuario;
 
-    public Notificacion() {
+    public Alerta() {
     }
 
-    public Notificacion(Integer idNotificacion) {
-        this.idNotificacion = idNotificacion;
+    public Alerta(Integer idAlerta) {
+        this.idAlerta = idAlerta;
     }
 
-    public Notificacion(Integer idNotificacion, String mensaje, String tipo, Date fechaHora, String estado) {
-        this.idNotificacion = idNotificacion;
-        this.mensaje = mensaje;
+    public Alerta(Integer idAlerta, String tipo, String contenido, Date fechaHora) {
+        this.idAlerta = idAlerta;
         this.tipo = tipo;
+        this.contenido = contenido;
         this.fechaHora = fechaHora;
-        this.estado = estado;
     }
 
-    public Integer getIdNotificacion() {
-        return idNotificacion;
+    public Integer getIdAlerta() {
+        return idAlerta;
     }
 
-    public void setIdNotificacion(Integer idNotificacion) {
-        this.idNotificacion = idNotificacion;
-    }
-
-    public String getMensaje() {
-        return mensaje;
-    }
-
-    public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
+    public void setIdAlerta(Integer idAlerta) {
+        this.idAlerta = idAlerta;
     }
 
     public String getTipo() {
@@ -110,6 +98,14 @@ public class Notificacion implements Serializable {
         this.tipo = tipo;
     }
 
+    public String getContenido() {
+        return contenido;
+    }
+
+    public void setContenido(String contenido) {
+        this.contenido = contenido;
+    }
+
     public Date getFechaHora() {
         return fechaHora;
     }
@@ -118,12 +114,12 @@ public class Notificacion implements Serializable {
         this.fechaHora = fechaHora;
     }
 
-    public String getEstado() {
-        return estado;
+    public Boolean getVisto() {
+        return visto;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setVisto(Boolean visto) {
+        this.visto = visto;
     }
 
     public Usuario getIdUsuario() {
@@ -137,18 +133,18 @@ public class Notificacion implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idNotificacion != null ? idNotificacion.hashCode() : 0);
+        hash += (idAlerta != null ? idAlerta.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Notificacion)) {
+        if (!(object instanceof Alerta)) {
             return false;
         }
-        Notificacion other = (Notificacion) object;
-        if ((this.idNotificacion == null && other.idNotificacion != null) || (this.idNotificacion != null && !this.idNotificacion.equals(other.idNotificacion))) {
+        Alerta other = (Alerta) object;
+        if ((this.idAlerta == null && other.idAlerta != null) || (this.idAlerta != null && !this.idAlerta.equals(other.idAlerta))) {
             return false;
         }
         return true;
@@ -156,7 +152,7 @@ public class Notificacion implements Serializable {
 
     @Override
     public String toString() {
-        return "com.mycompany.checkinc.entities.Notificacion[ idNotificacion=" + idNotificacion + " ]";
+        return "com.mycompany.checkinc.entities.Alerta[ idAlerta=" + idAlerta + " ]";
     }
     
 }

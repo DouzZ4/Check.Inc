@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -26,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author davidalonso
+ * @author angel
  */
 @Entity
 @Table(name = "medicamento")
@@ -72,6 +73,10 @@ public class Medicamento implements Serializable {
     @Column(name = "fechaFin")
     @Temporal(TemporalType.DATE)
     private Date fechaFin;
+    @Lob
+    @Size(max = 65535)
+    @Column(name = "observaciones")
+    private String observaciones;
     @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Usuario idUsuario;
@@ -138,6 +143,14 @@ public class Medicamento implements Serializable {
 
     public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
 
     public Usuario getIdUsuario() {

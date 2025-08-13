@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author davidalonso
+ * @author angel
  */
 @Entity
 @Table(name = "cita")
@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Cita.findAll", query = "SELECT c FROM Cita c"),
     @NamedQuery(name = "Cita.findByIdCita", query = "SELECT c FROM Cita c WHERE c.idCita = :idCita"),
     @NamedQuery(name = "Cita.findByFecha", query = "SELECT c FROM Cita c WHERE c.fecha = :fecha"),
-    @NamedQuery(name = "Cita.findByHora", query = "SELECT c FROM Cita c WHERE c.hora = :hora")})
+    @NamedQuery(name = "Cita.findByHora", query = "SELECT c FROM Cita c WHERE c.hora = :hora"),
+    @NamedQuery(name = "Cita.findByEstado", query = "SELECT c FROM Cita c WHERE c.estado = :estado")})
 public class Cita implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -61,6 +62,9 @@ public class Cita implements Serializable {
     @Size(min = 1, max = 65535)
     @Column(name = "motivo")
     private String motivo;
+    @Size(max = 20)
+    @Column(name = "estado")
+    private String estado;
     @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Usuario idUsuario;
@@ -111,6 +115,14 @@ public class Cita implements Serializable {
         this.motivo = motivo;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
     public Usuario getIdUsuario() {
         return idUsuario;
     }
@@ -141,7 +153,7 @@ public class Cita implements Serializable {
 
     @Override
     public String toString() {
-        return "idCita=" + idCita + " ";
+        return "com.mycompany.checkinc.entities.Cita[ idCita=" + idCita + " ]";
     }
     
 }

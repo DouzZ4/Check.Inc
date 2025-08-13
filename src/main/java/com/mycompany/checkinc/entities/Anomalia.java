@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author davidalonso
+ * @author angel
  */
 @Entity
 @Table(name = "anomalia")
@@ -35,7 +35,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Anomalia.findAll", query = "SELECT a FROM Anomalia a"),
     @NamedQuery(name = "Anomalia.findByIdAnomalia", query = "SELECT a FROM Anomalia a WHERE a.idAnomalia = :idAnomalia"),
-    @NamedQuery(name = "Anomalia.findByFechaHora", query = "SELECT a FROM Anomalia a WHERE a.fechaHora = :fechaHora")})
+    @NamedQuery(name = "Anomalia.findByFechaHora", query = "SELECT a FROM Anomalia a WHERE a.fechaHora = :fechaHora"),
+    @NamedQuery(name = "Anomalia.findByGravedad", query = "SELECT a FROM Anomalia a WHERE a.gravedad = :gravedad"),
+    @NamedQuery(name = "Anomalia.findByResuelto", query = "SELECT a FROM Anomalia a WHERE a.resuelto = :resuelto")})
 public class Anomalia implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -61,6 +63,11 @@ public class Anomalia implements Serializable {
     @Size(min = 1, max = 65535)
     @Column(name = "sintomas")
     private String sintomas;
+    @Size(max = 8)
+    @Column(name = "gravedad")
+    private String gravedad;
+    @Column(name = "resuelto")
+    private Boolean resuelto;
     @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Usuario idUsuario;
@@ -109,6 +116,22 @@ public class Anomalia implements Serializable {
 
     public void setSintomas(String sintomas) {
         this.sintomas = sintomas;
+    }
+
+    public String getGravedad() {
+        return gravedad;
+    }
+
+    public void setGravedad(String gravedad) {
+        this.gravedad = gravedad;
+    }
+
+    public Boolean getResuelto() {
+        return resuelto;
+    }
+
+    public void setResuelto(Boolean resuelto) {
+        this.resuelto = resuelto;
     }
 
     public Usuario getIdUsuario() {

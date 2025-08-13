@@ -21,11 +21,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author davidalonso
+ * @author angel
  */
 @Entity
 @Table(name = "glucosa")
@@ -34,7 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Glucosa.findAll", query = "SELECT g FROM Glucosa g"),
     @NamedQuery(name = "Glucosa.findByIdGlucosa", query = "SELECT g FROM Glucosa g WHERE g.idGlucosa = :idGlucosa"),
     @NamedQuery(name = "Glucosa.findByNivelGlucosa", query = "SELECT g FROM Glucosa g WHERE g.nivelGlucosa = :nivelGlucosa"),
-    @NamedQuery(name = "Glucosa.findByFechaHora", query = "SELECT g FROM Glucosa g WHERE g.fechaHora = :fechaHora")})
+    @NamedQuery(name = "Glucosa.findByFechaHora", query = "SELECT g FROM Glucosa g WHERE g.fechaHora = :fechaHora"),
+    @NamedQuery(name = "Glucosa.findByMomentoDia", query = "SELECT g FROM Glucosa g WHERE g.momentoDia = :momentoDia")})
 public class Glucosa implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,6 +54,9 @@ public class Glucosa implements Serializable {
     @Column(name = "fechaHora")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaHora;
+    @Size(max = 50)
+    @Column(name = "momentoDia")
+    private String momentoDia;
     @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Usuario idUsuario;
@@ -91,6 +96,14 @@ public class Glucosa implements Serializable {
 
     public void setFechaHora(Date fechaHora) {
         this.fechaHora = fechaHora;
+    }
+
+    public String getMomentoDia() {
+        return momentoDia;
+    }
+
+    public void setMomentoDia(String momentoDia) {
+        this.momentoDia = momentoDia;
     }
 
     public Usuario getIdUsuario() {

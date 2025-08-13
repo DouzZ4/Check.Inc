@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author davidalonso
+ * @author angel
  */
 @Entity
 @Table(name = "usuario")
@@ -41,7 +41,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuario.findByNombres", query = "SELECT u FROM Usuario u WHERE u.nombres = :nombres"),
     @NamedQuery(name = "Usuario.findByApellidos", query = "SELECT u FROM Usuario u WHERE u.apellidos = :apellidos"),
     @NamedQuery(name = "Usuario.findByCorreo", query = "SELECT u FROM Usuario u WHERE u.correo = :correo"),
-    @NamedQuery(name = "Usuario.findByEdad", query = "SELECT u FROM Usuario u WHERE u.edad = :edad")})
+    @NamedQuery(name = "Usuario.findByEdad", query = "SELECT u FROM Usuario u WHERE u.edad = :edad"),
+    @NamedQuery(name = "Usuario.findByTipoDiabetes", query = "SELECT u FROM Usuario u WHERE u.tipoDiabetes = :tipoDiabetes"),
+    @NamedQuery(name = "Usuario.findByEsInsulodependiente", query = "SELECT u FROM Usuario u WHERE u.esInsulodependiente = :esInsulodependiente")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -83,10 +85,15 @@ public class Usuario implements Serializable {
     @NotNull
     @Column(name = "edad")
     private int edad;
+    @Size(max = 11)
+    @Column(name = "tipoDiabetes")
+    private String tipoDiabetes;
+    @Column(name = "esInsulodependiente")
+    private Boolean esInsulodependiente;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
+    private List<Alerta> alertaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
     private List<Glucosa> glucosaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
-    private List<Recordatorio> recordatorioList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
     private List<Anomalia> anomaliaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
@@ -96,10 +103,6 @@ public class Usuario implements Serializable {
     private Rol idRol;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
     private List<Cita> citaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
-    private List<Notificacion> notificacionList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
-    private List<Reporte> reporteList;
 
     public Usuario() {
     }
@@ -183,6 +186,31 @@ public class Usuario implements Serializable {
         this.edad = edad;
     }
 
+    public String getTipoDiabetes() {
+        return tipoDiabetes;
+    }
+
+    public void setTipoDiabetes(String tipoDiabetes) {
+        this.tipoDiabetes = tipoDiabetes;
+    }
+
+    public Boolean getEsInsulodependiente() {
+        return esInsulodependiente;
+    }
+
+    public void setEsInsulodependiente(Boolean esInsulodependiente) {
+        this.esInsulodependiente = esInsulodependiente;
+    }
+
+    @XmlTransient
+    public List<Alerta> getAlertaList() {
+        return alertaList;
+    }
+
+    public void setAlertaList(List<Alerta> alertaList) {
+        this.alertaList = alertaList;
+    }
+
     @XmlTransient
     public List<Glucosa> getGlucosaList() {
         return glucosaList;
@@ -190,15 +218,6 @@ public class Usuario implements Serializable {
 
     public void setGlucosaList(List<Glucosa> glucosaList) {
         this.glucosaList = glucosaList;
-    }
-
-    @XmlTransient
-    public List<Recordatorio> getRecordatorioList() {
-        return recordatorioList;
-    }
-
-    public void setRecordatorioList(List<Recordatorio> recordatorioList) {
-        this.recordatorioList = recordatorioList;
     }
 
     @XmlTransient
@@ -234,24 +253,6 @@ public class Usuario implements Serializable {
 
     public void setCitaList(List<Cita> citaList) {
         this.citaList = citaList;
-    }
-
-    @XmlTransient
-    public List<Notificacion> getNotificacionList() {
-        return notificacionList;
-    }
-
-    public void setNotificacionList(List<Notificacion> notificacionList) {
-        this.notificacionList = notificacionList;
-    }
-
-    @XmlTransient
-    public List<Reporte> getReporteList() {
-        return reporteList;
-    }
-
-    public void setReporteList(List<Reporte> reporteList) {
-        this.reporteList = reporteList;
     }
 
     @Override
