@@ -5,6 +5,7 @@
 package com.mycompany.checkinc.services;
 
 import com.mycompany.checkinc.entities.Anomalia;
+import com.mycompany.checkinc.entities.Usuario;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -28,5 +29,7 @@ public interface AnomaliaFacadeLocal {
     List<Anomalia> findRange(int[] range);
 
     int count();
+
+    public List<Anomalia> findByUsuario(Usuario usuario);
     
 }
