@@ -29,6 +29,9 @@ public interface UsuarioFacadeLocal {
     
     Usuario findByUser(String user); 
 
+    // Buscar usuario por documento
+    Usuario findByDocumento(int documento);
+
     int count();
     
     Usuario iniciarSesion(String username, String password);

@@ -258,6 +258,7 @@ CREATE TABLE `usuario` (
   `edad` int(11) NOT NULL,
   `idRol` int(11) NOT NULL,
   `tipoDiabetes` enum('Tipo 1','Tipo 2','Gestacional','Otro') DEFAULT NULL,
+  `detalleTipoDiabetes` varchar(50) DEFAULT NULL,
   `esInsulodependiente` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

@@ -88,6 +88,16 @@ public class Usuario implements Serializable {
     @Size(max = 11)
     @Column(name = "tipoDiabetes")
     private String tipoDiabetes;
+
+    @Column(name = "detalleTipoDiabetes")
+    private String detalleTipoDiabetes;
+    public String getDetalleTipoDiabetes() {
+        return detalleTipoDiabetes;
+    }
+
+    public void setDetalleTipoDiabetes(String detalleTipoDiabetes) {
+        this.detalleTipoDiabetes = detalleTipoDiabetes;
+    }
     @Column(name = "esInsulodependiente")
     private Boolean esInsulodependiente;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)

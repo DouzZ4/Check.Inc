@@ -25,11 +25,12 @@
                 <h:messages globalOnly="true" styleClass="message-box" 
                            infoClass="message-info" errorClass="message-error"/>
                 
+
                 <div class="form-group">
                     <h:outputLabel for="nombres" value="Nombres:"/>
                     <h:inputText id="nombres" value="#{registroUsuario.nombres}" required="true"
-                               requiredMessage="Por favor ingrese sus nombres"
-                               validatorMessage="Ingrese solo letras y espacios">
+                        requiredMessage="Por favor ingrese sus nombres"
+                        validatorMessage="Ingrese solo letras y espacios">
                         <f:validateRegex pattern="[A-Za-zÀ-ÿ\s]+"/>
                     </h:inputText>
                     <h:message for="nombres" styleClass="message error-message"/>
@@ -38,8 +39,8 @@
                 <div class="form-group">
                     <h:outputLabel for="apellidos" value="Apellidos:"/>
                     <h:inputText id="apellidos" value="#{registroUsuario.apellidos}" required="true"
-                               requiredMessage="Por favor ingrese sus apellidos"
-                               validatorMessage="Ingrese solo letras y espacios">
+                        requiredMessage="Por favor ingrese sus apellidos"
+                        validatorMessage="Ingrese solo letras y espacios">
                         <f:validateRegex pattern="[A-Za-zÀ-ÿ\s]+"/>
                     </h:inputText>
                     <h:message for="apellidos" styleClass="message error-message"/>
@@ -48,8 +49,8 @@
                 <div class="form-group">
                     <h:outputLabel for="edad" value="Edad:"/>
                     <h:inputText id="edad" value="#{registroUsuario.edad}" required="true"
-                               requiredMessage="Por favor ingrese su edad"
-                               validatorMessage="Ingrese una edad válida entre 1 y 120">
+                        requiredMessage="Por favor ingrese su edad"
+                        validatorMessage="Ingrese una edad válida entre 1 y 120">
                         <f:validateLongRange minimum="1" maximum="120"/>
                     </h:inputText>
                     <h:message for="edad" styleClass="message error-message"/>
@@ -58,8 +59,8 @@
                 <div class="form-group">
                     <h:outputLabel for="correo" value="Correo Electrónico:"/>
                     <h:inputText id="correo" value="#{registroUsuario.correo}" required="true"
-                               requiredMessage="Por favor ingrese su correo electrónico"
-                               validatorMessage="Ingrese un correo electrónico válido que termine en .com">
+                        requiredMessage="Por favor ingrese su correo electrónico"
+                        validatorMessage="Ingrese un correo electrónico válido que termine en .com">
                         <f:validateRegex pattern=".+@.+\.com$"/>
                     </h:inputText>
                     <h:message for="correo" styleClass="message error-message"/>
@@ -68,8 +69,8 @@
                 <div class="form-group">
                     <h:outputLabel for="username" value="Nombre de Usuario:"/>
                     <h:inputText id="username" value="#{registroUsuario.username}" required="true"
-                               requiredMessage="Por favor ingrese un nombre de usuario"
-                               validatorMessage="El nombre de usuario debe tener al menos 5 caracteres">
+                        requiredMessage="Por favor ingrese un nombre de usuario"
+                        validatorMessage="El nombre de usuario debe tener al menos 5 caracteres">
                         <f:validateLength minimum="5"/>
                     </h:inputText>
                     <h:message for="username" styleClass="message error-message"/>
@@ -78,8 +79,8 @@
                 <div class="form-group">
                     <h:outputLabel for="documento" value="Documento (Cédula):"/>
                     <h:inputText id="documento" value="#{registroUsuario.documento}" required="true"
-                               requiredMessage="Por favor ingrese su número de documento"
-                               validatorMessage="El documento debe tener entre 6 y 20 dígitos">
+                        requiredMessage="Por favor ingrese su número de documento"
+                        validatorMessage="El documento debe tener entre 6 y 20 dígitos">
                         <f:validateRegex pattern="[0-9]{6,20}"/>
                     </h:inputText>
                     <h:message for="documento" styleClass="message error-message"/>
@@ -88,12 +89,59 @@
                 <div class="form-group">
                     <h:outputLabel for="password" value="Contraseña:"/>
                     <h:inputSecret id="password" value="#{registroUsuario.password}" required="true"
-                               requiredMessage="Por favor ingrese una contraseña"
-                               validatorMessage="La contraseña debe tener al menos 8 caracteres, incluyendo mayúscula, minúscula y símbolo especial">
+                        requiredMessage="Por favor ingrese una contraseña"
+                        validatorMessage="La contraseña debe tener al menos 8 caracteres, incluyendo mayúscula, minúscula y símbolo especial">
                         <f:validateRegex pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$"/>
                     </h:inputSecret>
                     <h:message for="password" styleClass="message error-message"/>
                 </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="tipoDiabetesSelect" value="Tipo de Diabetes:"/>
+                    <h:selectOneMenu id="tipoDiabetesSelect" value="#{registroUsuario.tipoDiabetes}" onchange="toggleTipoDiabetesInput(this.value)" required="false" styleClass="custom-select">
+                        <f:selectItem itemLabel="Seleccione..." itemValue=""/>
+                        <f:selectItem itemLabel="Tipo 1" itemValue="Tipo 1"/>
+                        <f:selectItem itemLabel="Tipo 2" itemValue="Tipo 2"/>
+                        <f:selectItem itemLabel="Gestacional" itemValue="Gestacional"/>
+                        <f:selectItem itemLabel="Otro" itemValue="Otro"/>
+                    </h:selectOneMenu>
+                    <h:message for="tipoDiabetesSelect" styleClass="message error-message"/>
+                </div>
+                <div class="form-group" id="tipoDiabetesInputDiv" style="display:none;">
+                    <h:outputLabel for="tipoDiabetesOtro" value="Especifique el tipo de diabetes:"/>
+                    <h:inputText id="tipoDiabetesOtro" value="#{registroUsuario.detalleTipoDiabetes}" maxlength="50"
+                        validatorMessage="Máximo 50 caracteres"/>
+                    <h:message for="tipoDiabetesOtro" styleClass="message error-message"/>
+                </div>
+                <script type="text/javascript">
+                    function toggleTipoDiabetesInput(value) {
+                        var inputDiv = document.getElementById('tipoDiabetesInputDiv');
+                        if (value === 'Otro') {
+                            inputDiv.style.display = 'block';
+                        } else {
+                            inputDiv.style.display = 'none';
+                        }
+                    }
+                    // Inicializar al cargar la página
+                    window.addEventListener('DOMContentLoaded', function() {
+                        var select = document.getElementById('registroForm:tipoDiabetesSelect');
+                        if (select) toggleTipoDiabetesInput(select.value);
+                    });
+                </script>
+
+                <div class="form-group">
+                    <h:outputLabel for="esInsulodependiente" value="¿Es insulodependiente?" style="display:block; margin-bottom:6px; font-weight:bold;"/>
+                    <div class="custom-select-wrapper">
+                        <h:selectOneMenu id="esInsulodependiente" value="#{registroUsuario.esInsulodependiente}" required="true"
+                            requiredMessage="Debe indicar si es insulodependiente" styleClass="custom-select">
+                            <f:selectItem itemLabel="Seleccione..." itemValue=""/>
+                            <f:selectItem itemLabel="Sí" itemValue="true"/>
+                            <f:selectItem itemLabel="No" itemValue="false"/>
+                        </h:selectOneMenu>
+                    </div>
+                    <h:message for="esInsulodependiente" styleClass="message error-message"/>
+                </div>
+
 
                 <h:commandButton value="Registrarme" action="#{registroUsuario.registrar}" 
                                styleClass="submit-button"/>

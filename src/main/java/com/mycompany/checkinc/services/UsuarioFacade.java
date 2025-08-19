@@ -99,4 +99,15 @@ public Usuario findByUser(String user) {
     }
 }
 
+    @Override
+    public Usuario findByDocumento(int documento) {
+        try {
+            Query query = em.createQuery("SELECT u FROM Usuario u WHERE u.documento = :documento");
+            query.setParameter("documento", documento);
+            return (Usuario) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
 }
