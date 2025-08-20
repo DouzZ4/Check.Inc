@@ -138,7 +138,7 @@ public class RegistroUsuario implements Serializable {
             nuevo.setCorreo(correo);
             nuevo.setUser(username);
             nuevo.setDocumento(docInt);
-            nuevo.setPassword(password); // El hash se aplica en el facade
+            nuevo.setPassword(password);
             nuevo.setTipoDiabetes(tipoDiabetesFinal);
             nuevo.setDetalleTipoDiabetes(detalleTipoDiabetesFinal);
             nuevo.setEsInsulodependiente(esInsulodependiente);
