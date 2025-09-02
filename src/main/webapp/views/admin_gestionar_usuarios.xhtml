@@ -9,8 +9,15 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Gestión de Usuarios - Control Glucosa</title>
+
     <h:outputStylesheet library="css" name="navbar.css"/>
     <h:outputStylesheet library="css" name="styles.css"/>
+    <h:outputStylesheet library="css" name="jquery.dataTables.min.css"/>
+
+    <h:outputScript library="js" name="jquery-3.7.1.min.js"/>
+    <h:outputScript library="js" name="jquery.dataTables.min.js"/>
+    <h:outputScript library="js" name="script.js"/>
+
     <style>
         .dashboard-container { padding: 20px 30px; }
         .welcome-admin { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
@@ -30,7 +37,7 @@
         <h1 class="welcome-admin">Gestión de Usuarios</h1>
         <h:messages globalOnly="true" style="color:red;"/>
         <h:form id="usuariosForm">
-            <h:dataTable value="#{dashboardAdminBean.listaUsuarios}" var="usuario" styleClass="user-table" style="min-width:900px; max-width:100%;">
+            <h:dataTable id="usuario" value="#{dashboardAdminBean.listaUsuarios}" var="usuario" style="min-width:900px; max-width:100%;" styleClass="display">
                 <h:column>
                     <f:facet name="header">Nombre</f:facet>
                     <h:inputText value="#{usuario.nombres}" rendered="#{usuario.editable}"/>
@@ -59,14 +66,17 @@
                 <h:column>
                     <f:facet name="header">Rol</f:facet>
                     <h:selectOneMenu value="#{usuario.nuevoRolId}" rendered="#{usuario.editable}" styleClass="role-select">
-                        <f:selectItems value="#{dashboardAdminBean.listaRoles}" var="rol" itemValue="#{rol.idRol}" itemLabel="#{rol.nombre}"/>
+                        <f:selectItems value="#{dashboardAdminBean.listaRoles}" var="rol"
+                                       itemValue="#{rol.idRol}" itemLabel="#{rol.nombre}"/>
                     </h:selectOneMenu>
                     <h:outputText value="#{usuario.rolNombre}" rendered="#{!usuario.editable}"/>
                 </h:column>
                 <h:column>
                     <f:facet name="header">Acciones</f:facet>
-                    <h:commandButton value="Editar" action="#{dashboardAdminBean.editarUsuario(usuario)}" rendered="#{!usuario.editable}" styleClass="edit-btn"/>
-                    <h:commandButton value="Guardar" action="#{dashboardAdminBean.guardarUsuario(usuario)}" rendered="#{usuario.editable}" styleClass="save-btn"/>
+                    <h:commandButton value="Editar" action="#{dashboardAdminBean.editarUsuario(usuario)}"
+                                     rendered="#{!usuario.editable}" styleClass="edit-btn"/>
+                    <h:commandButton value="Guardar" action="#{dashboardAdminBean.guardarUsuario(usuario)}"
+                                     rendered="#{usuario.editable}" styleClass="save-btn"/>
                 </h:column>
             </h:dataTable>
         </h:form>
