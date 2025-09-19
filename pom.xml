@@ -60,6 +60,20 @@
             <artifactId>primefaces</artifactId>
             <version>13.0.0</version>
         </dependency>
+
+        <!-- Jersey Client for HTTP requests -->
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>2.35</version>
+        </dependency>
+
+        <!-- Jersey JSON processing -->
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>2.35</version>
+        </dependency>
     </dependencies>
 
     <build>
