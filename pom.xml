@@ -40,6 +40,13 @@
             <version>2.15.2</version>
         </dependency>
         
+        <!-- Apache HttpClient para conexiones HTTP/HTTPS -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.14</version>
+        </dependency>
+        
         <!-- BCrypt para hashing de contraseñas -->
         <dependency>
             <groupId>org.mindrot</groupId>

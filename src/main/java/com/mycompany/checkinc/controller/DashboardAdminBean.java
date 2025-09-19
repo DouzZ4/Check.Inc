@@ -39,7 +39,6 @@ public class DashboardAdminBean implements Serializable {
 
     private List<UsuarioEditable> listaUsuarios;
     private List<Rol> listaRoles;
-
     @PostConstruct
     public void init() {
         try {

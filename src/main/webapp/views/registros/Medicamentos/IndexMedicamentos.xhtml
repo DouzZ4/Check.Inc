@@ -57,6 +57,54 @@
                     </div>
                 </h:form>
             </section>
+
+            <!-- Consulta de medicamentos en INVIMA -->
+            <section aria-labelledby="invima-heading" style="margin-bottom:2em;">
+                <h2 id="invima-heading">Consultar Medicamento en INVIMA</h2>
+                <h:form id="consultaInvimaForm">
+                    <div class="form-group">
+                        <h:outputLabel for="nombreBusqueda" value="Nombre del Medicamento:"/>
+                        <h:inputText id="nombreBusqueda" value="#{consultaMedicamentoInvima.nombreBusqueda}"/>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel for="numeroRegistroBusqueda" value="Número de Registro Sanitario:"/>
+                        <h:inputText id="numeroRegistroBusqueda" value="#{consultaMedicamentoInvima.numeroRegistroBusqueda}"/>
+                    </div>
+                    <div id="form-buttons">
+                        <h:commandButton value="Buscar en INVIMA" action="#{consultaMedicamentoInvima.buscar}" styleClass="submit-button">
+                            <f:ajax render="tablaInvima" execute="@form"/>
+                        </h:commandButton>
+                        <h:commandButton value="Limpiar" action="#{consultaMedicamentoInvima.limpiar}" immediate="true" styleClass="cancel-button">
+                            <f:ajax render="consultaInvimaForm tablaInvima" execute="@this"/>
+                        </h:commandButton>
+                    </div>
+                </h:form>
+                <h:panelGroup id="tablaInvima">
+                    <h:dataTable value="#{consultaMedicamentoInvima.resultados}" var="invima" rendered="#{not empty consultaMedicamentoInvima.resultados}" styleClass="tabla-registros" headerClass="tabla-header">
+                        <h:column>
+                            <f:facet name="header">Registro Sanitario</f:facet>
+                            #{invima.numeroRegistro}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Nombre</f:facet>
+                            #{invima.nombre}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Titular</f:facet>
+                            #{invima.titular}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Estado</f:facet>
+                            #{invima.estado}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Vigencia</f:facet>
+                            #{invima.fechaVencimiento}
+                        </h:column>
+                    </h:dataTable>
+                    <h:outputText value="No se encontraron resultados en INVIMA." rendered="#{consultaMedicamentoInvima.resultados != null and consultaMedicamentoInvima.resultados.isEmpty()}" style="color:#888;"/>
+                </h:panelGroup>
+            </section>
             
             <section aria-labelledby="registros-heading">
                 <h2 id="registros-heading">Registros de Medicamentos</h2>
