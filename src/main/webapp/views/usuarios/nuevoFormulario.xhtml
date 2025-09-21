@@ -15,27 +15,6 @@
     </h:head>
     <h:body>
         <main class="form-container">
-            <h2>Prueba de Nuevo Formulario</h2>
-            <h:form id="nuevoFormulario">
-                <h:messages globalOnly="true" styleClass="message-box"/>
-
-                <div class="form-group">
-                    <h:outputLabel for="nombre" value="Nombre:"/>
-                    <h:inputText id="nombre" value="#{registroUsuario.nombres}"/>
-                </div>
-
-                <div class="form-group">
-                    <h:outputLabel for="correo" value="Correo Electrónico:"/>
-                    <h:inputText id="correo" value="#{registroUsuario.correo}"/>
-                </div>
-
-                <div class="form-group">
-                    <h:outputLabel for="password" value="Contraseña:"/>
-                    <h:inputSecret id="password" value="#{registroUsuario.password}"/>
-                </div>
-
-                <h:commandButton value="Registrar" action="#{registroUsuario.registrar}"/>
-            </h:form>
 
             <h2>Prueba de Consulta INVIMA</h2>
             <h:form id="consultaInvimaForm">

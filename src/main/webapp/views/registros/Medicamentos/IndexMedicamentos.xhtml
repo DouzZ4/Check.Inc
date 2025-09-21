@@ -63,46 +63,37 @@
                 <h2 id="invima-heading">Consultar Medicamento en INVIMA</h2>
                 <h:form id="consultaInvimaForm">
                     <div class="form-group">
-                        <h:outputLabel for="nombreBusqueda" value="Nombre del Medicamento:"/>
-                        <h:inputText id="nombreBusqueda" value="#{consultaMedicamentoInvima.nombreBusqueda}"/>
-                    </div>
-                    <div class="form-group">
-                        <h:outputLabel for="numeroRegistroBusqueda" value="Número de Registro Sanitario:"/>
-                        <h:inputText id="numeroRegistroBusqueda" value="#{consultaMedicamentoInvima.numeroRegistroBusqueda}"/>
+                        <h:outputLabel for="terminoBusqueda" value="Nombre del Medicamento:"/>
+                        <h:inputText id="terminoBusqueda" value="#{medicamentoInvimaBean.terminoBusqueda}"/>
                     </div>
                     <div id="form-buttons">
-                        <h:commandButton value="Buscar en INVIMA" action="#{consultaMedicamentoInvima.buscar}" styleClass="submit-button">
-                            <f:ajax render="tablaInvima" execute="@form"/>
-                        </h:commandButton>
-                        <h:commandButton value="Limpiar" action="#{consultaMedicamentoInvima.limpiar}" immediate="true" styleClass="cancel-button">
-                            <f:ajax render="consultaInvimaForm tablaInvima" execute="@this"/>
+                        <h:commandButton value="Buscar en INVIMA" action="#{medicamentoInvimaBean.buscar}" styleClass="submit-button">
+                            <f:ajax render="tablaInvima mensajeErrorInvima" execute="@form"/>
                         </h:commandButton>
                     </div>
                 </h:form>
+                <h:panelGroup id="mensajeErrorInvima">
+                    <h:outputText value="#{medicamentoInvimaBean.mensajeError}" style="color:red;" rendered="#{not empty medicamentoInvimaBean.mensajeError}"/>
+                </h:panelGroup>
                 <h:panelGroup id="tablaInvima">
-                    <h:dataTable value="#{consultaMedicamentoInvima.resultados}" var="invima" rendered="#{not empty consultaMedicamentoInvima.resultados}" styleClass="tabla-registros" headerClass="tabla-header">
+                    <h:dataTable value="#{medicamentoInvimaBean.resultados}" var="invima" rendered="#{not empty medicamentoInvimaBean.resultados}" styleClass="tabla-registros" headerClass="tabla-header">
                         <h:column>
-                            <f:facet name="header">Registro Sanitario</f:facet>
-                            #{invima.numeroRegistro}
+                            <f:facet name="header">Expediente</f:facet>
+                            #{invima.expediente}
                         </h:column>
                         <h:column>
-                            <f:facet name="header">Nombre</f:facet>
-                            #{invima.nombre}
+                            <f:facet name="header">Producto</f:facet>
+                            #{invima.producto}
                         </h:column>
                         <h:column>
                             <f:facet name="header">Titular</f:facet>
                             #{invima.titular}
                         </h:column>
                         <h:column>
-                            <f:facet name="header">Estado</f:facet>
-                            #{invima.estado}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Vigencia</f:facet>
-                            #{invima.fechaVencimiento}
+                            <f:facet name="header">Descripción Comercial</f:facet>
+                            #{invima.descripcioncomercial}
                         </h:column>
                     </h:dataTable>
-                    <h:outputText value="No se encontraron resultados en INVIMA." rendered="#{consultaMedicamentoInvima.resultados != null and consultaMedicamentoInvima.resultados.isEmpty()}" style="color:#888;"/>
                 </h:panelGroup>
             </section>
             
