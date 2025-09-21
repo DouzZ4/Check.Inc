@@ -18,83 +18,81 @@
                     <div class="form-group">
                         <h:outputLabel for="nombre" value="Nombre del Medicamento:"/>
                         <h:inputText id="nombre" value="#{registroMedicamento.nombre}" required="true"
-                                   requiredMessage="Por favor ingrese el nombre del medicamento"/>
+                                    requiredMessage="Por favor ingrese el nombre del medicamento"/>
                         <h:message for="nombre" styleClass="message error-message"/>
                     </div>
                     <div class="form-group">
                         <h:outputLabel for="dosis" value="Dosis:"/>
                         <h:inputText id="dosis" value="#{registroMedicamento.dosis}" required="true"
-                                   requiredMessage="Por favor ingrese la dosis"/>
+                                    requiredMessage="Por favor ingrese la dosis"/>
                         <h:message for="dosis" styleClass="message error-message"/>
                     </div>
                     <div class="form-group">
                         <h:outputLabel for="frecuencia" value="Frecuencia:"/>
                         <h:inputText id="frecuencia" value="#{registroMedicamento.frecuencia}" required="true"
-                                   requiredMessage="Por favor ingrese la frecuencia"/>
+                                    requiredMessage="Por favor ingrese la frecuencia"/>
                         <h:message for="frecuencia" styleClass="message error-message"/>
                     </div>
                     <div class="form-group">
                         <h:outputLabel for="fechaInicio" value="Fecha de Inicio:"/>
                         <p:datePicker id="fechaInicio" value="#{registroMedicamento.fechaInicio}" required="true"
-                                   requiredMessage="Por favor ingrese la fecha de inicio"
-                                   pattern="dd/MM/yyyy" locale="es"/>
+                                    requiredMessage="Por favor ingrese la fecha de inicio"
+                                    pattern="dd/MM/yyyy" locale="es"/>
                         <h:message for="fechaInicio" styleClass="message error-message"/>
                     </div>
                     <div class="form-group">
                         <h:outputLabel for="fechaFin" value="Fecha de Fin:"/>
                         <p:datePicker id="fechaFin" value="#{registroMedicamento.fechaFin}" required="true"
-                                   requiredMessage="Por favor ingrese la fecha de fin"
-                                   pattern="dd/MM/yyyy" locale="es"/>
+                                    requiredMessage="Por favor ingrese la fecha de fin"
+                                    pattern="dd/MM/yyyy" locale="es"/>
                         <h:message for="fechaFin" styleClass="message error-message"/>
                     </div>
                     <div id="form-buttons">
                         <h:commandButton value="#{registroMedicamento.editando ? 'Actualizar' : 'Registrar'}" 
-                                       action="#{registroMedicamento.registrar}"
-                                       styleClass="submit-button"/>
+                                        action="#{registroMedicamento.registrar}"
+                                        styleClass="submit-button"/>
                         <h:commandButton value="Cancelar" 
-                                       action="#{registroMedicamento.cancelarEdicion}"
-                                       immediate="true" styleClass="cancel-button"/>
+                                        action="#{registroMedicamento.cancelarEdicion}"
+                                        immediate="true" styleClass="cancel-button"/>
                     </div>
                 </h:form>
             </section>
 
-            <!-- Consulta de medicamentos en INVIMA -->
             <section aria-labelledby="invima-heading" style="margin-bottom:2em;">
                 <h2 id="invima-heading">Consultar Medicamento en INVIMA</h2>
-                <h:form id="consultaInvimaForm">
-                    <div class="form-group">
-                        <h:outputLabel for="terminoBusqueda" value="Nombre del Medicamento:"/>
-                        <h:inputText id="terminoBusqueda" value="#{medicamentoInvimaBean.terminoBusqueda}"/>
-                    </div>
-                    <div id="form-buttons">
-                        <h:commandButton value="Buscar en INVIMA" action="#{medicamentoInvimaBean.buscar}" styleClass="submit-button">
-                            <f:ajax render="tablaInvima mensajeErrorInvima" execute="@form"/>
-                        </h:commandButton>
-                    </div>
-                </h:form>
-                <h:panelGroup id="mensajeErrorInvima">
-                    <h:outputText value="#{medicamentoInvimaBean.mensajeError}" style="color:red;" rendered="#{not empty medicamentoInvimaBean.mensajeError}"/>
-                </h:panelGroup>
-                <h:panelGroup id="tablaInvima">
-                    <h:dataTable value="#{medicamentoInvimaBean.resultados}" var="invima" rendered="#{not empty medicamentoInvimaBean.resultados}" styleClass="tabla-registros" headerClass="tabla-header">
-                        <h:column>
-                            <f:facet name="header">Expediente</f:facet>
-                            #{invima.expediente}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Producto</f:facet>
-                            #{invima.producto}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Titular</f:facet>
-                            #{invima.titular}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Descripción Comercial</f:facet>
-                            #{invima.descripcioncomercial}
-                        </h:column>
-                    </h:dataTable>
-                </h:panelGroup>
+                
+                <div class="form-group">
+                    <label for="searchMedicamento">Buscar medicamento:</label>
+                    <input type="text" id="searchMedicamento" class="form-control" 
+                            placeholder="Ingrese el nombre del medicamento" 
+                            minlength="3"/>
+                    <small class="text-muted">Ingrese al menos 3 caracteres para buscar</small>
+                </div>
+                
+                <div id="form-buttons">
+                    <button type="button" id="btnBuscarMedicamento" class="btn btn-primary submit-button">
+                        Buscar en INVIMA
+                    </button>
+                </div>
+
+                <div id="mensajesInvima" class="message-box" style="margin-top: 1em; display: none;"></div>
+
+                <div id="tablaInvimaContainer" class="table-responsive" style="margin-top: 1em;">
+                    <table id="tablaMedicamentos" class="tabla-registros" style="display: none;">
+                        <thead class="tabla-header">
+                            <tr>
+                                <th>Expediente</th>
+                                <th>Producto</th>
+                                <th>Titular</th>
+                                <th>Registro Sanitario</th>
+                                <th>Principio Activo</th>
+                                <th>Concentración</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </section>
             
             <section aria-labelledby="registros-heading">
@@ -132,9 +130,9 @@
                     </h:form>
                     <h:form id="tablaForm">
                         <h:dataTable id="medicamento" value="#{registroMedicamento.registrosFiltradosYOrdenados}" var="medicamento"
-                                   styleClass="tabla-registros"
-                                   headerClass="tabla-header"
-                                   rowClasses="tabla-fila-par,tabla-fila-impar">                        
+                                    styleClass="tabla-registros"
+                                    headerClass="tabla-header"
+                                    rowClasses="tabla-fila-par,tabla-fila-impar">                     
                             <h:column>
                                 <f:facet name="header">Nombre</f:facet>
                                 #{medicamento.nombre}
@@ -162,17 +160,19 @@
                             <h:column>
                                 <f:facet name="header">Acciones</f:facet>
                                 <h:commandButton value="Editar" 
-                                               action="#{registroMedicamento.editar(medicamento)}"
-                                               styleClass="action-button edit-button"/>
+                                                action="#{registroMedicamento.editar(medicamento)}"
+                                                styleClass="action-button edit-button"/>
                                 <h:commandButton value="Eliminar" 
-                                               action="#{registroMedicamento.eliminar(medicamento)}"
-                                               styleClass="action-button delete-button"
-                                               onclick="return confirm('¿Está seguro de eliminar este medicamento?');"/>
+                                                action="#{registroMedicamento.eliminar(medicamento)}"
+                                                styleClass="action-button delete-button"
+                                                onclick="return confirm('¿Está seguro de eliminar este medicamento?');"/>
                             </h:column>
                         </h:dataTable>
                     </h:form>
                 </div>
             </section>
+            
+            <h:outputScript library="js" name="invima-search.js" target="body"/>
         </ui:define>
     </ui:composition>
 </html>

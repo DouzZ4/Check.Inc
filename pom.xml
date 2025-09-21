@@ -24,34 +24,27 @@
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
-        
-    <!-- iText 2.1.7 para exportar PDF (compatible con PrimeFaces DataExporter) -->
-    <dependency>
-    <groupId>com.itextpdf</groupId>
-    <artifactId>itextpdf</artifactId>
-    <version>5.5.13.2</version>
-</dependency>
 
-<dependencies>
-    <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>2.9.8</version> </dependency>
-</dependencies>
-        <!-- Para manejo de JSON -->
+        <!-- iText para exportar PDF -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.13.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.12.0</version>
+        </dependency>
+
+        <!-- Para manejo de JSON con Jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.15.2</version>
         </dependency>
-        
-        <!-- Apache HttpClient para conexiones HTTP/HTTPS -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.14</version>
-        </dependency>
-        
+
         <!-- BCrypt para hashing de contraseñas -->
         <dependency>
             <groupId>org.mindrot</groupId>
@@ -64,20 +57,6 @@
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
             <version>13.0.0</version>
-        </dependency>
-
-        <!-- Jersey Client for HTTP requests -->
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>2.35</version>
-        </dependency>
-
-        <!-- Jersey JSON processing -->
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-json-jackson</artifactId>
-            <version>2.35</version>
         </dependency>
     </dependencies>
 
