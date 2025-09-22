@@ -28,32 +28,36 @@ public class RegistroAnomalia implements Serializable {
 
     private static final String USUARIO_SESSION_KEY = "usuario";
     private static final String ERROR = "Error";
-    
+
     @EJB
     private AnomaliaFacadeLocal anomaliaFacade;
-    
+
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
-    
+
     private Integer idAnomalia;
     private String descripcion;
     private Date fechaHora;
     private String sintomas;
     private String gravedad;
-    private Boolean resuelto;
     private List<Anomalia> registros;
     private boolean editando;
-    
+
     //-- Filtrar por resuelto--//
     private String filtroResuelto;
-    public String getFiltroResuelto() { return filtroResuelto; }
-    public void setFiltroResuelto(String filtroResuelto) { this.filtroResuelto = filtroResuelto; }
-    
-  
+
+    public String getFiltroResuelto() {
+        return filtroResuelto;
+    }
+
+    public void setFiltroResuelto(String filtroResuelto) {
+        this.filtroResuelto = filtroResuelto;
+    }
+
     public RegistroAnomalia() {
         this.fechaHora = new Date();
     }
-    
+
     @PostConstruct
     public void init() {
         Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(USUARIO_SESSION_KEY);
@@ -106,14 +110,6 @@ public class RegistroAnomalia implements Serializable {
         this.gravedad = gravedad;
     }
 
-    public Boolean getResuelto() {
-        return resuelto;
-    }
-
-    public void setResuelto(Boolean resuelto) {
-        this.resuelto = resuelto;
-    }
-
     public List<Anomalia> getRegistros() {
         return registros;
     }
@@ -129,7 +125,11 @@ public class RegistroAnomalia implements Serializable {
     public void setEditando(boolean editando) {
         this.editando = editando;
     }
-    
+
+    public List<Anomalia> getListaAnomalias() {
+        return registros; 
+    }
+
     public void registrar() {
         Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(USUARIO_SESSION_KEY);
         if (usuario == null) {
@@ -139,6 +139,7 @@ public class RegistroAnomalia implements Serializable {
         try {
             if (editando) {
                 Anomalia anomalia = anomaliaFacade.find(idAnomalia);
+                System.out.println("EDITARNDONADN:" +idAnomalia);
                 if (anomalia == null) {
                     addMessage(FacesMessage.SEVERITY_ERROR, ERROR, "Registro no encontrado");
                     return;
@@ -147,7 +148,6 @@ public class RegistroAnomalia implements Serializable {
                 anomalia.setFechaHora(fechaHora);
                 anomalia.setSintomas(sintomas);
                 anomalia.setGravedad(gravedad);
-                anomalia.setResuelto(resuelto);
                 anomaliaFacade.edit(anomalia);
                 addMessage(FacesMessage.SEVERITY_INFO, "Registro actualizado", "La Anomalia ha sido actualizada");
                 editando = false;
@@ -157,7 +157,6 @@ public class RegistroAnomalia implements Serializable {
                 anomalia.setFechaHora(fechaHora);
                 anomalia.setSintomas(sintomas);
                 anomalia.setGravedad(gravedad);
-                anomalia.setResuelto(resuelto);
                 anomalia.setIdUsuario(usuario);
                 anomaliaFacade.create(anomalia);
                 addMessage(FacesMessage.SEVERITY_INFO, "Registro guardado", "El medicamento ha sido guardado correctamente");
@@ -168,17 +167,16 @@ public class RegistroAnomalia implements Serializable {
             addMessage(FacesMessage.SEVERITY_ERROR, ERROR, "No se pudo procesar el registro: " + e.getMessage());
         }
     }
-    
+
     public void editar(Anomalia anomalia) {
         this.idAnomalia = anomalia.getIdAnomalia();
         this.descripcion = anomalia.getDescripcion();
         this.fechaHora = anomalia.getFechaHora();
         this.sintomas = anomalia.getSintomas();
         this.gravedad = anomalia.getGravedad();
-        this.resuelto = anomalia.getResuelto();
         this.editando = true;
     }
-    
+
     public void eliminar(Anomalia anomalia) {
         try {
             anomaliaFacade.remove(anomalia);
@@ -191,24 +189,23 @@ public class RegistroAnomalia implements Serializable {
             addMessage(FacesMessage.SEVERITY_ERROR, ERROR, "No se pudo eliminar el registro: " + e.getMessage());
         }
     }
-    
+
     public void cancelarEdicion() {
         limpiarFormulario();
         editando = false;
     }
-    
+
     private void limpiarFormulario() {
         this.idAnomalia = null;
         this.descripcion = null;
         this.fechaHora = new Date();
         this.sintomas = null;
         this.gravedad = null;
-        this.resuelto = null;
     }
-    
+
     private void addMessage(FacesMessage.Severity severity, String summary, String detail) {
-        FacesContext.getCurrentInstance().addMessage(null, 
-            new FacesMessage(severity, summary, detail));
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(severity, summary, detail));
     }
 
 }
