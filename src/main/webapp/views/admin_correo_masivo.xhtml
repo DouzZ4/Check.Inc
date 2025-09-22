@@ -1,66 +1,64 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-
-    <body>
-
-        <ui:composition template="/views/TemplateSitio.xhtml">
-
-            <ui:define name="title">
-                Registro y Consulta de Anomalias
-            </ui:define>
-
-            <ui:define name="content">
-                <h:messages globalOnly="true" styleClass="message-box" infoClass="message-info" errorClass="message-error"/>
-                <section aria-labelledby="form-title-heading">
-                <h2 id="form-title-heading">#{registroAnomalia.editando ? 'Editar' : 'Registrar'} Anomalia</h2>
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      lang="es"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Registros Glucosa - Admin</title>
+        <h:outputStylesheet library="css" name="navbar.css"/>
+        <h:outputStylesheet library="css" name="styles.css"/>
+        <style>
+            .dashboard-container {
+                padding: 20px 30px;
+            }
+            .welcome-admin {
+                margin-bottom: 25px;
+                padding-bottom: 15px;
+                border-bottom: 1px solid #eee;
+            }
+            .placeholder {
+                color: #888;
+                font-size: 1.2em;
+                margin-top: 40px;
+                text-align: center;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <ui:include src="/includes/navbar.xhtml"/>
+        <main class="dashboard-container">
+            <h1 class="welcome-admin">Comunicación Masiva</h1>
+            <div class="placeholder">
                 <h:form id="formAnomalia">
                     <h:inputHidden id="id" value="#{registroAnomalia.idAnomalia}"/>
                     <div class="form-group">
-                        <h:outputLabel for="fechaHora" value="Fecha:"/>
-                        <p:datePicker id="fechaHora" value="#{registroAnomalia.fechaHora}" required="true"
-                                   requiredMessage="Por favor ingrese la Fecha."
-                                   pattern="dd/MM/yyyy" locale="es"/>
-                        <h:message for="fechaHora" styleClass="message error-message"/>
-                    </div>
-                    <div class="form-group">
-                        <h:outputLabel for="descripcion" value="Descripcion:"/>
+                        <h:outputLabel for="descripcion" value="Asunto"/>
                         <p:inputTextarea id="descripcion" value="#{registroAnomalia.descripcion}" required="true"
-                                   requiredMessage="Por favor ingrese la descripcion."/>
+                                         requiredMessage="Por favor ingrese la descripcion."/>
                         <h:message for="descripcion" styleClass="message error-message"/>
                     </div>
                     <div class="form-group">
-                        <h:outputLabel for="sintomas" value="Sintomas:"/>
+                        <h:outputLabel for="sintomas" value="Contenido:"/>
                         <p:inputTextarea id="sintomas" value="#{registroAnomalia.sintomas}" required="true"
-                                   requiredMessage="Por favor ingrese la descripcion."/>
+                                         requiredMessage="Por favor ingrese la descripcion."/>
                         <h:message for="sintomas" styleClass="message error-message"/>
                     </div>
-                    <div class="form-group">
-                    <h:outputLabel for="gravedad" value="Gravedad:"/>
-                    <h:selectOneMenu id="gravedad" value="#{registroAnomalia.gravedad}" onchange="toggleTipoDiabetesInput(this.value)" required="true" requiredMessage="Debe seleccionar un nivel de gravedad." styleClass="custom-select">
-                        <f:selectItem itemLabel="Seleccione..." itemValue=""/>
-                        <f:selectItem itemLabel="leve" itemValue="leve"/>
-                        <f:selectItem itemLabel="moderada" itemValue="moderada"/>
-                        <f:selectItem itemLabel="grave" itemValue="grave"/>
-                    </h:selectOneMenu>
-                    <h:message for="gravedad" styleClass="message error-message"/>
-                    </div>
                     <div id="form-buttons">
-                        <h:commandButton value="#{registroAnomalia.editando ? 'Actualizar' : 'Registrar'}" 
-                                       action="#{registroAnomalia.registrar}"
-                                       styleClass="submit-button"/>
+                        <h:commandButton value="#{registroAnomalia.editando ? 'Actualizar' : 'Enviar'}" 
+                                         action="#{registroAnomalia.registrar}"
+                                         styleClass="submit-button"/>
                         <h:commandButton value="Cancelar" 
-                                       action="#{registroAnomalia.cancelarEdicion}"
-                                       immediate="true" styleClass="cancel-button"/>
+                                         action="#{registroAnomalia.cancelarEdicion}"
+                                         immediate="true" styleClass="cancel-button"/>
                     </div>
                 </h:form>
-            </section>
+
                 <section aria-labelledby="registros-heading">
-                    <h2 id="registros-heading">Registros Anomalias</h2>
+                    <h2 id="registros-heading">Registros Correos</h2>
                     <div style="overflow-x: auto;">
                         <h:form id="tablaForm">
                             <h:dataTable id="registro" value="#{registroAnomalia.registros}" var="registro"
@@ -76,15 +74,15 @@
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">Descripción</f:facet>
-                                #{registro.descripcion}
+                                        #{registro.descripcion}
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">Sintomas</f:facet>
-                                #{registro.sintomas}
+                                        #{registro.sintomas}
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">Gravedad</f:facet>
-                                #{registro.gravedad}
+                                        #{registro.gravedad}
                                 </h:column>                            
                                 <h:column>
                                     <f:facet name="header">Acciones</f:facet>
@@ -101,9 +99,7 @@
                         </h:form>
                     </div>
                 </section>
-            </ui:define>
-
-        </ui:composition>
-
-    </body>
+            </div>
+        </main>
+    </h:body>
 </html>
