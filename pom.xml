@@ -58,6 +58,13 @@
             <artifactId>primefaces</artifactId>
             <version>13.0.0</version>
         </dependency>
+
+        <!-- JFreeChart para gráficos -->
+        <dependency>
+            <groupId>jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.0.13</version>
+        </dependency>
     </dependencies>
 
     <build>

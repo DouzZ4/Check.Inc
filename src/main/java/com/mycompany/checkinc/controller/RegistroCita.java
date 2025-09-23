@@ -5,6 +5,9 @@ import com.mycompany.checkinc.entities.Usuario;
 import com.mycompany.checkinc.services.CitaFacadeLocal;
 import com.mycompany.checkinc.services.UsuarioFacadeLocal;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -13,6 +16,11 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultScheduleEvent;
+import org.primefaces.model.DefaultScheduleModel;
+import org.primefaces.model.ScheduleEvent;
+import org.primefaces.model.ScheduleModel;
 
 @ManagedBean(name = "registroCita")
 @ViewScoped
@@ -32,6 +40,8 @@ public class RegistroCita implements Serializable {
     private String motivo;
     private List<Cita> registros;
     private boolean editando;
+    private ScheduleModel eventModel;
+    private ScheduleEvent<?> selectedEvent;
     
     // --- Filtro y método filtrado para motivo ---
     private String filtroMotivo;
@@ -99,14 +109,71 @@ public class RegistroCita implements Serializable {
         Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(USUARIO_SESSION_KEY);
         if (usuario != null) {
             cargarRegistros(usuario);
+            inicializarCalendario();
         }
     }
     
+    private void inicializarCalendario() {
+        eventModel = new DefaultScheduleModel();
+        if (registros != null) {
+            for (Cita cita : registros) {
+                LocalDateTime start = combinarFechaHora(cita.getFecha(), cita.getHora());
+                LocalDateTime end = start.plusHours(1); // Asumimos 1 hora de duración
+
+                ScheduleEvent<?> event = DefaultScheduleEvent.builder()
+                        .title(cita.getMotivo())
+                        .startDate(start)
+                        .endDate(end)
+                        .description(cita.getMotivo())
+                        .build();
+                eventModel.addEvent(event);
+            }
+        }
+    }
+
+    private LocalDateTime combinarFechaHora(Date fecha, Date hora) {
+        Calendar calFecha = Calendar.getInstance();
+        calFecha.setTime(fecha);
+
+        Calendar calHora = Calendar.getInstance();
+        calHora.setTime(hora);
+
+        calFecha.set(Calendar.HOUR_OF_DAY, calHora.get(Calendar.HOUR_OF_DAY));
+        calFecha.set(Calendar.MINUTE, calHora.get(Calendar.MINUTE));
+        calFecha.set(Calendar.SECOND, 0);
+        calFecha.set(Calendar.MILLISECOND, 0);
+
+        return calFecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+    
+    public void onEventSelect(SelectEvent<ScheduleEvent<?>> selectEvent) {
+        selectedEvent = selectEvent.getObject();
+    }
+
+    public void onDateSelect(SelectEvent<LocalDateTime> selectEvent) {
+        selectedEvent = DefaultScheduleEvent.builder()
+                .startDate(selectEvent.getObject())
+                .endDate(selectEvent.getObject().plusHours(1))
+                .build();
+    }
+
     private void cargarRegistros(Usuario usuario) {
         this.registros = citaFacade.findByUsuario(usuario);
     }
     
     // Getters y Setters
+    public ScheduleModel getEventModel() {
+        return eventModel;
+    }
+
+    public ScheduleEvent<?> getSelectedEvent() {
+        return selectedEvent;
+    }
+
+    public void setSelectedEvent(ScheduleEvent<?> selectedEvent) {
+        this.selectedEvent = selectedEvent;
+    }
+
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
     
