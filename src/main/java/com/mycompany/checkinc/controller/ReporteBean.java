@@ -245,20 +245,43 @@ public class ReporteBean implements Serializable {
         try {
             PdfWriter.getInstance(document, response.getOutputStream());
             document.open();
-            
+
             Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, new BaseColor(48, 88, 166));
             Paragraph title = new Paragraph("Reporte de Glucosa", titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
             title.setSpacingAfter(20f);
             document.add(title);
+            
+            // Agregar encabezado con datos del paciente
+            agregarEncabezadoPaciente(document, usuario);
 
             if (!glucosaList.isEmpty()) {
-                Image chartImage = crearGraficoGlucosa(glucosaList);
-                if (chartImage != null) {
-                    chartImage.scaleToFit(500, 300);
-                    chartImage.setAlignment(Element.ALIGN_CENTER);
-                    document.add(chartImage);
-                    document.add(new Paragraph(" "));
+                // Verificar registros de la última semana
+                java.util.Date hoy = new java.util.Date();
+                java.util.Calendar cal = java.util.Calendar.getInstance();
+                cal.setTime(hoy);
+                cal.add(java.util.Calendar.DAY_OF_YEAR, -7);
+                java.util.Date ultimaSemana = cal.getTime();
+                
+                List<Glucosa> registrosSemanales = glucosaList.stream()
+                    .filter(g -> g.getFechaHora().after(ultimaSemana))
+                    .collect(java.util.stream.Collectors.toList());
+
+                if (!registrosSemanales.isEmpty()) {
+                    Image chartImage = crearGraficoGlucosa(glucosaList);
+                    if (chartImage != null) {
+                        chartImage.scaleToFit(500, 300);
+                        chartImage.setAlignment(Element.ALIGN_CENTER);
+                        document.add(chartImage);
+                        document.add(new Paragraph(" "));
+                    }
+                } else {
+                    Font warningFont = new Font(Font.FontFamily.HELVETICA, 12, Font.ITALIC, new BaseColor(244, 85, 1));
+                    Paragraph warning = new Paragraph("No hay registros de glucosa para la última semana. " +
+                        "El gráfico muestra la tendencia de los niveles de glucosa de los últimos 7 días.", warningFont);
+                    warning.setAlignment(Element.ALIGN_CENTER);
+                    warning.setSpacingAfter(10f);
+                    document.add(warning);
                 }
 
                 PdfPTable table = new PdfPTable(3);
@@ -311,6 +334,9 @@ public class ReporteBean implements Serializable {
             title.setAlignment(Element.ALIGN_CENTER);
             title.setSpacingAfter(20f);
             document.add(title);
+            
+            // Agregar encabezado con datos del paciente
+            agregarEncabezadoPaciente(document, usuario);
 
             if (!medicamentoList.isEmpty()) {
                 PdfPTable table = new PdfPTable(5);
@@ -368,6 +394,9 @@ public class ReporteBean implements Serializable {
             title.setAlignment(Element.ALIGN_CENTER);
             title.setSpacingAfter(20f);
             document.add(title);
+            
+            // Agregar encabezado con datos del paciente
+            agregarEncabezadoPaciente(document, usuario);
 
             if (!citaList.isEmpty()) {
                 PdfPTable table = new PdfPTable(3);
@@ -400,19 +429,69 @@ public class ReporteBean implements Serializable {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM");
         
-        int start = Math.max(0, glucosaList.size() - 15);
-        for (int i = start; i < glucosaList.size(); i++) {
-            Glucosa g = glucosaList.get(i);
-            dataset.addValue(g.getNivelGlucosa(), "Glucosa", sdf.format(g.getFechaHora()));
+        // Filtrar registros de la última semana
+        java.util.Date hoy = new java.util.Date();
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.setTime(hoy);
+        cal.add(java.util.Calendar.DAY_OF_YEAR, -7);
+        java.util.Date ultimaSemana = cal.getTime();
+        
+        List<Glucosa> registrosSemanales = glucosaList.stream()
+            .filter(g -> g.getFechaHora().after(ultimaSemana))
+            .sorted((g1, g2) -> g1.getFechaHora().compareTo(g2.getFechaHora()))
+            .collect(java.util.stream.Collectors.toList());
+            
+        for (Glucosa g : registrosSemanales) {
+            dataset.addValue(g.getNivelGlucosa(), "Nivel de Glucosa", sdf.format(g.getFechaHora()));
         }
 
         JFreeChart lineChart = ChartFactory.createLineChart(
-                "Niveles de Glucosa", "Fecha", "Nivel (mg/dL)",
-                dataset, PlotOrientation.VERTICAL, false, true, false);
+                "Tendencia de Glucosa", // título
+                "Fecha", // eje X
+                "Nivel (mg/dL)", // eje Y
+                dataset,
+                PlotOrientation.VERTICAL,
+                true,
+                true,
+                false);
 
+        // Personalización del gráfico
         lineChart.setBackgroundPaint(Color.white);
-        lineChart.getPlot().setBackgroundPaint(Color.white);
-
+        
+        // Configurar el plot
+        org.jfree.chart.plot.CategoryPlot plot = lineChart.getCategoryPlot();
+        plot.setBackgroundPaint(Color.white);
+        plot.setDomainGridlinePaint(new Color(220, 220, 220));
+        plot.setRangeGridlinePaint(new Color(220, 220, 220));
+        
+        // Personalizar la línea
+        org.jfree.chart.renderer.category.LineAndShapeRenderer renderer = 
+            (org.jfree.chart.renderer.category.LineAndShapeRenderer) plot.getRenderer();
+        renderer.setSeriesPaint(0, new Color(47, 85, 151));
+        renderer.setSeriesStroke(0, new java.awt.BasicStroke(2.0f));
+        renderer.setSeriesShapesVisible(0, true);
+        renderer.setSeriesShape(0, new java.awt.geom.Ellipse2D.Double(-3, -3, 6, 6));
+        renderer.setDrawOutlines(true);
+        renderer.setUseFillPaint(true);
+        renderer.setSeriesFillPaint(0, Color.WHITE);
+        
+        // Configurar el área bajo la curva
+        renderer.setSeriesShape(0, new java.awt.geom.Ellipse2D.Double(-3, -3, 6, 6));
+        plot.setRenderer(renderer);
+        
+        // Personalizar ejes
+        org.jfree.chart.axis.CategoryAxis domainAxis = plot.getDomainAxis();
+        domainAxis.setLowerMargin(0.05);
+        domainAxis.setUpperMargin(0.05);
+        domainAxis.setTickLabelFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 10));
+        
+        org.jfree.chart.axis.NumberAxis rangeAxis = (org.jfree.chart.axis.NumberAxis) plot.getRangeAxis();
+        rangeAxis.setStandardTickUnits(org.jfree.chart.axis.NumberAxis.createIntegerTickUnits());
+        rangeAxis.setTickLabelFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 10));
+        
+        // Ajustar tamaño de la leyenda
+        lineChart.getLegend().setItemFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 10));
+        
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             ChartUtilities.writeChartAsPNG(baos, lineChart, 500, 300);
@@ -430,6 +509,38 @@ public class ReporteBean implements Serializable {
         cell.setBackgroundColor(bgColor);
         cell.setPadding(6);
         return cell;
+    }
+
+    private void agregarEncabezadoPaciente(Document document, Usuario usuario) throws DocumentException {
+        BaseColor azul = new BaseColor(48, 88, 166);
+        Font sectionFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD, new BaseColor(244, 85, 1));
+        
+        // Logo
+        try {
+            Image logo = Image.getInstance(FacesContext.getCurrentInstance()
+                .getExternalContext().getRealPath("/resources/images/LOGO PNG.png"));
+            logo.scaleToFit(100, 100);
+            logo.setAlignment(Element.ALIGN_CENTER);
+            document.add(logo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        // Fecha de emisión
+        SimpleDateFormat sdf = new SimpleDateFormat("dd 'de' MMMM 'de' yyyy");
+        Paragraph fecha = new Paragraph("Fecha de emisión: " + sdf.format(new java.util.Date()), 
+            new Font(Font.FontFamily.HELVETICA, 10));
+        fecha.setAlignment(Element.ALIGN_RIGHT);
+        document.add(fecha);
+        
+        document.add(new Paragraph(" "));
+        document.add(new Paragraph("Datos del Paciente", sectionFont));
+        document.add(new Paragraph("Nombre: " + usuario.getNombres() + " " + usuario.getApellidos()));
+        document.add(new Paragraph("Documento: " + usuario.getDocumento()));
+        document.add(new Paragraph("Correo: " + usuario.getCorreo()));
+        document.add(new Paragraph("Edad: " + usuario.getEdad()));
+        document.add(new Paragraph("Tipo de Diabetes: " + (usuario.getTipoDiabetes() != null ? usuario.getTipoDiabetes() : "N/A")));
+        document.add(new Paragraph(" "));
     }
 
     private MenuModel model;
