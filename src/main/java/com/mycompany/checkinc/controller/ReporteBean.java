@@ -114,119 +114,17 @@ public class ReporteBean implements Serializable {
 
     public void exportarReporteCompletoPDF() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
         Usuario usuario = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
-
         if (usuario == null) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario no autenticado"));
             return;
         }
-
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"reporte_completo.pdf\"");
-
-        Document document = new Document();
         try {
-            PdfWriter.getInstance(document, response.getOutputStream());
-            document.open();
-
-            // Colores y fuentes
-            BaseColor azul = new BaseColor(48, 88, 166);
-            BaseColor naranja = new BaseColor(244, 85, 1);
-            Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, azul);
-            Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
-            Font cellFont = new Font(Font.FontFamily.HELVETICA, 11);
-            Font sectionFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD, naranja);
-
-            // Título del reporte
-            Paragraph title = new Paragraph("Reporte Completo del Paciente", titleFont);
-            title.setAlignment(Element.ALIGN_CENTER);
-            title.setSpacingAfter(20f);
-            document.add(title);
-
-            // Datos del paciente
-            document.add(new Paragraph("Datos del Paciente", sectionFont));
-            document.add(new Paragraph("Nombre: " + usuario.getNombres() + " " + usuario.getApellidos()));
-            document.add(new Paragraph("Documento: " + usuario.getDocumento()));
-            document.add(new Paragraph("Correo: " + usuario.getCorreo()));
-            document.add(new Paragraph("Edad: " + usuario.getEdad()));
-            document.add(new Paragraph("Tipo de Diabetes: " + (usuario.getTipoDiabetes() != null ? usuario.getTipoDiabetes() : "N/A")));
-            document.add(new Paragraph(" "));
-
-            // Glucosa
-            List<Glucosa> glucosaList = glucosaFacade.findByUsuario(usuario);
-            if (!glucosaList.isEmpty()) {
-                document.add(new Paragraph("Registros de Glucosa", sectionFont));
-                
-                Image chartImage = crearGraficoGlucosa(glucosaList);
-                if (chartImage != null) {
-                    chartImage.scaleToFit(500, 300);
-                    chartImage.setAlignment(Element.ALIGN_CENTER);
-                    document.add(chartImage);
-                    document.add(new Paragraph(" "));
-                }
-
-                PdfPTable glucosaTable = new PdfPTable(3);
-                glucosaTable.setWidthPercentage(100);
-                glucosaTable.addCell(estilizarCelda("Nivel de Glucosa", headerFont, azul));
-                glucosaTable.addCell(estilizarCelda("Fecha y Hora", headerFont, azul));
-                glucosaTable.addCell(estilizarCelda("Momento del Día", headerFont, azul));
-
-                for (Glucosa g : glucosaList) {
-                    glucosaTable.addCell(new Phrase(String.valueOf(g.getNivelGlucosa()), cellFont));
-                    glucosaTable.addCell(new Phrase(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(g.getFechaHora()), cellFont));
-                    glucosaTable.addCell(new Phrase(g.getMomentoDia() != null ? g.getMomentoDia() : "N/A", cellFont));
-                }
-                document.add(glucosaTable);
-                document.add(new Paragraph(" "));
-            }
-
-            // Citas
-            List<Cita> citaList = citaFacade.findByUsuario(usuario);
-            if (!citaList.isEmpty()) {
-                document.add(new Paragraph("Citas Médicas", sectionFont));
-                PdfPTable citaTable = new PdfPTable(3);
-                citaTable.setWidthPercentage(100);
-                citaTable.addCell(estilizarCelda("Fecha", headerFont, azul));
-                citaTable.addCell(estilizarCelda("Hora", headerFont, azul));
-                citaTable.addCell(estilizarCelda("Motivo", headerFont, azul));
-
-                for (Cita c : citaList) {
-                    citaTable.addCell(new Phrase(new SimpleDateFormat("dd/MM/yyyy").format(c.getFecha()), cellFont));
-                    citaTable.addCell(new Phrase(new SimpleDateFormat("HH:mm").format(c.getHora()), cellFont));
-                    citaTable.addCell(new Phrase(c.getMotivo(), cellFont));
-                }
-                document.add(citaTable);
-                document.add(new Paragraph(" "));
-            }
-
-            // Medicamentos
-            List<Medicamento> medicamentoList = medicamentoFacade.findByUsuario(usuario);
-            if (!medicamentoList.isEmpty()) {
-                document.add(new Paragraph("Medicamentos", sectionFont));
-                PdfPTable medTable = new PdfPTable(5);
-                medTable.setWidthPercentage(100);
-                medTable.addCell(estilizarCelda("Nombre", headerFont, azul));
-                medTable.addCell(estilizarCelda("Dosis", headerFont, azul));
-                medTable.addCell(estilizarCelda("Frecuencia", headerFont, azul));
-                medTable.addCell(estilizarCelda("Fecha Inicio", headerFont, azul));
-                medTable.addCell(estilizarCelda("Fecha Fin", headerFont, azul));
-
-                for (Medicamento m : medicamentoList) {
-                    medTable.addCell(new Phrase(m.getNombre(), cellFont));
-                    medTable.addCell(new Phrase(m.getDosis(), cellFont));
-                    medTable.addCell(new Phrase(m.getFrecuencia(), cellFont));
-                    medTable.addCell(new Phrase(new SimpleDateFormat("dd/MM/yyyy").format(m.getFechaInicio()), cellFont));
-                    medTable.addCell(new Phrase(new SimpleDateFormat("dd/MM/yyyy").format(m.getFechaFin()), cellFont));
-                }
-                document.add(medTable);
-            }
-
-        } catch (DocumentException e) {
+            ReporteGeneralPDF reporte = new ReporteGeneralPDF(usuario, glucosaFacade, medicamentoFacade, citaFacade);
+            reporte.exportarPDF();
+        } catch (Exception e) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo generar el reporte general."));
             e.printStackTrace();
-        } finally {
-            document.close();
-            context.responseComplete();
         }
     }
     
