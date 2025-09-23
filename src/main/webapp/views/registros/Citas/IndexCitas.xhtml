@@ -50,16 +50,21 @@
             <section aria-labelledby="registros-heading">
                 <h2 id="registros-heading">Citas Programadas</h2>
                 
-                <h:form>
-                    <p:schedule id="schedule" value="#{registroCita.eventModel}" locale="es" view="dayGridMonth" timeZone="America/Bogota">
-                        <p:ajax event="dateSelect" listener="#{registroCita.onDateSelect}" update=":dialogs:eventDetails" oncomplete="PF('eventDialog').show();" />
-                        <p:ajax event="eventSelect" listener="#{registroCita.onEventSelect}" update=":dialogs:eventDetails" oncomplete="PF('eventDialog').show();" />
-                    </p:schedule>
-                </h:form>
-                
-                <div style="overflow-x: auto;">
+                <div class="schedule-table-grid">
+                    <div class="schedule-wrapper">
+                        <h:form id="scheduleForm">
+                            <div class="schedule-container">
+                                <p:schedule id="schedule" value="#{registroCita.eventModel}" locale="es" view="dayGridMonth" timeZone="America/Bogota">
+                                    <p:ajax event="dateSelect" listener="#{registroCita.onDateSelect}" update=":dialogs:eventDetails" oncomplete="PF('eventDialog').show();" />
+                                    <p:ajax event="eventSelect" listener="#{registroCita.onEventSelect}" update=":dialogs:eventDetails" oncomplete="PF('eventDialog').show();" />
+                                </p:schedule>
+                            </div>
+                        </h:form>
+                    </div>
+
+                    <div class="table-container" style="overflow-x: auto;">
     
-        <h:form id="tablaForm">
+    <h:form id="tablaForm">
             <h:dataTable id="cita" value="#{registroCita.registrosFiltrados}" var="cita"
                        styleClass="tabla-registros"
                        headerClass="tabla-header"
@@ -98,6 +103,7 @@
                         </h:dataTable>
                     </h:form>
                 </div>
+            </div>
             </section>
             
             <h:outputStylesheet>

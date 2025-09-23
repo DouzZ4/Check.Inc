@@ -174,6 +174,31 @@ public class RegistroCita implements Serializable {
         this.selectedEvent = selectedEvent;
     }
 
+    /**
+     * Devuelve la fecha de inicio del evento seleccionado como java.util.Date
+     * para que los convertidores de JSF puedan formatearla correctamente.
+     */
+    public Date getSelectedEventStartDate() {
+        if (selectedEvent == null || selectedEvent.getStartDate() == null) return null;
+        Object sd = selectedEvent.getStartDate();
+        if (sd instanceof Date) {
+            return (Date) sd;
+        }
+        if (sd instanceof java.time.LocalDateTime) {
+            java.time.LocalDateTime ldt = (java.time.LocalDateTime) sd;
+            return Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+        }
+        return null;
+    }
+
+    /**
+     * Devuelve la hora del evento seleccionado como java.util.Date (misma fecha)
+     * para formatearse con un patrón de hora (HH:mm) en la vista.
+     */
+    public Date getSelectedEventStartTime() {
+        return getSelectedEventStartDate();
+    }
+
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
     
@@ -227,7 +252,9 @@ public class RegistroCita implements Serializable {
                 citaFacade.create(cita);
                 addMessage(FacesMessage.SEVERITY_INFO, "Registro guardado", "La cita ha sido guardada correctamente");
             }
+            // Recargar registros y re-inicializar el calendario para reflejar los cambios
             cargarRegistros(usuario);
+            inicializarCalendario();
             limpiarFormulario();
         } catch (Exception e) {
             addMessage(FacesMessage.SEVERITY_ERROR, ERROR, "No se pudo procesar el registro: " + e.getMessage());
@@ -248,6 +275,7 @@ public class RegistroCita implements Serializable {
             Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(USUARIO_SESSION_KEY);
             if (usuario != null) {
                 cargarRegistros(usuario);
+                inicializarCalendario();
             }
             addMessage(FacesMessage.SEVERITY_INFO, "Registro eliminado", "La cita ha sido eliminada correctamente");
         } catch (Exception e) {

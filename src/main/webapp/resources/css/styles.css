@@ -219,75 +219,38 @@ h2:first-child {
 }
 
 
-.edit-button { 
-    background-color: #f45501;
-    border: none;
+.edit-button, .ui-button.edit-button {
+    background-color: #f45501 !important;
+    border: none !important;
+    color: #fff !important;
     position: relative;
     overflow: hidden;
 }
 
-.edit-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
-    transition: opacity 0.3s ease;
-}
-
-.edit-button:hover::before {
-    opacity: 0;
-}
-
-.edit-button:hover {
-    background-color: #e04900;
+.edit-button:hover, .ui-button.edit-button:hover {
+    background-color: #e04900 !important;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(244, 85, 1, 0.3);
+    box-shadow: 0 5px 15px rgba(244, 85, 1, 0.3) !important;
 }
 
-.delete-button { 
-    background-color: #dc3545;
-    border: none;
+.delete-button, .ui-button.delete-button {
+    background-color: #dc3545 !important;
+    border: none !important;
+    color: #fff !important;
     position: relative;
     overflow: hidden;
 }
 
-.delete-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
-    transition: opacity 0.3s ease;
-}
-
-.delete-button:hover::before {
-    opacity: 0;
-}
-
-.delete-button:hover {
-    background-color: #c82333;
+.delete-button:hover, .ui-button.delete-button:hover {
+    background-color: #c82333 !important;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3) !important;
 }
 
 /* Efecto de presión */
-.action-button:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-/* Añadir iconos o texto descriptivo */
-.edit-button::after {
-    content: 'EDITAR';
-}
-
-.delete-button::after {
-    content: 'ELIMINAR';
+.action-button:active, .ui-button.action-button:active {
+    transform: translateY(1px) !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
 }
 
 /* --- Tabla --- */
@@ -767,4 +730,80 @@ table td:last-child {
     font-weight: bold;
     color: #333;
     padding-right: 15px;
+}
+
+/* Columnas para panelGrid de detalles del evento */
+.labelCol {
+    width: 35%;
+    vertical-align: middle;
+    text-align: left;
+    padding: 8px 12px;
+}
+
+.valueCol {
+    width: 65%;
+    vertical-align: middle;
+    text-align: left;
+    padding: 8px 12px;
+}
+
+/* Asegurar que outputs dentro del panelGrid ocupen el espacio y no se alineen extrañamente */
+#eventDetails .ui-outputtext {
+    display: block;
+    width: 100%;
+}
+
+/* Ajustes para calendario en la vista de citas */
+.schedule-wrapper {
+    margin-bottom: 18px; /* separación con la tabla */
+}
+
+.schedule-container {
+    /* ocupar todo el ancho disponible y permitir que el calendario llene el espacio */
+    width: 100%;
+    min-height: 520px; /* aumentar tamaño por defecto */
+    overflow: hidden; /* dejar que el calendario maneje su scroll interno */
+    border: 1px solid #e6e6e6;
+    border-radius: 6px;
+    padding: 6px;
+    background: #fff;
+}
+
+/* Asegurar que el dataTable quede separado y no se solape */
+.table-container {
+    clear: both;
+    margin-top: 8px;
+}
+
+/* Grid que contiene calendario y tabla: responsive */
+.schedule-table-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+@media (min-width: 1100px) {
+    .schedule-table-grid {
+        grid-template-columns: 640px 1fr; /* calendario a la izquierda (más amplio), tabla a la derecha */
+        align-items: start;
+    }
+
+    .schedule-container {
+        max-height: none; /* permitir que calendario muestre más en pantallas grandes */
+        min-height: 640px; /* más altura en pantallas grandes */
+    }
+}
+
+/* Forzar que FullCalendar use todo el espacio del contenedor */
+.schedule-container .fc,
+.schedule-container .fc .fc-view,
+.schedule-container .fc .fc-scroller,
+.schedule-container .fc .fc-daygrid-view {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+/* Ajustes adicionales: el wrapper interno de PrimeFaces schedule */
+.schedule-container .ui-schedule {
+    height: 100% !important;
 }
