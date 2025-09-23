@@ -26,6 +26,10 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -256,48 +260,100 @@ public class ReporteBean implements Serializable {
             agregarEncabezadoPaciente(document, usuario);
 
             if (!glucosaList.isEmpty()) {
-                // Verificar registros de la última semana
-                java.util.Date hoy = new java.util.Date();
-                java.util.Calendar cal = java.util.Calendar.getInstance();
-                cal.setTime(hoy);
-                cal.add(java.util.Calendar.DAY_OF_YEAR, -7);
-                java.util.Date ultimaSemana = cal.getTime();
-                
-                List<Glucosa> registrosSemanales = glucosaList.stream()
-                    .filter(g -> g.getFechaHora().after(ultimaSemana))
-                    .collect(java.util.stream.Collectors.toList());
+                Font sectionFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD, new BaseColor(244, 85, 1));
+                document.add(new Paragraph("Registros de Glucosa", sectionFont));
+                document.add(new Paragraph(" "));
 
-                if (!registrosSemanales.isEmpty()) {
-                    Image chartImage = crearGraficoGlucosa(glucosaList);
-                    if (chartImage != null) {
-                        chartImage.scaleToFit(500, 300);
-                        chartImage.setAlignment(Element.ALIGN_CENTER);
-                        document.add(chartImage);
-                        document.add(new Paragraph(" "));
-                    }
+                // 1. Mostrar gráfico de tendencia de la última semana
+                Image chartImage = crearGraficoGlucosa(glucosaList);
+                if (chartImage != null) {
+                    chartImage.scaleToFit(500, 300);
+                    chartImage.setAlignment(Element.ALIGN_CENTER);
+                    document.add(chartImage);
+                    document.add(new Paragraph(" "));
+                    
+                    // Agregar leyenda del gráfico
+                    Font legendFont = new Font(Font.FontFamily.HELVETICA, 10, Font.ITALIC);
+                    Paragraph legend = new Paragraph("Gráfico de tendencia de los últimos 7 días", legendFont);
+                    legend.setAlignment(Element.ALIGN_CENTER);
+                    legend.setSpacingAfter(20f);
+                    document.add(legend);
                 } else {
+                    // Mensaje si no hay datos recientes
                     Font warningFont = new Font(Font.FontFamily.HELVETICA, 12, Font.ITALIC, new BaseColor(244, 85, 1));
-                    Paragraph warning = new Paragraph("No hay registros de glucosa para la última semana. " +
-                        "El gráfico muestra la tendencia de los niveles de glucosa de los últimos 7 días.", warningFont);
+                    Paragraph warning = new Paragraph("No hay registros de glucosa para la última semana.", warningFont);
                     warning.setAlignment(Element.ALIGN_CENTER);
-                    warning.setSpacingAfter(10f);
+                    warning.setSpacingAfter(20f);
                     document.add(warning);
                 }
 
-                PdfPTable table = new PdfPTable(3);
-                table.setWidthPercentage(100);
+                // 2. Organizar y mostrar registros por mes
+                SimpleDateFormat sdfFecha = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
-                table.addCell(estilizarCelda("Nivel de Glucosa", headerFont, new BaseColor(48, 88, 166)));
-                table.addCell(estilizarCelda("Fecha y Hora", headerFont, new BaseColor(48, 88, 166)));
-                table.addCell(estilizarCelda("Momento del Día", headerFont, new BaseColor(48, 88, 166)));
-
                 Font cellFont = new Font(Font.FontFamily.HELVETICA, 11);
-                for (Glucosa g : glucosaList) {
-                    table.addCell(new Phrase(String.valueOf(g.getNivelGlucosa()), cellFont));
-                    table.addCell(new Phrase(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(g.getFechaHora()), cellFont));
-                    table.addCell(new Phrase(g.getMomentoDia() != null ? g.getMomentoDia() : "N/A", cellFont));
-                }
-                document.add(table);
+                Font monthFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, new BaseColor(48, 88, 166));
+                BaseColor azulHeader = new BaseColor(48, 88, 166);
+
+                // Agrupar y ordenar registros por mes (más reciente primero)
+                Map<String, List<Glucosa>> registrosPorMes = glucosaList.stream()
+                    .sorted((g1, g2) -> g2.getFechaHora().compareTo(g1.getFechaHora()))
+                    .collect(Collectors.groupingBy(g -> new SimpleDateFormat("MMMM yyyy").format(g.getFechaHora())));
+
+                // Procesar cada mes
+                registrosPorMes.entrySet().stream()
+                    .sorted((e1, e2) -> {
+                        try {
+                            Date d1 = new SimpleDateFormat("MMMM yyyy").parse(e1.getKey());
+                            Date d2 = new SimpleDateFormat("MMMM yyyy").parse(e2.getKey());
+                            return d2.compareTo(d1); // Orden descendente
+                        } catch (Exception e) {
+                            return 0;
+                        }
+                    })
+                    .forEach(mes -> {
+                        try {
+                            // Título del mes
+                            Paragraph mesTitle = new Paragraph(mes.getKey(), monthFont);
+                            mesTitle.setSpacingBefore(15f);
+                            mesTitle.setSpacingAfter(10f);
+                            document.add(mesTitle);
+
+                            // Tabla del mes
+                            PdfPTable tabla = new PdfPTable(3);
+                            tabla.setWidthPercentage(100);
+                            tabla.setSpacingBefore(5f);
+                            tabla.setSpacingAfter(10f);
+
+                            // Encabezados
+                            tabla.addCell(estilizarCelda("Nivel de Glucosa", headerFont, azulHeader));
+                            tabla.addCell(estilizarCelda("Fecha y Hora", headerFont, azulHeader));
+                            tabla.addCell(estilizarCelda("Momento del Día", headerFont, azulHeader));
+
+                            // Ordenar registros del mes cronológicamente
+                            List<Glucosa> registrosOrdenados = mes.getValue().stream()
+                                .sorted((g1, g2) -> g1.getFechaHora().compareTo(g2.getFechaHora()))
+                                .collect(Collectors.toList());
+
+                            // Agregar datos
+                            for (Glucosa g : registrosOrdenados) {
+                                PdfPCell cellNivel = new PdfPCell(new Phrase(String.valueOf(g.getNivelGlucosa()), cellFont));
+                                PdfPCell cellFecha = new PdfPCell(new Phrase(sdfFecha.format(g.getFechaHora()), cellFont));
+                                PdfPCell cellMomento = new PdfPCell(new Phrase(g.getMomentoDia() != null ? g.getMomentoDia() : "N/A", cellFont));
+
+                                cellNivel.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                cellFecha.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                cellMomento.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+                                tabla.addCell(cellNivel);
+                                tabla.addCell(cellFecha);
+                                tabla.addCell(cellMomento);
+                            }
+
+                            document.add(tabla);
+                        } catch (DocumentException e) {
+                            e.printStackTrace();
+                        }
+                    });
             } else {
                 document.add(new Paragraph("No hay registros de glucosa para mostrar."));
             }
@@ -431,15 +487,21 @@ public class ReporteBean implements Serializable {
         
         // Filtrar registros de la última semana
         java.util.Date hoy = new java.util.Date();
-        java.util.Calendar cal = java.util.Calendar.getInstance();
-        cal.setTime(hoy);
-        cal.add(java.util.Calendar.DAY_OF_YEAR, -7);
-        java.util.Date ultimaSemana = cal.getTime();
+        java.util.Calendar tempCal = java.util.Calendar.getInstance();
+        tempCal.setTime(hoy);
+        tempCal.add(java.util.Calendar.DAY_OF_YEAR, -7);
+        java.util.Date ultimaSemana = tempCal.getTime();
         
+        // Ordenar y filtrar registros por semana
         List<Glucosa> registrosSemanales = glucosaList.stream()
             .filter(g -> g.getFechaHora().after(ultimaSemana))
             .sorted((g1, g2) -> g1.getFechaHora().compareTo(g2.getFechaHora()))
             .collect(java.util.stream.Collectors.toList());
+            
+        if (registrosSemanales.isEmpty()) {
+            // Si no hay registros de la última semana, mostrar un mensaje
+            return null;
+        }
             
         for (Glucosa g : registrosSemanales) {
             dataset.addValue(g.getNivelGlucosa(), "Nivel de Glucosa", sdf.format(g.getFechaHora()));

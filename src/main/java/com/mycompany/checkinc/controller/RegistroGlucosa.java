@@ -5,6 +5,7 @@ import com.mycompany.checkinc.entities.Usuario;
 import com.mycompany.checkinc.services.GlucosaFacadeLocal;
 import com.mycompany.checkinc.services.UsuarioFacadeLocal;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -29,6 +30,8 @@ public class RegistroGlucosa implements Serializable {
     private Integer id;
     private Double nivelGlucosa;
     private Date fechaHora;
+    private String momentoDia;
+    private List<String> momentosDia;
     private List<Glucosa> registros;
     private boolean editando;
     private org.primefaces.model.charts.line.LineChartModel lineChartModel;
@@ -80,6 +83,8 @@ public class RegistroGlucosa implements Serializable {
         this.fechaHora = new Date();
     }
     
+    
+
     @PostConstruct
     public void init() {
         Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(USUARIO_SESSION_KEY);
@@ -87,6 +92,16 @@ public class RegistroGlucosa implements Serializable {
             cargarRegistros(usuario);
         }
         initLineChart();
+
+        this.momentosDia = new ArrayList<>();
+        this.momentosDia.add("En Ayuno");
+        this.momentosDia.add("Antes de Desayuno");
+        this.momentosDia.add("Después de Desayuno");
+        this.momentosDia.add("Antes de Almuerzo");
+        this.momentosDia.add("Después de Almuerzo");
+        this.momentosDia.add("Antes de Cena");
+        this.momentosDia.add("Después de Cena");
+        this.momentosDia.add("Antes de Dormir");
     }
     
     private void cargarRegistros(Usuario usuario) {
@@ -155,6 +170,12 @@ public class RegistroGlucosa implements Serializable {
     public Date getFechaHora() { return fechaHora; }
     public void setFechaHora(Date fechaHora) { this.fechaHora = fechaHora; }
     
+    public String getMomentoDia() { return momentoDia; }
+    public void setMomentoDia(String momentoDia) { this.momentoDia = momentoDia; }
+
+    public List<String> getMomentosDia() { return momentosDia; }
+    public void setMomentosDia(List<String> momentosDia) { this.momentosDia = momentosDia; }
+
     public List<Glucosa> getRegistros() { return registros; }
     
     public boolean isEditando() { return editando; }
@@ -185,6 +206,7 @@ public class RegistroGlucosa implements Serializable {
                 }
                 glucosa.setNivelGlucosa(nivelGlucosa.floatValue());
                 glucosa.setFechaHora(fechaHora);
+                glucosa.setMomentoDia(momentoDia);
                 glucosaFacade.edit(glucosa);
                 addMessage(FacesMessage.SEVERITY_INFO, "Registro actualizado", "El registro ha sido actualizado correctamente");
                 editando = false;
@@ -193,6 +215,7 @@ public class RegistroGlucosa implements Serializable {
                 glucosa.setNivelGlucosa(nivelGlucosa.floatValue());
                 glucosa.setFechaHora(fechaHora);
                 glucosa.setIdUsuario(usuario);
+                glucosa.setMomentoDia(momentoDia);
                 glucosaFacade.create(glucosa);
                 addMessage(FacesMessage.SEVERITY_INFO, "Registro guardado", "El registro ha sido guardado correctamente");
             }
@@ -208,6 +231,7 @@ public class RegistroGlucosa implements Serializable {
         this.id = glucosa.getIdGlucosa();
         this.nivelGlucosa = Double.valueOf(glucosa.getNivelGlucosa());
         this.fechaHora = glucosa.getFechaHora();
+        this.momentoDia = glucosa.getMomentoDia();
         this.editando = true;
     }
     
@@ -233,6 +257,7 @@ public class RegistroGlucosa implements Serializable {
         this.id = null;
         this.nivelGlucosa = null;
         this.fechaHora = new Date();
+        this.momentoDia = null;
     }
     
     private void addMessage(FacesMessage.Severity severity, String summary, String detail) {

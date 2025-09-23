@@ -28,6 +28,15 @@
                         <h:message for="nivelGlucosa" styleClass="message error-message"/>
                     </div>
                     <div class="form-group">
+                        <h:outputLabel for="momentoDia" value="Momento del Día:" />
+                        <h:selectOneMenu id="momentoDia" value="#{registroGlucosa.momentoDia}" required="true"
+                                         requiredMessage="Por favor seleccione el momento del día" styleClass="custom-select">
+                            <f:selectItem itemLabel="Seleccione..." itemValue=""  />
+                            <f:selectItems value="#{registroGlucosa.momentosDia}" var="momento" itemLabel="#{momento}" itemValue="#{momento}" />
+                        </h:selectOneMenu>
+                        <h:message for="momentoDia" styleClass="message error-message"/>
+                    </div>
+                    <div class="form-group">
                         <h:outputLabel for="fechaHora" value="Fecha y Hora:"/>
                         <p:datePicker id="fechaHora" value="#{registroGlucosa.fechaHora}" required="true"
                                    requiredMessage="Por favor ingrese la fecha y hora"
