@@ -1,5 +1,16 @@
 package com.mycompany.checkinc.controller;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.mycompany.checkinc.entities.Cita;
 import com.mycompany.checkinc.entities.Glucosa;
 import com.mycompany.checkinc.entities.Medicamento;
@@ -7,11 +18,13 @@ import com.mycompany.checkinc.entities.Usuario;
 import com.mycompany.checkinc.services.CitaFacadeLocal;
 import com.mycompany.checkinc.services.GlucosaFacadeLocal;
 import com.mycompany.checkinc.services.MedicamentoFacadeLocal;
-import com.mycompany.checkinc.services.ReportePDFServiceLocal;
 import com.mycompany.checkinc.services.UsuarioFacadeLocal;
+import java.awt.Color;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -20,6 +33,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.MenuModel;
 
@@ -38,9 +56,6 @@ public class ReporteBean implements Serializable {
 
     @EJB
     private CitaFacadeLocal citaFacade;
-    
-    @EJB
-    private ReportePDFServiceLocal reportePDFService;
 
     public void exportarCSV() throws IOException {
         exportar("text/csv", "usuarios.csv", ",");
@@ -80,23 +95,13 @@ public class ReporteBean implements Serializable {
     public void descargarReporteDinamico() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
         String viewId = context.getViewRoot().getViewId();
-        HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
-        Usuario usuario = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
-
-        if (usuario == null) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario no autenticado"));
-            return;
-        }
 
         if (viewId.contains("registroGlucosa")) {
-            List<Glucosa> glucosaList = glucosaFacade.findByUsuario(usuario);
-            reportePDFService.exportarGlucosaPDF(response, usuario, glucosaList);
+            exportarGlucosaPDF();
         } else if (viewId.contains("IndexMedicamentos")) {
-            List<Medicamento> medicamentoList = medicamentoFacade.findByUsuario(usuario);
-            reportePDFService.exportarMedicamentosPDF(response, usuario, medicamentoList);
+            exportarMedicamentosPDF();
         } else if (viewId.contains("IndexCitas")) {
-            List<Cita> citaList = citaFacade.findByUsuario(usuario);
-            reportePDFService.exportarCitasPDF(response, usuario, citaList);
+            exportarCitasPDF();
         } else {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                     "Advertencia", "No se puede generar el reporte para esta vista."));
@@ -113,13 +118,318 @@ public class ReporteBean implements Serializable {
             return;
         }
 
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=\"reporte_completo.pdf\"");
+
+        Document document = new Document();
+        try {
+            PdfWriter.getInstance(document, response.getOutputStream());
+            document.open();
+
+            // Colores y fuentes
+            BaseColor azul = new BaseColor(48, 88, 166);
+            BaseColor naranja = new BaseColor(244, 85, 1);
+            Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, azul);
+            Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 11);
+            Font sectionFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD, naranja);
+
+            // Título del reporte
+            Paragraph title = new Paragraph("Reporte Completo del Paciente", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            title.setSpacingAfter(20f);
+            document.add(title);
+
+            // Datos del paciente
+            document.add(new Paragraph("Datos del Paciente", sectionFont));
+            document.add(new Paragraph("Nombre: " + usuario.getNombres() + " " + usuario.getApellidos()));
+            document.add(new Paragraph("Documento: " + usuario.getDocumento()));
+            document.add(new Paragraph("Correo: " + usuario.getCorreo()));
+            document.add(new Paragraph("Edad: " + usuario.getEdad()));
+            document.add(new Paragraph("Tipo de Diabetes: " + (usuario.getTipoDiabetes() != null ? usuario.getTipoDiabetes() : "N/A")));
+            document.add(new Paragraph(" "));
+
+            // Glucosa
+            List<Glucosa> glucosaList = glucosaFacade.findByUsuario(usuario);
+            if (!glucosaList.isEmpty()) {
+                document.add(new Paragraph("Registros de Glucosa", sectionFont));
+                
+                Image chartImage = crearGraficoGlucosa(glucosaList);
+                if (chartImage != null) {
+                    chartImage.scaleToFit(500, 300);
+                    chartImage.setAlignment(Element.ALIGN_CENTER);
+                    document.add(chartImage);
+                    document.add(new Paragraph(" "));
+                }
+
+                PdfPTable glucosaTable = new PdfPTable(3);
+                glucosaTable.setWidthPercentage(100);
+                glucosaTable.addCell(estilizarCelda("Nivel de Glucosa", headerFont, azul));
+                glucosaTable.addCell(estilizarCelda("Fecha y Hora", headerFont, azul));
+                glucosaTable.addCell(estilizarCelda("Momento del Día", headerFont, azul));
+
+                for (Glucosa g : glucosaList) {
+                    glucosaTable.addCell(new Phrase(String.valueOf(g.getNivelGlucosa()), cellFont));
+                    glucosaTable.addCell(new Phrase(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(g.getFechaHora()), cellFont));
+                    glucosaTable.addCell(new Phrase(g.getMomentoDia() != null ? g.getMomentoDia() : "N/A", cellFont));
+                }
+                document.add(glucosaTable);
+                document.add(new Paragraph(" "));
+            }
+
+            // Citas
+            List<Cita> citaList = citaFacade.findByUsuario(usuario);
+            if (!citaList.isEmpty()) {
+                document.add(new Paragraph("Citas Médicas", sectionFont));
+                PdfPTable citaTable = new PdfPTable(3);
+                citaTable.setWidthPercentage(100);
+                citaTable.addCell(estilizarCelda("Fecha", headerFont, azul));
+                citaTable.addCell(estilizarCelda("Hora", headerFont, azul));
+                citaTable.addCell(estilizarCelda("Motivo", headerFont, azul));
+
+                for (Cita c : citaList) {
+                    citaTable.addCell(new Phrase(new SimpleDateFormat("dd/MM/yyyy").format(c.getFecha()), cellFont));
+                    citaTable.addCell(new Phrase(new SimpleDateFormat("HH:mm").format(c.getHora()), cellFont));
+                    citaTable.addCell(new Phrase(c.getMotivo(), cellFont));
+                }
+                document.add(citaTable);
+                document.add(new Paragraph(" "));
+            }
+
+            // Medicamentos
+            List<Medicamento> medicamentoList = medicamentoFacade.findByUsuario(usuario);
+            if (!medicamentoList.isEmpty()) {
+                document.add(new Paragraph("Medicamentos", sectionFont));
+                PdfPTable medTable = new PdfPTable(5);
+                medTable.setWidthPercentage(100);
+                medTable.addCell(estilizarCelda("Nombre", headerFont, azul));
+                medTable.addCell(estilizarCelda("Dosis", headerFont, azul));
+                medTable.addCell(estilizarCelda("Frecuencia", headerFont, azul));
+                medTable.addCell(estilizarCelda("Fecha Inicio", headerFont, azul));
+                medTable.addCell(estilizarCelda("Fecha Fin", headerFont, azul));
+
+                for (Medicamento m : medicamentoList) {
+                    medTable.addCell(new Phrase(m.getNombre(), cellFont));
+                    medTable.addCell(new Phrase(m.getDosis(), cellFont));
+                    medTable.addCell(new Phrase(m.getFrecuencia(), cellFont));
+                    medTable.addCell(new Phrase(new SimpleDateFormat("dd/MM/yyyy").format(m.getFechaInicio()), cellFont));
+                    medTable.addCell(new Phrase(new SimpleDateFormat("dd/MM/yyyy").format(m.getFechaFin()), cellFont));
+                }
+                document.add(medTable);
+            }
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } finally {
+            document.close();
+            context.responseComplete();
+        }
+    }
+    
+    private void exportarGlucosaPDF() throws IOException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
+        Usuario usuario = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
+
+        if (usuario == null) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario no autenticado"));
+            return;
+        }
+        
         List<Glucosa> glucosaList = glucosaFacade.findByUsuario(usuario);
-        List<Cita> citaList = citaFacade.findByUsuario(usuario);
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=\"glucosa.pdf\"");
+
+        Document document = new Document();
+        try {
+            PdfWriter.getInstance(document, response.getOutputStream());
+            document.open();
+            
+            Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, new BaseColor(48, 88, 166));
+            Paragraph title = new Paragraph("Reporte de Glucosa", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            title.setSpacingAfter(20f);
+            document.add(title);
+
+            if (!glucosaList.isEmpty()) {
+                Image chartImage = crearGraficoGlucosa(glucosaList);
+                if (chartImage != null) {
+                    chartImage.scaleToFit(500, 300);
+                    chartImage.setAlignment(Element.ALIGN_CENTER);
+                    document.add(chartImage);
+                    document.add(new Paragraph(" "));
+                }
+
+                PdfPTable table = new PdfPTable(3);
+                table.setWidthPercentage(100);
+                Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
+                table.addCell(estilizarCelda("Nivel de Glucosa", headerFont, new BaseColor(48, 88, 166)));
+                table.addCell(estilizarCelda("Fecha y Hora", headerFont, new BaseColor(48, 88, 166)));
+                table.addCell(estilizarCelda("Momento del Día", headerFont, new BaseColor(48, 88, 166)));
+
+                Font cellFont = new Font(Font.FontFamily.HELVETICA, 11);
+                for (Glucosa g : glucosaList) {
+                    table.addCell(new Phrase(String.valueOf(g.getNivelGlucosa()), cellFont));
+                    table.addCell(new Phrase(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(g.getFechaHora()), cellFont));
+                    table.addCell(new Phrase(g.getMomentoDia() != null ? g.getMomentoDia() : "N/A", cellFont));
+                }
+                document.add(table);
+            } else {
+                document.add(new Paragraph("No hay registros de glucosa para mostrar."));
+            }
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } finally {
+            document.close();
+            context.responseComplete();
+        }
+    }
+
+    private void exportarMedicamentosPDF() throws IOException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
+        Usuario usuario = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
+
+        if (usuario == null) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario no autenticado"));
+            return;
+        }
+
         List<Medicamento> medicamentoList = medicamentoFacade.findByUsuario(usuario);
 
-        reportePDFService.exportarReporteCompletoPDF(response, usuario, glucosaList, citaList, medicamentoList);
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=\"medicamentos.pdf\"");
+
+        Document document = new Document();
+        try {
+            PdfWriter.getInstance(document, response.getOutputStream());
+            document.open();
+
+            Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, new BaseColor(48, 88, 166));
+            Paragraph title = new Paragraph("Reporte de Medicamentos", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            title.setSpacingAfter(20f);
+            document.add(title);
+
+            if (!medicamentoList.isEmpty()) {
+                PdfPTable table = new PdfPTable(5);
+                table.setWidthPercentage(100);
+                Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
+                table.addCell(estilizarCelda("Nombre", headerFont, new BaseColor(48, 88, 166)));
+                table.addCell(estilizarCelda("Dosis", headerFont, new BaseColor(48, 88, 166)));
+                table.addCell(estilizarCelda("Frecuencia", headerFont, new BaseColor(48, 88, 166)));
+                table.addCell(estilizarCelda("Fecha Inicio", headerFont, new BaseColor(48, 88, 166)));
+                table.addCell(estilizarCelda("Fecha Fin", headerFont, new BaseColor(48, 88, 166)));
+
+                Font cellFont = new Font(Font.FontFamily.HELVETICA, 11);
+                for (Medicamento m : medicamentoList) {
+                    table.addCell(new Phrase(m.getNombre(), cellFont));
+                    table.addCell(new Phrase(m.getDosis(), cellFont));
+                    table.addCell(new Phrase(m.getFrecuencia(), cellFont));
+                    table.addCell(new Phrase(new SimpleDateFormat("dd/MM/yyyy").format(m.getFechaInicio()), cellFont));
+                    table.addCell(new Phrase(new SimpleDateFormat("dd/MM/yyyy").format(m.getFechaFin()), cellFont));
+                }
+                document.add(table);
+            } else {
+                document.add(new Paragraph("No hay registros de medicamentos para mostrar."));
+            }
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } finally {
+            document.close();
+            context.responseComplete();
+        }
+    }
+
+    private void exportarCitasPDF() throws IOException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
+        Usuario usuario = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
+
+        if (usuario == null) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario no autenticado"));
+            return;
+        }
+
+        List<Cita> citaList = citaFacade.findByUsuario(usuario);
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=\"citas.pdf\"");
+
+        Document document = new Document();
+        try {
+            PdfWriter.getInstance(document, response.getOutputStream());
+            document.open();
+
+            Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, new BaseColor(48, 88, 166));
+            Paragraph title = new Paragraph("Reporte de Citas", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            title.setSpacingAfter(20f);
+            document.add(title);
+
+            if (!citaList.isEmpty()) {
+                PdfPTable table = new PdfPTable(3);
+                table.setWidthPercentage(100);
+                Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
+                table.addCell(estilizarCelda("Fecha", headerFont, new BaseColor(48, 88, 166)));
+                table.addCell(estilizarCelda("Hora", headerFont, new BaseColor(48, 88, 166)));
+                table.addCell(estilizarCelda("Motivo", headerFont, new BaseColor(48, 88, 166)));
+
+                Font cellFont = new Font(Font.FontFamily.HELVETICA, 11);
+                for (Cita c : citaList) {
+                    table.addCell(new Phrase(new SimpleDateFormat("dd/MM/yyyy").format(c.getFecha()), cellFont));
+                    table.addCell(new Phrase(new SimpleDateFormat("HH:mm").format(c.getHora()), cellFont));
+                    table.addCell(new Phrase(c.getMotivo(), cellFont));
+                }
+                document.add(table);
+            } else {
+                document.add(new Paragraph("No hay registros de citas para mostrar."));
+            }
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } finally {
+            document.close();
+            context.responseComplete();
+        }
+    }
+
+    private Image crearGraficoGlucosa(List<Glucosa> glucosaList) {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM");
         
-        context.responseComplete();
+        int start = Math.max(0, glucosaList.size() - 15);
+        for (int i = start; i < glucosaList.size(); i++) {
+            Glucosa g = glucosaList.get(i);
+            dataset.addValue(g.getNivelGlucosa(), "Glucosa", sdf.format(g.getFechaHora()));
+        }
+
+        JFreeChart lineChart = ChartFactory.createLineChart(
+                "Niveles de Glucosa", "Fecha", "Nivel (mg/dL)",
+                dataset, PlotOrientation.VERTICAL, false, true, false);
+
+        lineChart.setBackgroundPaint(Color.white);
+        lineChart.getPlot().setBackgroundPaint(Color.white);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            ChartUtilities.writeChartAsPNG(baos, lineChart, 500, 300);
+            return Image.getInstance(baos.toByteArray());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private PdfPCell estilizarCelda(String texto, Font font, BaseColor bgColor) {
+        PdfPCell cell = new PdfPCell(new Phrase(texto, font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cell.setBackgroundColor(bgColor);
+        cell.setPadding(6);
+        return cell;
     }
 
     private MenuModel model;

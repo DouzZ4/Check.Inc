@@ -59,7 +59,7 @@
             <version>13.0.0</version>
         </dependency>
 
-        <!-- JFreeChart para gráficos -->
+        <!-- JFreeChart para gráficos en PDF -->
         <dependency>
             <groupId>jfree</groupId>
             <artifactId>jfreechart</artifactId>
