@@ -21,8 +21,8 @@
                     <div class="form-group">
                         <h:outputLabel for="nivelGlucosa" value="Nivel de Glucosa (mg/dL):"/>
                         <h:inputText id="nivelGlucosa" value="#{registroGlucosa.nivelGlucosa}" required="true"
-                                   requiredMessage="Por favor ingrese el nivel de glucosa"
-                                   validatorMessage="Ingrese un valor válido mayor a 0">
+                                     requiredMessage="Por favor ingrese el nivel de glucosa"
+                                     validatorMessage="Ingrese un valor válido mayor a 0">
                             <f:validateDoubleRange minimum="1"/>
                         </h:inputText>
                         <h:message for="nivelGlucosa" styleClass="message error-message"/>
@@ -30,68 +30,53 @@
                     <div class="form-group">
                         <h:outputLabel for="fechaHora" value="Fecha y Hora:"/>
                         <p:datePicker id="fechaHora" value="#{registroGlucosa.fechaHora}" required="true"
-                                   requiredMessage="Por favor ingrese la fecha y hora"
-                                   showTime="true" pattern="dd/MM/yyyy HH:mm" locale="es"/>
+                                      requiredMessage="Por favor ingrese la fecha y hora"
+                                      showTime="true" pattern="dd/MM/yyyy HH:mm" locale="es"/>
                         <h:message for="fechaHora" styleClass="message error-message"/>
                         <h:commandButton value="Ahora" action="#{registroGlucosa.setFechaHoraNow}" immediate="true" styleClass="now-button"/>
                     </div>
                     <div id="form-buttons">
                         <h:commandButton value="#{registroGlucosa.editando ? 'Actualizar' : 'Registrar'}" 
-                                       action="#{registroGlucosa.registrar}"
-                                       styleClass="submit-button"/>
+                                         action="#{registroGlucosa.registrar}"
+                                         styleClass="submit-button"/>
                         <h:commandButton value="Cancelar" 
-                                       action="#{registroGlucosa.cancelarEdicion}"
-                                       immediate="true" styleClass="cancel-button"/>
+                                         action="#{registroGlucosa.cancelarEdicion}"
+                                         immediate="true" styleClass="cancel-button"/>
                     </div>
                 </h:form>
             </section>
-            
+
             <section aria-labelledby="registros-heading">
                 <h2 id="registros-heading">Registros Anteriores</h2>
                 <div style="overflow-x: auto;">
-                    <h:form id="filtrosForm">
-                        <div class="filtros-medicamentos filtros-glucosa">
-                            <h:outputLabel for="filtroNivel" value="Filtrar por Nivel:"/>
-                            <div class="filtro-nombre-orden">
-                                <h:inputText id="filtroNivel" value="#{registroGlucosa.filtroNivel}">
-                                    <f:ajax render="tablaForm" execute="@this"/>
-                                </h:inputText>
-                                <h:selectOneMenu id="ascendente" value="#{registroGlucosa.ascendente}">
-                                    <f:selectItem itemValue="true" itemLabel="Más antiguo primero"/>
-                                    <f:selectItem itemValue="false" itemLabel="Más reciente primero"/>
-                                    <f:ajax render="tablaForm" execute="@this"/>
-                                </h:selectOneMenu>
-                            </div>
-                        </div>
-                    </h:form>
                     <h:form id="tablaForm">
                         <h:dataTable id="registro" value="#{registroGlucosa.registrosFiltrados}" var="registro"
-                                   styleClass="tabla-registros"
-                                   headerClass="tabla-header"
-                                   rowClasses="tabla-fila-par,tabla-fila-impar">
-                            
+                                     styleClass="tabla-registros"
+                                     headerClass="tabla-header"
+                                     rowClasses="tabla-fila-par,tabla-fila-impar">
+
                             <h:column>
                                 <f:facet name="header">Nivel (mg/dL)</f:facet>
-                                #{registro.nivelGlucosa}
+                                    #{registro.nivelGlucosa}
                             </h:column>
-                            
+
                             <h:column>
                                 <f:facet name="header">Fecha y Hora</f:facet>
                                 <h:outputText value="#{registro.fechaHora}">
                                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                                 </h:outputText>
                             </h:column>
-                            
+
                             <h:column>
                                 <f:facet name="header">Acciones</f:facet>
                                 <h:commandButton value="Editar" 
-                                               action="#{registroGlucosa.editar(registro)}"
-                                               styleClass="action-button edit-button"/>
-                                
+                                                 action="#{registroGlucosa.editar(registro)}"
+                                                 styleClass="action-button edit-button"/>
+
                                 <h:commandButton value="Eliminar" 
-                                               action="#{registroGlucosa.eliminar(registro)}"
-                                               styleClass="action-button delete-button"
-                                               onclick="return confirm('¿Está seguro de eliminar este registro?');"/>
+                                                 action="#{registroGlucosa.eliminar(registro)}"
+                                                 styleClass="action-button delete-button"
+                                                 onclick="return confirm('¿Está seguro de eliminar este registro?');"/>
                             </h:column>
                         </h:dataTable>
                     </h:form>

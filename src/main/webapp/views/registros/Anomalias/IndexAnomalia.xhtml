@@ -29,14 +29,14 @@
                     </div>
                     <div class="form-group">
                         <h:outputLabel for="descripcion" value="Descripcion:"/>
-                        <p:inputTextarea id="descripcion" value="#{registroAnomalia.descripcion}" required="true"
-                                   requiredMessage="Por favor ingrese la descripcion."/>
+                        <h:inputTextarea id="descripcion" value="#{registroCita.motivo}" required="true"
+                                         requiredMessage="Por favor ingrese la descripcion."/>
                         <h:message for="descripcion" styleClass="message error-message"/>
                     </div>
                     <div class="form-group">
                         <h:outputLabel for="sintomas" value="Sintomas:"/>
-                        <p:inputTextarea id="sintomas" value="#{registroAnomalia.sintomas}" required="true"
-                                   requiredMessage="Por favor ingrese la descripcion."/>
+                        <h:inputTextarea id="sintomas" value="#{registroCita.motivo}" required="true"
+                                         requiredMessage="Por favor ingrese la descripcion."/>
                         <h:message for="sintomas" styleClass="message error-message"/>
                     </div>
                     <div class="form-group">

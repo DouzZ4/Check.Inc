@@ -10,6 +10,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import org.primefaces.PrimeFaces;
 
 @ManagedBean(name = "registroUsuario")
 @SessionScoped
@@ -67,19 +68,23 @@ public class RegistroUsuario implements Serializable {
 
             // ENVIAR CORREO USANDO EL SERVICIO
             boolean correoEnviado = servicioCorreo.enviarCorreoRegistro(
-                correo, 
-                nombres, 
-                apellidos, 
-                username, 
-                edad, 
-                "Otro".equals(tipoDiabetes) ? tipoDiabetesOtro : tipoDiabetes, 
-                esInsulodependiente
+                    correo,
+                    nombres,
+                    apellidos,
+                    username,
+                    edad,
+                    "Otro".equals(tipoDiabetes) ? tipoDiabetesOtro : tipoDiabetes,
+                    esInsulodependiente
             );
 
             if (correoEnviado) {
                 mostrarInfo("Registro exitoso", "Usuario registrado y correo enviado exitosamente");
+                PrimeFaces.current().executeScript("alert('Registro exitoso. Se envió el correo.'); window.location='"
+                        + FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml';");
             } else {
                 mostrarInfo("Registro exitoso", "Usuario registrado correctamente");
+                PrimeFaces.current().executeScript("alert('Registro exitoso.'); window.location='"
+                        + FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml';");
             }
 
             limpiarFormulario();
@@ -116,26 +121,91 @@ public class RegistroUsuario implements Serializable {
     }
 
     // Getters y Setters
-    public String getNombres() { return nombres; }
-    public void setNombres(String nombres) { this.nombres = nombres; }
-    public String getApellidos() { return apellidos; }
-    public void setApellidos(String apellidos) { this.apellidos = apellidos; }
-    public Integer getEdad() { return edad; }
-    public void setEdad(Integer edad) { this.edad = edad; }
-    public String getCorreo() { return correo; }
-    public void setCorreo(String correo) { this.correo = correo; }
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
-    public String getDocumento() { return documento; }
-    public void setDocumento(String documento) { this.documento = documento; }
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
-    public String getTipoDiabetes() { return tipoDiabetes; }
-    public void setTipoDiabetes(String tipoDiabetes) { this.tipoDiabetes = tipoDiabetes; }
-    public String getTipoDiabetesOtro() { return tipoDiabetesOtro; }
-    public void setTipoDiabetesOtro(String tipoDiabetesOtro) { this.tipoDiabetesOtro = tipoDiabetesOtro; }
-    public String getDetalleTipoDiabetes() { return detalleTipoDiabetes; }
-    public void setDetalleTipoDiabetes(String detalleTipoDiabetes) { this.detalleTipoDiabetes = detalleTipoDiabetes; }
-    public Boolean getEsInsulodependiente() { return esInsulodependiente; }
-    public void setEsInsulodependiente(Boolean esInsulodependiente) { this.esInsulodependiente = esInsulodependiente; }
+    public String getNombres() {
+        return nombres;
+    }
+
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
+    }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
+    public Integer getEdad() {
+        return edad;
+    }
+
+    public void setEdad(Integer edad) {
+        this.edad = edad;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getDocumento() {
+        return documento;
+    }
+
+    public void setDocumento(String documento) {
+        this.documento = documento;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getTipoDiabetes() {
+        return tipoDiabetes;
+    }
+
+    public void setTipoDiabetes(String tipoDiabetes) {
+        this.tipoDiabetes = tipoDiabetes;
+    }
+
+    public String getTipoDiabetesOtro() {
+        return tipoDiabetesOtro;
+    }
+
+    public void setTipoDiabetesOtro(String tipoDiabetesOtro) {
+        this.tipoDiabetesOtro = tipoDiabetesOtro;
+    }
+
+    public String getDetalleTipoDiabetes() {
+        return detalleTipoDiabetes;
+    }
+
+    public void setDetalleTipoDiabetes(String detalleTipoDiabetes) {
+        this.detalleTipoDiabetes = detalleTipoDiabetes;
+    }
+
+    public Boolean getEsInsulodependiente() {
+        return esInsulodependiente;
+    }
+
+    public void setEsInsulodependiente(Boolean esInsulodependiente) {
+        this.esInsulodependiente = esInsulodependiente;
+    }
 }
