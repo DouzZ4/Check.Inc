@@ -1,0 +1,140 @@
+/* Glucose monitoring styles */
+.glucose-chart-container {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+}
+
+.glucose-chart-title {
+    color: #3058a6;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f4f8;
+}
+
+/* Glucose form styles */
+.glucose-form {
+    background: #f8fafc;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.glucose-input {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 12px;
+    width: 100%;
+    font-size: 1.1em;
+    transition: all 0.3s ease;
+}
+
+.glucose-input:focus {
+    border-color: #3058a6;
+    box-shadow: 0 0 0 3px rgba(48, 88, 166, 0.1);
+    outline: none;
+}
+
+/* Glucose records table */
+.glucose-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 20px 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.glucose-table th {
+    background: #3058a6;
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.glucose-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.glucose-table tr:last-child td {
+    border-bottom: none;
+}
+
+.glucose-table tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Glucose level indicators */
+.glucose-level {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.glucose-level-low {
+    background-color: #fed7d7;
+    color: #c53030;
+}
+
+.glucose-level-normal {
+    background-color: #c6f6d5;
+    color: #2f855a;
+}
+
+.glucose-level-high {
+    background-color: #feebc8;
+    color: #c05621;
+}
+
+/* Glucose chart customization */
+.glucose-chart {
+    height: 400px !important;
+    margin: 20px 0;
+}
+
+/* Chart legend and tooltip customization */
+.glucose-chart .legend-item {
+    font-size: 0.9em;
+    color: #4a5568;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.glucose-chart .chart-tooltip {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .glucose-chart-container {
+        padding: 15px;
+        margin: 15px 0;
+    }
+    
+    .glucose-form {
+        padding: 15px;
+    }
+    
+    .glucose-table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    .glucose-chart {
+        height: 300px !important;
+    }
+}

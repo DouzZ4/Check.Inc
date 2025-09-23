@@ -6,6 +6,7 @@ import com.mycompany.checkinc.services.GlucosaFacadeLocal;
 import com.mycompany.checkinc.services.UsuarioFacadeLocal;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -35,6 +36,10 @@ public class RegistroGlucosa implements Serializable {
     private List<Glucosa> registros;
     private boolean editando;
     private org.primefaces.model.charts.line.LineChartModel lineChartModel;
+    
+    // Constants for glucose levels
+    private static final double GLUCOSE_LOW_THRESHOLD = 70.0;
+    private static final double GLUCOSE_HIGH_THRESHOLD = 180.0;
     
     // --- Filtro y método filtrado para nivel de glucosa ---
     private String filtroNivel;
@@ -112,42 +117,114 @@ public class RegistroGlucosa implements Serializable {
     private void initLineChart() {
         org.primefaces.model.charts.line.LineChartModel model = new org.primefaces.model.charts.line.LineChartModel();
         org.primefaces.model.charts.ChartData data = new org.primefaces.model.charts.ChartData();
+        
+        // Dataset principal para niveles de glucosa
         org.primefaces.model.charts.line.LineChartDataSet dataSet = new org.primefaces.model.charts.line.LineChartDataSet();
+        
+        // Dataset para límite bajo
+        org.primefaces.model.charts.line.LineChartDataSet lowThresholdSet = new org.primefaces.model.charts.line.LineChartDataSet();
+        
+        // Dataset para límite alto
+        org.primefaces.model.charts.line.LineChartDataSet highThresholdSet = new org.primefaces.model.charts.line.LineChartDataSet();
 
         java.util.List<Object> values = new java.util.ArrayList<>();
+        java.util.List<Object> lowThresholdValues = new java.util.ArrayList<>();
+        java.util.List<Object> highThresholdValues = new java.util.ArrayList<>();
         java.util.List<String> labels = new java.util.ArrayList<>();
+        
         if (registros != null) {
             java.text.SimpleDateFormat sdfShort = new java.text.SimpleDateFormat("dd/MM"); // Eje X
             java.text.SimpleDateFormat sdfFull = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm"); // Tooltip
+            
             for (Glucosa g : registros) {
-                // El valor sigue siendo numérico, pero la etiqueta del eje X es corta
-                values.add(g.getNivelGlucosa());
-                // La etiqueta del eje X es corta
+                double nivelGlucosa = g.getNivelGlucosa();
+                values.add(nivelGlucosa);
+                lowThresholdValues.add(GLUCOSE_LOW_THRESHOLD);
+                highThresholdValues.add(GLUCOSE_HIGH_THRESHOLD);
                 labels.add(sdfShort.format(g.getFechaHora()));
-                // Guardamos la fecha completa en el label del dataset para el tooltip (truco visual)
-            }
-            // Truco: mostrar la fecha completa en el label del dataset (esto aparece en el tooltip)
-            if (!registros.isEmpty()) {
-                dataSet.setLabel("Nivel de Glucosa (" + sdfFull.format(registros.get(registros.size()-1).getFechaHora()) + ")");
+                
+                // Colorear los puntos según el nivel
+                String pointColor;
+                if (nivelGlucosa < GLUCOSE_LOW_THRESHOLD) {
+                    pointColor = "#e53e3e"; // Rojo para bajo
+                } else if (nivelGlucosa > GLUCOSE_HIGH_THRESHOLD) {
+                    pointColor = "#dd6b20"; // Naranja para alto
+                } else {
+                    pointColor = "#38a169"; // Verde para normal
+                }
+                dataSet.setPointBackgroundColor(pointColor);
             }
         }
+        
+        // Configuración del dataset principal
         dataSet.setData(values);
         dataSet.setLabel("Nivel de Glucosa");
         dataSet.setFill(true);
-        dataSet.setBorderColor("#3058a6"); // Azul fuerte
-        dataSet.setBackgroundColor("rgba(48,88,166,0.15)"); // Relleno suave
-        dataSet.setPointBackgroundColor("#f45501"); // Naranja para los puntos
-        dataSet.setPointRadius(5);
-        dataSet.setPointHoverRadius(7);
-        dataSet.setTension(0.4); // Línea suavizada
+        dataSet.setBorderColor("#3058a6");
+        dataSet.setBackgroundColor("rgba(48,88,166,0.1)");
+        dataSet.setPointRadius(6);
+        dataSet.setPointHoverRadius(8);
+        dataSet.setTension(0.4);
         dataSet.setShowLine(true);
+        
+        // Configuración del límite bajo
+        lowThresholdSet.setData(lowThresholdValues);
+        lowThresholdSet.setLabel("Límite Bajo (70 mg/dL)");
+        lowThresholdSet.setBorderColor("#e53e3e");
+        lowThresholdSet.setBorderDash(Arrays.asList(5, 5));
+        lowThresholdSet.setPointRadius(0);
+        lowThresholdSet.setFill(false);
+        
+        // Configuración del límite alto
+        highThresholdSet.setData(highThresholdValues);
+        highThresholdSet.setLabel("Límite Alto (180 mg/dL)");
+        highThresholdSet.setBorderColor("#dd6b20");
+        highThresholdSet.setBorderDash(Arrays.asList(5, 5));
+        highThresholdSet.setPointRadius(0);
+        highThresholdSet.setFill(false);
 
         data.setLabels(labels);
         data.addChartDataSet(dataSet);
+        data.addChartDataSet(lowThresholdSet);
+        data.addChartDataSet(highThresholdSet);
+        
+        model.setData(data);
+        
+        // Configuración de opciones del gráfico
+        org.primefaces.model.charts.axes.cartesian.CartesianScales scales = new org.primefaces.model.charts.axes.cartesian.CartesianScales();
+        
+        // Configuración del eje Y
+        org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes yAxes = new org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes();
+        yAxes.setOffset(true);
+        yAxes.setBeginAtZero(true);
+        
+        // Configuración del eje X
+        org.primefaces.model.charts.axes.cartesian.category.CartesianCategoryAxes xAxes = new org.primefaces.model.charts.axes.cartesian.category.CartesianCategoryAxes();
+        xAxes.setOffset(true);
+        
+        scales.addYAxesData(yAxes);
+        scales.addXAxesData(xAxes);
+        
+        org.primefaces.model.charts.optionconfig.legend.Legend legend = new org.primefaces.model.charts.optionconfig.legend.Legend();
+        legend.setDisplay(true);
+        legend.setPosition("top");
+        
+        org.primefaces.model.charts.optionconfig.title.Title title = new org.primefaces.model.charts.optionconfig.title.Title();
+        title.setDisplay(true);
+        title.setText("Niveles de Glucosa en el Tiempo");
+        title.setFontSize(16);
+        
+        org.primefaces.model.charts.line.LineChartOptions options = new org.primefaces.model.charts.line.LineChartOptions();
+        options.setScales(scales);
+        options.setLegend(legend);
+        options.setTitle(title);
+        
+        model.setOptions(options);
+
+        this.lineChartModel = model;
         model.setData(data);
 
-        // Opciones del gráfico
-        org.primefaces.model.charts.line.LineChartOptions options = new org.primefaces.model.charts.line.LineChartOptions();
+        // Opciones adicionales del gráfico
         options.setResponsive(true);
         options.setLegend(new org.primefaces.model.charts.optionconfig.legend.Legend());
         options.getLegend().setDisplay(true);

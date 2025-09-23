@@ -9,14 +9,16 @@
     <ui:composition template="/views/TemplateSitio.xhtml">
         <ui:define name="title">Registro y Consulta de Glucosa</ui:define>
         <ui:define name="content">
+            <h:outputStylesheet name="css/glucose.css"/>
             <h:messages globalOnly="true" styleClass="message-box" infoClass="message-info" errorClass="message-error"/>
-            <section aria-labelledby="chart-heading" rendered="#{not empty registroGlucosa.registros}">
-                <h2 id="chart-heading">Tendencia de Glucosa</h2>
-                <p:lineChart id="glucoseChart" model="#{registroGlucosa.lineChartModel}" style="width:100%;height:400px"/>
+            <section aria-labelledby="chart-heading" rendered="#{not empty registroGlucosa.registros}" class="glucose-chart-container">
+                <h2 id="chart-heading" class="glucose-chart-title">Tendencia de Glucosa</h2>
+                <p:lineChart id="glucoseChart" model="#{registroGlucosa.lineChartModel}" styleClass="glucose-chart"/>
             </section>
-            <section aria-labelledby="form-title-heading">
-                <h2 id="form-title-heading">#{registroGlucosa.editando ? 'Editar' : 'Registrar'} Medición</h2>
-                <h:form id="formGlucosa">
+            </section>
+            <section aria-labelledby="form-title-heading" class="glucose-form">
+                <h2 id="form-title-heading" class="glucose-chart-title">#{registroGlucosa.editando ? 'Editar' : 'Registrar'} Medición</h2>
+                <h:form id="formGlucosa" styleClass="glucose-form">
                     <h:inputHidden id="id" value="#{registroGlucosa.id}"/>
                     <div class="form-group">
                         <h:outputLabel for="nivelGlucosa" value="Nivel de Glucosa (mg/dL):"/>
@@ -61,9 +63,9 @@
                     
                     <h:form id="tablaForm">
                         <h:dataTable id="registro" value="#{registroGlucosa.registrosFiltrados}" var="registro"
-                                   styleClass="tabla-registros"
-                                   headerClass="tabla-header"
-                                   rowClasses="tabla-fila-par,tabla-fila-impar">
+                                   styleClass="glucose-table"
+                                   headerClass="glucose-table-header"
+                                   rowClasses="glucose-table-row-even,glucose-table-row-odd">
                             
                             <h:column>
                                 <f:facet name="header">Nivel (mg/dL)</f:facet>

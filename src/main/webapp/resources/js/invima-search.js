@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    const APP_TOKEN = "eYzoy7NJVkqnCYmCUNWMHyNj5";
+    const APP_TOKEN = "";
     const API_URL = "https://www.datos.gov.co/resource/i7cb-raxc.json";
     
     function mostrarMensaje(mensaje, tipo) {

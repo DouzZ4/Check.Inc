@@ -41,24 +41,23 @@
 
         <h:form id="dialogs">
             <p:dialog widgetVar="eventDialog" header="Detalles de la Cita" showEffect="fade" hideEffect="fade" modal="true">
-                <h:panelGrid id="eventDetails" columns="2" columnClasses="labelCol,valueCol">
-                    <!-- Motivo -->
-                    <h:outputLabel for="title" value="Motivo:" />
-                    <h:outputText id="title" value="#{registroCita.selectedEvent.title}" />
+    <h:panelGrid id="eventDetails" columns="2">
+        
+        <h:outputLabel for="title" value="Motivo:" />
+        <h:outputText id="title" value="#{registroCita.selectedEvent.title}" />
 
-                    <!-- Fecha (solo fecha) -->
-                    <h:outputLabel for="date" value="Fecha:" />
-                    <h:outputText id="date" value="#{registroCita.selectedEventStartDate}">
-                        <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Bogota"/>
-                    </h:outputText>
+        <h:outputLabel for="date" value="Fecha:" />
+        <h:outputText id="date" value="#{registroCita.selectedEventStartDate}">
+            <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Bogota"/>
+        </h:outputText>
 
-                    <!-- Hora (solo hora) -->
-                    <h:outputLabel for="time" value="Hora:" />
-                    <h:outputText id="time" value="#{registroCita.selectedEventStartTime}">
-                        <f:convertDateTime pattern="HH:mm" timeZone="America/Bogota"/>
-                    </h:outputText>
-                </h:panelGrid>
-            </p:dialog>
+        <h:outputLabel for="time" value="Hora:" />
+        <h:outputText id="time" value="#{registroCita.selectedEventStartTime}">
+            <f:convertDateTime pattern="HH:mm" timeZone="America/Bogota"/>
+        </h:outputText>
+        
+    </h:panelGrid>
+</p:dialog>
         </h:form>
 
         <footer style="text-align:center; margin-top:40px; color:#888; font-size:0.95em;">
