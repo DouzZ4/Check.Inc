@@ -86,8 +86,6 @@
                                 <th>Titular</th>
                                 <th>Registro Sanitario</th>
                                 <th>Principio Activo</th>
-                                <th>Concentración</th>
-                                <th>Acción</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -98,36 +96,7 @@
             <section aria-labelledby="registros-heading">
                 <h2 id="registros-heading">Registros de Medicamentos</h2>
                 <div style="overflow-x: auto;">
-                    <h:form id="filtrosForm">
-                        <div class="filtros-medicamentos">
-                            <h:outputLabel for="filtroNombre" value="Filtrar por Nombre:"/>
-                            <div class="filtro-nombre-orden">
-                                <h:inputText id="filtroNombre" value="#{registroMedicamento.filtroNombre}">
-                                    <f:ajax render="tablaForm" execute="@this"/>
-                                </h:inputText>
-                                <h:selectOneMenu id="ascendente" value="#{registroMedicamento.ascendente}">
-                                    <f:selectItem itemValue="true" itemLabel="A-Z"/>
-                                    <f:selectItem itemValue="false" itemLabel="Z-A"/>
-                                    <f:ajax render="tablaForm" execute="@this"/>
-                                </h:selectOneMenu>
-                            </div>
-                            <h:outputLabel for="filtroDosis" value="Filtrar por Dosis:"/>
-                            <h:inputText id="filtroDosis" value="#{registroMedicamento.filtroDosis}">
-                                <f:ajax render="tablaForm" execute="@this"/>
-                            </h:inputText>
-                            <h:outputLabel for="filtroFrecuencia" value="Filtrar por Frecuencia:"/>
-                            <h:inputText id="filtroFrecuencia" value="#{registroMedicamento.filtroFrecuencia}">
-                                <f:ajax render="tablaForm" execute="@this"/>
-                            </h:inputText>
-                            <h:outputLabel for="campoOrden" value="Ordenar por:"/>
-                            <h:selectOneMenu id="campoOrden" value="#{registroMedicamento.campoOrden}">
-                                <f:selectItem itemValue="nombre" itemLabel="Nombre"/>
-                                <f:selectItem itemValue="dosis" itemLabel="Dosis"/>
-                                <f:selectItem itemValue="frecuencia" itemLabel="Frecuencia"/>
-                                <f:ajax render="tablaForm" execute="@this"/>
-                            </h:selectOneMenu>
-                        </div>
-                    </h:form>
+                    
                     <h:form id="tablaForm">
                         <h:dataTable id="medicamento" value="#{registroMedicamento.registrosFiltradosYOrdenados}" var="medicamento"
                                     styleClass="tabla-registros"

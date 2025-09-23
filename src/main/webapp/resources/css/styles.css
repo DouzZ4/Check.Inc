@@ -677,3 +677,94 @@ table td:last-child {
 .back-link:hover {
     text-decoration: underline;
 }
+
+/* --- Estilos para el Calendario (PrimeFaces Schedule) --- */
+
+/* Contenedor principal del calendario */
+.fc {
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Encabezado del calendario (botones y título) */
+.fc-header-toolbar {
+    background-color: #f0f4f8;
+    padding: 15px;
+    border-radius: 8px 8px 0 0;
+    border-bottom: 2px solid #e0e8f0;
+}
+
+/* Título del mes/año */
+.fc-center h2 {
+    color: #3058a6;
+    font-weight: 600;
+}
+
+/* Botones de navegación (anterior, siguiente, hoy) */
+.fc-button {
+    background-color: #3058a6 !important;
+    border: none !important;
+    color: white !important;
+    text-transform: capitalize !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    transition: background-color 0.3s ease !important;
+}
+
+.fc-button:hover {
+    background-color: #2a4d94 !important;
+}
+
+/* Estilo de los eventos en el calendario */
+.fc-day-grid-event {
+    background-color: #5c85d6;
+    border: 1px solid #4a6baf;
+    color: #fff;
+    padding: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.fc-day-grid-event:hover {
+    background-color: #4a6baf;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Hora del evento */
+.fc-time {
+    font-weight: bold;
+}
+
+/* Título del evento */
+.fc-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Celda del día de hoy */
+.fc-today {
+    background-color: #e6f0ff !important;
+}
+
+/* --- Diálogo de Detalles del Evento --- */
+.ui-dialog .ui-dialog-titlebar {
+    background-color: #3058a6;
+    color: white;
+    border-radius: 8px 8px 0 0;
+    padding: 12px;
+}
+
+.ui-dialog .ui-dialog-content {
+    padding: 20px;
+}
+
+#eventDetails {
+    width: 100%;
+}
+
+#eventDetails .ui-outputlabel {
+    font-weight: bold;
+    color: #333;
+    padding-right: 15px;
+}
