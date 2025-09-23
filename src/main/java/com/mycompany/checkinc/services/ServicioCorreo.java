@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class ServicioCorreo {
 
-    private static final String SENDGRID_API_KEY = "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";
+    private static final String SENDGRID_API_KEY = "";
 
     @PersistenceContext
     private EntityManager em;
