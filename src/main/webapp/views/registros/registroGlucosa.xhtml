@@ -78,6 +78,11 @@
                             </h:column>
 
                             <h:column>
+                                <f:facet name="header">Momento del Día</f:facet>
+                                <h:outputText value="#{registro.momentoDia}" />
+                            </h:column>
+
+                            <h:column>
                                 <f:facet name="header">Acciones</f:facet>
                                 <h:commandButton value="Editar" 
                                                  action="#{registroGlucosa.editar(registro)}"
