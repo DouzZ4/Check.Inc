@@ -39,6 +39,7 @@ public class DashboardAdminBean implements Serializable {
 
     private List<UsuarioEditable> listaUsuarios;
     private List<Rol> listaRoles;
+
     @PostConstruct
     public void init() {
         try {
@@ -109,6 +110,7 @@ public class DashboardAdminBean implements Serializable {
 
     // Clase interna para manejar el estado editable y el cambio de rol
     public static class UsuarioEditable implements Serializable {
+
         private Usuario usuario;
         private boolean editable = false;
         private Integer nuevoRolId;
@@ -119,26 +121,90 @@ public class DashboardAdminBean implements Serializable {
                 this.nuevoRolId = usuario.getIdRol().getIdRol();
             }
         }
-        public Usuario getUsuario() { return usuario; }
-        public void setUsuario(Usuario usuario) { this.usuario = usuario; }
-        public boolean isEditable() { return editable; }
-        public void setEditable(boolean editable) { this.editable = editable; }
-        public Integer getNuevoRolId() { return nuevoRolId; }
-        public void setNuevoRolId(Integer nuevoRolId) { this.nuevoRolId = nuevoRolId; }
+
+        public Usuario getUsuario() {
+            return usuario;
+        }
+
+        public void setUsuario(Usuario usuario) {
+            this.usuario = usuario;
+        }
+
+        public boolean isEditable() {
+            return editable;
+        }
+
+        public void setEditable(boolean editable) {
+            this.editable = editable;
+        }
+
+        public Integer getNuevoRolId() {
+            return nuevoRolId;
+        }
+
+        public void setNuevoRolId(Integer nuevoRolId) {
+            this.nuevoRolId = nuevoRolId;
+        }
+
+        public Integer getIdUsuario() {
+            return usuario.getIdUsuario();
+        }
+
+        public void setIdUsuario(Integer id) {
+            usuario.setIdUsuario(id);
+        }
+
         // Getters delegados para JSF
-        public String getNombres() { return usuario.getNombres(); }
-        public void setNombres(String n) { usuario.setNombres(n); }
-        public String getApellidos() { return usuario.getApellidos(); }
-        public void setApellidos(String a) { usuario.setApellidos(a); }
-        public String getCorreo() { return usuario.getCorreo(); }
-        public void setCorreo(String c) { usuario.setCorreo(c); }
-        public String getUser() { return usuario.getUser(); }
-        public void setUser(String u) { usuario.setUser(u); }
-        public int getDocumento() { return usuario.getDocumento(); }
-        public void setDocumento(int d) { usuario.setDocumento(d); }
-        public int getEdad() { return usuario.getEdad(); }
-        public void setEdad(int e) { usuario.setEdad(e); }
-        public String getRolNombre() { return usuario.getIdRol() != null ? usuario.getIdRol().getNombre() : ""; }
+        public String getNombres() {
+            return usuario.getNombres();
+        }
+
+        public void setNombres(String n) {
+            usuario.setNombres(n);
+        }
+
+        public String getApellidos() {
+            return usuario.getApellidos();
+        }
+
+        public void setApellidos(String a) {
+            usuario.setApellidos(a);
+        }
+
+        public String getCorreo() {
+            return usuario.getCorreo();
+        }
+
+        public void setCorreo(String c) {
+            usuario.setCorreo(c);
+        }
+
+        public String getUser() {
+            return usuario.getUser();
+        }
+
+        public void setUser(String u) {
+            usuario.setUser(u);
+        }
+
+        public int getDocumento() {
+            return usuario.getDocumento();
+        }
+
+        public void setDocumento(int d) {
+            usuario.setDocumento(d);
+        }
+
+        public int getEdad() {
+            return usuario.getEdad();
+        }
+
+        public void setEdad(int e) {
+            usuario.setEdad(e);
+        }
+
+        public String getRolNombre() {
+            return usuario.getIdRol() != null ? usuario.getIdRol().getNombre() : "";
+        }
     }
 }
-

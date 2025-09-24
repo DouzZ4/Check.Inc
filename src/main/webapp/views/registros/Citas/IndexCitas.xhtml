@@ -10,7 +10,7 @@
         <ui:define name="title">Registro y Consulta de Citas</ui:define>
         <ui:define name="content">
             <h:messages globalOnly="true" styleClass="message-box" infoClass="message-info" errorClass="message-error"/>
-            
+
             <section aria-labelledby="form-title-heading">
                 <h2 id="form-title-heading">#{registroCita.editando ? 'Editar' : 'Registrar'} Cita</h2>
                 <h:form id="formCita">
@@ -18,35 +18,35 @@
                     <div class="form-group">
                         <h:outputLabel for="fecha" value="Fecha:"/>
                         <p:datePicker id="fecha" value="#{registroCita.fecha}" required="true"
-                                   requiredMessage="Por favor ingrese la fecha"
-                                   pattern="dd/MM/yyyy" locale="es"/>
+                                      requiredMessage="Por favor ingrese la fecha"
+                                      pattern="dd/MM/yyyy" locale="es"/>
                         <h:message for="fecha" styleClass="message error-message"/>
                     </div>
                     <div class="form-group">
                         <h:outputLabel for="hora" value="Hora:"/>
                         <p:datePicker id="hora" value="#{registroCita.hora}" required="true"
-                                   requiredMessage="Por favor ingrese la hora"
-                                   timeOnly="true" pattern="HH:mm" locale="es"/>
+                                      requiredMessage="Por favor ingrese la hora"
+                                      timeOnly="true" pattern="HH:mm" locale="es"/>
                         <h:message for="hora" styleClass="message error-message"/>
                         <h:commandButton value="Ahora" action="#{registroCita.setFechaHoraNow}" immediate="true" styleClass="now-button"/>
                     </div>
                     <div class="form-group">
                         <h:outputLabel for="motivo" value="Motivo:"/>
                         <h:inputTextarea id="motivo" value="#{registroCita.motivo}" required="true"
-                                     requiredMessage="Por favor ingrese el motivo"/>
+                                         requiredMessage="Por favor ingrese el motivo"/>
                         <h:message for="motivo" styleClass="message error-message"/>
                     </div>
                     <div id="form-buttons">
                         <h:commandButton value="#{registroCita.editando ? 'Actualizar' : 'Registrar'}" 
-                                       action="#{registroCita.registrar}"
-                                       styleClass="submit-button"/>
+                                         action="#{registroCita.registrar}"
+                                         styleClass="submit-button"/>
                         <h:commandButton value="Cancelar" 
-                                       action="#{registroCita.cancelarEdicion}"
-                                       immediate="true" styleClass="cancel-button"/>
+                                         action="#{registroCita.cancelarEdicion}"
+                                         immediate="true" styleClass="cancel-button"/>
                     </div>
                 </h:form>
             </section>
-            
+
             <section aria-labelledby="registros-heading">
                 <h2 id="registros-heading">Citas Programadas</h2>
                 
@@ -76,41 +76,41 @@
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText>
                             </h:column>
-                            
+
                             <h:column>
                                 <f:facet name="header">Hora</f:facet>
                                 <h:outputText value="#{cita.hora}">
                                     <f:convertDateTime pattern="HH:mm" />
                                 </h:outputText>
                             </h:column>
-                            
+
                             <h:column>
                                 <f:facet name="header">Motivo</f:facet>
-                                #{cita.motivo}
+                                    #{cita.motivo}
                             </h:column>
-                            
+
                             <h:column>
                                 <f:facet name="header">Acciones</f:facet>
                                 <h:commandButton value="Editar" 
-                                               action="#{registroCita.editar(cita)}"
-                                               styleClass="action-button edit-button"/>
-                                
+                                                 action="#{registroCita.editar(cita)}"
+                                                 styleClass="action-button edit-button"/>
+
                                 <h:commandButton value="Eliminar" 
-                                               action="#{registroCita.eliminar(cita)}"
-                                               styleClass="action-button delete-button"
-                                               onclick="return confirm('¿Está seguro de eliminar esta cita?');"/>
+                                                 action="#{registroCita.eliminar(cita)}"
+                                                 styleClass="action-button delete-button"
+                                                 onclick="return confirm('¿Está seguro de eliminar esta cita?');"/>
                             </h:column>
                         </h:dataTable>
                     </h:form>
+                    </div>
                 </div>
-            </div>
             </section>
-            
-            <h:outputStylesheet>
+
+            <style type="text/css">
                 .fc-day-grid-event {
                     cursor: pointer;
                 }
-            </h:outputStylesheet>
+            </style>
         </ui:define>
     </ui:composition>
 </html>

@@ -134,7 +134,6 @@ public class RegistroGlucosa implements Serializable {
         
         if (registros != null) {
             java.text.SimpleDateFormat sdfShort = new java.text.SimpleDateFormat("dd/MM"); // Eje X
-            java.text.SimpleDateFormat sdfFull = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm"); // Tooltip
             
             for (Glucosa g : registros) {
                 double nivelGlucosa = g.getNivelGlucosa();

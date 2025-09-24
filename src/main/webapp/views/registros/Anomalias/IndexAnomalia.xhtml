@@ -29,14 +29,14 @@
                     </div>
                     <div class="form-group">
                         <h:outputLabel for="descripcion" value="Descripcion:"/>
-                        <p:inputTextarea id="descripcion" value="#{registroAnomalia.descripcion}" required="true"
-                                   requiredMessage="Por favor ingrese la descripcion."/>
+                        <h:inputTextarea id="descripcion" value="#{registroCita.motivo}" required="true"
+                                         requiredMessage="Por favor ingrese la descripcion."/>
                         <h:message for="descripcion" styleClass="message error-message"/>
                     </div>
                     <div class="form-group">
                         <h:outputLabel for="sintomas" value="Sintomas:"/>
-                        <p:inputTextarea id="sintomas" value="#{registroAnomalia.sintomas}" required="true"
-                                   requiredMessage="Por favor ingrese la descripcion."/>
+                        <h:inputTextarea id="sintomas" value="#{registroCita.motivo}" required="true"
+                                         requiredMessage="Por favor ingrese la descripcion."/>
                         <h:message for="sintomas" styleClass="message error-message"/>
                     </div>
                     <div class="form-group">
@@ -59,48 +59,48 @@
                     </div>
                 </h:form>
             </section>
-                            <section aria-labelledby="registros-heading">
-                <h2 id="registros-heading">Registros Anomalias</h2>
-                <div style="overflow-x: auto;">
-                    <h:form id="tablaForm">
-                        <h:dataTable id="registro" value="#{registroAnomalia.registros}" var="registro"
-                                   styleClass="tabla-registros"
-                                   headerClass="tabla-header"
-                                   rowClasses="tabla-fila-par,tabla-fila-impar">
-                            
-                            <h:column>
-                                <f:facet name="header">Fecha</f:facet>
-                                <h:outputText value="#{registro.fechaHora}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                                </h:outputText>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">Descripción</f:facet>
+                <section aria-labelledby="registros-heading">
+                    <h2 id="registros-heading">Registros Anomalias</h2>
+                    <div style="overflow-x: auto;">
+                        <h:form id="tablaForm">
+                            <h:dataTable id="registro" value="#{registroAnomalia.registros}" var="registro"
+                                         styleClass="tabla-registros"
+                                         headerClass="tabla-header"
+                                         rowClasses="tabla-fila-par,tabla-fila-impar">
+
+                                <h:column>
+                                    <f:facet name="header">Fecha</f:facet>
+                                    <h:outputText value="#{registro.fechaHora}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                    </h:outputText>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Descripción</f:facet>
                                 #{registro.descripcion}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">Sintomas</f:facet>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Sintomas</f:facet>
                                 #{registro.sintomas}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">Gravedad</f:facet>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Gravedad</f:facet>
                                 #{registro.gravedad}
-                            </h:column>                            
-                            <h:column>
-                                <f:facet name="header">Acciones</f:facet>
-                                <h:commandButton value="Editar" 
-                                               action="#{registroAnomalia.editar(registro)}"
-                                               styleClass="action-button edit-button"/>
-                                
-                                <h:commandButton value="Eliminar" 
-                                               action="#{registroAnomalia.eliminar(registro)}"
-                                               styleClass="action-button delete-button"
-                                               onclick="return confirm('¿Está seguro de eliminar este registro?');"/>
-                            </h:column>
-                        </h:dataTable>
-                    </h:form>
-                </div>
-            </section>
+                                </h:column>                            
+                                <h:column>
+                                    <f:facet name="header">Acciones</f:facet>
+                                    <h:commandButton value="Editar" 
+                                                     action="#{registroAnomalia.editar(registro)}"
+                                                     styleClass="action-button edit-button"/>
+
+                                    <h:commandButton value="Eliminar" 
+                                                     action="#{registroAnomalia.eliminar(registro)}"
+                                                     styleClass="action-button delete-button"
+                                                     onclick="return confirm('¿Está seguro de eliminar este registro?');"/>
+                                </h:column>
+                            </h:dataTable>
+                        </h:form>
+                    </div>
+                </section>
             </ui:define>
 
         </ui:composition>

@@ -27,7 +27,6 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
@@ -472,7 +471,6 @@ public class ReporteBean implements Serializable {
     }
 
     private void agregarEncabezadoPaciente(Document document, Usuario usuario) throws DocumentException {
-        BaseColor azul = new BaseColor(48, 88, 166);
         Font sectionFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD, new BaseColor(244, 85, 1));
         
         // Logo
