@@ -12,13 +12,30 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import java.util.Properties;
+
 @Stateless
 public class ServicioCorreo {
 
-    private static final String SENDGRID_API_KEY = "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";
+    private static String SENDGRID_API_KEY = "";
+
 
     @PersistenceContext
     private EntityManager em;
+
+    // Cargar la API key desde el archivo de propiedades
+    static {
+        Properties props = new Properties();
+        try {
+            props.load(new FileInputStream("src/main/resources/sendgrid.properties"));
+            SENDGRID_API_KEY = props.getProperty("SENDGRID_API_KEY", "");
+        } catch (IOException e) {
+            System.err.println("No se pudo cargar la clave de SendGrid: " + e.getMessage());
+        }
+    }
 
     /**
      * ✅ MÉTODO 1: Enviar correo cuando se registra un usuario nuevo
