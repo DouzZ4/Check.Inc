@@ -10,7 +10,7 @@
         <ui:define name="title">Registro y Consulta de Medicamentos</ui:define>
         <ui:define name="content">
             <h:messages globalOnly="true" styleClass="message-box" infoClass="message-info" errorClass="message-error"/>
-            
+
             <section aria-labelledby="form-title-heading">
                 <h2 id="form-title-heading">#{registroMedicamento.editando ? 'Editar' : 'Registrar'} Medicamento</h2>
                 <h:form id="formMedicamento">
@@ -18,57 +18,58 @@
                     <div class="form-group">
                         <h:outputLabel for="nombre" value="Nombre del Medicamento:"/>
                         <h:inputText id="nombre" value="#{registroMedicamento.nombre}" required="true"
-                                    requiredMessage="Por favor ingrese el nombre del medicamento"/>
+                                     requiredMessage="Por favor ingrese el nombre del medicamento"
+                                     styleClass="medicamento-nombre"/>
                         <h:message for="nombre" styleClass="message error-message"/>
                     </div>
                     <div class="form-group">
                         <h:outputLabel for="dosis" value="Dosis:"/>
                         <h:inputText id="dosis" value="#{registroMedicamento.dosis}" required="true"
-                                    requiredMessage="Por favor ingrese la dosis"/>
+                                     requiredMessage="Por favor ingrese la dosis"/>
                         <h:message for="dosis" styleClass="message error-message"/>
                     </div>
                     <div class="form-group">
                         <h:outputLabel for="frecuencia" value="Frecuencia:"/>
                         <h:inputText id="frecuencia" value="#{registroMedicamento.frecuencia}" required="true"
-                                    requiredMessage="Por favor ingrese la frecuencia"/>
+                                     requiredMessage="Por favor ingrese la frecuencia"/>
                         <h:message for="frecuencia" styleClass="message error-message"/>
                     </div>
                     <div class="form-group">
                         <h:outputLabel for="fechaInicio" value="Fecha de Inicio:"/>
                         <p:datePicker id="fechaInicio" value="#{registroMedicamento.fechaInicio}" required="true"
-                                    requiredMessage="Por favor ingrese la fecha de inicio"
-                                    pattern="dd/MM/yyyy" locale="es"/>
+                                      requiredMessage="Por favor ingrese la fecha de inicio"
+                                      pattern="dd/MM/yyyy" locale="es"/>
                         <h:message for="fechaInicio" styleClass="message error-message"/>
                     </div>
                     <div class="form-group">
                         <h:outputLabel for="fechaFin" value="Fecha de Fin:"/>
                         <p:datePicker id="fechaFin" value="#{registroMedicamento.fechaFin}" required="true"
-                                    requiredMessage="Por favor ingrese la fecha de fin"
-                                    pattern="dd/MM/yyyy" locale="es"/>
+                                      requiredMessage="Por favor ingrese la fecha de fin"
+                                      pattern="dd/MM/yyyy" locale="es"/>
                         <h:message for="fechaFin" styleClass="message error-message"/>
                     </div>
                     <div id="form-buttons">
                         <h:commandButton value="#{registroMedicamento.editando ? 'Actualizar' : 'Registrar'}" 
-                                        action="#{registroMedicamento.registrar}"
-                                        styleClass="submit-button"/>
+                                         action="#{registroMedicamento.registrar}"
+                                         styleClass="submit-button"/>
                         <h:commandButton value="Cancelar" 
-                                        action="#{registroMedicamento.cancelarEdicion}"
-                                        immediate="true" styleClass="cancel-button"/>
+                                         action="#{registroMedicamento.cancelarEdicion}"
+                                         immediate="true" styleClass="cancel-button"/>
                     </div>
                 </h:form>
             </section>
 
             <section aria-labelledby="invima-heading" style="margin-bottom:2em;">
                 <h2 id="invima-heading">Consultar Medicamento en INVIMA</h2>
-                
+
                 <div class="form-group">
                     <label for="searchMedicamento">Buscar medicamento:</label>
                     <input type="text" id="searchMedicamento" class="form-control" 
-                            placeholder="Ingrese el nombre del medicamento" 
-                            minlength="3"/>
+                           placeholder="Ingrese el nombre del medicamento" 
+                           minlength="3"/>
                     <small class="text-muted">Ingrese al menos 3 caracteres para buscar</small>
                 </div>
-                
+
                 <div id="form-buttons">
                     <button type="button" id="btnBuscarMedicamento" class="btn btn-primary submit-button">
                         Buscar en INVIMA
@@ -78,41 +79,40 @@
                 <div id="mensajesInvima" class="message-box" style="margin-top: 1em; display: none;"></div>
 
                 <div id="tablaInvimaContainer" class="table-responsive" style="margin-top: 1em;">
-                    <table id="tablaMedicamentos" class="tabla-registros" style="display: none;">
+                    <table id="tablaMedicamentos" class="display tabla-registros" style="width:100%; display: none;">
                         <thead class="tabla-header">
                             <tr>
                                 <th>Expediente</th>
                                 <th>Producto</th>
                                 <th>Titular</th>
-                                <th>Registro Sanitario</th>
-                                <th>Principio Activo</th>
+                                <th>Seleccionar</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                 </div>
             </section>
-            
+
             <section aria-labelledby="registros-heading">
                 <h2 id="registros-heading">Registros de Medicamentos</h2>
                 <div style="overflow-x: auto;">
-                    
+
                     <h:form id="tablaForm">
                         <h:dataTable id="medicamento" value="#{registroMedicamento.registrosFiltradosYOrdenados}" var="medicamento"
-                                    styleClass="tabla-registros"
-                                    headerClass="tabla-header"
-                                    rowClasses="tabla-fila-par,tabla-fila-impar">                     
+                                     styleClass="tabla-registros"
+                                     headerClass="tabla-header"
+                                     rowClasses="tabla-fila-par,tabla-fila-impar">                     
                             <h:column>
                                 <f:facet name="header">Nombre</f:facet>
-                                #{medicamento.nombre}
+                                    #{medicamento.nombre}
                             </h:column>
                             <h:column>
                                 <f:facet name="header">Dosis</f:facet>
-                                #{medicamento.dosis}
+                                    #{medicamento.dosis}
                             </h:column>
                             <h:column>
                                 <f:facet name="header">Frecuencia</f:facet>
-                                #{medicamento.frecuencia}
+                                    #{medicamento.frecuencia}
                             </h:column>
                             <h:column>
                                 <f:facet name="header">Fecha Inicio</f:facet>
@@ -129,18 +129,17 @@
                             <h:column>
                                 <f:facet name="header">Acciones</f:facet>
                                 <h:commandButton value="Editar" 
-                                                action="#{registroMedicamento.editar(medicamento)}"
-                                                styleClass="action-button edit-button"/>
+                                                 action="#{registroMedicamento.editar(medicamento)}"
+                                                 styleClass="action-button edit-button"/>
                                 <h:commandButton value="Eliminar" 
-                                                action="#{registroMedicamento.eliminar(medicamento)}"
-                                                styleClass="action-button delete-button"
-                                                onclick="return confirm('¿Está seguro de eliminar este medicamento?');"/>
+                                                 action="#{registroMedicamento.eliminar(medicamento)}"
+                                                 styleClass="action-button delete-button"
+                                                 onclick="return confirm('¿Está seguro de eliminar este medicamento?');"/>
                             </h:column>
                         </h:dataTable>
                     </h:form>
                 </div>
             </section>
-            
             <h:outputScript library="js" name="invima-search.js" target="body"/>
         </ui:define>
     </ui:composition>

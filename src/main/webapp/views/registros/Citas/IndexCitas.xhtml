@@ -47,63 +47,60 @@
                 </h:form>
             </section>
 
+            <!-- Sección del Calendario -->
+            <section aria-labelledby="calendar-heading" style="margin-bottom: 30px;">
+                <h2 id="calendar-heading">Calendario de Citas</h2>
+                <h:form id="scheduleForm">
+                    <p:schedule id="schedule" value="#{registroCita.eventModel}" locale="es" view="dayGridMonth" timeZone="America/Bogota"
+                                style="width: 100%; height: 500px;">
+                        <p:ajax event="dateSelect" listener="#{registroCita.onDateSelect}" update=":dialogs:eventDetails" oncomplete="PF('eventDialog').show();" />
+                        <p:ajax event="eventSelect" listener="#{registroCita.onEventSelect}" update=":dialogs:eventDetails" oncomplete="PF('eventDialog').show();" />
+                    </p:schedule>
+                </h:form>
+            </section>
+
+            <!-- Sección de la Tabla -->
             <section aria-labelledby="registros-heading">
-                <h2 id="registros-heading">Citas Programadas</h2>
-                
-                <div class="schedule-table-grid">
-                    <div class="schedule-wrapper">
-                        <h:form id="scheduleForm">
-                            <div class="schedule-container">
-                                <p:schedule id="schedule" value="#{registroCita.eventModel}" locale="es" view="dayGridMonth" timeZone="America/Bogota">
-                                    <p:ajax event="dateSelect" listener="#{registroCita.onDateSelect}" update=":dialogs:eventDetails" oncomplete="PF('eventDialog').show();" />
-                                    <p:ajax event="eventSelect" listener="#{registroCita.onEventSelect}" update=":dialogs:eventDetails" oncomplete="PF('eventDialog').show();" />
-                                </p:schedule>
-                            </div>
-                        </h:form>
-                    </div>
+                <h2 id="registros-heading">Lista de Citas Programadas</h2>
 
-                    <div class="table-container" style="overflow-x: auto;">
-    
-    <h:form id="tablaForm">
-            <h:dataTable id="cita" value="#{registroCita.registrosFiltrados}" var="cita"
-                       styleClass="tabla-registros"
-                       headerClass="tabla-header"
-                       rowClasses="tabla-fila-par,tabla-fila-impar">
-                      
-                            <h:column>
-                                <f:facet name="header">Fecha</f:facet>
-                                <h:outputText value="#{cita.fecha}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy" />
-                                </h:outputText>
-                            </h:column>
+                <h:form id="tablaForm">
+                    <h:dataTable id="cita" value="#{registroCita.registrosFiltrados}" var="cita"
+                                 styleClass="tabla-registros"
+                                 headerClass="tabla-header"
+                                 rowClasses="tabla-fila-par,tabla-fila-impar">
 
-                            <h:column>
-                                <f:facet name="header">Hora</f:facet>
-                                <h:outputText value="#{cita.hora}">
-                                    <f:convertDateTime pattern="HH:mm" />
-                                </h:outputText>
-                            </h:column>
+                        <h:column>
+                            <f:facet name="header">Fecha</f:facet>
+                            <h:outputText value="#{cita.fecha}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </h:column>
 
-                            <h:column>
-                                <f:facet name="header">Motivo</f:facet>
-                                    #{cita.motivo}
-                            </h:column>
+                        <h:column>
+                            <f:facet name="header">Hora</f:facet>
+                            <h:outputText value="#{cita.hora}">
+                                <f:convertDateTime pattern="HH:mm" />
+                            </h:outputText>
+                        </h:column>
 
-                            <h:column>
-                                <f:facet name="header">Acciones</f:facet>
-                                <h:commandButton value="Editar" 
-                                                 action="#{registroCita.editar(cita)}"
-                                                 styleClass="action-button edit-button"/>
+                        <h:column>
+                            <f:facet name="header">Motivo</f:facet>
+                                #{cita.motivo}
+                        </h:column>
 
-                                <h:commandButton value="Eliminar" 
-                                                 action="#{registroCita.eliminar(cita)}"
-                                                 styleClass="action-button delete-button"
-                                                 onclick="return confirm('¿Está seguro de eliminar esta cita?');"/>
-                            </h:column>
-                        </h:dataTable>
-                    </h:form>
-                    </div>
-                </div>
+                        <h:column>
+                            <f:facet name="header">Acciones</f:facet>
+                            <h:commandButton value="Editar" 
+                                             action="#{registroCita.editar(cita)}"
+                                             styleClass="action-button edit-button"/>
+
+                            <h:commandButton value="Eliminar" 
+                                             action="#{registroCita.eliminar(cita)}"
+                                             styleClass="action-button delete-button"
+                                             onclick="return confirm('¿Está seguro de eliminar esta cita?');"/>
+                        </h:column>
+                    </h:dataTable>
+                </h:form>
             </section>
 
             <style type="text/css">

@@ -60,8 +60,8 @@
                     <h:outputLabel for="correo" value="Correo Electrónico:"/>
                     <h:inputText id="correo" value="#{registroUsuario.correo}" required="true"
                                  requiredMessage="Por favor ingrese su correo electrónico"
-                                 validatorMessage="Ingrese un correo electrónico válido que termine en .com">
-                        <f:validateRegex pattern=".+@.+\.com$"/>
+                                 validatorMessage="Ingrese un correo electrónico válido">
+                        <f:validateRegex pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"/>
                     </h:inputText>
                     <h:message for="correo" styleClass="message error-message"/>
                 </div>
