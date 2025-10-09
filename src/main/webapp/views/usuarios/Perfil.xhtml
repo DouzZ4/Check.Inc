@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      lang="es" xml:lang="es">
+
+<ui:composition template="/views/TemplateSitio.xhtml">
+    <ui:define name="title">Perfil</ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="perfilForm">
+            <p:growl id="msgs" showDetail="true" />
+
+            <!-- CONTENEDOR CENTRAL -->
+            <div class="p-d-flex p-jc-center p-mt-5">
+
+                <!-- TARJETA PRINCIPAL -->
+                <p:card style="width:600px; border-radius:20px; margin:auto; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+
+                    <!-- ENCABEZADO -->
+                    <h2 class="p-text-center" style="color:#3058a6; margin-bottom:0;">Mi Perfil</h2>
+                    <p class="p-text-center" style="margin-top:0;">Consulta y actualiza tus datos personales</p>
+
+                    <!-- TARJETA DE USUARIO -->
+                    <div class="p-d-flex p-ai-center p-jc-start p-mb-4" style="gap:15px; margin-top:20px;">
+                        <p:avatar icon="pi pi-user" size="xlarge" style="background:#3058a6; color:white;" />
+                        <div>
+                            <h3 style="margin:0;">#{perfilController.usuario.nombres} #{perfilController.usuario.apellidos}</h3>
+                            <small style="color:gray;">#{perfilController.usuario.correo}</small>
+                        </div>
+                    </div>
+
+                    <p:divider />
+
+                    <!-- CUERPO DE LA TARJETA -->
+                    <div class="p-grid p-mt-2">
+
+                        <!-- COLUMNA IZQUIERDA: DATOS ACTUALES -->
+                        <div class="p-col-12 p-md-6" style="border-right: 1px solid #eee;">
+                            <h3 style="color:#3058a6;">Datos actuales</h3>
+                            <p><b>Nombre:</b> #{perfilController.usuario.nombres}</p>
+                            <p><b>Apellido:</b> #{perfilController.usuario.apellidos}</p>
+                            <p><b>Correo:</b> #{perfilController.usuario.correo}</p>
+                            <p><b>Teléfono:</b> #{perfilController.usuario.telefono}</p>
+                            <p><b>Tipo de Diabetes:</b> #{perfilController.usuario.tipoDiabetes}</p>
+                            <p><b>Insulodependiente:</b>
+                                <h:outputText value="#{perfilController.usuario.esInsulodependiente ? 'Sí' : 'No'}" />
+                            </p>
+                        </div>
+
+                        <!-- COLUMNA DERECHA: FORMULARIO DE EDICIÓN -->
+                        <div class="p-col-12 p-md-6">
+                            <h3 style="color:#3058a6;">Editar información</h3>
+
+                            <div class="p-fluid">
+                                <div class="p-field">
+                                    <p:outputLabel value="Nombre" for="nombres" />
+                                    <p:inputText id="nombres" value="#{perfilController.usuario.nombres}" required="true" />
+                                </div>
+                                <div class="p-field">
+                                    <p:outputLabel value="Apellido" for="apellidos" />
+                                    <p:inputText id="apellidos" value="#{perfilController.usuario.apellidos}" />
+                                </div>
+                                <div class="p-field">
+                                    <p:outputLabel value="Correo electrónico" for="correo" />
+                                    <p:inputText id="correo" value="#{perfilController.usuario.correo}" />
+                                </div>
+                                <div class="p-field">
+                                    <p:outputLabel value="Teléfono" for="telefono" />
+                                    <p:inputText id="telefono" value="#{perfilController.usuario.telefono}" />
+                                </div>
+                                <div class="p-field">
+                                    <p:outputLabel value="Tipo de diabetes" for="tipoDiabetes" />
+                                    <p:inputText id="tipoDiabetes" value="#{perfilController.usuario.tipoDiabetes}" />
+                                </div>
+                                <div class="p-field-checkbox">
+                                    <p:selectBooleanCheckbox id="insulodependiente"
+                                        value="#{perfilController.usuario.esInsulodependiente}" />
+                                    <p:outputLabel for="insulodependiente" value="¿Insulodependiente?" />
+                                </div>
+
+                                <div class="p-mt-3">
+                                    <p:commandButton value="Actualizar Perfil"
+                                                     icon="pi pi-save"
+                                                     actionListener="#{perfilController.actualizarPerfil}"
+                                                     update="perfilForm msgs"
+                                                     style="background-color:#3058a6; border:none; width:100%;" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </p:card>
+            </div>
+        </h:form>
+
+    </ui:define>
+</ui:composition>
+</html>

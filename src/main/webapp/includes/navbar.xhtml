@@ -9,7 +9,7 @@
 
         <!-- Branding / Logo -->
         <div class="navbar-branding">
-            <h:link outcome="/index" styleClass="brand-link">
+            <h:link outcome="/views/usuarios/Perfil.xhtml" styleClass="brand-link">
                 <h:graphicImage library="images" name="ICONO.png" alt="Logo Check" styleClass="logo-navbar" />
                 <h1>CHECK</h1>
             </h:link>
@@ -45,6 +45,7 @@
         <div class="navbar-user-info" style="display:flex;align-items:center;gap:10px;">
             <h:panelGroup rendered="#{not empty login.usuarioActual}">
                 <span class="welcome-message" style="font-weight:bold;">Hola, #{login.usuarioActual.nombres}</span>
+
                 <h:form styleClass="logout-form" style="display:inline;">
                     <h:commandButton value="Cerrar Sesión" 
                                      action="#{login.logout}" 
@@ -52,7 +53,9 @@
                         <f:ajax render="@all"/>
                     </h:commandButton>
                 </h:form>
+                
             </h:panelGroup>
+
 
             <h:panelGroup rendered="#{empty login.usuarioActual}">
                 <h:link outcome="/views/usuarios/login" value="Iniciar Sesión" styleClass="button-login"/>
