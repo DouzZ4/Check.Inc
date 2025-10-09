@@ -15,7 +15,6 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class ServicioCorreo {
 
-    private static final String SENDGRID = "";
 
     @PersistenceContext
     private EntityManager em;
