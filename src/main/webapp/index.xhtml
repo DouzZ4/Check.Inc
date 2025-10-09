@@ -42,7 +42,7 @@
                             <h:form>
                                 <h:commandButton value="Registro Citas" action="/views/registros/Citas/IndexCitas.xhtml?faces-redirect=true" styleClass="btn btn-black" />
                             </h:form>
-                            <h:form>
+                            <h:form rendered="#{login.usuarioActual.idRol.idRol == 1}">
                                 <h:commandButton value="Ir al panel de gestión" action="/views/inicioGestion.xhtml?faces-redirect=true" styleClass="btn btn-black" />
                             </h:form>
                         </div>

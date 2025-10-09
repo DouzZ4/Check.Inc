@@ -1,5 +1,4 @@
 
 /target/
 src/main/resources/sendgrid.properties
-C:/xampp/htdocs/Check.Inc/src/main/java/com/mycompany/checkinc/services/ServicioCorreo.java
 src/main/java/com/mycompany/checkinc/services/ServicioCorreo.java
