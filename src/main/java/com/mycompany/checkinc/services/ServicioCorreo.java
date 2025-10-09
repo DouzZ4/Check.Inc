@@ -1,6 +1,7 @@
 package com.mycompany.checkinc.services;
 
 import com.mycompany.checkinc.entities.Usuario;
+import com.mycompany.checkinc.util.Config;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
@@ -15,7 +16,7 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class ServicioCorreo {
 
-    private static final String SENDGRID = "";
+    private static final String SENDGRID = Config.get("SENDGRID_API_KEY");
 
     @PersistenceContext
     private EntityManager em;
@@ -79,6 +80,7 @@ public class ServicioCorreo {
             e.printStackTrace();
             return false;
         }
+
     }
 
     /**
@@ -219,4 +221,5 @@ public class ServicioCorreo {
                 + "}]"
                 + "}";
     }
+
 }
