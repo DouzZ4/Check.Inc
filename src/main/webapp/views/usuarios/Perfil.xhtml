@@ -11,89 +11,85 @@
 
     <ui:define name="content">
 
-        <h:form id="perfilForm">
+        <!-- Enlace al CSS -->
+        <h:outputStylesheet library="css" name="perfil.css" />
+
+        <h:form id="perfilForm" styleClass="perfil-container">
             <p:growl id="msgs" showDetail="true" />
 
-            <!-- CONTENEDOR CENTRAL -->
-            <div class="p-d-flex p-jc-center p-mt-5">
-
-                <!-- TARJETA PRINCIPAL -->
-                <p:card style="width:600px; border-radius:20px; margin:auto; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
-
-                    <!-- ENCABEZADO -->
-                    <h2 class="p-text-center" style="color:#3058a6; margin-bottom:0;">Mi Perfil</h2>
-                    <p class="p-text-center" style="margin-top:0;">Consulta y actualiza tus datos personales</p>
-
-                    <!-- TARJETA DE USUARIO -->
-                    <div class="p-d-flex p-ai-center p-jc-start p-mb-4" style="gap:15px; margin-top:20px;">
-                        <p:avatar icon="pi pi-user" size="xlarge" style="background:#3058a6; color:white;" />
-                        <div>
-                            <h3 style="margin:0;">#{perfilController.usuario.nombres} #{perfilController.usuario.apellidos}</h3>
-                            <small style="color:gray;">#{perfilController.usuario.correo}</small>
-                        </div>
-                    </div>
-
-                    <p:divider />
-
-                    <!-- CUERPO DE LA TARJETA -->
-                    <div class="p-grid p-mt-2">
-
-                        <!-- COLUMNA IZQUIERDA: DATOS ACTUALES -->
-                        <div class="p-col-12 p-md-6" style="border-right: 1px solid #eee;">
-                            <h3 style="color:#3058a6;">Datos actuales</h3>
-                            <p><b>Nombre:</b> #{PerfilBean.usuario.nombres}</p>
-                            <p><b>Apellido:</b> #{PerfilBean.usuario.apellidos}</p>
-                            <p><b>Correo:</b> #{PerfilBean.usuario.correo}</p>
-                            <p><b>Detalles de tipo de diabetes:</b> #{PerfilBean.usuario.detalleTipoDiabetes}</p>
-                            <p><b>Tipo de Diabetes:</b> #{PerfilBean.usuario.tipoDiabetes}</p>
-                            <p><b>Insulodependiente:</b>
-                                <h:outputText value="#{PerfilBean.usuario.esInsulodependiente ? 'Sí' : 'No'}" />
-                            </p>
-                        </div>
-
-                        <!-- COLUMNA DERECHA: FORMULARIO DE EDICIÓN -->
-                        <div class="p-col-12 p-md-6">
-                            <h3 style="color:#3058a6;">Editar información</h3>
-
-                            <div class="p-fluid">
-                                <div class="p-field">
-                                    <p:outputLabel value="Nombre" for="nombres" />
-                                    <p:inputText id="nombres" value="#{PerfilBean.usuario.nombres}" required="true" />
-                                </div>
-                                <div class="p-field">
-                                    <p:outputLabel value="Apellido" for="apellidos" />
-                                    <p:inputText id="apellidos" value="#{PerfilBean.usuario.apellidos}" />
-                                </div>
-                                <div class="p-field">
-                                    <p:outputLabel value="Correo electrónico" for="correo" />
-                                    <p:inputText id="correo" value="#{PerfilBean.usuario.correo}" />
-                                </div>
-                                <div class="p-field">
-                                    <p:outputLabel value="Teléfono" for="telefono" />
-                                    <p:inputText id="telefono" value="#{PerfilBean.usuario.detalleTipoDiabetes}" />
-                                </div>
-                                <div class="p-field">
-                                    <p:outputLabel value="Tipo de diabetes" for="tipoDiabetes" />
-                                    <p:inputText id="tipoDiabetes" value="#{PerfilBean.usuario.tipoDiabetes}" />
-                                </div>
-                                <div class="p-field-checkbox">
-                                    <p:selectBooleanCheckbox id="insulodependiente"
-                                        value="#{PerfilBean.usuario.esInsulodependiente}" />
-                                    <p:outputLabel for="insulodependiente" value="¿Insulodependiente?" />
-                                </div>
-
-                                <div class="p-mt-3">
-                                    <p:commandButton value="Actualizar Perfil"
-                                                     icon="pi pi-save"
-                                                     actionListener="#{PerfilBean.actualizarPerfil}"
-                                                     update="perfilForm msgs"
-                                                     style="background-color:#3058a6; border:none; width:100%;" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </p:card>
+            <!-- Tarjeta de usuario -->
+            <div class="perfil-header">
+                <div class="perfil-avatar">
+                    #{PerfilBean.usuario.nombres != null ? PerfilBean.usuario.nombres.substring(0,1) : 'U'}
+                </div>
+                <div class="perfil-info">
+                    <h3>#{PerfilBean.usuario.nombres} #{PerfilBean.usuario.apellidos}</h3>
+                    <small>#{PerfilBean.usuario.correo}</small>
+                </div>
             </div>
+
+            <!-- Divider -->
+            <p:divider />
+
+            <div class="perfil-form">
+
+                <!-- Columna izquierda -->
+                <div>
+                    <h3 style="color:#3058a6;">Datos actuales</h3>
+                    <p><b>Nombre:</b> #{PerfilBean.usuario.nombres}</p>
+                    <p><b>Apellido:</b> #{PerfilBean.usuario.apellidos}</p>
+                    <p><b>Correo:</b> #{PerfilBean.usuario.correo}</p>
+                    <p><b>Detalle tipo de diabetes:</b> #{PerfilBean.usuario.detalleTipoDiabetes}</p>
+                    <p><b>Tipo de Diabetes:</b> #{PerfilBean.usuario.tipoDiabetes}</p>
+                    <p><b>Insulodependiente:</b>
+                        <h:outputText value="#{PerfilBean.usuario.esInsulodependiente ? 'Sí' : 'No'}" />
+                    </p>
+                </div>
+
+                <!-- Columna derecha -->
+                <div>
+                    <h3 style="color:#3058a6;">Editar información</h3>
+
+                    <div class="p-fluid">
+                        <div class="p-field">
+                            <p:outputLabel value="Nombre" for="nombres" />
+                            <p:inputText id="nombres" value="#{PerfilBean.usuario.nombres}" required="true" />
+                        </div>
+                        <div class="p-field">
+                            <p:outputLabel value="Apellido" for="apellidos" />
+                            <p:inputText id="apellidos" value="#{PerfilBean.usuario.apellidos}" />
+                        </div>
+                        <div class="p-field">
+                            <p:outputLabel value="Correo electrónico" for="correo" />
+                            <p:inputText id="correo" value="#{PerfilBean.usuario.correo}" />
+                        </div>
+                       
+                        <div class="p-field">
+                            <p:outputLabel value="Detalle tipo de diabetes" for="detalleTipoDiabetes" />
+                            <p:inputText id="detalleTipoDiabetes" value="#{PerfilBean.usuario.detalleTipoDiabetes}" />
+                        </div>
+                        <div class="p-field">
+                            <p:outputLabel value="Tipo de diabetes" for="tipoDiabetes" />
+                            <p:inputText id="tipoDiabetes" value="#{PerfilBean.usuario.tipoDiabetes}" />
+                        </div>
+                        <div class="p-field-checkbox">
+                            <p:selectBooleanCheckbox id="insulodependiente"
+                                value="#{PerfilBean.usuario.esInsulodependiente}" />
+                            <p:outputLabel for="insulodependiente" value="¿Insulodependiente?" />
+                        </div>
+
+                        <div class="p-mt-3">
+                            <p:commandButton value="Actualizar Perfil"
+                                             icon="pi pi-save"
+                                             actionListener="#{PerfilBean.actualizarPerfil}"
+                                             update="perfilForm msgs"
+                                             styleClass="btn-actualizar" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p:messages id="mensajes" styleClass="perfil-messages" showSummary="true" showDetail="false"/>
         </h:form>
 
     </ui:define>

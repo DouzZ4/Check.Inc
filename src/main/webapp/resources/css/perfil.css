@@ -1,0 +1,103 @@
+/* === Estilos generales del perfil === */
+.perfil-container {
+    max-width: 800px;
+    margin: 40px auto;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 30px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Encabezado del perfil con avatar */
+.perfil-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 2px solid #f2f2f2;
+    padding-bottom: 20px;
+    margin-bottom: 25px;
+}
+
+.perfil-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background-color: #3058a6;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: bold;
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+}
+
+.perfil-info h3 {
+    margin: 0;
+    font-size: 1.6rem;
+    color: #3058a6;
+}
+
+.perfil-info small {
+    color: #666;
+}
+
+/* === Campos del formulario === */
+.perfil-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.perfil-form .ui-inputfield,
+.perfil-form input,
+.perfil-form select {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 8px 10px;
+    transition: border-color 0.3s ease;
+}
+
+.perfil-form .ui-inputfield:focus,
+.perfil-form input:focus {
+    border-color: #3058a6;
+    box-shadow: 0 0 5px rgba(48, 88, 166, 0.3);
+    outline: none;
+}
+
+/* === Botón de guardar === */
+.btn-actualizar {
+    grid-column: span 2;
+    background-color: #3058a6;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 0;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.btn-actualizar:hover {
+    background-color: #f45501;
+}
+
+/* === Mensajes de JSF === */
+.perfil-messages {
+    margin-top: 20px;
+}
+
+.ui-messages-info {
+    background-color: rgba(48, 88, 166, 0.1);
+    border-left: 4px solid #3058a6;
+    color: #3058a6;
+}
+
+.ui-messages-error {
+    background-color: rgba(244, 85, 1, 0.1);
+    border-left: 4px solid #f45501;
+    color: #f45501;
+}
