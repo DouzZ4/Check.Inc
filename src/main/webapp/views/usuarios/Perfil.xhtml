@@ -41,13 +41,13 @@
                         <!-- COLUMNA IZQUIERDA: DATOS ACTUALES -->
                         <div class="p-col-12 p-md-6" style="border-right: 1px solid #eee;">
                             <h3 style="color:#3058a6;">Datos actuales</h3>
-                            <p><b>Nombre:</b> #{perfilController.usuario.nombres}</p>
-                            <p><b>Apellido:</b> #{perfilController.usuario.apellidos}</p>
-                            <p><b>Correo:</b> #{perfilController.usuario.correo}</p>
-                            <p><b>Teléfono:</b> #{perfilController.usuario.telefono}</p>
-                            <p><b>Tipo de Diabetes:</b> #{perfilController.usuario.tipoDiabetes}</p>
+                            <p><b>Nombre:</b> #{PerfilBean.usuario.nombres}</p>
+                            <p><b>Apellido:</b> #{PerfilBean.usuario.apellidos}</p>
+                            <p><b>Correo:</b> #{PerfilBean.usuario.correo}</p>
+                            <p><b>Detalles de tipo de diabetes:</b> #{PerfilBean.usuario.detalleTipoDiabetes}</p>
+                            <p><b>Tipo de Diabetes:</b> #{PerfilBean.usuario.tipoDiabetes}</p>
                             <p><b>Insulodependiente:</b>
-                                <h:outputText value="#{perfilController.usuario.esInsulodependiente ? 'Sí' : 'No'}" />
+                                <h:outputText value="#{PerfilBean.usuario.esInsulodependiente ? 'Sí' : 'No'}" />
                             </p>
                         </div>
 
@@ -58,34 +58,34 @@
                             <div class="p-fluid">
                                 <div class="p-field">
                                     <p:outputLabel value="Nombre" for="nombres" />
-                                    <p:inputText id="nombres" value="#{perfilController.usuario.nombres}" required="true" />
+                                    <p:inputText id="nombres" value="#{PerfilBean.usuario.nombres}" required="true" />
                                 </div>
                                 <div class="p-field">
                                     <p:outputLabel value="Apellido" for="apellidos" />
-                                    <p:inputText id="apellidos" value="#{perfilController.usuario.apellidos}" />
+                                    <p:inputText id="apellidos" value="#{PerfilBean.usuario.apellidos}" />
                                 </div>
                                 <div class="p-field">
                                     <p:outputLabel value="Correo electrónico" for="correo" />
-                                    <p:inputText id="correo" value="#{perfilController.usuario.correo}" />
+                                    <p:inputText id="correo" value="#{PerfilBean.usuario.correo}" />
                                 </div>
                                 <div class="p-field">
                                     <p:outputLabel value="Teléfono" for="telefono" />
-                                    <p:inputText id="telefono" value="#{perfilController.usuario.telefono}" />
+                                    <p:inputText id="telefono" value="#{PerfilBean.usuario.detalleTipoDiabetes}" />
                                 </div>
                                 <div class="p-field">
                                     <p:outputLabel value="Tipo de diabetes" for="tipoDiabetes" />
-                                    <p:inputText id="tipoDiabetes" value="#{perfilController.usuario.tipoDiabetes}" />
+                                    <p:inputText id="tipoDiabetes" value="#{PerfilBean.usuario.tipoDiabetes}" />
                                 </div>
                                 <div class="p-field-checkbox">
                                     <p:selectBooleanCheckbox id="insulodependiente"
-                                        value="#{perfilController.usuario.esInsulodependiente}" />
+                                        value="#{PerfilBean.usuario.esInsulodependiente}" />
                                     <p:outputLabel for="insulodependiente" value="¿Insulodependiente?" />
                                 </div>
 
                                 <div class="p-mt-3">
                                     <p:commandButton value="Actualizar Perfil"
                                                      icon="pi pi-save"
-                                                     actionListener="#{perfilController.actualizarPerfil}"
+                                                     actionListener="#{PerfilBean.actualizarPerfil}"
                                                      update="perfilForm msgs"
                                                      style="background-color:#3058a6; border:none; width:100%;" />
                                 </div>
