@@ -160,6 +160,21 @@ h2:first-child {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.leve {
+  color: green;
+  font-weight: bold;
+}
+
+.moderada {
+  color: orange;
+  font-weight: bold;
+}
+
+.grave {
+  color: red;
+  font-weight: bold;
+}
+
 /* Botón principal (Registrar/Actualizar) */
 .submit-button, #submitButton {
     background-color: #3058a6;

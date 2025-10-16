@@ -7,6 +7,7 @@ package com.mycompany.checkinc.controller;
 import com.mycompany.checkinc.entities.Anomalia;
 import com.mycompany.checkinc.entities.Usuario;
 import com.mycompany.checkinc.services.AnomaliaFacadeLocal;
+import com.mycompany.checkinc.services.ServicioCorreo;
 import com.mycompany.checkinc.services.UsuarioFacadeLocal;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
@@ -35,11 +36,32 @@ public class RegistroAnomalia implements Serializable {
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
 
+    @EJB
+    private ServicioCorreo servicioCorreo;
+    
+    
     private Integer idAnomalia;
     private String descripcion;
     private Date fechaHora;
     private String sintomas;
     private String gravedad;
+    private boolean resuelto;
+
+    public AnomaliaFacadeLocal getAnomaliaFacade() {
+        return anomaliaFacade;
+    }
+
+    public void setAnomaliaFacade(AnomaliaFacadeLocal anomaliaFacade) {
+        this.anomaliaFacade = anomaliaFacade;
+    }
+
+    public boolean isResuelto() {
+        return resuelto;
+    }
+
+    public void setResuelto(boolean resuelto) {
+        this.resuelto = resuelto;
+    }
     private List<Anomalia> registros;
     private boolean editando;
 
@@ -131,42 +153,99 @@ public class RegistroAnomalia implements Serializable {
     }
 
     public void registrar() {
-        Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(USUARIO_SESSION_KEY);
-        if (usuario == null) {
-            addMessage(FacesMessage.SEVERITY_ERROR, ERROR, "Debe iniciar sesión para registrar");
+    Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(USUARIO_SESSION_KEY);
+    if (usuario == null) {
+        addMessage(FacesMessage.SEVERITY_ERROR, ERROR, "Debe iniciar sesión para registrar una anomalía.");
+        return;
+    }
+
+    try {
+        Anomalia anomalia;
+        if (editando) {
+            // 🟡 Modo edición
+            anomalia = anomaliaFacade.find(idAnomalia);
+            if (anomalia == null) {
+                addMessage(FacesMessage.SEVERITY_ERROR, ERROR, "Registro no encontrado.");
+                return;
+            }
+            anomalia.setDescripcion(descripcion);
+            anomalia.setFechaHora(fechaHora);
+            anomalia.setSintomas(sintomas);
+            anomalia.setGravedad(gravedad);
+            anomaliaFacade.edit(anomalia);
+            addMessage(FacesMessage.SEVERITY_INFO, "Registro actualizado", "La anomalía ha sido actualizada correctamente.");
+            editando = false;
+
+        } else {
+            // 🟢 Nuevo registro
+            anomalia = new Anomalia();
+            anomalia.setDescripcion(descripcion);
+            anomalia.setFechaHora(fechaHora);
+            anomalia.setSintomas(sintomas);
+            anomalia.setGravedad(gravedad);
+            anomalia.setIdUsuario(usuario);
+
+            anomaliaFacade.create(anomalia);
+            addMessage(FacesMessage.SEVERITY_INFO, "Registro guardado", "La anomalía ha sido registrada correctamente.");
+
+            // 🚨 Enviar correo si la gravedad es moderada o grave
+            if ("moderada".equalsIgnoreCase(gravedad) || "grave".equalsIgnoreCase(gravedad)) {
+                enviarAlertaEmergencia(usuario, anomalia);
+            }
+        }
+
+        // 🔄 Recargar lista y limpiar
+        cargarRegistros(usuario);
+        limpiarFormulario();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        addMessage(FacesMessage.SEVERITY_ERROR, ERROR, "Error al registrar la anomalía: " + e.getMessage());
+    }
+}
+
+private void enviarAlertaEmergencia(Usuario usuario, Anomalia anomalia) {
+    try {
+        String correoDestino = usuario.getCorreoEmergencia();
+        if (correoDestino == null || correoDestino.trim().isEmpty()) {
+            System.out.println("⚠️ No hay correo de emergencia configurado para este usuario.");
             return;
         }
-        try {
-            if (editando) {
-                Anomalia anomalia = anomaliaFacade.find(idAnomalia);
-                System.out.println("EDITARNDONADN:" +idAnomalia);
-                if (anomalia == null) {
-                    addMessage(FacesMessage.SEVERITY_ERROR, ERROR, "Registro no encontrado");
-                    return;
-                }
-                anomalia.setDescripcion(descripcion);
-                anomalia.setFechaHora(fechaHora);
-                anomalia.setSintomas(sintomas);
-                anomalia.setGravedad(gravedad);
-                anomaliaFacade.edit(anomalia);
-                addMessage(FacesMessage.SEVERITY_INFO, "Registro actualizado", "La Anomalia ha sido actualizada");
-                editando = false;
-            } else {
-                Anomalia anomalia = new Anomalia();
-                anomalia.setDescripcion(descripcion);
-                anomalia.setFechaHora(fechaHora);
-                anomalia.setSintomas(sintomas);
-                anomalia.setGravedad(gravedad);
-                anomalia.setIdUsuario(usuario);
-                anomaliaFacade.create(anomalia);
-                addMessage(FacesMessage.SEVERITY_INFO, "Registro guardado", "El medicamento ha sido guardado correctamente");
-            }
-            cargarRegistros(usuario);
-            limpiarFormulario();
-        } catch (Exception e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, ERROR, "No se pudo procesar el registro: " + e.getMessage());
+
+        String asunto = "⚠️ Alerta de salud: " + usuario.getNombres() + " " + usuario.getApellidos();
+        String mensaje = String.format(
+                "Hola %s,\n\n"
+                + "Se ha registrado una anomalía %s en el sistema Check Inc para tu familiar %s %s.\n\n"
+                + "🕒 Fecha y hora: %s\n"
+                + "💬 Descripción: %s\n"
+                + "🤒 Síntomas: %s\n\n"
+                + "Por favor comunícate con él/ella o busca asistencia médica si es necesario.\n\n"
+                + "-- Sistema Check Inc --",
+                usuario.getNombreContactoEmergencia(),
+                anomalia.getGravedad(),
+                usuario.getNombres(),
+                usuario.getApellidos(),
+                anomalia.getFechaHora(),
+                anomalia.getDescripcion(),
+                anomalia.getSintomas()
+        );
+
+        boolean enviado = servicioCorreo.enviarCorreoAnomalia(correoDestino, asunto, mensaje);
+
+        if (enviado) {
+            System.out.println("📧 Correo de emergencia enviado a " + correoDestino);
+            addMessage(FacesMessage.SEVERITY_INFO, "Alerta enviada", "Se notificó al contacto de emergencia.");
+        } else {
+            System.err.println("❌ Error al enviar el correo a " + correoDestino);
+            addMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "No se pudo enviar la alerta al familiar.");
         }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        addMessage(FacesMessage.SEVERITY_ERROR, ERROR, "Ocurrió un error al enviar la alerta: " + e.getMessage());
     }
+}
+
 
     public void editar(Anomalia anomalia) {
         this.idAnomalia = anomalia.getIdAnomalia();

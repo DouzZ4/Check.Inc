@@ -149,6 +149,35 @@ public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuari
         }
     }
 
+    public boolean enviarCorreoAnomalia(String correoDestino, String asunto, String mensaje) {
+    File tempFile = null;
+    try {
+        tempFile = File.createTempFile("sendgrid_anomalia", ".json");
+
+        String json = "{"
+                + "\"personalizations\": [{\"to\": [{\"email\": \"" + correoDestino + "\"}]}],"
+                + "\"from\": {\"email\": \"a-cmoreno@hotmail.com\",\"name\": \"CheckInc - Sistema de Diabetes\"},"
+                + "\"subject\": \"" + asunto.replace("\"", "\\\"") + "\","
+                + "\"content\": [{\"type\": \"text/plain\",\"value\": \"" + mensaje.replace("\"", "\\\"") + "\"}]"
+                + "}";
+
+        try (OutputStreamWriter writer = new OutputStreamWriter(
+                new FileOutputStream(tempFile), StandardCharsets.UTF_8)) {
+            writer.write(json);
+        }
+
+        return ejecutarEnvioCorreo(tempFile);
+
+    } catch (Exception e) {
+        System.err.println("❌ [ERROR] No se pudo enviar correo de anomalía: " + e.getMessage());
+        e.printStackTrace();
+        return false;
+    } finally {
+        if (tempFile != null && tempFile.exists()) tempFile.delete();
+    }
+}
+
+
     // ======================================================
     // ✅ MÉTODO COMÚN: Ejecutar envío con cURL
     // ======================================================

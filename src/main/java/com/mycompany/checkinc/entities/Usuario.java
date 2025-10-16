@@ -43,7 +43,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuario.findByCorreo", query = "SELECT u FROM Usuario u WHERE u.correo = :correo"),
     @NamedQuery(name = "Usuario.findByEdad", query = "SELECT u FROM Usuario u WHERE u.edad = :edad"),
     @NamedQuery(name = "Usuario.findByTipoDiabetes", query = "SELECT u FROM Usuario u WHERE u.tipoDiabetes = :tipoDiabetes"),
-    @NamedQuery(name = "Usuario.findByEsInsulodependiente", query = "SELECT u FROM Usuario u WHERE u.esInsulodependiente = :esInsulodependiente")})
+    @NamedQuery(name = "Usuario.findByDetalleTipoDiabetes", query = "SELECT u FROM Usuario u WHERE u.detalleTipoDiabetes = :detalleTipoDiabetes"),
+    @NamedQuery(name = "Usuario.findByEsInsulodependiente", query = "SELECT u FROM Usuario u WHERE u.esInsulodependiente = :esInsulodependiente"),
+    @NamedQuery(name = "Usuario.findByTelefonoEmergencia", query = "SELECT u FROM Usuario u WHERE u.telefonoEmergencia = :telefonoEmergencia"),
+    @NamedQuery(name = "Usuario.findByCorreoEmergencia", query = "SELECT u FROM Usuario u WHERE u.correoEmergencia = :correoEmergencia"),
+    @NamedQuery(name = "Usuario.findByNombreContactoEmergencia", query = "SELECT u FROM Usuario u WHERE u.nombreContactoEmergencia = :nombreContactoEmergencia"),
+    @NamedQuery(name = "Usuario.findByParentescoContacto", query = "SELECT u FROM Usuario u WHERE u.parentescoContacto = :parentescoContacto")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -88,18 +93,23 @@ public class Usuario implements Serializable {
     @Size(max = 11)
     @Column(name = "tipoDiabetes")
     private String tipoDiabetes;
-
+    @Size(max = 50)
     @Column(name = "detalleTipoDiabetes")
     private String detalleTipoDiabetes;
-    public String getDetalleTipoDiabetes() {
-        return detalleTipoDiabetes;
-    }
-
-    public void setDetalleTipoDiabetes(String detalleTipoDiabetes) {
-        this.detalleTipoDiabetes = detalleTipoDiabetes;
-    }
     @Column(name = "esInsulodependiente")
     private Boolean esInsulodependiente;
+    @Size(max = 20)
+    @Column(name = "telefonoEmergencia")
+    private String telefonoEmergencia;
+    @Size(max = 100)
+    @Column(name = "correoEmergencia")
+    private String correoEmergencia;
+    @Size(max = 100)
+    @Column(name = "nombreContactoEmergencia")
+    private String nombreContactoEmergencia;
+    @Size(max = 50)
+    @Column(name = "parentescoContacto")
+    private String parentescoContacto;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
     private List<Alerta> alertaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
@@ -204,12 +214,52 @@ public class Usuario implements Serializable {
         this.tipoDiabetes = tipoDiabetes;
     }
 
+    public String getDetalleTipoDiabetes() {
+        return detalleTipoDiabetes;
+    }
+
+    public void setDetalleTipoDiabetes(String detalleTipoDiabetes) {
+        this.detalleTipoDiabetes = detalleTipoDiabetes;
+    }
+
     public Boolean getEsInsulodependiente() {
         return esInsulodependiente;
     }
 
     public void setEsInsulodependiente(Boolean esInsulodependiente) {
         this.esInsulodependiente = esInsulodependiente;
+    }
+
+    public String getTelefonoEmergencia() {
+        return telefonoEmergencia;
+    }
+
+    public void setTelefonoEmergencia(String telefonoEmergencia) {
+        this.telefonoEmergencia = telefonoEmergencia;
+    }
+
+    public String getCorreoEmergencia() {
+        return correoEmergencia;
+    }
+
+    public void setCorreoEmergencia(String correoEmergencia) {
+        this.correoEmergencia = correoEmergencia;
+    }
+
+    public String getNombreContactoEmergencia() {
+        return nombreContactoEmergencia;
+    }
+
+    public void setNombreContactoEmergencia(String nombreContactoEmergencia) {
+        this.nombreContactoEmergencia = nombreContactoEmergencia;
+    }
+
+    public String getParentescoContacto() {
+        return parentescoContacto;
+    }
+
+    public void setParentescoContacto(String parentescoContacto) {
+        this.parentescoContacto = parentescoContacto;
     }
 
     @XmlTransient
