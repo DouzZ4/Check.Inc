@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -61,42 +62,41 @@ public class ServicioCorreo {
             if (tempFile != null && tempFile.exists()) tempFile.delete();
         }
     }
+/**
+ * Envía un comunicado a usuarios registrados y correos externos.
+ * Retorna true si al menos 1 envío fue exitoso.
+ */
+public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuario> usuariosRegistrados, List<String> correosExternos) {
+    // Construir lista de destinatarios como strings (email + opcional nombre)
+    List<String> todos = new ArrayList<>();
 
-    // ======================================================
-    // ✅ MÉTODO 2: Enviar comunicado masivo
-    // ======================================================
-    public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuario> usuarios) {
-        if (usuarios == null || usuarios.isEmpty()) {
-            System.err.println("⚠️ [WARN] Lista de usuarios vacía. No hay destinatarios para enviar el correo masivo.");
-            return false;
+    // Agregar usuarios registrados (puedes usar su nombre para personalizar)
+    for (Usuario u : usuariosRegistrados) {
+        if (u != null && u.getCorreo() != null && !u.getCorreo().trim().isEmpty()) {
+            todos.add(u.getCorreo().trim());
         }
-
-        int exitosos = 0;
-        int fallidos = 0;
-
-        for (Usuario usuario : usuarios) {
-            try {
-                boolean enviado = enviarCorreoIndividual(
-                        usuario.getCorreo(),
-                        usuario.getNombres(),
-                        usuario.getApellidos(),
-                        asunto,
-                        mensaje
-                );
-                if (enviado) exitosos++;
-                else fallidos++;
-
-                Thread.sleep(500);
-
-            } catch (Exception e) {
-                fallidos++;
-                System.err.println("❌ [ERROR] Error enviando a " + usuario.getCorreo() + ": " + e.getMessage());
-            }
-        }
-
-        System.out.println("📊 [RESULTADO] Envíos exitosos: " + exitosos + " | Fallidos: " + fallidos);
-        return exitosos > 0;
     }
+
+    // Agregar correos externos
+    for (String c : correosExternos) {
+        if (c != null && !c.trim().isEmpty()) {
+            todos.add(c.trim());
+        }
+    }
+
+    // Enviar uno por uno (puedes optimizar para batches si quieres)
+    int exitosos = 0;
+    int fallidos = 0;
+    for (String destinatario : todos) {
+        boolean sent = enviarCorreoIndividual(destinatario, "", "", asunto, mensaje);
+        if (sent) exitosos++; else fallidos++;
+        try { Thread.sleep(300); } catch (InterruptedException ex) { /* ignore */ }
+    }
+
+    System.out.println("📊 [RESULTADO] Exitosos: " + exitosos + " Fallidos: " + fallidos);
+    return exitosos > 0;
+}
+
 
     // ======================================================
     // ✅ MÉTODO AUXILIAR: Enviar correo individual

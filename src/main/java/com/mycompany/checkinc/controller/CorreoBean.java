@@ -43,73 +43,86 @@ public class CorreoBean implements Serializable {
     // =======================
     // ENVIAR CORREO MASIVO
     // =======================
-    public void enviarCorreoMasivo() {
-        try {
-            // 1️⃣ Validación de campos obligatorios
-            if (destinatariosString == null || destinatariosString.trim().isEmpty()) {
-                mostrarMensaje(FacesMessage.SEVERITY_WARN, "Atención", "Debes ingresar al menos un destinatario.");
-                System.out.println("⚠️ [WARN] No hay destinatarios seleccionados.");
-                return;
-            }
-            if (asunto == null || asunto.trim().isEmpty()) {
-                mostrarMensaje(FacesMessage.SEVERITY_WARN, "Atención", "Debes ingresar un asunto para el correo.");
-                System.out.println("⚠️ [WARN] Asunto vacío.");
-                return;
-            }
-            if (mensaje == null || mensaje.trim().isEmpty()) {
-                mostrarMensaje(FacesMessage.SEVERITY_WARN, "Atención", "Debes ingresar un mensaje para enviar.");
-                System.out.println("⚠️ [WARN] Mensaje vacío.");
-                return;
-            }
+public void enviarCorreoMasivo() {
+    try {
+        // 1) Validaciones básicas
+        if (destinatariosString == null || destinatariosString.trim().isEmpty()) {
+            mostrarMensaje(FacesMessage.SEVERITY_WARN, "Atención", "Debes ingresar al menos un destinatario.");
+            System.out.println("⚠️ [WARN] No hay destinatarios seleccionados.");
+            return;
+        }
+        if (asunto == null || asunto.trim().isEmpty()) {
+            mostrarMensaje(FacesMessage.SEVERITY_WARN, "Atención", "Debes ingresar un asunto para el correo.");
+            System.out.println("⚠️ [WARN] Asunto vacío.");
+            return;
+        }
+        if (mensaje == null || mensaje.trim().isEmpty()) {
+            mostrarMensaje(FacesMessage.SEVERITY_WARN, "Atención", "Debes ingresar un mensaje para enviar.");
+            System.out.println("⚠️ [WARN] Mensaje vacío.");
+            return;
+        }
 
-            // 2️⃣ Procesar lista de destinatarios
-            destinatariosSeleccionados.clear();
-            for (String correo : destinatariosString.split(",")) {
-                if (!correo.trim().isEmpty()) destinatariosSeleccionados.add(correo.trim());
-            }
+        // 2) Normalizar y separar destinatarios (por comas)
+        destinatariosSeleccionados.clear();
+        for (String s : destinatariosString.split(",")) {
+            String correo = s.trim();
+            if (!correo.isEmpty()) destinatariosSeleccionados.add(correo);
+        }
 
-            if (destinatariosSeleccionados.isEmpty()) {
-                mostrarMensaje(FacesMessage.SEVERITY_WARN, "Atención", "No se detectaron correos válidos.");
-                System.out.println("⚠️ [WARN] Ningún correo válido detectado.");
-                return;
-            }
+        if (destinatariosSeleccionados.isEmpty()) {
+            mostrarMensaje(FacesMessage.SEVERITY_WARN, "Atención", "No se detectaron correos válidos.");
+            System.out.println("⚠️ [WARN] Ningún correo válido detectado.");
+            return;
+        }
 
-            // 3️⃣ Buscar usuarios por correo
-            List<Usuario> usuarios = new ArrayList<>();
-            for (String correo : destinatariosSeleccionados) {
-                Usuario u = servicioCorreo.obtenerUsuarioPorCorreo(correo);
-                if (u != null) {
-                    usuarios.add(u);
+        // 3) Separar entre usuarios del sistema y correos externos
+        List<Usuario> usuariosRegistrados = new ArrayList<>();
+        List<String> correosExternos = new ArrayList<>();
+
+        for (String correo : destinatariosSeleccionados) {
+            Usuario u = servicioCorreo.obtenerUsuarioPorCorreo(correo); // si vas a eliminar este método, sustituir por otro servicio
+            if (u != null) {
+                usuariosRegistrados.add(u);
+            } else {
+                // opcional: validar formato básico de email antes de agregar
+                if (correo.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+                    correosExternos.add(correo);
                 } else {
-                    System.out.println("⚠️ [INFO] Usuario no encontrado en BD para correo: " + correo);
+                    System.out.println("⚠️ [WARN] Formato inválido, se omitirá: " + correo);
                 }
             }
-
-            if (usuarios.isEmpty()) {
-                mostrarMensaje(FacesMessage.SEVERITY_WARN, "Atención", "Ninguno de los destinatarios está registrado en el sistema.");
-                System.out.println("⚠️ [WARN] Ningún usuario encontrado en la base de datos.");
-                return;
-            }
-
-            // 4️⃣ Enviar correo masivo
-            System.out.println("📤 [INFO] Enviando correo masivo a " + usuarios.size() + " destinatarios...");
-            boolean exito = servicioCorreo.enviarComunicadoMasivo(asunto, mensaje, usuarios);
-
-            if (exito) {
-                limpiarFormulario();
-                mostrarMensaje(FacesMessage.SEVERITY_INFO, "Éxito", "El correo se envió correctamente a los destinatarios.");
-                System.out.println("✅ [OK] Correo masivo enviado correctamente.");
-            } else {
-                mostrarMensaje(FacesMessage.SEVERITY_ERROR, "Error", "Hubo un problema al enviar los correos. Revisa el log para más detalles.");
-                System.err.println("❌ [ERROR] Falló el envío de correo masivo.");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            mostrarMensaje(FacesMessage.SEVERITY_FATAL, "Error inesperado", "Ocurrió un error al enviar los correos: " + e.getMessage());
-            System.err.println("💥 [EXCEPCIÓN] " + e.getMessage());
         }
+
+        if (usuariosRegistrados.isEmpty() && correosExternos.isEmpty()) {
+            mostrarMensaje(FacesMessage.SEVERITY_WARN, "Atención", "No hay destinatarios válidos (revisa formatos).");
+            System.out.println("⚠️ [WARN] Ningún destinatario válido tras validación.");
+            return;
+        }
+
+        // 4) Llamada al servicio: ahora aceptamos ambos tipos
+        System.out.println("📤 [INFO] Enviando a: registrados=" + usuariosRegistrados.size()
+                + " externos=" + correosExternos.size());
+
+        // NUEVO método en ServicioCorreo (ver sección 2 abajo)
+        boolean exito = servicioCorreo.enviarComunicadoMasivo(asunto, mensaje, usuariosRegistrados, correosExternos);
+
+        // 5) Resultado y mensajes al usuario
+        if (exito) {
+            limpiarFormulario();
+            mostrarMensaje(FacesMessage.SEVERITY_INFO, "Éxito", "El correo se envió correctamente a los destinatarios.");
+            System.out.println("✅ [OK] Correo masivo enviado correctamente.");
+        } else {
+            mostrarMensaje(FacesMessage.SEVERITY_ERROR, "Error", "Hubo un problema al enviar los correos. Revisa el log para más detalles.");
+            System.err.println("❌ [ERROR] Falló el envío de correo masivo.");
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        mostrarMensaje(FacesMessage.SEVERITY_FATAL, "Error inesperado", "Ocurrió un error al enviar los correos: " + e.getMessage());
+        System.err.println("💥 [EXCEPCIÓN] " + e.getMessage());
     }
+}
+
 
     // =======================
     // LIMPIAR FORMULARIO
