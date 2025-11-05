@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Importar Registros de Glucosa - CheckInc</title>
+    <style>
+        .panel-grid {
+            margin: 10px 0;
+        }
+        .result-panel {
+            margin-top: 20px;
+        }
+        .format-example {
+            background: #f8f9fa;
+            border-left: 4px solid #007ad9;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .required-field::after {
+            content: " *";
+            color: red;
+        }
+        .user-info {
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+        }
+        .warning-info {
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #ffc107;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <h:form id="formImportar" enctype="multipart/form-data">
+        <p:growl id="growlMessages" showDetail="true" life="5000" />
+        
+        <!-- Información del usuario (si está logueado) -->
+        <div class="user-info" style="width: 90%; max-width: 800px; margin: 20px auto;">
+            <h3>👤 Importando registros para tu usuario</h3>
+            <p>Los registros se asociarán automáticamente a tu cuenta.</p>
+        </div>
+        
+        <!-- Panel principal de importación -->
+        <p:panel header="Importar Archivo CSV de Glucosa" style="width: 90%; max-width: 800px; margin: 20px auto;">
+            
+            <h:panelGrid columns="1" cellpadding="10" style="width: 100%;" class="panel-grid">
+                <p:outputLabel for="fileUpload" value="Seleccione archivo CSV:" styleClass="required-field" />
+                <p:fileUpload id="fileUpload" 
+                            value="#{importarGlucosaBean.file}"
+                            mode="simple" 
+                            skinSimple="true"
+                            accept=".csv,.txt"
+                            required="true"
+                            requiredMessage="Seleccione un archivo CSV"
+                            update="formImportar" />
+            </h:panelGrid>
+            
+            <p:separator />
+            
+            <div class="button-group">
+                <p:commandButton value="📤 Importar CSV" 
+                               action="#{importarGlucosaBean.importar()}"
+                               update="growlMessages resultPanel"
+                               icon="pi pi-upload"
+                               styleClass="ui-button-primary" />
+                
+                <p:commandButton value="🗑️ Limpiar" 
+                               action="#{importarGlucosaBean.limpiar()}"
+                               update="formImportar"
+                               icon="pi pi-times"
+                               styleClass="ui-button-secondary" />
+            </div>
+        </p:panel>
+        
+        <!-- Panel de resultados -->
+        <p:panel id="resultPanel" 
+                header="Resultado de Importación" 
+                style="width: 90%; max-width: 800px; margin: 20px auto;"
+                rendered="#{importarGlucosaBean.mostrarResultado}">
+            
+            <h:panelGrid columns="2" cellpadding="10" style="width: 100%;">
+                <p:outputLabel value="Registros importados exitosamente:" />
+                <p:outputLabel value="#{importarGlucosaBean.registrosImportados}" 
+                             style="font-weight: bold; color: #28a745;" />
+                
+                <p:outputLabel value="Errores encontrados:" />
+                <p:outputLabel value="#{importarGlucosaBean.totalErrores}" 
+                             style="font-weight: bold; color: #dc3545;" />
+                
+                <p:outputLabel value="Estado:" />
+                <p:outputLabel value="#{importarGlucosaBean.mensaje}" 
+                             style="font-weight: bold;" />
+            </h:panelGrid>
+        </p:panel>
+        
+        <!-- Panel de información del formato -->
+        <p:panel header="📋 Instrucciones y Formato del Archivo CSV" 
+                style="width: 90%; max-width: 800px; margin: 20px auto;"
+                toggleable="true" collapsed="false">
+            
+            <div class="format-example">
+                <h4>Formato requerido para el archivo CSV:</h4>
+                <p>El archivo debe tener encabezados y seguir este formato exacto:</p>
+                
+                <table style="width: 100%; border-collapse: collapse; margin: 10px 0;">
+                    <thead>
+                        <tr style="background: #007ad9; color: white;">
+                            <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Columna</th>
+                            <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Tipo de Dato</th>
+                            <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Requerido</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>nivel</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">Número decimal (ej: 120.5)</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">✅ Sí</td>
+                        </tr>
+                        <tr style="background: #f8f9fa;">
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>fecha</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">Fecha (AAAA-MM-DD)</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">✅ Sí</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>momento</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">Texto (ej: 'ayuno', 'postcomida')</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">✅ Sí</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="format-example">
+                <h4>📄 Ejemplo de archivo CSV válido:</h4>
+                <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 5px; overflow-x: auto; font-family: 'Courier New', monospace;">
+nivel,fecha,momento
+98.6,2024-10-30,ayuno
+120.5,2024-10-30,postcomida
+110.2,2024-10-31,ayuno
+85.4,2024-10-31,postcomida</pre>
+            </div>
+        </p:panel>
+        
+    </h:form>
+</h:body>
+</html>

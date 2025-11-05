@@ -24,12 +24,11 @@
                     <h:panelGroup rendered="#{empty login.username}">
                         <div class="button-group">
                             <h:form>
-                                    <h:button value="Iniciar Sesión" outcome="/views/usuarios/login.xhtml" styleClass="button login" />
+                                <h:button value="Iniciar Sesión" outcome="/views/usuarios/login.xhtml" styleClass="button login" />
                             </h:form>
                             <h:form>
-                                    <h:button value="Registrarse" outcome="/views/usuarios/registrousuario.xhtml" styleClass="button register" />
+                                <h:button value="Registrarse" outcome="/views/usuarios/registrousuario.xhtml" styleClass="button register" />
                             </h:form>
-
                         </div>
                     </h:panelGroup>
 
@@ -38,6 +37,9 @@
                         <div class="button-group">
                             <h:form>
                                 <h:commandButton value="Registro Glucosa" action="/views/registros/registroGlucosa.xhtml?faces-redirect=true" styleClass="btn btn-black" />
+                            </h:form>
+                            <h:form>
+                                <h:commandButton value="Importar Registro de Glucosa" action="/views/glucosa/importarGlucosa.xhtml?faces-redirect=true" styleClass="btn btn-black" />
                             </h:form>
                             <h:form>
                                 <h:commandButton value="Registro Citas" action="/views/registros/Citas/IndexCitas.xhtml?faces-redirect=true" styleClass="btn btn-black" />

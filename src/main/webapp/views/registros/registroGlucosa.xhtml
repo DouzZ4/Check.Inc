@@ -10,6 +10,8 @@
         <ui:define name="title">Registro y Consulta de Glucosa</ui:define>
         <ui:define name="content">
         <h:outputStylesheet name="css/glucose.css"/>
+        <h:link outcome="/views/glucosa/importarGlucosa.xhtml" value="importar glucosa" />
+
             <h:messages globalOnly="true" styleClass="message-box" infoClass="message-info" errorClass="message-error"/>
             <section aria-labelledby="chart-heading" rendered="#{not empty registroGlucosa.registros}">
                 <h2 id="chart-heading">Tendencia de Glucosa</h2>

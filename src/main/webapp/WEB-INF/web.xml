@@ -15,6 +15,35 @@
         <param-value>true</param-value>
     </context-param>
     
+    <!-- Configuración para PrimeFaces File Upload -->
+    <context-param>
+        <param-name>primefaces.UPLOADER</param-name>
+        <param-value>native</param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>primefaces.FONT_AWESOME</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    
+    <!-- Tema de PrimeFaces -->
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>saga</param-value>
+    </context-param>
+    
+    <!-- Configuración de caracteres -->
+    <context-param>
+        <param-name>primefaces.UPLOAD_MAX_FILESIZE</param-name>
+        <param-value>10485760</param-value> <!-- 10MB -->
+    </context-param>
+    
+    <!-- Configuración de codificación -->
+    <context-param>
+        <param-name>javax.faces.ENCODING</param-name>
+        <param-value>UTF-8</param-value>
+    </context-param>
+    
     <!-- Servlet de JSF -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
@@ -43,6 +72,16 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     
+    <!-- Filtro para caracteres UTF-8 -->
+    <filter>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <filter-class>com.mycompany.checkinc.filters.CharacterEncodingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
     <!-- Configuración de error pages -->
     <error-page>
         <error-code>404</error-code>
@@ -53,7 +92,7 @@
         <location>/error/500.xhtml</location>
     </error-page>
     
-    <!-- MIME Types para PrimeIcons -->
+    <!-- MIME Types para PrimeIcons y fuentes -->
     <mime-mapping>
         <extension>eot</extension>
         <mime-type>application/vnd.ms-fontobject</mime-type>
@@ -69,5 +108,15 @@
     <mime-mapping>
         <extension>ttf</extension>
         <mime-type>application/x-font-ttf</mime-type>
+    </mime-mapping>
+    
+    <!-- MIME Types para archivos CSV -->
+    <mime-mapping>
+        <extension>csv</extension>
+        <mime-type>text/csv</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>txt</extension>
+        <mime-type>text/plain</mime-type>
     </mime-mapping>
 </web-app>

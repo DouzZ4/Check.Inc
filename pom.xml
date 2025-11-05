@@ -13,7 +13,8 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>        <jsf.version>2.2.20</jsf.version>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <jsf.version>2.2.20</jsf.version>
     </properties>
     
     <dependencies>
@@ -23,6 +24,13 @@
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- Apache Commons CSV para importación de archivos -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.9.0</version>
         </dependency>
 
         <!-- iText para exportar PDF -->
