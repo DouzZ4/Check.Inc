@@ -4,22 +4,22 @@ import com.mycompany.checkinc.services.ImportarGlucosaService;
 import com.mycompany.checkinc.entities.Usuario;
 import org.primefaces.model.file.UploadedFile;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
+import javax.ejb.EJB;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@Named
+@ManagedBean(name = "importarGlucosaBean")
 @ViewScoped
 public class ImportarGlucosaBean implements Serializable {
 
     private static final Logger logger = Logger.getLogger(ImportarGlucosaBean.class.getName());
 
-    @Inject
+    @EJB // ✅ Inyectar como EJB
     private ImportarGlucosaService importarGlucosaService;
 
     private UploadedFile file;
@@ -27,6 +27,10 @@ public class ImportarGlucosaBean implements Serializable {
     private boolean mostrarResultado;
     private int registrosImportados;
     private int totalErrores;
+
+    public ImportarGlucosaBean() {
+        logger.log(Level.INFO, "=== ImportarGlucosaBean CONSTRUIDO ===");
+    }
 
     public void importar() {
         logger.log(Level.INFO, "=== INICIANDO IMPORTACIÓN ===");
@@ -53,6 +57,7 @@ public class ImportarGlucosaBean implements Serializable {
 
         logger.log(Level.INFO, "Procesando archivo: {0} ({1} bytes), Usuario ID: {2}", 
                   new Object[]{file.getFileName(), file.getContent().length, idUsuario});
+        logger.log(Level.INFO, "Service disponible: {0}", (importarGlucosaService != null));
 
         try {
             ImportarGlucosaService.ImportResult result = importarGlucosaService
@@ -104,27 +109,6 @@ public class ImportarGlucosaBean implements Serializable {
                     if (id != null) {
                         return Integer.parseInt(id.toString());
                     }
-                    
-                    // Último intento: busca cualquier atributo que contenga "usuario"
-                    java.util.Enumeration<String> attributeNames = session.getAttributeNames();
-                    while (attributeNames.hasMoreElements()) {
-                        String attributeName = attributeNames.nextElement();
-                        if (attributeName.toLowerCase().contains("usuario") || 
-                            attributeName.toLowerCase().contains("user")) {
-                            Object attrValue = session.getAttribute(attributeName);
-                            if (attrValue instanceof Usuario) {
-                                return ((Usuario) attrValue).getIdUsuario();
-                            } else if (attrValue instanceof Integer) {
-                                return (Integer) attrValue;
-                            } else if (attrValue instanceof String) {
-                                try {
-                                    return Integer.parseInt((String) attrValue);
-                                } catch (NumberFormatException e) {
-                                    // Continuar buscando
-                                }
-                            }
-                        }
-                    }
                 }
             }
         } catch (Exception e) {
@@ -146,7 +130,10 @@ public class ImportarGlucosaBean implements Serializable {
 
     // Getters y Setters
     public UploadedFile getFile() { return file; }
-    public void setFile(UploadedFile file) { this.file = file; }
+    public void setFile(UploadedFile file) { 
+        this.file = file; 
+        logger.log(Level.INFO, "File seteado: {0}", (file != null ? file.getFileName() : "null"));
+    }
     
     public String getMensaje() { return mensaje; }
     public void setMensaje(String mensaje) { this.mensaje = mensaje; }

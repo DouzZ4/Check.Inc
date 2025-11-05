@@ -25,6 +25,12 @@
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>org.omnifaces</groupId>
+            <artifactId>omnifaces</artifactId>
+            <version>3.14.1</version> <!-- o la versión más reciente -->
+        </dependency>
 
         <!-- Apache Commons CSV para importación de archivos -->
         <dependency>
