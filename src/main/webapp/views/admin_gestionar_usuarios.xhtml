@@ -19,45 +19,38 @@
     <h:outputScript library="js" name="script.js"/>
 
     <style>
-        .dashboard-container {
-            padding: 20px 30px;
-        }
-        .welcome-admin {
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        .user-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .user-table th, .user-table td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
-        .user-table th {
-            background-color: #3058a6;
-            color: white;
-        }
-        .edit-btn, .save-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .edit-btn {
-            background-color: #f45501;
-            color: white;
-        }
-        .save-btn {
-            background-color: #3058a6;
-            color: white;
-        }
-        .role-select {
-            padding: 4px 8px;
-            border-radius: 4px;
+        /* Layout base (mantener colores principales) */
+        .dashboard-container { padding: 20px 30px; }
+        .welcome-admin { margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid rgba(48,88,166,0.12); }
+
+        /* Dashboard cards */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin: 18px 0 28px; }
+        .dashboard-card { background: #fff; padding: 18px; border-radius: 10px; box-shadow: 0 6px 18px rgba(16,24,40,0.06); text-align: left; border-left: 6px solid #3058a6; }
+        .dashboard-card h3 { margin:0 0 8px; color: #3058a6; font-size:1.05rem; }
+        .dashboard-card .stat-number { font-size: 1.9rem; font-weight:700; color: #f45501; display:block; }
+        .dashboard-card p { margin: 6px 0 0; color:#555; font-size:0.95rem; }
+        .card-actions { margin-top:12px; display:flex; gap:10px; }
+        .card-link { background-color:#3058a6; color:#fff; padding:8px 12px; border-radius:6px; text-decoration:none; display:inline-block; }
+        .card-link.secondary { background:#f5f5f7; color:#3058a6; border:1px solid #e6e9f2; }
+
+        /* Table improvements */
+        .user-table { width:100%; border-collapse:collapse; margin-top:12px; background:#fff; border-radius:6px; overflow:hidden; box-shadow:0 4px 12px rgba(16,24,40,0.04); }
+        .user-table th, .user-table td { padding:12px 10px; text-align:left; border-bottom:1px solid #f0f2f8; }
+        .user-table thead th { background:#f7f9ff; color:#3058a6; font-weight:600; }
+        .user-table tbody tr:hover { background:#fcfcfe; }
+
+        /* Buttons */
+        .edit-btn, .save-btn { padding:8px 12px; border-radius:6px; cursor:pointer; border:none; }
+        .edit-btn { background-color:#f45501; color:white; }
+        .save-btn { background-color:#3058a6; color:white; }
+        .cancel-button { background:#e9ecef; color:#333; padding:8px 12px; border-radius:6px; border:none; }
+
+        /* Responsive tweaks */
+        @media (max-width:720px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .user-table thead { display:none; }
+            .user-table td { display:block; width:100%; }
+            .user-table tr { margin-bottom:10px; display:block; border:1px solid #f0f2f8; border-radius:6px; }
         }
     </style>
 </h:head>
@@ -71,6 +64,8 @@
         <h1 class="welcome-admin">Gestión de Usuarios</h1>
         <p>Administra y controla la información de los usuarios del sistema. Aquí puede editar los datos, asignar roles y gestionarlos forma rápida y sencilla.</p>
 
+        <!-- (Las tarjetas fueron movidas al Panel de Inicio) -->
+
         <!-- Botón para abrir modal de correo -->
         <button type="button" class="edit-btn" onclick="abrirModal()">Enviar correos</button><br/><br/>
 
@@ -80,7 +75,7 @@
         <!-- ✅ Tabla de usuarios -->
         <h:form id="usuariosForm">
             <h:dataTable id="usuario" value="#{dashboardAdminBean.listaUsuarios}" var="usuario" 
-                         style="min-width:900px; max-width:100%;" styleClass="display">
+                         style="min-width:900px; max-width:100%;" styleClass="user-table display">
 
                 <h:column>
                     <f:facet name="header">
@@ -181,6 +176,22 @@
                 </div>
             </h:panelGroup>
         </h:form>
+        
+        <!-- Pequeños scripts para interacción del dashboard -->
+        <script>
+            // Select / deselect all checkboxes
+            document.addEventListener('DOMContentLoaded', function(){
+                var sel = document.getElementById('selectAll');
+                if(sel){
+                    sel.addEventListener('change', function(){
+                        var checks = document.querySelectorAll('.userCheckbox');
+                        checks.forEach(function(c){ c.checked = sel.checked; });
+                    });
+                }
+            });
+            function abrirModal(){ var m = document.getElementById('correoModal'); if(m) m.style.display='flex'; }
+            function cerrarModal(){ var m = document.getElementById('correoModal'); if(m) m.style.display='none'; }
+        </script>
     </main>
 </h:body>
 </html>

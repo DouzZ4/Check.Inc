@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/views/TemplateSitio.xhtml">
+    <ui:define name="title">Estadísticas - Usuarios</ui:define>
+    <ui:define name="content">
+
+        <h:form id="statsUsuariosForm">
+            <h2>Estadísticas de Usuarios</h2>
+            <p>Resumen por roles y distribución de usuarios.</p>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-top:20px;">
+                <div style="background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+                    <h3 style="color:#3058a6; margin-top:0;">Distribución por rol</h3>
+                    <canvas id="pieChart" style="max-height:300px;"></canvas>
+                </div>
+
+                <div style="background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+                    <h3 style="color:#3058a6; margin-top:0;">Resumen</h3>
+                    <p><strong>Total usuarios:</strong> <span style="font-size:1.8rem; color:#f45501; font-weight:bold;">#{statsUsuariosBean.totalUsuarios}</span></p>
+                    <p:commandButton value="Actualizar" actionListener="#{statsUsuariosBean.loadData}" update="statsUsuariosForm" style="margin-top:12px"/>
+                </div>
+            </div>
+
+            <div style="margin-top:20px; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+                <h3 style="color:#3058a6; margin-top:0;">Detalle por Rol</h3>
+                <h:dataTable value="#{statsUsuariosBean.roleDetails}" var="r" style="width:100%; border-collapse:collapse;">
+                    <h:column>
+                        <f:facet name="header">Rol</f:facet>
+                        <h:outputText value="#{r.nombreRol}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Cantidad</f:facet>
+                        <h:outputText value="#{r.cantidad}"/>
+                    </h:column>
+                </h:dataTable>
+            </div>
+        </h:form>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+        <script type="text/javascript">
+            //<![CDATA[
+            document.addEventListener('DOMContentLoaded', function() {
+                var chartDataJson = '#{statsUsuariosBean.chartDataJson}';
+                if (chartDataJson && chartDataJson.length > 0) {
+                    var chartData = JSON.parse(chartDataJson);
+                    var ctx = document.getElementById('pieChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: chartData.labels,
+                            datasets: [{
+                                data: chartData.values,
+                                backgroundColor: chartData.colors,
+                                borderColor: '#fff',
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            plugins: {
+                                legend: { position: 'bottom' }
+                            }
+                        }
+                    });
+                }
+            });
+            //]]>
+        </script>
+
+    </ui:define>
+</ui:composition>
+</html>

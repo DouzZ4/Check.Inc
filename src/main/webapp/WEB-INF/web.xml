@@ -72,16 +72,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     
-    <!-- Filtro para caracteres UTF-8 -->
-    <filter>
-        <filter-name>CharacterEncodingFilter</filter-name>
-        <filter-class>com.mycompany.checkinc.filters.CharacterEncodingFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>CharacterEncodingFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-    
     <!-- Configuración de error pages -->
     <error-page>
         <error-code>404</error-code>

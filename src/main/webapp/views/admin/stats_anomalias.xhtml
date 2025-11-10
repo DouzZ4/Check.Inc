@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/views/TemplateSitio.xhtml">
+    <ui:define name="title">Estadísticas - Anomalías</ui:define>
+    <ui:define name="content">
+
+        <h:form id="statsAnomaliasForm">
+            <h2>Estadísticas de Anomalías</h2>
+            <p>Conteo por gravedad y estado (resuelto/no resuelto).</p>
+
+            <div style="background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-top:20px;">
+                <h3 style="color:#3058a6; margin-top:0;">Por Gravedad</h3>
+                <canvas id="barChart" style="max-height:360px;"></canvas>
+            </div>
+
+            <p:commandButton value="Actualizar" actionListener="#{statsAnomaliasBean.loadData}" update="statsAnomaliasForm" style="margin-top:12px"/>
+
+            <div style="margin-top:20px; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+                <h3 style="color:#3058a6; margin-top:0;">Detalle de Anomalías</h3>
+                <h:dataTable value="#{statsAnomaliasBean.anomaliasDetalle}" var="a" style="width:100%; border-collapse:collapse;">
+                    <h:column>
+                        <f:facet name="header">Fecha</f:facet>
+                        <h:outputText value="#{a.fechaHora}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Gravedad</f:facet>
+                        <h:outputText value="#{a.gravedad}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Resuelto</f:facet>
+                        <h:outputText value="#{a.resuelto ? 'Sí' : 'No'}"/>
+                    </h:column>
+                </h:dataTable>
+            </div>
+        </h:form>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+        <script type="text/javascript">
+            //<![CDATA[
+            document.addEventListener('DOMContentLoaded', function() {
+                var chartDataJson = '#{statsAnomaliasBean.chartDataJson}';
+                if (chartDataJson && chartDataJson.length > 0) {
+                    var chartData = JSON.parse(chartDataJson);
+                    var ctx = document.getElementById('barChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: chartData.labels,
+                            datasets: [{
+                                label: 'Cantidad',
+                                data: chartData.values,
+                                backgroundColor: chartData.colors,
+                                borderColor: '#333',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            indexAxis: 'y',
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            plugins: {
+                                legend: { position: 'top' }
+                            }
+                        }
+                    });
+                }
+            });
+            //]]>
+        </script>
+
+    </ui:define>
+</ui:composition>
+</html>

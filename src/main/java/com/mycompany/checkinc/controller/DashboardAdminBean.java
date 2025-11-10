@@ -32,9 +32,14 @@ public class DashboardAdminBean implements Serializable {
     @EJB
     private RolFacadeLocal rolFacade;
 
+    @EJB
+    private com.mycompany.checkinc.services.AnomaliaFacadeLocal anomaliaFacade;
+
     private int totalUsuarios;
     private int totalRegistrosGlucosa;
     private int totalCitas;
+    private int totalAnomalias;
+    private int anomaliasSinResolver;
     private String errorStats;
 
     private List<UsuarioEditable> listaUsuarios;
@@ -46,6 +51,20 @@ public class DashboardAdminBean implements Serializable {
             totalUsuarios = usuarioFacade.count();
             totalRegistrosGlucosa = glucosaFacade.count();
             totalCitas = citaFacade.count();
+            // Anomalias (totales y sin resolver)
+            try {
+                totalAnomalias = anomaliaFacade.count();
+                int sinResolver = 0;
+                for (com.mycompany.checkinc.entities.Anomalia a : anomaliaFacade.findAll()) {
+                    if (a.getResuelto() == null || !a.getResuelto()) {
+                        sinResolver++;
+                    }
+                }
+                anomaliasSinResolver = sinResolver;
+            } catch (Exception e) {
+                totalAnomalias = 0;
+                anomaliasSinResolver = 0;
+            }
             cargarUsuarios();
             listaRoles = rolFacade.findAll();
         } catch (Exception e) {
@@ -98,6 +117,14 @@ public class DashboardAdminBean implements Serializable {
 
     public int getTotalRegistrosGlucosa() {
         return totalRegistrosGlucosa;
+    }
+
+    public int getTotalAnomalias() {
+        return totalAnomalias;
+    }
+
+    public int getAnomaliasSinResolver() {
+        return anomaliasSinResolver;
     }
 
     public int getTotalCitas() {
