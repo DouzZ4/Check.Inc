@@ -251,6 +251,40 @@ h2:first-child {
     box-shadow: 0 3px 6px rgba(40, 167, 69, 0.3);
 }
 
+/* Botón Descargar Reporte */
+.download-button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    min-width: 120px;
+    box-shadow: 0 2px 6px rgba(48, 88, 166, 0.3);
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.download-button:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(244, 85, 1, 0.3);
+}
+
+.download-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(244, 85, 1, 0.2);
+}
+
+.download-button i::before {
+    content: "⬇";
+    margin-right: 4px;
+}
+
 
 .edit-button, .ui-button.edit-button {
     background-color: #f45501 !important;

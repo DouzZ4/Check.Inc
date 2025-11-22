@@ -15,8 +15,16 @@
         <h:panelGroup rendered="#{not empty login.usuarioActual and login.usuarioActual.idRol.idRol == 2}">
             <!-- Dashboard inline sin ui:include -->
             <h:form id="patientDashboardForm">
-                <h2 class="dashboard-title">Mi Salud - Dashboard</h2>
-                <p class="dashboard-subtitle">Resumen rápido de tu control de glucosa, anomalías y próximas citas.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div>
+                        <h2 class="dashboard-title">Mi Salud - Dashboard</h2>
+                        <p class="dashboard-subtitle">Resumen rápido de tu control de glucosa, anomalías y próximas citas.</p>
+                    </div>
+                    <h:commandButton value="Descargar Reporte" 
+                                     action="#{reporteBean.exportarReporteSaludPDF}"
+                                     styleClass="download-button"
+                                     title="Descargar reporte completo de salud en PDF" />
+                </div>
 
                 <!-- Tarjetas resumen -->
                 <div class="dashboard-grid">

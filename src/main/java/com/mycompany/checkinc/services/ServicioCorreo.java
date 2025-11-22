@@ -1,6 +1,7 @@
 package com.mycompany.checkinc.services;
 
 import com.mycompany.checkinc.entities.Usuario;
+import com.mycompany.checkinc.entities.Glucosa;
 import com.mycompany.checkinc.util.Config;
 import java.io.BufferedReader;
 import java.io.File;
@@ -253,6 +254,116 @@ public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuari
         } catch (Exception e) {
             System.err.println("⚠️ [WARN] No se encontró usuario con correo: " + correo);
             return null;
+        }
+    }
+
+    // ======================================================
+    // ✅ MÉTODO: Enviar alerta de glucosa con HTML
+    // ======================================================
+    public boolean enviarAlertaGlucosaHTML(Usuario usuario, Glucosa glucosa, String estado, String rango, String recomendacion) {
+        File tempFile = null;
+        try {
+            System.out.println("📤 [INFO] Enviando alerta de glucosa a: " + usuario.getCorreo());
+
+            tempFile = File.createTempFile("sendgrid_alerta_glucosa", ".json");
+
+            // Formatear datos para el HTML
+            String nombreUsuario = usuario.getNombres() != null ? usuario.getNombres() : "Usuario";
+            String correoDestino = usuario.getCorreo();
+            String tipoDiabetes = usuario.getTipoDiabetes() != null ? usuario.getTipoDiabetes() : "No especificado";
+            String nivelGlucosaStr = String.format("%.1f", glucosa.getNivelGlucosa());
+            String fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(glucosa.getFechaHora());
+
+            // Determinar emoji según el estado
+            String emoji = "❓";
+            String colorBorde = "#FFA500";
+            switch (estado) {
+                case "CRITICO_BAJO":
+                    emoji = "🚨";
+                    colorBorde = "#FF0000";
+                    break;
+                case "CRITICO_ALTO":
+                    emoji = "🚨";
+                    colorBorde = "#FF0000";
+                    break;
+                case "BAJO":
+                    emoji = "⚠️";
+                    colorBorde = "#FF6B6B";
+                    break;
+                case "ALTO":
+                    emoji = "⚠️";
+                    colorBorde = "#FF6B6B";
+                    break;
+                case "NORMAL":
+                    emoji = "✅";
+                    colorBorde = "#28A745";
+                    break;
+            }
+
+            // Construir HTML del correo
+            String htmlBody = "<html><head><meta charset='UTF-8'></head><body style='font-family: Arial, sans-serif; line-height: 1.6; color: #333;'>"
+                    + "<div style='max-width: 600px; margin: 0 auto; background-color: #f9f9f9; border: 3px solid " + colorBorde + "; border-radius: 8px; padding: 20px;'>"
+                    + "<div style='text-align: center; margin-bottom: 20px;'>"
+                    + "<h2 style='color: " + colorBorde + "; margin: 0;'>" + emoji + " ALERTA DE GLUCOSA</h2>"
+                    + "</div>"
+                    + "<hr style='border: none; border-top: 2px solid " + colorBorde + "; margin: 20px 0;'>"
+                    + "<p><strong>Hola " + nombreUsuario + ",</strong></p>"
+                    + "<p>Se ha detectado un nivel de glucosa fuera del rango normal:</p>"
+                    + "<div style='background-color: white; border-left: 4px solid " + colorBorde + "; padding: 15px; margin: 15px 0; border-radius: 4px;'>"
+                    + "<p><strong>📊 Nivel actual:</strong> <span style='font-size: 24px; color: " + colorBorde + "; font-weight: bold;'>" + nivelGlucosaStr + " mg/dL</span></p>"
+                    + "<p><strong>📍 Estado:</strong> <span style='color: " + colorBorde + "; font-weight: bold;'>" + estado + "</span></p>"
+                    + "<p><strong>🎯 Rango recomendado:</strong> " + rango + "</p>"
+                    + "<p><strong>⏰ Hora del registro:</strong> " + fecha + "</p>"
+                    + "<p><strong>🏥 Tipo de diabetes:</strong> " + tipoDiabetes + "</p>"
+                    + "</div>"
+                    + "<div style='background-color: #FFF3CD; border-left: 4px solid #FF9800; padding: 15px; margin: 15px 0; border-radius: 4px;'>"
+                    + "<p><strong>💡 RECOMENDACIÓN:</strong></p>"
+                    + "<p>" + recomendacion + "</p>"
+                    + "</div>"
+                    + "<hr style='border: none; border-top: 1px solid #ddd; margin: 20px 0;'>"
+                    + "<p style='font-size: 12px; color: #999;'>"
+                    + "Este es un mensaje automático del sistema CheckInc. Por favor, no respondas a este correo. "
+                    + "Si necesitas contactar con soporte, accede a tu panel de CheckInc."
+                    + "</p>"
+                    + "<p style='text-align: center; margin-top: 20px;'>"
+                    + "<a href='http://localhost:8080/CheckInc' style='background-color: " + colorBorde + "; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block;'>Ir al Dashboard</a>"
+                    + "</p>"
+                    + "</div>"
+                    + "</body></html>";
+
+            // Escapar comillas y newlines para JSON
+            htmlBody = htmlBody.replace("\"", "\\\"").replace("\n", "");
+
+            // Construir JSON para SendGrid con soporte para HTML
+            String json = "{"
+                    + "\"personalizations\": [{\"to\": [{\"email\": \"" + correoDestino + "\",\"name\": \"" + nombreUsuario + "\"}]}],"
+                    + "\"from\": {\"email\": \"a-cmoreno@hotmail.com\",\"name\": \"CheckInc - Sistema de Diabetes\"},"
+                    + "\"subject\": \"" + emoji + " ALERTA DE GLUCOSA - Nivel " + estado + "\","
+                    + "\"content\": [{\"type\": \"text/html\",\"value\": \"" + htmlBody + "\"}]"
+                    + "}";
+
+            // Escritura segura con UTF-8
+            try (OutputStreamWriter writer = new OutputStreamWriter(
+                    new FileOutputStream(tempFile), StandardCharsets.UTF_8)) {
+                writer.write(json.replace("\\\\n", "\\n"));
+            }
+
+            boolean enviado = ejecutarEnvioCorreo(tempFile);
+
+            if (enviado) {
+                System.out.println("✅ [OK] Alerta de glucosa enviada correctamente a " + correoDestino);
+            } else {
+                System.err.println("⚠️ [WARN] La alerta de glucosa no pudo ser enviada a " + correoDestino);
+            }
+
+            return enviado;
+
+        } catch (Exception e) {
+            System.err.println("❌ [ERROR] Falló el envío de alerta de glucosa: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (tempFile != null && tempFile.exists()) tempFile.delete();
         }
     }
 

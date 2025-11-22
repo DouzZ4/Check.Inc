@@ -12,6 +12,7 @@
     <class>com.mycompany.checkinc.entities.Recordatorio</class>
     <class>com.mycompany.checkinc.entities.Usuario</class>
     <class>com.mycompany.checkinc.entities.Alerta</class>
+    <class>com.mycompany.checkinc.entities.NivelesGlucosa</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>

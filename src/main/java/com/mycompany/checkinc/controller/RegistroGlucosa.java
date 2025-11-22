@@ -2,8 +2,12 @@ package com.mycompany.checkinc.controller;
 
 import com.mycompany.checkinc.entities.Glucosa;
 import com.mycompany.checkinc.entities.Usuario;
+import com.mycompany.checkinc.entities.Anomalia;
 import com.mycompany.checkinc.services.GlucosaFacadeLocal;
 import com.mycompany.checkinc.services.UsuarioFacadeLocal;
+import com.mycompany.checkinc.services.NivelesGlucosaFacadeLocal;
+import com.mycompany.checkinc.services.AnomaliaFacadeLocal;
+import com.mycompany.checkinc.services.ServicioCorreo;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +31,15 @@ public class RegistroGlucosa implements Serializable {
     
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
+    
+    @EJB
+    private NivelesGlucosaFacadeLocal nivelesGlucosaFacade;
+    
+    @EJB
+    private AnomaliaFacadeLocal anomaliaFacade;
+    
+    @EJB
+    private ServicioCorreo servicioCorreo;
     
     private Integer id;
     private Double nivelGlucosa;
@@ -294,6 +307,28 @@ public class RegistroGlucosa implements Serializable {
                 glucosa.setMomentoDia(momentoDia);
                 glucosaFacade.create(glucosa);
                 addMessage(FacesMessage.SEVERITY_INFO, "Registro guardado", "El registro ha sido guardado correctamente");
+                
+                // 🆕 Determinar estado de glucosa y enviar alerta si es necesario
+                Float nivelFloat = nivelGlucosa.floatValue();
+                String estado = nivelesGlucosaFacade.determinarEstadoGlucosa(nivelFloat, usuario);
+                
+                // Enviar alerta solo si está fuera de rango normal
+                if (!estado.equals("NORMAL")) {
+                    try {
+                        String rango = nivelesGlucosaFacade.obtenerRangoTexto(usuario);
+                        String recomendacion = nivelesGlucosaFacade.obtenerRecomendacion(estado);
+                        boolean alertaEnviada = servicioCorreo.enviarAlertaGlucosaHTML(usuario, glucosa, estado, rango, recomendacion);
+                        System.out.println("📧 Alerta de glucosa enviada: " + usuario.getCorreo() + " - Estado: " + estado);
+                        
+                        // 🆕 Si es CRÍTICO, crear registro de Anomalía
+                        if (estado.equals("CRITICO_ALTO") || estado.equals("CRITICO_BAJO")) {
+                            crearAnomaliaGlucosa(usuario, glucosa, estado, alertaEnviada, usuario.getCorreo());
+                        }
+                    } catch (Exception ex) {
+                        System.err.println("❌ Error al enviar alerta: " + ex.getMessage());
+                        ex.printStackTrace();
+                    }
+                }
             }
             cargarRegistros(usuario);
             limpiarFormulario();
@@ -339,5 +374,50 @@ public class RegistroGlucosa implements Serializable {
     private void addMessage(FacesMessage.Severity severity, String summary, String detail) {
         FacesContext.getCurrentInstance().addMessage(null, 
             new FacesMessage(severity, summary, detail));
+    }
+    
+    /**
+     * Crea un registro de anomalía cuando se detecta glucosa crítica.
+     * Incluye información sobre la alerta enviada.
+     */
+    private void crearAnomaliaGlucosa(Usuario usuario, Glucosa glucosa, String estado, boolean alertaEnviada, String correoAlerta) {
+        try {
+            Anomalia anomalia = new Anomalia();
+            anomalia.setIdUsuario(usuario);
+            anomalia.setFechaHora(new Date());
+            
+            // Construcción de descripción detallada
+            String nivelStr = String.format("%.1f", glucosa.getNivelGlucosa());
+            String descripcion = "ALERTA GLUCOSA " + estado + "\n"
+                    + "Nivel de glucosa: " + nivelStr + " mg/dL\n"
+                    + "Tipo: " + estado + "\n"
+                    + "Timestamp: " + new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(glucosa.getFechaHora());
+            
+            // Si se envió alerta, agregar información
+            if (alertaEnviada) {
+                descripcion += "\n✅ Notificación enviada a: " + correoAlerta;
+            } else {
+                descripcion += "\n❌ Falló el envío de notificación";
+            }
+            
+            anomalia.setDescripcion(descripcion);
+            
+            // Síntomas relacionados con glucosa crítica
+            String sintomas = estado.equals("CRITICO_BAJO") 
+                ? "Mareos, confusión, temblores, sudoración, palpitaciones"
+                : "Visión borrosa, sed extrema, micción frecuente, fatiga";
+            anomalia.setSintomas(sintomas);
+            
+            // Definir gravedad según tipo de anomalía
+            anomalia.setGravedad("ALTA");
+            anomalia.setResuelto(false);
+            
+            anomaliaFacade.create(anomalia);
+            System.out.println("✅ Anomalía registrada: " + estado + " para usuario " + usuario.getIdUsuario());
+            
+        } catch (Exception e) {
+            System.err.println("❌ Error al crear anomalía: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

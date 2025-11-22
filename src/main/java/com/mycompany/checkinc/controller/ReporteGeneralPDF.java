@@ -20,6 +20,12 @@ import com.mycompany.checkinc.services.MedicamentoFacadeLocal;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
 import org.jfree.chart.ChartFactory;
@@ -30,6 +36,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
  * Genera el reporte completo PDF del paciente con glucosa, citas y medicamentos.
+ * Incluye gráficos hermosos y estructura organizada por meses.
  */
 public class ReporteGeneralPDF extends ReporteBasePDF {
 
@@ -72,12 +79,12 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
     }
 
     /**
-     * Genera la sección de glucosa con gráfico y tabla.
+     * Genera la sección de glucosa con gráfico hermoso y tabla organizada por mes.
      */
     private void generarSeccionGlucosa(Document document, List<Glucosa> glucosaList) throws DocumentException {
         agregarSeccion(document, "Registros de Glucosa");
 
-        // Gráfico de tendencia
+        // Gráfico de tendencia hermoso
         try {
             Image chartImage = crearGraficoGlucosa(glucosaList);
             if (chartImage != null) {
@@ -94,46 +101,133 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
             // Continuar sin gráfico si hay error
         }
 
-        // Tabla de glucosa
-        PdfPTable table = new PdfPTable(3);
-        table.setWidthPercentage(100);
-        table.setSpacingBefore(10f);
-        table.addCell(crearCeldaHeader("Nivel (mg/dL)"));
-        table.addCell(crearCeldaHeader("Fecha y Hora"));
-        table.addCell(crearCeldaHeader("Momento del Día"));
+        // Agrupar por mes (usando clave año*100+mes para ordenar cronológicamente)
+        Map<Integer, List<Glucosa>> agrupadoPorMes = glucosaList.stream()
+            .collect(Collectors.groupingBy(g -> {
+                Calendar c = Calendar.getInstance();
+                c.setTime(g.getFechaHora());
+                return c.get(Calendar.YEAR) * 100 + (c.get(Calendar.MONTH) + 1);
+            }));
 
+        // Ordenar claves descendentes (meses más recientes primero)
+        Map<Integer, List<Glucosa>> ordenadoPorMes = agrupadoPorMes.entrySet().stream()
+            .sorted(Map.Entry.<Integer, List<Glucosa>>comparingByKey(Comparator.reverseOrder()))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                    (a, b) -> a, LinkedHashMap::new));
+
+        SimpleDateFormat sdfMes = new SimpleDateFormat("MMMM yyyy", new Locale("es", "ES"));
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        for (Glucosa g : glucosaList) {
-            table.addCell(crearCeldaData(String.valueOf(g.getNivelGlucosa())));
-            table.addCell(crearCeldaData(sdf.format(g.getFechaHora())));
-            table.addCell(crearCeldaData(g.getMomentoDia() != null ? g.getMomentoDia() : "N/A"));
+
+        for (Map.Entry<Integer, List<Glucosa>> entrada : ordenadoPorMes.entrySet()) {
+            try {
+                int clave = entrada.getKey();
+                int year = clave / 100;
+                int month = clave % 100;
+
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.YEAR, year);
+                cal.set(Calendar.MONTH, month - 1);
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+
+                String tituloMes = sdfMes.format(cal.getTime());
+                Paragraph mesTitle = new Paragraph(tituloMes, fontSubtitulo);
+                mesTitle.setSpacingBefore(10f);
+                mesTitle.setSpacingAfter(5f);
+                document.add(mesTitle);
+
+                // Ordenar registros del mes por fecha descendente
+                List<Glucosa> listaMes = entrada.getValue().stream()
+                    .sorted((g1, g2) -> g2.getFechaHora().compareTo(g1.getFechaHora()))
+                    .collect(Collectors.toList());
+
+                PdfPTable table = new PdfPTable(3);
+                table.setWidthPercentage(100);
+                table.setSpacingBefore(5f);
+                table.addCell(crearCeldaHeader("Nivel (mg/dL)"));
+                table.addCell(crearCeldaHeader("Fecha y Hora"));
+                table.addCell(crearCeldaHeader("Momento del Día"));
+
+                for (Glucosa g : listaMes) {
+                    table.addCell(crearCeldaData(String.valueOf(g.getNivelGlucosa())));
+                    table.addCell(crearCeldaData(sdf.format(g.getFechaHora())));
+                    table.addCell(crearCeldaData(g.getMomentoDia() != null ? g.getMomentoDia() : "N/A"));
+                }
+                document.add(table);
+                document.add(new Paragraph(" "));
+            } catch (DocumentException ex) {
+                ex.printStackTrace();
+            }
         }
-        document.add(table);
-        document.add(new Paragraph(" "));
     }
 
     /**
-     * Genera la sección de citas.
+     * Genera la sección de citas médicas.
      */
     private void generarSeccionCitas(Document document, List<Cita> citaList) throws DocumentException {
         agregarSeccion(document, "Citas Médicas");
 
-        PdfPTable table = new PdfPTable(3);
-        table.setWidthPercentage(100);
-        table.setSpacingBefore(10f);
-        table.addCell(crearCeldaHeader("Fecha"));
-        table.addCell(crearCeldaHeader("Hora"));
-        table.addCell(crearCeldaHeader("Motivo"));
+        // Agrupar citas por mes (año*100+mes)
+        Map<Integer, List<Cita>> agrupado = citaList.stream()
+            .collect(Collectors.groupingBy(c -> {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(c.getFecha());
+                return cal.get(Calendar.YEAR) * 100 + (cal.get(Calendar.MONTH) + 1);
+            }));
+
+        Map<Integer, List<Cita>> ordenado = agrupado.entrySet().stream()
+            .sorted(Map.Entry.<Integer, List<Cita>>comparingByKey(Comparator.reverseOrder()))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                    (a, b) -> a, LinkedHashMap::new));
 
         SimpleDateFormat sdfFecha = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm");
-        for (Cita c : citaList) {
-            table.addCell(crearCeldaData(sdfFecha.format(c.getFecha())));
-            table.addCell(crearCeldaData(sdfHora.format(c.getHora())));
-            table.addCell(crearCeldaData(c.getMotivo()));
+        SimpleDateFormat sdfMes = new SimpleDateFormat("MMMM yyyy", new Locale("es", "ES"));
+
+        for (Map.Entry<Integer, List<Cita>> entrada : ordenado.entrySet()) {
+            try {
+                int clave = entrada.getKey();
+                int year = clave / 100;
+                int month = clave % 100;
+
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.YEAR, year);
+                cal.set(Calendar.MONTH, month - 1);
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+
+                Paragraph mesTitle = new Paragraph(sdfMes.format(cal.getTime()), fontSubtitulo);
+                mesTitle.setSpacingBefore(8f);
+                mesTitle.setSpacingAfter(6f);
+                document.add(mesTitle);
+
+                // Ordenar por fecha/hora ascendente dentro del mes
+                List<Cita> listaMes = entrada.getValue().stream()
+                    .sorted((a, b) -> {
+                        int cmp = a.getFecha().compareTo(b.getFecha());
+                        if (cmp != 0) return cmp;
+                        return a.getHora().compareTo(b.getHora());
+                    })
+                    .collect(Collectors.toList());
+
+                PdfPTable table = new PdfPTable(4);
+                table.setWidthPercentage(100);
+                table.setSpacingBefore(5f);
+                table.addCell(crearCeldaHeader("Fecha"));
+                table.addCell(crearCeldaHeader("Hora"));
+                table.addCell(crearCeldaHeader("Motivo"));
+                table.addCell(crearCeldaHeader("Estado"));
+
+                for (Cita c : listaMes) {
+                    table.addCell(crearCeldaData(sdfFecha.format(c.getFecha())));
+                    table.addCell(crearCeldaData(sdfHora.format(c.getHora())));
+                    table.addCell(crearCeldaData(c.getMotivo()));
+                    table.addCell(crearCeldaData(c.getEstado() != null ? c.getEstado() : "N/A"));
+                }
+                document.add(table);
+                document.add(new Paragraph(" "));
+            } catch (DocumentException ex) {
+                ex.printStackTrace();
+            }
         }
-        document.add(table);
-        document.add(new Paragraph(" "));
     }
 
     /**
@@ -163,14 +257,14 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
     }
 
     /**
-     * Crea gráfico de tendencia de glucosa (últimos 7 días).
+     * Crea gráfico hermoso de tendencia de glucosa (últimos 7 días).
      */
-    private Image crearGraficoGlucosa(List<Glucosa> glucosaList) {
+    protected Image crearGraficoGlucosa(List<Glucosa> glucosaList) {
         try {
             DefaultCategoryDataset dataset = new DefaultCategoryDataset();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM");
 
-            // Filtrar últimos 7 días
+            // Filtrar últimos 7 días y agrupar por día (promedio por día)
             java.util.Date hoy = new java.util.Date();
             java.util.Calendar tempCal = java.util.Calendar.getInstance();
             tempCal.setTime(hoy);
@@ -179,15 +273,32 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
 
             List<Glucosa> registrosSemanales = glucosaList.stream()
                 .filter(g -> g.getFechaHora().after(ultimaSemana))
-                .sorted((g1, g2) -> g1.getFechaHora().compareTo(g2.getFechaHora()))
                 .collect(java.util.stream.Collectors.toList());
 
             if (registrosSemanales.isEmpty()) {
                 return null;
             }
 
-            for (Glucosa g : registrosSemanales) {
-                dataset.addValue(g.getNivelGlucosa(), "Nivel de Glucosa", sdf.format(g.getFechaHora()));
+            // Agrupar por día (dd/MM) y calcular promedio para cada día
+            Map<String, Double> promedioPorDia = registrosSemanales.stream()
+                .collect(Collectors.groupingBy(g -> sdf.format(g.getFechaHora()),
+                        Collectors.averagingDouble(g -> g.getNivelGlucosa())));
+
+            // Ordenar por fecha cronológica
+            List<String> diasOrdenados = promedioPorDia.keySet().stream()
+                .sorted((d1, d2) -> {
+                    try {
+                        java.util.Date dd1 = sdf.parse(d1);
+                        java.util.Date dd2 = sdf.parse(d2);
+                        return dd1.compareTo(dd2);
+                    } catch (Exception ex) {
+                        return d1.compareTo(d2);
+                    }
+                })
+                .collect(java.util.stream.Collectors.toList());
+
+            for (String dia : diasOrdenados) {
+                dataset.addValue(promedioPorDia.get(dia), "Nivel de Glucosa", dia);
             }
 
             JFreeChart lineChart = ChartFactory.createLineChart(
@@ -200,6 +311,7 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
                     true,
                     false);
 
+            // Personalización del gráfico
             lineChart.setBackgroundPaint(java.awt.Color.white);
 
             org.jfree.chart.plot.CategoryPlot plot = lineChart.getCategoryPlot();
