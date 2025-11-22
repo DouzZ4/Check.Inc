@@ -920,11 +920,11 @@ table td:last-child {
 }
 
 .table-header-overlay {
-    background: #f5f5f5;
+    background: transparent;
     padding: 8px;
     text-align: left;
     border-bottom: 1px solid #e6e6e6;
-    color: #3058a6;
+    color: white;
 }
 
 .severity-grave { color: #e53e3e; font-weight: bold; }

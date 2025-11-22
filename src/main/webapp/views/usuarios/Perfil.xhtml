@@ -33,22 +33,40 @@
 
             <div class="perfil-form">
 
-                <!-- Columna izquierda -->
-                <div>
-                    <h3 style="color:#3058a6;">Datos actuales</h3>
-                    <p><b>Nombre:</b> #{PerfilBean.usuario.nombres}</p>
-                    <p><b>Apellido:</b> #{PerfilBean.usuario.apellidos}</p>
-                    <p><b>Correo:</b> #{PerfilBean.usuario.correo}</p>
-                    <p><b>Detalle tipo de diabetes:</b> #{PerfilBean.usuario.detalleTipoDiabetes}</p>
-                    <p><b>Tipo de Diabetes:</b> #{PerfilBean.usuario.tipoDiabetes}</p>
-                    <p><b>Insulodependiente:</b>
-                        <h:outputText value="#{PerfilBean.usuario.esInsulodependiente ? 'Sí' : 'No'}" />
-                    </p>
+                <!-- Columna izquierda: Datos actuales (solo lectura) -->
+                <div class="perfil-section">
+                    <h3>Datos actuales</h3>
+                    <div class="perfil-data-item">
+                        <b>Nombre:</b>
+                        <p>#{PerfilBean.usuario.nombres}</p>
+                    </div>
+                    <div class="perfil-data-item">
+                        <b>Apellido:</b>
+                        <p>#{PerfilBean.usuario.apellidos}</p>
+                    </div>
+                    <div class="perfil-data-item">
+                        <b>Correo:</b>
+                        <p>#{PerfilBean.usuario.correo}</p>
+                    </div>
+                    <div class="perfil-data-item">
+                        <b>Detalle tipo de diabetes:</b>
+                        <p>#{PerfilBean.usuario.detalleTipoDiabetes}</p>
+                    </div>
+                    <div class="perfil-data-item">
+                        <b>Tipo de Diabetes:</b>
+                        <p>#{PerfilBean.usuario.tipoDiabetes}</p>
+                    </div>
+                    <div class="perfil-data-item">
+                        <b>Insulodependiente:</b>
+                        <p>
+                            <h:outputText value="#{PerfilBean.usuario.esInsulodependiente ? 'Sí' : 'No'}" />
+                        </p>
+                    </div>
                 </div>
 
-                <!-- Columna derecha -->
-                <div>
-                    <h3 style="color:#3058a6;">Editar información</h3>
+                <!-- Columna derecha: Editar información -->
+                <div class="perfil-section">
+                    <h3>Editar información</h3>
 
                     <div class="p-fluid">
                         <div class="p-field">

@@ -1,172 +1,323 @@
 /* === NAVBAR SPECIFIC STYLES === */
 /* Global body/main styles are in resources/css/styles.css */
+
 .navbar {
-    background-color: #3058a6; /* Azul Principal */
+    background-color: #3058a6;
     color: white;
-    padding: 10px 0; /* Padding vertical, horizontal gestionado por container */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 12px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     width: 100%;
-    justify-content: space-between;
-    flex-wrap: wrap; /* Para responsividad */
-    gap: 15px; /* Espacio entre grupos de elementos */
+    position: relative;
+    z-index: 1000;
 }
 
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* === BRANDING (Logo + Título) === */
 .navbar-branding {
     display: flex;
     align-items: center;
-    /* Quitar el enlace de branding del flujo normal si es necesario */
+    gap: 8px;
+    flex-shrink: 0;
+    order: 1;
 }
 
-.navbar-branding a { /* Estilo para el enlace del logo/título */
+.navbar-branding a {
     text-decoration: none;
     display: flex;
     align-items: center;
-    color: white; /* Asegurar que el título sea blanco */
+    gap: 8px;
+    color: white;
+    transition: opacity 0.3s ease;
 }
+
+.navbar-branding a:hover {
+    opacity: 0.85;
+}
+
 .logo-navbar {
-    height: 50px !important; /* O el tamaño que necesites */
-    width: auto; /* Para mantener proporción */
-    max-height: 50px;
-    margin-right: 10px;
+    height: 45px;
+    width: auto;
+    max-height: 45px;
+    filter: drop-shadow(1px 1px 0 rgba(255,255,255,0.3));
+    border-radius: 4px;
+    padding: 2px;
+    box-sizing: border-box;
     filter:
     drop-shadow(1px 1px 0 white) /* Sombra abajo-derecha */
     drop-shadow(-1px -1px 0 white) /* Sombra arriba-izquierda */
     drop-shadow(1px -1px 0 white) /* Sombra arriba-derecha */
-    drop-shadow(-1px 1px 0 white); /* Sombra abajo-izquierda */
-  }
-
-.navbar-branding h1 {
-    font-size: 1.4em;
-    margin: 0;
-    font-weight: bold;
-    white-space: nowrap; /* Evitar que el título se parta */
+    drop-shadow(-1px 1px 0 white);/* Sombra abajo-izquierda */
 }
 
+.navbar-branding h1 {
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: 700;
+    white-space: nowrap;
+    letter-spacing: 1px;
+}
+
+/* === LINKS (Menú principal) === */
 .navbar-links {
     display: flex;
     align-items: center;
-    gap: 20px; /* Espacio entre enlaces de navegación */
-    flex-grow: 1; /* Ocupa espacio si es necesario */
-    justify-content: center; /* Centrar enlaces principales */
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    flex-grow: 1;
+    justify-content: center;
+    order: 2;
 }
 
-.navbar-links a {
+.navbar-links li {
+    display: inline-flex;
+    align-items: center;
+}
+
+.navbar-links a,
+.navbar-links .nav-link {
     color: white;
     text-decoration: none;
-    font-weight: 500; /* Un poco menos grueso que bold */
-    padding: 5px 0;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 8px 0;
     position: relative;
     transition: color 0.3s ease;
+    white-space: nowrap;
 }
-/* Efecto hover sutil para enlaces */
-.navbar-links a::after {
+
+/* Efecto subrayado hover para enlaces */
+.navbar-links a::after,
+.navbar-links .nav-link::after {
     content: '';
     position: absolute;
     width: 0;
     height: 2px;
-    bottom: 0;
+    bottom: -4px;
     left: 50%;
-    background-color: #f45501; /* Naranja */
+    background-color: #f45501;
     transition: all 0.3s ease-out;
     transform: translateX(-50%);
 }
-.navbar-links a:hover::after {
+
+.navbar-links a:hover::after,
+.navbar-links .nav-link:hover::after {
     width: 100%;
 }
-.navbar-links a:hover {
-     color: #f0f4f8; /* Ligeramente más claro al pasar el ratón */
+
+.navbar-links a:hover,
+.navbar-links .nav-link:hover {
+    color: #ffd699;
 }
 
+/* === USER INFO SECTION === */
 .navbar-user-info {
     display: flex;
     align-items: center;
-    gap: 10px;
-    display: inline-block;
-    padding: 8px 18px; /* Ajusta padding */
-    margin: 0; /* Quitar margen por defecto si se usa en flex/grid */
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 0.9em; /* Ligeramente más pequeño en navbar */
-    border: none;
-    transition: background-color 0.3s ease, transform 0.1s ease;
-    white-space: nowrap;/* Espacio entre "Hola, X" y botones */
+    gap: 12px;
+    flex-shrink: 0;
+    order: 3;
 }
 
-.navbar-user-info .welcome-message {
-    font-size: 0.95em;
-    margin-right: 5px; /* Pequeño espacio antes del botón */
+.welcome-message {
+    font-weight: 600;
+    font-size: 0.9rem;
     white-space: nowrap;
 }
 
-.button-login, .button-register {
-            display: inline-block;
-            padding: 12px 25px;
-            margin: 10px 5px;
-            background-color: #f45501; /* Naranja Principal */
-            color: white !important; /* Forzar color blanco en enlace */
-            text-decoration: none;
-            border-radius: 5px;
-            border: none; /* Quitar borde si se usa en <button> */
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-        .button:hover {
-            background-color: #d84a00; /* Naranja más oscuro */
-            text-decoration: none;
-        }
-        /* Botón secundario (ej. Registrarse si ya hay Iniciar Sesión) */
-        .button-secondary {
-             background-color: #5a6268; /* Gris */
-        }
-         .button-secondary:hover {
-             background-color: #4a4f54;
-         }
-.button-login:hover, .button-register:hover {
-    background-color: #d84a00; /* Naranja oscuro */
-}
-
-.button-logout {
-    display: inline-block;
-    padding: 8px 16px;
-    background-color: #6c757d; /* Gray color */
+/* === BUTTONS === */
+.button-login,
+.button-register {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    background-color: #f45501;
     color: white !important;
-    text-decoration: none !important; /* Remove underline */
+    text-decoration: none;
     border-radius: 5px;
     border: none;
     cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-    margin-left: 10px;
-}
-.button-logout:hover {
-    background-color: #dc3545 !important; /* Red color on hover */
-    text-decoration: none !important;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
-/* --- Responsividad Básica para Navbar --- */
+.button-login:hover,
+.button-register:hover {
+    background-color: #d84a00;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(244, 85, 1, 0.3);
+}
+
+.button-logout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    background-color: #6c757d;
+    color: white !important;
+    text-decoration: none !important;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.button-logout:hover {
+    background-color: #dc3545;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* Formularios inline en navbar */
+.navbar-user-info form {
+    display: inline-flex;
+    margin: 0;
+}
+
+.navbar-user-info .ui-button {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 992px) {
+    .navbar-container {
+        gap: 15px;
+        padding: 0 15px;
+    }
+
+    .navbar-links {
+        gap: 18px;
+    }
+
+    .navbar-links a,
+    .navbar-links .nav-link {
+        font-size: 0.9rem;
+        padding: 6px 0;
+    }
+
+    .button-login,
+    .button-register {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+    }
+}
+
 @media (max-width: 768px) {
     .navbar-container {
-        flex-direction: column; /* Apilar elementos verticalmente */
-        align-items: stretch; /* Estirar elementos */
         gap: 10px;
+        flex-wrap: wrap;
+        align-items: flex-start;
     }
-    .navbar-links {
-        justify-content: center; /* Centrar enlaces */
-        order: 3; /* Poner enlaces al final */
-        flex-wrap: wrap; /* Permitir que los enlaces se ajusten */
-        padding: 10px 0;
-        gap: 15px;
-    }
-     .navbar-user-info {
-        justify-content: center; /* Centrar info de usuario */
-        order: 2; /* Poner info de usuario en medio */
-    }
+
     .navbar-branding {
-         justify-content: center; /* Centrar logo y título */
-         order: 1;
+        order: 1;
+        width: 100%;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .navbar-branding h1 {
+        font-size: 1.3rem;
+    }
+
+    .logo-navbar {
+        height: 40px;
+        border: 1.5px solid white;
+        padding: 1px;
+    }
+
+    .navbar-links {
+        order: 2;
+        width: 100%;
+        flex-direction: column;
+        gap: 8px;
+        justify-content: flex-start;
+        padding: 10px 0;
+        flex-grow: unset;
+    }
+
+    .navbar-links li {
+        width: 100%;
+    }
+
+    .navbar-links a,
+    .navbar-links .nav-link {
+        display: block;
+        padding: 10px 8px;
+        font-size: 0.95rem;
+    }
+
+    .navbar-links a::after,
+    .navbar-links .nav-link::after {
+        display: none;
+    }
+
+    .navbar-user-info {
+        order: 3;
+        width: 100%;
+        flex-direction: column;
+        gap: 8px;
+        padding-top: 8px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .welcome-message {
+        width: 100%;
+        padding: 8px 0;
+        text-align: left;
+    }
+
+    .button-login,
+    .button-register,
+    .button-logout {
+        width: 100%;
+        padding: 12px 10px;
+        font-size: 0.95rem;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-container {
+        padding: 0 10px;
+    }
+
+    .navbar-branding h1 {
+        font-size: 1.1rem;
+        letter-spacing: 0;
+    }
+
+    .logo-navbar {
+        height: 35px;
+        border: 1px solid white;
+        padding: 0;
+    }
+
+    .navbar-links a,
+    .navbar-links .nav-link {
+        font-size: 0.9rem;
+        padding: 8px 4px;
+    }
+
+    .welcome-message {
+        font-size: 0.85rem;
     }
 }

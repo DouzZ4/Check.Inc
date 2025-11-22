@@ -16,7 +16,7 @@
         </div>
 
         <!-- Enlaces del menú principal -->
-        <ul class="navbar-links" style="list-style:none;display:flex;gap:18px;margin:0;padding:0;align-items:center;">
+        <ul class="navbar-links">
             <!-- Mostrar "Inicio" solo si NO hay sesión activa -->
             <li rendered="#{empty login.usuarioActual}"><h:link outcome="/index" value="Inicio" styleClass="nav-link"/></li>
 
@@ -30,7 +30,6 @@
 
             <!-- Si el usuario está autenticado y es PACIENTE -->
             <ui:fragment rendered="#{not empty login.usuarioActual and login.usuarioActual.idRol.idRol == 2}">
-                <li><h:link outcome="/index" value="Mi Dashboard" styleClass="nav-link"/></li>
                 <li><h:link outcome="/views/registros/Citas/IndexCitas.xhtml" value="Citas" styleClass="nav-link"/></li>
                 <li><h:link outcome="/views/registros/Medicamentos/IndexMedicamentos.xhtml" value="Medicamentos" styleClass="nav-link"/></li>
                 <li><h:link outcome="/views/registros/registroGlucosa.xhtml" value="Glucosa" styleClass="nav-link"/></li>
@@ -44,20 +43,18 @@
         </ul>
 
         <!-- Área de usuario (login/logout) -->
-        <div class="navbar-user-info" style="display:flex;align-items:center;gap:10px;">
+        <div class="navbar-user-info">
             <h:panelGroup rendered="#{not empty login.usuarioActual}">
-                <span class="welcome-message" style="font-weight:bold;">Hola, #{login.usuarioActual.nombres}</span>
+                <span class="welcome-message">Hola, #{login.usuarioActual.nombres}</span>
 
-                <h:form styleClass="logout-form" style="display:inline;">
+                <h:form styleClass="logout-form">
                     <h:commandButton value="Cerrar Sesión" 
                                      action="#{login.logout}" 
                                      styleClass="button-logout">
                         <f:ajax render="@all"/>
                     </h:commandButton>
                 </h:form>
-                
             </h:panelGroup>
-
 
             <h:panelGroup rendered="#{empty login.usuarioActual}">
                 <h:link outcome="/views/usuarios/login" value="Iniciar Sesión" styleClass="button-login"/>
