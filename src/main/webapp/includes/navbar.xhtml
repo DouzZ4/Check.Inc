@@ -17,7 +17,8 @@
 
         <!-- Enlaces del menú principal -->
         <ul class="navbar-links" style="list-style:none;display:flex;gap:18px;margin:0;padding:0;align-items:center;">
-            <li><h:link outcome="/index" value="Inicio" styleClass="nav-link"/></li>
+            <!-- Mostrar "Inicio" solo si NO hay sesión activa -->
+            <li rendered="#{empty login.usuarioActual}"><h:link outcome="/index" value="Inicio" styleClass="nav-link"/></li>
 
             <!-- Si el usuario está autenticado y es ADMIN -->
             <ui:fragment rendered="#{not empty login.usuarioActual and login.usuarioActual.idRol.idRol == 1}">
@@ -29,10 +30,11 @@
 
             <!-- Si el usuario está autenticado y es PACIENTE -->
             <ui:fragment rendered="#{not empty login.usuarioActual and login.usuarioActual.idRol.idRol == 2}">
+                <li><h:link outcome="/index" value="Mi Dashboard" styleClass="nav-link"/></li>
                 <li><h:link outcome="/views/registros/Citas/IndexCitas.xhtml" value="Citas" styleClass="nav-link"/></li>
                 <li><h:link outcome="/views/registros/Medicamentos/IndexMedicamentos.xhtml" value="Medicamentos" styleClass="nav-link"/></li>
                 <li><h:link outcome="/views/registros/registroGlucosa.xhtml" value="Glucosa" styleClass="nav-link"/></li>
-                <li><h:link outcome="/views/registros/Anomalias/IndexAnomalia.xhtml" value="Anomalia" styleClass="nav-link"/></li>
+                <li><h:link outcome="/views/registros/Anomalias/IndexAnomalia.xhtml" value="Anomalias" styleClass="nav-link"/></li>
                 <li>
                     <h:form>
                         <p:commandButton value="Reporte" action="#{reporteBean.descargarReporteDinamico}" ajax="false" icon="pi pi-download"/>

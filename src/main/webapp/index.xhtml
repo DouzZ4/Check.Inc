@@ -3,14 +3,185 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      lang="es" xml:lang="es">
+      lang="es" xml:lang="es"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <ui:composition template="/views/TemplateSitio.xhtml">
     <ui:define name="title">Inicio - CHECK</ui:define>
 
     <ui:define name="content">
 
-        <!-- Sección de bienvenida y botones según login -->
+        <!-- Si usuario es paciente, mostrar solo dashboard (sin template adicional) -->
+        <h:panelGroup rendered="#{not empty login.usuarioActual and login.usuarioActual.idRol.idRol == 2}">
+            <!-- Dashboard inline sin ui:include -->
+            <h:form id="patientDashboardForm">
+                <h2 style="color:#3058a6;">Mi Salud - Dashboard</h2>
+                <p style="color:#666;">Resumen rápido de tu control de glucosa, anomalías y próximas citas.</p>
+
+                <!-- Tarjetas resumen -->
+                <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:15px; margin-top:18px;">
+                    <div style="background:#3058a6; color:#fff; padding:16px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); border-top:4px solid #f45501;">
+                        <p style="margin:0; color:rgba(255,255,255,0.9); font-size:0.9rem;">Última medición</p>
+                        <h3 style="margin:6px 0; color:#fff;"> 
+                            <h:outputText value="#{not empty patientDashboardBean.glucosaReciente ? patientDashboardBean.glucosaReciente.get(0).nivelGlucosa : '-'}" />
+                            <small style="color:rgba(255,255,255,0.9); font-size:0.8rem;"> mg/dL</small>
+                        </h3>
+                        <p style="margin:0; color:rgba(255,255,255,0.85); font-size:0.85rem;">
+                            <h:outputText value="#{not empty patientDashboardBean.glucosaReciente ? patientDashboardBean.glucosaReciente.get(0).fechaHora : ''}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                            </h:outputText>
+                        </p>
+                    </div>
+
+                    <div style="background:#3058a6; color:#fff; padding:16px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); border-top:4px solid #38a169;">
+                        <p style="margin:0; color:rgba(255,255,255,0.9); font-size:0.9rem;">Promedio (últimos días)</p>
+                        <h3 style="margin:6px 0; color:#fff;">
+                            <h:outputText value="#{patientDashboardBean.promedioGlucosa}">
+                                <f:convertNumber type="number" minFractionDigits="1" maxFractionDigits="2"/>
+                            </h:outputText>
+                            <small style="color:rgba(255,255,255,0.9); font-size:0.8rem;"> mg/dL</small>
+                        </h3>
+                        <p style="margin:0; color:rgba(255,255,255,0.85); font-size:0.85rem;">Promedio de todos los registros</p>
+                    </div>
+
+                    <div style="background:#3058a6; color:#fff; padding:16px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); border-top:4px solid #dd6b20;">
+                        <p style="margin:0; color:rgba(255,255,255,0.9); font-size:0.9rem;">Próxima cita</p>
+                        <h3 style="margin:6px 0; color:#fff;">
+                            <h:outputText value="#{not empty patientDashboardBean.proximasCitas ? patientDashboardBean.proximasCitas.get(0).fecha : '-'}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </h3>
+                        <p style="margin:0; color:rgba(255,255,255,0.85); font-size:0.85rem;">
+                            <h:outputText value="#{not empty patientDashboardBean.proximasCitas ? patientDashboardBean.proximasCitas.get(0).motivo : 'Sin citas próximas'}"/>
+                        </p>
+                    </div>
+
+                    <div style="background:#3058a6; color:#fff; padding:16px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); border-top:4px solid #6b46c1;">
+                        <p style="margin:0; color:rgba(255,255,255,0.9); font-size:0.9rem;">Medicamentos</p>
+                        <h3 style="margin:6px 0; color:#fff;"> <h:outputText value="#{fn:length(patientDashboardBean.medicamentos)}" xmlns:fn="http://java.sun.com/jsp/jstl/functions"/> </h3>
+                        <p style="margin:0; color:rgba(255,255,255,0.85); font-size:0.85rem;">Activos</p>
+                    </div>
+                </div>
+
+                <!-- Gráfico y tabla (apilados verticalmente) -->
+                <div style="display:grid; grid-template-columns: 1fr; gap:18px; margin-top:20px;">
+                    <div style="background:#3058a6; color:#fff; padding:18px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                        <h3 style="color:#fff; margin-top:0;">Tendencia de Glucosa</h3>
+                        <canvas id="patientLineChart" style="max-height:320px;"></canvas>
+                    </div>
+
+                    <div style="background:#3058a6; color:#fff; padding:18px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                        <h3 style="color:#fff; margin-top:0;">Últimas lecturas</h3>
+                        <h:panelGroup rendered="#{empty patientDashboardBean.glucosaReciente}">
+                            <p style="color:rgba(255,255,255,0.85);">No hay registros de glucosa disponibles.</p>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{not empty patientDashboardBean.glucosaReciente}">
+                            <h:dataTable value="#{patientDashboardBean.glucosaReciente}" var="g" style="width:100%; font-size:0.9rem; border-collapse: collapse; color:#fff;">
+                                <h:column>
+                                    <f:facet name="header">
+                                        <div style="background:rgba(255,255,255,0.08); padding:8px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.12); color:#fff;">Fecha</div>
+                                    </f:facet>
+                                    <h:outputText value="#{g.fechaHora}">
+                                        <f:convertDateTime pattern="dd/MM HH:mm"/>
+                                    </h:outputText>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <div style="background:rgba(255,255,255,0.08); padding:8px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.12); color:#fff;">Nivel</div>
+                                    </f:facet>
+                                    <h:outputText value="#{g.nivelGlucosa}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <div style="background:rgba(255,255,255,0.08); padding:8px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.12); color:#fff;">Momento</div>
+                                    </f:facet>
+                                    <h:outputText value="#{g.momentoDia}"/>
+                                </h:column>
+                            </h:dataTable>
+                        </h:panelGroup>
+                    </div>
+                </div>
+
+                <!-- Anomalías recientes -->
+                <div style="margin-top:20px; background:#3058a6; color:#fff; padding:18px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                    <h3 style="color:#fff; margin-top:0;">Anomalías recientes</h3>
+                    <h:panelGroup rendered="#{empty patientDashboardBean.anomaliasRecientes}">
+                        <p style="color:rgba(255,255,255,0.85);">No hay anomalías registradas.</p>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{not empty patientDashboardBean.anomaliasRecientes}">
+                        <h:dataTable value="#{patientDashboardBean.anomaliasRecientes}" var="a" style="width:100%; font-size:0.9rem; border-collapse: collapse; color:#fff;">
+                            <h:column>
+                                <f:facet name="header">
+                                    <div style="background:rgba(255,255,255,0.08); padding:8px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.12); color:#fff;">Fecha</div>
+                                </f:facet>
+                                <h:outputText value="#{a.fechaHora}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <div style="background:rgba(255,255,255,0.08); padding:8px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.12); color:#fff;">Descripción</div>
+                                </f:facet>
+                                <h:outputText value="#{a.descripcion}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <div style="background:rgba(255,255,255,0.08); padding:8px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.12); color:#fff;">Gravedad</div>
+                                </f:facet>
+                                <h:panelGroup rendered="#{a.gravedad eq 'grave'}">
+                                    <span style="color:#e53e3e; font-weight:bold;">#{a.gravedad}</span>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{a.gravedad eq 'moderada'}">
+                                    <span style="color:#dd6b20; font-weight:bold;">#{a.gravedad}</span>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{a.gravedad eq 'leve'}">
+                                    <span style="color:#38a169;">#{a.gravedad}</span>
+                                </h:panelGroup>
+                            </h:column>
+                        </h:dataTable>
+                    </h:panelGroup>
+                </div>
+
+            </h:form>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+            <script type="text/javascript">
+                //<![CDATA[
+                document.addEventListener('DOMContentLoaded', function() {
+                    var chartDataJson = '#{patientDashboardBean.chartDataJson}';
+                    if (chartDataJson && chartDataJson.length > 0) {
+                        try {
+                            var chartData = JSON.parse(chartDataJson);
+                            var ctx = document.getElementById('patientLineChart').getContext('2d');
+                            new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: chartData.labels,
+                                    datasets: [{
+                                        label: 'Promedio Glucosa (mg/dL)',
+                                        data: chartData.values,
+                                        borderColor: '#3058a6',
+                                        backgroundColor: 'rgba(48,88,166,0.12)',
+                                        borderWidth: 2,
+                                        pointRadius: 4,
+                                        pointBackgroundColor: '#f45501',
+                                        tension: 0.2,
+                                        fill: true
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: true,
+                                    scales: { y: { title: { display: true, text: 'mg/dL' } } }
+                                }
+                            });
+                        } catch (e) { /* ignore parse errors */ }
+                    }
+                });
+                //]]>
+            </script>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{empty login.usuarioActual or login.usuarioActual.idRol.idRol == 1}">
         <section id="inicio" class="hero-section">
             <div class="hero-container two-column">
                 <div class="hero-image">
@@ -36,15 +207,6 @@
                         <p>Bienvenido, #{login.username}. Navega por el menú o accede a tus registros.</p>
                         <div class="button-group">
                             <h:form>
-                                <h:commandButton value="Registro Glucosa" action="/views/registros/registroGlucosa.xhtml?faces-redirect=true" styleClass="btn btn-black" />
-                            </h:form>
-                            <h:form>
-                                <h:commandButton value="Importar Registro de Glucosa" action="/views/glucosa/importarGlucosa.xhtml?faces-redirect=true" styleClass="btn btn-black" />
-                            </h:form>
-                            <h:form>
-                                <h:commandButton value="Registro Citas" action="/views/registros/Citas/IndexCitas.xhtml?faces-redirect=true" styleClass="btn btn-black" />
-                            </h:form>
-                            <h:form rendered="#{login.usuarioActual.idRol.idRol == 1}">
                                 <h:commandButton value="Ir al panel de gestión" action="/views/inicioGestion.xhtml?faces-redirect=true" styleClass="btn btn-black" />
                             </h:form>
                         </div>
@@ -122,6 +284,7 @@
                 <h:outputLink value="mailto:contacto@checkdiabetes.com">contacto@checkdiabetes.com</h:outputLink>
             </p>
         </section>
+        </h:panelGroup>
 
     </ui:define>
 </ui:composition>

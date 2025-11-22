@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/views/TemplateSitio.xhtml">
+    <ui:define name="title">Dashboard Paciente</ui:define>
+    <ui:define name="content">
+
+        <h:form id="patientDashboardForm">
+            <h2 style="color:#3058a6;">Mi Salud - Dashboard</h2>
+            <p style="color:#666;">Resumen rápido de tu control de glucosa, anomalías y próximas citas.</p>
+
+            <!-- Tarjetas resumen -->
+            <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:15px; margin-top:18px;">
+                <div style="background:#fff; padding:16px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.06); border-left:4px solid #3058a6;">
+                    <p style="margin:0; color:#666; font-size:0.9rem;">Última medición</p>
+                    <h3 style="margin:6px 0; color:#3058a6;"> 
+                        <h:outputText value="#{not empty patientDashboardBean.glucosaReciente ? patientDashboardBean.glucosaReciente.get(0).nivelGlucosa : '-'}" />
+                        <small style="color:#999; font-size:0.8rem;"> mg/dL</small>
+                    </h3>
+                    <p style="margin:0; color:#999; font-size:0.85rem;">
+                        <h:outputText value="#{not empty patientDashboardBean.glucosaReciente ? patientDashboardBean.glucosaReciente.get(0).fechaHora : ''}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                        </h:outputText>
+                    </p>
+                </div>
+
+                <div style="background:#fff; padding:16px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.06); border-left:4px solid #38a169;">
+                    <p style="margin:0; color:#666; font-size:0.9rem;">Promedio (últimos días)</p>
+                    <h3 style="margin:6px 0; color:#38a169;">
+                        <h:outputText value="#{patientDashboardBean.promedioGlucosa}">
+                            <f:convertNumber type="number" minFractionDigits="1" maxFractionDigits="2"/>
+                        </h:outputText>
+                        <small style="color:#999; font-size:0.8rem;"> mg/dL</small>
+                    </h3>
+                    <p style="margin:0; color:#999; font-size:0.85rem;">Promedio de todos los registros</p>
+                </div>
+
+                <div style="background:#fff; padding:16px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.06); border-left:4px solid #dd6b20;">
+                    <p style="margin:0; color:#666; font-size:0.9rem;">Próxima cita</p>
+                    <h3 style="margin:6px 0; color:#dd6b20;">
+                        <h:outputText value="#{not empty patientDashboardBean.proximasCitas ? patientDashboardBean.proximasCitas.get(0).fecha : '-'}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </h3>
+                    <p style="margin:0; color:#999; font-size:0.85rem;">
+                        <h:outputText value="#{not empty patientDashboardBean.proximasCitas ? patientDashboardBean.proximasCitas.get(0).motivo : 'Sin citas próximas'}"/>
+                    </p>
+                </div>
+
+                <div style="background:#fff; padding:16px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.06); border-left:4px solid #6b46c1;">
+                    <p style="margin:0; color:#666; font-size:0.9rem;">Medicamentos</p>
+                    <h3 style="margin:6px 0; color:#6b46c1;"> <h:outputText value="#{fn:length(patientDashboardBean.medicamentos)}" xmlns:fn="http://java.sun.com/jsp/jstl/functions"/> </h3>
+                    <p style="margin:0; color:#999; font-size:0.85rem;">Activos</p>
+                </div>
+            </div>
+
+            <!-- Gráfico y tabla -->
+            <div style="display:grid; grid-template-columns: 2fr 1fr; gap:18px; margin-top:20px;">
+                <div style="background:#fff; padding:18px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.06);">
+                    <h3 style="color:#3058a6; margin-top:0;">Tendencia de Glucosa</h3>
+                    <canvas id="patientLineChart" style="max-height:320px;"></canvas>
+                </div>
+
+                <div style="background:#fff; padding:18px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.06);">
+                    <h3 style="color:#3058a6; margin-top:0;">Últimas lecturas</h3>
+                    <h:panelGroup rendered="#{empty patientDashboardBean.glucosaReciente}">
+                        <p style="color:#999;">No hay registros de glucosa disponibles.</p>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{not empty patientDashboardBean.glucosaReciente}">
+                        <h:dataTable value="#{patientDashboardBean.glucosaReciente}" var="g" style="width:100%; font-size:0.9rem; border-collapse: collapse;">
+                            <h:column>
+                                <f:facet name="header">
+                                    <div style="background:#f5f5f5; padding:8px; text-align:left; border-bottom:1px solid #ddd;">Fecha</div>
+                                </f:facet>
+                                <h:outputText value="#{g.fechaHora}">
+                                    <f:convertDateTime pattern="dd/MM HH:mm"/>
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <div style="background:#f5f5f5; padding:8px; text-align:left; border-bottom:1px solid #ddd;">Nivel</div>
+                                </f:facet>
+                                <h:outputText value="#{g.nivelGlucosa}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <div style="background:#f5f5f5; padding:8px; text-align:left; border-bottom:1px solid #ddd;">Momento</div>
+                                </f:facet>
+                                <h:outputText value="#{g.momentoDia}"/>
+                            </h:column>
+                        </h:dataTable>
+                    </h:panelGroup>
+                </div>
+            </div>
+
+            <!-- Anomalías recientes -->
+            <div style="margin-top:20px; background:#fff; padding:18px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.06);">
+                <h3 style="color:#3058a6; margin-top:0;">Anomalías recientes</h3>
+                <h:panelGroup rendered="#{empty patientDashboardBean.anomaliasRecientes}">
+                    <p style="color:#999;">No hay anomalías registradas.</p>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{not empty patientDashboardBean.anomaliasRecientes}">
+                    <h:dataTable value="#{patientDashboardBean.anomaliasRecientes}" var="a" style="width:100%; font-size:0.9rem; border-collapse: collapse;">
+                        <h:column>
+                            <f:facet name="header">
+                                <div style="background:#f5f5f5; padding:8px; text-align:left; border-bottom:1px solid #ddd;">Fecha</div>
+                            </f:facet>
+                            <h:outputText value="#{a.fechaHora}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <div style="background:#f5f5f5; padding:8px; text-align:left; border-bottom:1px solid #ddd;">Descripción</div>
+                            </f:facet>
+                            <h:outputText value="#{a.descripcion}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <div style="background:#f5f5f5; padding:8px; text-align:left; border-bottom:1px solid #ddd;">Gravedad</div>
+                            </f:facet>
+                            <h:panelGroup rendered="#{a.gravedad eq 'grave'}">
+                                <span style="color:#e53e3e; font-weight:bold;">#{a.gravedad}</span>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{a.gravedad eq 'moderada'}">
+                                <span style="color:#dd6b20; font-weight:bold;">#{a.gravedad}</span>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{a.gravedad eq 'leve'}">
+                                <span style="color:#38a169;">#{a.gravedad}</span>
+                            </h:panelGroup>
+                        </h:column>
+                    </h:dataTable>
+                </h:panelGroup>
+            </div>
+
+        </h:form>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+        <script type="text/javascript">
+            //<![CDATA[
+            document.addEventListener('DOMContentLoaded', function() {
+                var chartDataJson = '#{patientDashboardBean.chartDataJson}';
+                if (chartDataJson && chartDataJson.length > 0) {
+                    try {
+                        var chartData = JSON.parse(chartDataJson);
+                        var ctx = document.getElementById('patientLineChart').getContext('2d');
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: chartData.labels,
+                                datasets: [{
+                                    label: 'Promedio Glucosa (mg/dL)',
+                                    data: chartData.values,
+                                    borderColor: '#3058a6',
+                                    backgroundColor: 'rgba(48,88,166,0.12)',
+                                    borderWidth: 2,
+                                    pointRadius: 4,
+                                    pointBackgroundColor: '#f45501',
+                                    tension: 0.2,
+                                    fill: true
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                scales: { y: { title: { display: true, text: 'mg/dL' } } }
+                            }
+                        });
+                    } catch (e) { /* ignore parse errors */ }
+                }
+            });
+            //]]>
+        </script>
+
+    </ui:define>
+</ui:composition>
+</html>
