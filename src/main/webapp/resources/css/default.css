@@ -1,10 +1,6 @@
-body {
-    background-color: #ffffff;
-    font-size: 12px;
-    font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
-    color: #000000;  
-    margin: 10px;
-}
+/* === LEGACY / DEPRECATED STYLES === */
+/* Global body styles are defined in resources/css/styles.css */
+/* This file is kept for legacy compatibility only */
 
 h1 {
     font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;

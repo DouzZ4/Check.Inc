@@ -1,5 +1,8 @@
 /* styless.css - Estilos para la landing page pública */
 
+/* === LANDING PAGE STYLES === */
+/* Global styles are managed in resources/css/styles.css */
+
 :root {
   --primary-color: #2c56a4;
   --secondary-color: #4a90e2;
@@ -12,15 +15,7 @@
   --transition: all 0.3s ease;
 }
 
-body {
-  font-family: 'Roboto', sans-serif;
-  line-height: 1.6;
-  color: var(--dark-gray);
-  background-color: var(--white);
-  margin: 0;
-  padding: 0;
-}
-
+/* Landing page specific: hero, features, testimonials, etc. */
 .main-header {
   background-color: var(--primary-color);
   padding: 1.5rem 0;

@@ -15,71 +15,71 @@
         <h:panelGroup rendered="#{not empty login.usuarioActual and login.usuarioActual.idRol.idRol == 2}">
             <!-- Dashboard inline sin ui:include -->
             <h:form id="patientDashboardForm">
-                <h2 style="color:#3058a6;">Mi Salud - Dashboard</h2>
-                <p style="color:#666;">Resumen rápido de tu control de glucosa, anomalías y próximas citas.</p>
+                <h2 class="dashboard-title">Mi Salud - Dashboard</h2>
+                <p class="dashboard-subtitle">Resumen rápido de tu control de glucosa, anomalías y próximas citas.</p>
 
                 <!-- Tarjetas resumen -->
-                <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:15px; margin-top:18px;">
-                    <div style="background:#3058a6; color:#fff; padding:16px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); border-top:4px solid #f45501;">
-                        <p style="margin:0; color:rgba(255,255,255,0.9); font-size:0.9rem;">Última medición</p>
-                        <h3 style="margin:6px 0; color:#fff;"> 
+                <div class="dashboard-grid">
+                    <div class="card card-accent-1">
+                        <p class="card-title">Última medición</p>
+                        <h3 class="card-value"> 
                             <h:outputText value="#{not empty patientDashboardBean.glucosaReciente ? patientDashboardBean.glucosaReciente.get(0).nivelGlucosa : '-'}" />
-                            <small style="color:rgba(255,255,255,0.9); font-size:0.8rem;"> mg/dL</small>
+                            <small class="card-unit"> mg/dL</small>
                         </h3>
-                        <p style="margin:0; color:rgba(255,255,255,0.85); font-size:0.85rem;">
+                        <p class="card-muted">
                             <h:outputText value="#{not empty patientDashboardBean.glucosaReciente ? patientDashboardBean.glucosaReciente.get(0).fechaHora : ''}">
                                 <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
                             </h:outputText>
                         </p>
                     </div>
 
-                    <div style="background:#3058a6; color:#fff; padding:16px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); border-top:4px solid #38a169;">
-                        <p style="margin:0; color:rgba(255,255,255,0.9); font-size:0.9rem;">Promedio (últimos días)</p>
-                        <h3 style="margin:6px 0; color:#fff;">
+                    <div class="card card-accent-2">
+                        <p class="card-title">Promedio (últimos días)</p>
+                        <h3 class="card-value">
                             <h:outputText value="#{patientDashboardBean.promedioGlucosa}">
                                 <f:convertNumber type="number" minFractionDigits="1" maxFractionDigits="2"/>
                             </h:outputText>
-                            <small style="color:rgba(255,255,255,0.9); font-size:0.8rem;"> mg/dL</small>
+                            <small class="card-unit"> mg/dL</small>
                         </h3>
-                        <p style="margin:0; color:rgba(255,255,255,0.85); font-size:0.85rem;">Promedio de todos los registros</p>
+                        <p class="card-muted">Promedio de todos los registros</p>
                     </div>
 
-                    <div style="background:#3058a6; color:#fff; padding:16px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); border-top:4px solid #dd6b20;">
-                        <p style="margin:0; color:rgba(255,255,255,0.9); font-size:0.9rem;">Próxima cita</p>
-                        <h3 style="margin:6px 0; color:#fff;">
+                    <div class="card card-accent-3">
+                        <p class="card-title">Próxima cita</p>
+                        <h3 class="card-value">
                             <h:outputText value="#{not empty patientDashboardBean.proximasCitas ? patientDashboardBean.proximasCitas.get(0).fecha : '-'}">
                                 <f:convertDateTime pattern="dd/MM/yyyy"/>
                             </h:outputText>
                         </h3>
-                        <p style="margin:0; color:rgba(255,255,255,0.85); font-size:0.85rem;">
+                        <p class="card-muted">
                             <h:outputText value="#{not empty patientDashboardBean.proximasCitas ? patientDashboardBean.proximasCitas.get(0).motivo : 'Sin citas próximas'}"/>
                         </p>
                     </div>
 
-                    <div style="background:#3058a6; color:#fff; padding:16px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); border-top:4px solid #6b46c1;">
-                        <p style="margin:0; color:rgba(255,255,255,0.9); font-size:0.9rem;">Medicamentos</p>
-                        <h3 style="margin:6px 0; color:#fff;"> <h:outputText value="#{fn:length(patientDashboardBean.medicamentos)}" xmlns:fn="http://java.sun.com/jsp/jstl/functions"/> </h3>
-                        <p style="margin:0; color:rgba(255,255,255,0.85); font-size:0.85rem;">Activos</p>
+                    <div class="card card-accent-4">
+                        <p class="card-title">Medicamentos</p>
+                        <h3 class="card-value"> <h:outputText value="#{fn:length(patientDashboardBean.medicamentos)}" xmlns:fn="http://java.sun.com/jsp/jstl/functions"/> </h3>
+                        <p class="card-muted">Activos</p>
                     </div>
                 </div>
 
                 <!-- Gráfico y tabla (apilados verticalmente) -->
-                <div style="display:grid; grid-template-columns: 1fr; gap:18px; margin-top:20px;">
-                    <div style="background:#3058a6; color:#fff; padding:18px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
-                        <h3 style="color:#fff; margin-top:0;">Tendencia de Glucosa</h3>
-                        <canvas id="patientLineChart" style="max-height:320px;"></canvas>
+                <div class="stacked-grid">
+                    <div class="card-chart">
+                        <h3>Tendencia de Glucosa</h3>
+                        <canvas id="patientLineChart" class="chart-canvas"></canvas>
                     </div>
 
-                    <div style="background:#3058a6; color:#fff; padding:18px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
-                        <h3 style="color:#fff; margin-top:0;">Últimas lecturas</h3>
+                    <div class="card-table">
+                        <h3>Últimas lecturas</h3>
                         <h:panelGroup rendered="#{empty patientDashboardBean.glucosaReciente}">
                             <p style="color:rgba(255,255,255,0.85);">No hay registros de glucosa disponibles.</p>
                         </h:panelGroup>
                         <h:panelGroup rendered="#{not empty patientDashboardBean.glucosaReciente}">
-                            <h:dataTable value="#{patientDashboardBean.glucosaReciente}" var="g" style="width:100%; font-size:0.9rem; border-collapse: collapse; color:#fff;">
+                            <h:dataTable value="#{patientDashboardBean.glucosaReciente}" var="g" styleClass="table-white">
                                 <h:column>
                                     <f:facet name="header">
-                                        <div style="background:rgba(255,255,255,0.08); padding:8px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.12); color:#fff;">Fecha</div>
+                                        <div class="table-header-overlay">Fecha</div>
                                     </f:facet>
                                     <h:outputText value="#{g.fechaHora}">
                                         <f:convertDateTime pattern="dd/MM HH:mm"/>
@@ -87,13 +87,13 @@
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">
-                                        <div style="background:rgba(255,255,255,0.08); padding:8px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.12); color:#fff;">Nivel</div>
+                                        <div class="table-header-overlay">Nivel</div>
                                     </f:facet>
                                     <h:outputText value="#{g.nivelGlucosa}"/>
                                 </h:column>
                                 <h:column>
                                     <f:facet name="header">
-                                        <div style="background:rgba(255,255,255,0.08); padding:8px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.12); color:#fff;">Momento</div>
+                                        <div class="table-header-overlay">Momento</div>
                                     </f:facet>
                                     <h:outputText value="#{g.momentoDia}"/>
                                 </h:column>
@@ -103,16 +103,16 @@
                 </div>
 
                 <!-- Anomalías recientes -->
-                <div style="margin-top:20px; background:#3058a6; color:#fff; padding:18px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08);">
-                    <h3 style="color:#fff; margin-top:0;">Anomalías recientes</h3>
+                <div class="card-anomalies">
+                    <h3>Anomalías recientes</h3>
                     <h:panelGroup rendered="#{empty patientDashboardBean.anomaliasRecientes}">
                         <p style="color:rgba(255,255,255,0.85);">No hay anomalías registradas.</p>
                     </h:panelGroup>
                     <h:panelGroup rendered="#{not empty patientDashboardBean.anomaliasRecientes}">
-                        <h:dataTable value="#{patientDashboardBean.anomaliasRecientes}" var="a" style="width:100%; font-size:0.9rem; border-collapse: collapse; color:#fff;">
+                        <h:dataTable value="#{patientDashboardBean.anomaliasRecientes}" var="a" styleClass="table-white">
                             <h:column>
                                 <f:facet name="header">
-                                    <div style="background:rgba(255,255,255,0.08); padding:8px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.12); color:#fff;">Fecha</div>
+                                    <div class="table-header-overlay">Fecha</div>
                                 </f:facet>
                                 <h:outputText value="#{a.fechaHora}">
                                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
@@ -120,22 +120,22 @@
                             </h:column>
                             <h:column>
                                 <f:facet name="header">
-                                    <div style="background:rgba(255,255,255,0.08); padding:8px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.12); color:#fff;">Descripción</div>
+                                    <div class="table-header-overlay">Descripción</div>
                                 </f:facet>
                                 <h:outputText value="#{a.descripcion}"/>
                             </h:column>
                             <h:column>
                                 <f:facet name="header">
-                                    <div style="background:rgba(255,255,255,0.08); padding:8px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.12); color:#fff;">Gravedad</div>
+                                    <div class="table-header-overlay">Gravedad</div>
                                 </f:facet>
                                 <h:panelGroup rendered="#{a.gravedad eq 'grave'}">
-                                    <span style="color:#e53e3e; font-weight:bold;">#{a.gravedad}</span>
+                                    <span class="severity-grave">#{a.gravedad}</span>
                                 </h:panelGroup>
                                 <h:panelGroup rendered="#{a.gravedad eq 'moderada'}">
-                                    <span style="color:#dd6b20; font-weight:bold;">#{a.gravedad}</span>
+                                    <span class="severity-moderada">#{a.gravedad}</span>
                                 </h:panelGroup>
                                 <h:panelGroup rendered="#{a.gravedad eq 'leve'}">
-                                    <span style="color:#38a169;">#{a.gravedad}</span>
+                                    <span class="severity-leve">#{a.gravedad}</span>
                                 </h:panelGroup>
                             </h:column>
                         </h:dataTable>

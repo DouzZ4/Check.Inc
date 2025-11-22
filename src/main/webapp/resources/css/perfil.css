@@ -1,4 +1,6 @@
-/* === Estilos generales del perfil === */
+/* === PERFIL PAGE SPECIFIC STYLES === */
+/* Global body/main and buttons are managed in resources/css/styles.css */
+
 .perfil-container {
     max-width: 800px;
     margin: 40px auto;

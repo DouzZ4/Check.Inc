@@ -1,10 +1,6 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
-}
- /* Estilos específicos para .container y .button de esta página */
+/* === INDEX PAGE SPECIFIC STYLES === */
+/* Global body/main styles are in resources/css/styles.css */
+/* Estilos específicos para .container y .button de esta página */
         /* Podrías moverlos a styles.css también */
         .container {
             max-width: 800px;

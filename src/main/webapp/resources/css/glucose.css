@@ -1,4 +1,6 @@
-/* Glucose monitoring styles */
+/* === GLUCOSE PAGE SPECIFIC STYLES === */
+/* Global body/main, table, and button styles are in resources/css/styles.css */
+
 .glucose-chart-container {
     background: white;
     padding: 20px;

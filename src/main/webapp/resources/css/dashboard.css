@@ -1,0 +1,39 @@
+/* === DASHBOARD PAGE SPECIFIC STYLES === */
+/* Global body/main and table styles are in resources/css/styles.css */
+/* Dashboard-specific layout, cards, and chart styles */
+
+/* Chart.js canvas styling */
+#patientLineChart {
+    max-height: 320px;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Chart legend customization */
+.chart-legend {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Responsive adjustments for dashboard */
+@media (max-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stacked-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .card-chart canvas {
+        max-height: 250px;
+    }
+}
