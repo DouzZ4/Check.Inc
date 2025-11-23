@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-10-2025 a las 23:43:06
+-- Tiempo de generación: 23-11-2025 a las 20:59:19
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -63,7 +63,8 @@ INSERT INTO `anomalia` (`idAnomalia`, `descripcion`, `fechaHora`, `sintomas`, `i
 (3, 'dfdffddf', '2025-10-16 19:21:00', 'dfdffddf', 1, 'grave', NULL),
 (4, 'dwdffccxcv', '2025-10-16 19:24:00', 'sdcccsss', 1, 'grave', NULL),
 (5, 'dsdsdsds', '2025-10-16 19:25:00', 'sddds', 1, 'grave', NULL),
-(6, 'dsccscs', '2025-10-16 19:25:00', 'csccsscssc', 1, 'moderada', NULL);
+(6, 'dsccscs', '2025-10-16 19:25:00', 'csccsscssc', 1, 'moderada', NULL),
+(7, 'effddfdf', '2025-10-24 21:03:00', 'erefeefef', 1, 'grave', NULL);
 
 -- --------------------------------------------------------
 
@@ -122,88 +123,10 @@ INSERT INTO `cita` (`idCita`, `fecha`, `hora`, `motivo`, `idUsuario`, `estado`) 
 (47, '2025-09-25', '11:55:00', 'nose mi papa', 1, NULL),
 (48, '2025-09-26', '14:29:00', 'sise mi papax2', 1, NULL),
 (49, '2025-09-29', '15:23:00', 'control mensual', 1, NULL),
-(50, '2025-09-29', '15:23:00', 'control mensual', 1, NULL);
+(50, '2025-09-29', '15:23:00', 'control mensual', 1, NULL),
+(51, '2025-11-22', '10:39:00', 'nose sise', 1, NULL);
 
 -- --------------------------------------------------------
--- =====================================================
--- TABLA: nivelesGlucosa
--- Descripción: Almacena los rangos normales de glucosa por tipo de diabetes
---              y personalizaciones por usuario
--- =====================================================
-
-CREATE TABLE IF NOT EXISTS nivelesGlucosa (
-    idNivelGlucosa INT AUTO_INCREMENT PRIMARY KEY,
-    
-    -- Relación con usuario (NULL = valores por defecto del sistema)
-    idUsuario INT UNIQUE,
-    
-    -- Tipo de diabetes (Tipo 1, Tipo 2, Gestacional)
-    tipoDiabetes VARCHAR(50),
-    
-    -- Rangos normales (en mg/dL)
-    nivelMinimo FLOAT NOT NULL DEFAULT 80.0,
-    nivelMaximo FLOAT NOT NULL DEFAULT 130.0,
-    
-    -- Umbrales críticos para alertas
-    nivelBajoCritico FLOAT NOT NULL DEFAULT 70.0,
-    nivelAltoCritico FLOAT NOT NULL DEFAULT 250.0,
-    
-    -- Control: ¿está activo este perfil de niveles?
-    activo BOOLEAN DEFAULT TRUE,
-    
-    -- Auditoría
-    fechaCreacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    fechaActualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
-    -- Clave foránea
-    CONSTRAINT fk_nivelesGlucosa_usuario 
-        FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- =====================================================
--- VALORES POR DEFECTO DEL SISTEMA
--- Basados en recomendaciones ADA (American Diabetes Association)
--- y OMS (Organización Mundial de la Salud)
--- =====================================================
-
--- Tipo 1 (ADA: objetivo 80-130 mg/dL preprandial)
-INSERT INTO nivelesGlucosa (idUsuario, tipoDiabetes, nivelMinimo, nivelMaximo, nivelBajoCritico, nivelAltoCritico, activo)
-VALUES (NULL, 'Tipo 1', 80.0, 130.0, 70.0, 250.0, TRUE);
-
--- Tipo 2 (ADA: objetivo 80-130 mg/dL preprandial, más tolerancia)
-INSERT INTO nivelesGlucosa (idUsuario, tipoDiabetes, nivelMinimo, nivelMaximo, nivelBajoCritico, nivelAltoCritico, activo)
-VALUES (NULL, 'Tipo 2', 80.0, 180.0, 70.0, 300.0, TRUE);
-
--- Gestacional (ADA: más estricto durante embarazo)
-INSERT INTO nivelesGlucosa (idUsuario, tipoDiabetes, nivelMinimo, nivelMaximo, nivelBajoCritico, nivelAltoCritico, activo)
-VALUES (NULL, 'Gestacional', 70.0, 120.0, 60.0, 200.0, TRUE);
-
--- Prediabetes / Sin diagnóstico (OMS: normal < 100 en ayuno)
-INSERT INTO nivelesGlucosa (idUsuario, tipoDiabetes, nivelMinimo, nivelMaximo, nivelBajoCritico, nivelAltoCritico, activo)
-VALUES (NULL, 'No especificado', 70.0, 100.0, 60.0, 180.0, TRUE);
-
--- =====================================================
--- ÍNDICES para optimización
--- =====================================================
-CREATE INDEX idx_nivelesGlucosa_idUsuario ON nivelesGlucosa(idUsuario);
-CREATE INDEX idx_nivelesGlucosa_tipoDiabetes ON nivelesGlucosa(tipoDiabetes);
-CREATE INDEX idx_nivelesGlucosa_activo ON nivelesGlucosa(activo);
-
--- =====================================================
--- COMENTARIOS (documentación)
--- =====================================================
--- nivelMinimo: Límite inferior del rango normal
--- nivelMaximo: Límite superior del rango normal
--- nivelBajoCritico: Por debajo = HIPOGLUCEMIA (alerta roja)
--- nivelAltoCritico: Por encima = HIPERGLUCEMIA SEVERA (alerta roja)
--- 
--- INTERPRETACIÓN DE ESTADOS:
--- - nivel < nivelBajoCritico: "CRITICO_BAJO" (❌ Hipoglucemia)
--- - nivelBajoCritico ≤ nivel < nivelMinimo: "BAJO" (⚠️  Ligeramente bajo)
--- - nivelMinimo ≤ nivel ≤ nivelMaximo: "NORMAL" (✅)
--- - nivelMaximo < nivel ≤ nivelAltoCritico: "ALTO" (⚠️  Ligeramente alto)
--- - nivel > nivelAltoCritico: "CRITICO_ALTO" (❌ Hiperglucemia severa)
--- =====================================================
 
 --
 -- Estructura de tabla para la tabla `glucosa`
@@ -265,7 +188,11 @@ INSERT INTO `glucosa` (`idGlucosa`, `nivelGlucosa`, `fechaHora`, `idUsuario`, `m
 (58, 70, '2025-09-23 11:48:00', 1, 'En Ayuno'),
 (60, 70, '2025-09-23 11:50:00', 1, 'Después de Desayuno'),
 (61, 80, '2025-10-02 00:30:00', 1, 'Después de Cena'),
-(62, 110, '2025-10-02 00:30:00', 1, 'Después de Almuerzo');
+(62, 110, '2025-10-02 00:30:00', 1, 'Después de Almuerzo'),
+(63, 70, '2025-11-22 04:37:00', 1, 'Antes de Desayuno'),
+(64, 76, '2025-11-21 05:37:00', 1, 'Después de Almuerzo'),
+(65, 190, '2025-11-22 05:37:00', 1, 'Después de Cena'),
+(66, 190, '2025-11-22 05:43:00', 1, 'En Ayuno');
 
 -- --------------------------------------------------------
 
@@ -307,6 +234,35 @@ INSERT INTO `medicamento` (`idMedicamento`, `nombre`, `dosis`, `frecuencia`, `fe
 (22, 'Insulina', '10U', 'Antes del desayuno', '2025-06-10', '2025-09-10', 1, NULL),
 (23, 'Glipizida', '5mg', '1 vez al día', '2025-06-15', '2025-08-15', 2, NULL),
 (24, 'mentiras sise ', '1 diaria', 'nose', '2025-09-19', '2025-09-19', 52, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `nivelesglucosa`
+--
+
+CREATE TABLE `nivelesglucosa` (
+  `idNivelGlucosa` int(11) NOT NULL,
+  `idUsuario` int(11) DEFAULT NULL,
+  `tipoDiabetes` varchar(50) DEFAULT NULL,
+  `nivelMinimo` float NOT NULL DEFAULT 80,
+  `nivelMaximo` float NOT NULL DEFAULT 130,
+  `nivelBajoCritico` float NOT NULL DEFAULT 70,
+  `nivelAltoCritico` float NOT NULL DEFAULT 250,
+  `activo` tinyint(1) DEFAULT 1,
+  `fechaCreacion` timestamp NOT NULL DEFAULT current_timestamp(),
+  `fechaActualizacion` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `nivelesglucosa`
+--
+
+INSERT INTO `nivelesglucosa` (`idNivelGlucosa`, `idUsuario`, `tipoDiabetes`, `nivelMinimo`, `nivelMaximo`, `nivelBajoCritico`, `nivelAltoCritico`, `activo`, `fechaCreacion`, `fechaActualizacion`) VALUES
+(1, NULL, 'Tipo 1', 80, 130, 70, 250, 1, '2025-11-22 05:22:00', '2025-11-22 05:22:00'),
+(2, NULL, 'Tipo 2', 80, 180, 70, 300, 1, '2025-11-22 05:22:00', '2025-11-22 05:22:00'),
+(3, NULL, 'Gestacional', 70, 120, 60, 200, 1, '2025-11-22 05:22:00', '2025-11-22 05:22:00'),
+(4, NULL, 'No especificado', 70, 100, 60, 180, 1, '2025-11-22 05:22:00', '2025-11-22 05:22:00');
 
 -- --------------------------------------------------------
 
@@ -357,7 +313,7 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`idUsuario`, `user`, `password`, `documento`, `nombres`, `apellidos`, `correo`, `edad`, `idRol`, `tipoDiabetes`, `detalleTipoDiabetes`, `esInsulodependiente`, `telefonoEmergencia`, `correoEmergencia`, `nombreContactoEmergencia`, `parentescoContacto`) VALUES
-(1, 'carlosg', '$2a$10$OQHjlgrDQjBjL1qbK6he1Ow.OFcE3SE1zbcmYgxkRJierbLd3MnRS', 1001234567, 'Yeikol 2', 'Mahecha', '/*\n * Click nbfs://nbhost/SystemFileSystem/Templat', 30, 2, 'Tipo 1', 'nose', 1, NULL, 'angeleduardomen@gmail.com\n', NULL, NULL),
+(1, 'carlosg', '$2a$10$OQHjlgrDQjBjL1qbK6he1Ow.OFcE3SE1zbcmYgxkRJierbLd3MnRS', 1001234567, 'Yeikol 2', 'Mahecha', 'angeleduardomen@gmail.com', 30, 2, 'Tipo 1', 'nose', 1, NULL, 'angeleduardomen@gmail.com\n', NULL, NULL),
 (2, 'anam', '$2a$10$qucyb.irkvKjeitLN0l3s.HusjzWo0F2NBihO3oVRIy79fOjSczEC', 1007654321, 'Ana', 'Martínez', 'ana.martinez@example.com', 25, 2, 'Tipo 1', NULL, 0, NULL, 'angeleduardomen@gmail.com', NULL, NULL),
 (3, 'luisf', '$2a$10$mGfPkrh.PdHrXV9HfHHmPeExO1j3jJpCl38vgcigPzjN2aUOWyJEG', 1012345678, 'Luis', 'Fernández', 'luis.fernandez@example.com', 40, 1, 'Gestacional', NULL, NULL, NULL, 'angeleduardomen@gmail.com', NULL, NULL),
 (4, 'marial', '$2a$10$5flvIkVVc7z3EeQHzQ/P.Ofg6Zfvac78Hl4w2ewiYQ1WmuXAd0IZa', 1018765432, 'Fernando', 'Gonzalez', 'fergoga@gmail.com', 35, 2, 'Otro', NULL, 0, NULL, NULL, NULL, NULL),
@@ -456,6 +412,16 @@ ALTER TABLE `medicamento`
   ADD KEY `idUsuario` (`idUsuario`);
 
 --
+-- Indices de la tabla `nivelesglucosa`
+--
+ALTER TABLE `nivelesglucosa`
+  ADD PRIMARY KEY (`idNivelGlucosa`),
+  ADD UNIQUE KEY `idUsuario` (`idUsuario`),
+  ADD KEY `idx_nivelesGlucosa_idUsuario` (`idUsuario`),
+  ADD KEY `idx_nivelesGlucosa_tipoDiabetes` (`tipoDiabetes`),
+  ADD KEY `idx_nivelesGlucosa_activo` (`activo`);
+
+--
 -- Indices de la tabla `rol`
 --
 ALTER TABLE `rol`
@@ -485,25 +451,31 @@ ALTER TABLE `alerta`
 -- AUTO_INCREMENT de la tabla `anomalia`
 --
 ALTER TABLE `anomalia`
-  MODIFY `idAnomalia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idAnomalia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `cita`
 --
 ALTER TABLE `cita`
-  MODIFY `idCita` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `idCita` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT de la tabla `glucosa`
 --
 ALTER TABLE `glucosa`
-  MODIFY `idGlucosa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `idGlucosa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT de la tabla `medicamento`
 --
 ALTER TABLE `medicamento`
   MODIFY `idMedicamento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT de la tabla `nivelesglucosa`
+--
+ALTER TABLE `nivelesglucosa`
+  MODIFY `idNivelGlucosa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `rol`
@@ -551,6 +523,12 @@ ALTER TABLE `glucosa`
 --
 ALTER TABLE `medicamento`
   ADD CONSTRAINT `medicamento_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`);
+
+--
+-- Filtros para la tabla `nivelesglucosa`
+--
+ALTER TABLE `nivelesglucosa`
+  ADD CONSTRAINT `fk_nivelesGlucosa_usuario` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `usuario`
