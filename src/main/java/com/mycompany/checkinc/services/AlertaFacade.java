@@ -30,4 +30,11 @@ public class AlertaFacade implements AlertaFacadeLocal {
     public Alerta update(Alerta alerta) {
         return em.merge(alerta);
     }
+
+    @Override
+    public int markOlderThan(java.util.Date threshold) {
+        javax.persistence.Query q = em.createQuery("UPDATE Alerta a SET a.visto = TRUE WHERE a.fechaHora < :thr AND (a.visto = FALSE OR a.visto IS NULL)");
+        q.setParameter("thr", threshold);
+        return q.executeUpdate();
+    }
 }

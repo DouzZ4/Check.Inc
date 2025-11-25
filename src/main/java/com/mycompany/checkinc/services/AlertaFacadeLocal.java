@@ -10,4 +10,9 @@ public interface AlertaFacadeLocal {
     List<Alerta> findAll();
     Alerta find(Object id);
     Alerta update(Alerta alerta);
+    /**
+     * Marca como vistas las alertas con fechaHora anterior a la fecha indicada (bulk update).
+     * Retorna el número de filas afectadas.
+     */
+    int markOlderThan(java.util.Date threshold);
 }
