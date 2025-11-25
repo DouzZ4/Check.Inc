@@ -15,4 +15,9 @@ public class AlertaFacade implements AlertaFacadeLocal {
     public void create(Alerta alerta) {
         em.persist(alerta);
     }
+
+    @Override
+    public java.util.List<Alerta> findAll() {
+        return em.createNamedQuery("Alerta.findAll", Alerta.class).getResultList();
+    }
 }

@@ -224,41 +224,58 @@ public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuari
 
             System.out.println("🔧 [INFO] Enviando petición HTTP a SendGrid (API key oculta en logs)");
 
-            try (Response response = client.newCall(request).execute()) {
-                int code = response.code();
-                String respBody = response.body() != null ? response.body().string() : "";
+            int attempts = 0;
+            int maxAttempts = 3;
+            long backoff = 1000; // ms
+            while (attempts < maxAttempts) {
+                attempts++;
+                try (Response response = client.newCall(request).execute()) {
+                    int code = response.code();
+                    String respBody = response.body() != null ? response.body().string() : "";
 
-                System.out.println("📜 [RESPUESTA HTTP] Code=" + code);
-                System.out.println(respBody);
+                    System.out.println("📜 [RESPUESTA HTTP] Code=" + code + " (attempt " + attempts + ")");
+                    System.out.println(respBody);
 
-                // Registrar alerta en BD
-                try {
-                    com.mycompany.checkinc.entities.Alerta alerta = new com.mycompany.checkinc.entities.Alerta();
-                    alerta.setTipo(tipoAlerta != null ? tipoAlerta : "EMAIL");
-                    String contenido = "Envio a: " + (destinoEmail != null ? destinoEmail : "-") + " | Code=" + code + " | Resp=" + (respBody.length() > 1000 ? respBody.substring(0, 1000) : respBody);
-                    alerta.setContenido(contenido);
-                    alerta.setFechaHora(new Date());
-                    alerta.setVisto(Boolean.FALSE);
-                    if (usuario != null) alerta.setIdUsuario(usuario);
-                    alertaFacade.create(alerta);
-                } catch (Exception ex) {
-                    System.err.println("⚠️ [WARN] No se pudo registrar la alerta en BD: " + ex.getMessage());
+                    // Registrar alerta en BD
+                    try {
+                        com.mycompany.checkinc.entities.Alerta alerta = new com.mycompany.checkinc.entities.Alerta();
+                        alerta.setTipo(tipoAlerta != null ? tipoAlerta : "EMAIL");
+                        String contenido = "Envio a: " + (destinoEmail != null ? destinoEmail : "-") + " | Code=" + code + " | Attempts=" + attempts + " | Resp=" + (respBody.length() > 1000 ? respBody.substring(0, 1000) : respBody);
+                        alerta.setContenido(contenido);
+                        alerta.setFechaHora(new Date());
+                        alerta.setVisto(Boolean.FALSE);
+                        if (usuario != null) alerta.setIdUsuario(usuario);
+                        alertaFacade.create(alerta);
+                    } catch (Exception ex) {
+                        System.err.println("⚠️ [WARN] No se pudo registrar la alerta en BD: " + ex.getMessage());
+                    }
+
+                    if (code == 202) {
+                        System.out.println("📨 [OK] Correo enviado correctamente ✅");
+                        return true;
+                    } else if (code == 401) {
+                        System.err.println("🚫 [ERROR] Autenticación fallida. Verifica tu API Key de SendGrid.");
+                        return false; // don't retry on auth error
+                    } else if (code >= 400 && code < 500) {
+                        System.err.println("⚠️ [ERROR] Error cliente: " + code);
+                        return false; // client errors won't be fixed by retry
+                    } else if (code >= 500) {
+                        System.err.println("🚷 [ERROR] Error servidor en SendGrid: " + code + ", reintentando...");
+                        // will retry
+                    }
+
+                } catch (java.io.IOException ioex) {
+                    System.err.println("⚠️ [WARN] IOException en intento " + attempts + ": " + ioex.getMessage());
+                    // will retry
                 }
 
-                if (code == 202) {
-                    System.out.println("📨 [OK] Correo enviado correctamente ✅");
-                    return true;
-                } else if (code == 401) {
-                    System.err.println("🚫 [ERROR] Autenticación fallida. Verifica tu API Key de SendGrid.");
-                } else if (code >= 400 && code < 500) {
-                    System.err.println("⚠️ [ERROR] Error cliente: " + code);
-                } else if (code >= 500) {
-                    System.err.println("🚷 [ERROR] Error servidor en SendGrid: " + code);
-                }
-
-                return false;
+                // backoff before next attempt
+                try { Thread.sleep(backoff); } catch (InterruptedException ie) { /* ignore */ }
+                backoff *= 2;
             }
 
+            System.err.println("❌ [ERROR] Se alcanzó el número máximo de reintentos (" + maxAttempts + ").");
+            return false;
         } catch (Exception e) {
             System.err.println("💥 [ERROR] Excepción al realizar petición HTTP: " + e.getMessage());
             e.printStackTrace();
