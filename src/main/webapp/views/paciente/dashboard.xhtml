@@ -63,7 +63,7 @@
             <div style="display:grid; grid-template-columns: 2fr 1fr; gap:18px; margin-top:20px;">
                 <div style="background:#fff; padding:18px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.06);">
                     <h3 style="color:#3058a6; margin-top:0;">Tendencia de Glucosa</h3>
-                    <canvas id="patientLineChart" style="max-height:320px;"></canvas>
+                    <p:lineChart id="patientLineChart" model="#{patientDashboardBean.lineChartModel}" style="max-height:320px;" />
                 </div>
 
                 <div style="background:#fff; padding:18px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.06);">
@@ -140,42 +140,7 @@
 
         </h:form>
 
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
-        <script type="text/javascript">
-            //<![CDATA[
-            document.addEventListener('DOMContentLoaded', function() {
-                var chartDataJson = '#{patientDashboardBean.chartDataJson}';
-                if (chartDataJson && chartDataJson.length > 0) {
-                    try {
-                        var chartData = JSON.parse(chartDataJson);
-                        var ctx = document.getElementById('patientLineChart').getContext('2d');
-                        new Chart(ctx, {
-                            type: 'line',
-                            data: {
-                                labels: chartData.labels,
-                                datasets: [{
-                                    label: 'Promedio Glucosa (mg/dL)',
-                                    data: chartData.values,
-                                    borderColor: '#3058a6',
-                                    backgroundColor: 'rgba(48,88,166,0.12)',
-                                    borderWidth: 2,
-                                    pointRadius: 4,
-                                    pointBackgroundColor: '#f45501',
-                                    tension: 0.2,
-                                    fill: true
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: true,
-                                scales: { y: { title: { display: true, text: 'mg/dL' } } }
-                            }
-                        });
-                    } catch (e) { /* ignore parse errors */ }
-                }
-            });
-            //]]>
-        </script>
+        
 
     </ui:define>
 </ui:composition>

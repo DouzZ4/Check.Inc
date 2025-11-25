@@ -109,4 +109,15 @@
         <extension>txt</extension>
         <mime-type>text/plain</mime-type>
     </mime-mapping>
+    
+    <!-- Configuración de sesión y cookies (seguridad ISO25010) -->
+    <session-config>
+        <!-- Tiempo de sesión en minutos -->
+        <session-timeout>15</session-timeout>
+        <cookie-config>
+            <http-only>true</http-only>
+            <!-- El flag 'secure' solo tiene efecto si la aplicación se sirve por HTTPS -->
+            <secure>true</secure>
+        </cookie-config>
+    </session-config>
 </web-app>

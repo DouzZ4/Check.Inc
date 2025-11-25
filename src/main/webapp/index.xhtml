@@ -1,10 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      lang="es" xml:lang="es"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    lang="es" xml:lang="es"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <ui:composition template="/views/TemplateSitio.xhtml">
     <ui:define name="title">Inicio - CHECK</ui:define>
@@ -75,7 +76,7 @@
                 <div class="stacked-grid">
                     <div class="card-chart">
                         <h3>Tendencia de Glucosa</h3>
-                        <canvas id="patientLineChart" class="chart-canvas"></canvas>
+                        <p:lineChart id="patientLineChart" model="#{patientDashboardBean.lineChartModel}" style="max-height:320px;" />
                     </div>
 
                     <div class="card-table">
@@ -152,42 +153,8 @@
 
             </h:form>
 
-            <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
-            <script type="text/javascript">
-                //<![CDATA[
-                document.addEventListener('DOMContentLoaded', function() {
-                    var chartDataJson = '#{patientDashboardBean.chartDataJson}';
-                    if (chartDataJson && chartDataJson.length > 0) {
-                        try {
-                            var chartData = JSON.parse(chartDataJson);
-                            var ctx = document.getElementById('patientLineChart').getContext('2d');
-                            new Chart(ctx, {
-                                type: 'line',
-                                data: {
-                                    labels: chartData.labels,
-                                    datasets: [{
-                                        label: 'Promedio Glucosa (mg/dL)',
-                                        data: chartData.values,
-                                        borderColor: '#3058a6',
-                                        backgroundColor: 'rgba(48,88,166,0.12)',
-                                        borderWidth: 2,
-                                        pointRadius: 4,
-                                        pointBackgroundColor: '#f45501',
-                                        tension: 0.2,
-                                        fill: true
-                                    }]
-                                },
-                                options: {
-                                    responsive: true,
-                                    maintainAspectRatio: true,
-                                    scales: { y: { title: { display: true, text: 'mg/dL' } } }
-                                }
-                            });
-                        } catch (e) { /* ignore parse errors */ }
-                    }
-                });
-                //]]>
-            </script>
+            
+            
         </h:panelGroup>
         <h:panelGroup rendered="#{empty login.usuarioActual or login.usuarioActual.idRol.idRol == 1}">
         <section id="inicio" class="hero-section">

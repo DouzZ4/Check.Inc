@@ -8,7 +8,7 @@
         <ui:define name="title">500 - Error del Servidor</ui:define>
         <ui:define name="content">
             <div class="error-page-container">
-                <img src="#{request.contextPath}/resources/images/pag500.png" alt="500 Error - Servidor en llamas" class="image-500" />
+                <h:graphicImage library="images" name="pag500.png" alt="500 Error - Servidor en llamas" styleClass="image-500" />
                 <h:panelGroup layout="block" styleClass="error-message">
                     <p>¡Oh no! Parece que nuestro servidor tomó una siesta inesperada 😴. Estamos intentando despertarlo para que vuelva a funcionar.</p>
                     <h:link outcome="/index" styleClass="back-link">

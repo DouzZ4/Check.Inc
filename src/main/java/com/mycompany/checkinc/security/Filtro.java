@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.checkinc.security;
 
 import java.io.IOException;
@@ -21,48 +17,77 @@ public class Filtro implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        // No se requiere inicialización
+        // No initialization required
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+
+        if (!(request instanceof HttpServletRequest) || !(response instanceof HttpServletResponse)) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        String path = req.getRequestURI().substring(req.getContextPath().length());
 
-        // Cabeceras anti-caché para páginas protegidas
+        // Apply security-related headers for all responses
+        res.setHeader("X-Frame-Options", "SAMEORIGIN");
+        res.setHeader("X-Content-Type-Options", "nosniff");
+        res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+        // HSTS should only be enabled when serving over HTTPS in production
+        res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+        // Content Security Policy: only allow resources from same origin.
+        res.setHeader("Content-Security-Policy",
+            "default-src 'self'; " +
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
+            "style-src 'self' 'unsafe-inline'; " +
+            "img-src 'self' data:; " +
+            "font-src 'self' data:; " +
+            "connect-src 'self'");
+        res.setHeader("X-Permitted-Cross-Domain-Policies", "none");
+
+        String path = req.getRequestURI();
+        String context = req.getContextPath();
+        if (context != null && context.length() > 0 && path.startsWith(context)) {
+            path = path.substring(context.length());
+        }
+
+        // Anti-cache headers for protected pages
         if (!isPublicResource(path)) {
             res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
             res.setHeader("Pragma", "no-cache");
             res.setDateHeader("Expires", 0);
         }
 
-        // Si es un recurso estático o página pública, permitir acceso
+        // Allow public resources without authentication
         if (isPublicResource(path)) {
             chain.doFilter(request, response);
             return;
         }
 
-        // Verificar autenticación para el resto de páginas
+        // Authentication check for protected pages
         HttpSession session = req.getSession(false);
         if (session != null && session.getAttribute("usuario") != null) {
             chain.doFilter(request, response);
         } else {
             if (session != null) {
-                session.invalidate(); // Cierra la sesión si existe
+                session.invalidate();
             }
             res.sendRedirect(req.getContextPath() + "/index.xhtml");
         }
     }
 
     private boolean isPublicResource(String path) {
-        // Recursos públicos (CSS, JS, imágenes, etc.)
-        if (path.startsWith("/resources/") ||
-            path.startsWith("/javax.faces.resource/")) {
+        if (path == null) {
             return true;
         }
 
-        // Páginas públicas
+        if (path.startsWith("/resources/") || path.startsWith("/javax.faces.resource/")) {
+            return true;
+        }
+
         String[] publicPages = {
             "/views/usuarios/login.xhtml",
             "/views/usuarios/registrousuario.xhtml",
@@ -82,6 +107,6 @@ public class Filtro implements Filter {
 
     @Override
     public void destroy() {
-        // No se requieren acciones de limpieza
+        // No cleanup required
     }
 }

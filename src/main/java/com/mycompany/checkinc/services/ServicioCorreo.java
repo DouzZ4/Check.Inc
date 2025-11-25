@@ -26,13 +26,34 @@ import javax.ejb.EJB;
 @Stateless
 public class ServicioCorreo {
 
-    private static final String SENDGRID = Config.get("SENDGRID_API_KEY");
+    private String sendgridApiKey = Config.get("SENDGRID_API_KEY");
+    private String sendgridBaseUrl = "https://api.sendgrid.com/v3/mail/send";
+    // Injectable http client for tests
+    private okhttp3.OkHttpClient httpClient;
 
     @PersistenceContext
     private EntityManager em;
 
     @EJB
     private AlertaFacadeLocal alertaFacade;
+
+    // Setters for tests / injection
+    public void setSendgridApiKey(String key) {
+        this.sendgridApiKey = key;
+    }
+
+    public void setSendgridBaseUrl(String url) {
+        this.sendgridBaseUrl = url;
+    }
+
+    public void setHttpClient(okhttp3.OkHttpClient client) {
+        this.httpClient = client;
+    }
+
+    // Allow injecting a mocked AlertaFacade in tests
+    public void setAlertaFacade(AlertaFacadeLocal facade) {
+        this.alertaFacade = facade;
+    }
 
     // ======================================================
     // ✅ MÉTODO 1: Enviar correo de registro
@@ -201,23 +222,23 @@ public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuari
      */
     private boolean ejecutarEnvioConOkHttp(File tempFile, com.mycompany.checkinc.entities.Usuario usuario, String tipoAlerta, String destinoEmail) {
         try {
-            if (SENDGRID == null || SENDGRID.trim().isEmpty()) {
+                if (sendgridApiKey == null || sendgridApiKey.trim().isEmpty()) {
                 System.err.println("🚫 [ERROR] No se encontró SENDGRID_API_KEY en el entorno ni en config.properties. Abortando envío.");
                 return false;
-            }
+                }
 
-            String json = new String(Files.readAllBytes(tempFile.toPath()), StandardCharsets.UTF_8);
+                String json = new String(Files.readAllBytes(tempFile.toPath()), StandardCharsets.UTF_8);
 
-            OkHttpClient client = new OkHttpClient.Builder()
+                OkHttpClient client = this.httpClient != null ? this.httpClient : new OkHttpClient.Builder()
                     .callTimeout(java.time.Duration.ofSeconds(30))
                     .build();
 
-            MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
-            RequestBody body = RequestBody.create(json, mediaType);
+                MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+                RequestBody body = RequestBody.create(json, mediaType);
 
-            Request request = new Request.Builder()
-                    .url("https://api.sendgrid.com/v3/mail/send")
-                    .addHeader("Authorization", "Bearer " + SENDGRID)
+                Request request = new Request.Builder()
+                    .url(this.sendgridBaseUrl)
+                    .addHeader("Authorization", "Bearer " + this.sendgridApiKey)
                     .addHeader("Content-Type", "application/json; charset=utf-8")
                     .post(body)
                     .build();

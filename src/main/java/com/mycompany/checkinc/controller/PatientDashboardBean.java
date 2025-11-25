@@ -11,6 +11,15 @@ import com.mycompany.checkinc.services.CitaFacadeLocal;
 import com.mycompany.checkinc.services.MedicamentoFacadeLocal;
 import com.mycompany.checkinc.services.UsuarioFacadeLocal;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.primefaces.model.charts.ChartData;
+import org.primefaces.model.charts.line.LineChartModel;
+import org.primefaces.model.charts.line.LineChartDataSet;
+import org.primefaces.model.charts.optionconfig.title.Title;
+import org.primefaces.model.charts.optionconfig.legend.Legend;
+import org.primefaces.model.charts.line.LineChartOptions;
+import org.primefaces.model.charts.axes.cartesian.CartesianScales;
+import org.primefaces.model.charts.axes.cartesian.category.CartesianCategoryAxes;
+import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,6 +56,7 @@ public class PatientDashboardBean implements Serializable {
     private List<Cita> proximasCitas;
     private List<Medicamento> medicamentos;
     private String chartDataJson;
+    private org.primefaces.model.charts.line.LineChartModel lineChartModel;
 
     @PostConstruct
     public void init() {
@@ -169,10 +179,55 @@ public class PatientDashboardBean implements Serializable {
             chartData.put("values", values);
             ObjectMapper mapper = new ObjectMapper();
             chartDataJson = mapper.writeValueAsString(chartData);
+            // Build PrimeFaces LineChartModel
+            buildLineChartModel(labels, values);
         } catch (Exception ex) {
             ex.printStackTrace();
             chartDataJson = "";
+            lineChartModel = new LineChartModel();
         }
+    }
+
+    private void buildLineChartModel(List<String> labels, List<Double> values) {
+        LineChartModel model = new LineChartModel();
+        ChartData data = new ChartData();
+
+        LineChartDataSet dataSet = new LineChartDataSet();
+        java.util.List<Object> dataValues = new java.util.ArrayList<>();
+        if (values != null) dataValues.addAll(values);
+        dataSet.setData(dataValues);
+        dataSet.setLabel("Promedio Glucosa (mg/dL)");
+        dataSet.setFill(true);
+        dataSet.setBorderColor("#3058a6");
+        dataSet.setBackgroundColor("rgba(48,88,166,0.12)");
+        dataSet.setPointRadius(4);
+        dataSet.setTension(0.2);
+
+        data.setLabels(labels);
+        data.addChartDataSet(dataSet);
+
+        model.setData(data);
+
+        LineChartOptions options = new LineChartOptions();
+        CartesianScales scales = new CartesianScales();
+        CartesianLinearAxes yAxes = new CartesianLinearAxes();
+        yAxes.setBeginAtZero(true);
+        CartesianCategoryAxes xAxes = new CartesianCategoryAxes();
+        scales.addYAxesData(yAxes);
+        scales.addXAxesData(xAxes);
+        options.setScales(scales);
+
+        Legend legend = new Legend();
+        legend.setDisplay(true);
+        legend.setPosition("top");
+        options.setLegend(legend);
+
+        Title title = new Title();
+        title.setDisplay(false);
+        options.setTitle(title);
+
+        model.setOptions(options);
+        this.lineChartModel = model;
     }
 
     // Método para calcular promedio general
@@ -216,5 +271,9 @@ public class PatientDashboardBean implements Serializable {
 
     public String getChartDataJson() {
         return chartDataJson;
+    }
+
+    public LineChartModel getLineChartModel() {
+        return lineChartModel;
     }
 }
