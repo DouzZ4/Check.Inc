@@ -3,19 +3,25 @@ package com.mycompany.checkinc.services;
 import com.mycompany.checkinc.entities.Usuario;
 import com.mycompany.checkinc.entities.Glucosa;
 import com.mycompany.checkinc.util.Config;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.OutputStreamWriter;
 import java.io.FileOutputStream;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.nio.file.Files;
+import java.nio.charset.StandardCharsets;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ejb.EJB;
 
 @Stateless
 public class ServicioCorreo {
@@ -24,6 +30,9 @@ public class ServicioCorreo {
 
     @PersistenceContext
     private EntityManager em;
+
+    @EJB
+    private AlertaFacadeLocal alertaFacade;
 
     // ======================================================
     // ✅ MÉTODO 1: Enviar correo de registro
@@ -183,76 +192,75 @@ public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuari
     // ✅ MÉTODO COMÚN: Ejecutar envío con cURL
     // ======================================================
     private boolean ejecutarEnvioCorreo(File tempFile) {
+            return ejecutarEnvioConOkHttp(tempFile, null, "GENERICA", null);
+    }
+
+    /**
+     * Envia el JSON usando OkHttp y registra un objeto Alerta en BD si se proporciona el usuario.
+     * Retorna true si SendGrid devuelve 202.
+     */
+    private boolean ejecutarEnvioConOkHttp(File tempFile, com.mycompany.checkinc.entities.Usuario usuario, String tipoAlerta, String destinoEmail) {
         try {
             if (SENDGRID == null || SENDGRID.trim().isEmpty()) {
                 System.err.println("🚫 [ERROR] No se encontró SENDGRID_API_KEY en el entorno ni en config.properties. Abortando envío.");
                 return false;
             }
 
-            String authHeader = "Authorization: Bearer " + SENDGRID;
-            // Para logs no mostrar la API key completa
-            String maskedAuth = "Authorization: Bearer [REDACTED]";
+            String json = new String(Files.readAllBytes(tempFile.toPath()), StandardCharsets.UTF_8);
 
-            String[] comando = new String[]{
-                "curl", "-X", "POST",
-                "https://api.sendgrid.com/v3/mail/send",
-                "-H", authHeader,
-                "-H", "Content-Type: application/json; charset=utf-8",
-                "-d", "@" + tempFile.getAbsolutePath(),
-                "--max-time", "30",
-                "-s", "-i"
-            };
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .callTimeout(java.time.Duration.ofSeconds(30))
+                    .build();
 
-            System.out.println("🔧 [INFO] Ejecutando comando CURL (API key oculta en logs):");
-            // Construimos una representación segura del comando para el log
-            StringBuilder safeLog = new StringBuilder();
-            safeLog.append("curl -X POST https://api.sendgrid.com/v3/mail/send ");
-            safeLog.append("-H \"" + maskedAuth + "\" ");
-            safeLog.append("-H \"Content-Type: application/json; charset=utf-8\" ");
-            safeLog.append("-d @" + tempFile.getAbsolutePath());
-            System.out.println(safeLog.toString());
+            MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(json, mediaType);
 
-            ProcessBuilder pb = new ProcessBuilder(comando);
-            pb.redirectErrorStream(true);
-            Process process = pb.start();
+            Request request = new Request.Builder()
+                    .url("https://api.sendgrid.com/v3/mail/send")
+                    .addHeader("Authorization", "Bearer " + SENDGRID)
+                    .addHeader("Content-Type", "application/json; charset=utf-8")
+                    .post(body)
+                    .build();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
-            StringBuilder output = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                output.append(line).append("\n");
-            }
+            System.out.println("🔧 [INFO] Enviando petición HTTP a SendGrid (API key oculta en logs)");
 
-            int exitCode = process.waitFor();
+            try (Response response = client.newCall(request).execute()) {
+                int code = response.code();
+                String respBody = response.body() != null ? response.body().string() : "";
 
-            System.out.println("📜 [RESPUESTA CURL]");
-            System.out.println(output.toString());
+                System.out.println("📜 [RESPUESTA HTTP] Code=" + code);
+                System.out.println(respBody);
 
-            if (exitCode != 0) {
-                System.err.println("❌ [ERROR] Falló la ejecución de cURL. Código: " + exitCode);
+                // Registrar alerta en BD
+                try {
+                    com.mycompany.checkinc.entities.Alerta alerta = new com.mycompany.checkinc.entities.Alerta();
+                    alerta.setTipo(tipoAlerta != null ? tipoAlerta : "EMAIL");
+                    String contenido = "Envio a: " + (destinoEmail != null ? destinoEmail : "-") + " | Code=" + code + " | Resp=" + (respBody.length() > 1000 ? respBody.substring(0, 1000) : respBody);
+                    alerta.setContenido(contenido);
+                    alerta.setFechaHora(new Date());
+                    alerta.setVisto(Boolean.FALSE);
+                    if (usuario != null) alerta.setIdUsuario(usuario);
+                    alertaFacade.create(alerta);
+                } catch (Exception ex) {
+                    System.err.println("⚠️ [WARN] No se pudo registrar la alerta en BD: " + ex.getMessage());
+                }
+
+                if (code == 202) {
+                    System.out.println("📨 [OK] Correo enviado correctamente ✅");
+                    return true;
+                } else if (code == 401) {
+                    System.err.println("🚫 [ERROR] Autenticación fallida. Verifica tu API Key de SendGrid.");
+                } else if (code >= 400 && code < 500) {
+                    System.err.println("⚠️ [ERROR] Error cliente: " + code);
+                } else if (code >= 500) {
+                    System.err.println("🚷 [ERROR] Error servidor en SendGrid: " + code);
+                }
+
                 return false;
             }
 
-            if (output.toString().contains("202 Accepted")) {
-                System.out.println("📨 [OK] Correo enviado correctamente ✅");
-                return true;
-            } else if (output.toString().contains("401")) {
-                System.err.println("🚫 [ERROR] Autenticación fallida. Verifica tu API Key de SendGrid.");
-            } else if (output.toString().contains("400")) {
-                System.err.println("⚠️ [ERROR] Petición incorrecta. Revisa el formato del JSON enviado.");
-            } else if (output.toString().contains("403")) {
-                System.err.println("🚷 [ERROR] No tienes permisos para usar la API de SendGrid.");
-            } else if (output.toString().contains("415")) {
-                System.err.println("⚠️ [ERROR] El servidor rechazó la codificación. Verifica UTF-8 o caracteres especiales en el mensaje.");
-            } else {
-                System.err.println("❌ [ERROR] Respuesta desconocida del servidor:");
-                System.err.println(output.toString());
-            }
-
-            return false;
-
         } catch (Exception e) {
-            System.err.println("💥 [ERROR] Excepción al ejecutar cURL: " + e.getMessage());
+            System.err.println("💥 [ERROR] Excepción al realizar petición HTTP: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -363,7 +371,8 @@ public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuari
                 writer.write(json.replace("\\\\n", "\\n"));
             }
 
-            boolean enviado = ejecutarEnvioCorreo(tempFile);
+            // Usar la versión que registra la alerta en BD y asocia al usuario
+            boolean enviado = ejecutarEnvioConOkHttp(tempFile, usuario, "ALERTA_GLUCOSA", correoDestino);
 
             if (enviado) {
                 System.out.println("✅ [OK] Alerta de glucosa enviada correctamente a " + correoDestino);
