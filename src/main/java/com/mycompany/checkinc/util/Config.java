@@ -39,11 +39,37 @@ public class Config {
         }
     }
 
+    /**
+     * Obtiene la configuración buscando (en este orden):
+     *  1) Variable de entorno
+     *  2) System property
+     *  3) config.properties
+     * Devuelve null si no existe.
+     */
     public static String get(String key) {
-        String value = properties.getProperty(key);
-        if (value == null || value.trim().isEmpty()) {
-            System.err.println("⚠️ No se encontró la clave: " + key);
+        // 1) Environment variable
+        try {
+            String env = System.getenv(key);
+            if (env != null && !env.trim().isEmpty()) {
+                return env.trim();
+            }
+        } catch (SecurityException se) {
+            // En entornos restringidos puede lanzar excepción
         }
-        return value;
+
+        // 2) System property (-Dkey=value)
+        String sys = System.getProperty(key);
+        if (sys != null && !sys.trim().isEmpty()) {
+            return sys.trim();
+        }
+
+        // 3) config.properties file
+        String prop = properties.getProperty(key);
+        if (prop != null && !prop.trim().isEmpty()) {
+            return prop.trim();
+        }
+
+        // No encontrado
+        return null;
     }
 }

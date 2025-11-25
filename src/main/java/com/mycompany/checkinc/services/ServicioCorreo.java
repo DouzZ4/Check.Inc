@@ -184,18 +184,33 @@ public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuari
     // ======================================================
     private boolean ejecutarEnvioCorreo(File tempFile) {
         try {
-            String[] comando = {
+            if (SENDGRID == null || SENDGRID.trim().isEmpty()) {
+                System.err.println("🚫 [ERROR] No se encontró SENDGRID_API_KEY en el entorno ni en config.properties. Abortando envío.");
+                return false;
+            }
+
+            String authHeader = "Authorization: Bearer " + SENDGRID;
+            // Para logs no mostrar la API key completa
+            String maskedAuth = "Authorization: Bearer [REDACTED]";
+
+            String[] comando = new String[]{
                 "curl", "-X", "POST",
                 "https://api.sendgrid.com/v3/mail/send",
-                "-H", "Authorization: Bearer " + SENDGRID,
+                "-H", authHeader,
                 "-H", "Content-Type: application/json; charset=utf-8",
                 "-d", "@" + tempFile.getAbsolutePath(),
                 "--max-time", "30",
                 "-s", "-i"
             };
 
-            System.out.println("🔧 [INFO] Ejecutando comando CURL:");
-            System.out.println(String.join(" ", comando));
+            System.out.println("🔧 [INFO] Ejecutando comando CURL (API key oculta en logs):");
+            // Construimos una representación segura del comando para el log
+            StringBuilder safeLog = new StringBuilder();
+            safeLog.append("curl -X POST https://api.sendgrid.com/v3/mail/send ");
+            safeLog.append("-H \"" + maskedAuth + "\" ");
+            safeLog.append("-H \"Content-Type: application/json; charset=utf-8\" ");
+            safeLog.append("-d @" + tempFile.getAbsolutePath());
+            System.out.println(safeLog.toString());
 
             ProcessBuilder pb = new ProcessBuilder(comando);
             pb.redirectErrorStream(true);

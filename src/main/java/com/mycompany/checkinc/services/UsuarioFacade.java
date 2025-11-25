@@ -38,7 +38,6 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
             query.setParameter("username", username);
             Usuario usuario = (Usuario) query.getSingleResult();
             System.out.println("UsuarioFacade: Usuario encontrado: " + usuario.getUser());
-            System.out.println("UsuarioFacade: Password almacenado: " + usuario.getPassword());
             String storedPassword = usuario.getPassword();
             boolean passwordMatch;
             if (!storedPassword.startsWith("$2")) {
@@ -53,7 +52,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
             System.out.println("UsuarioFacade: Verificación de contraseña: " + passwordMatch);
             if (passwordMatch) {
                 if (!storedPassword.startsWith("$2")) {
-                    System.out.println("UsuarioFacade: Actualizando contraseña a formato hash");
+                    // Actualizar a hash bcrypt sin exponer información sensible en logs
                     usuario.setPassword(PasswordUtils.hashPassword(password));
                     em.merge(usuario);
                 }
