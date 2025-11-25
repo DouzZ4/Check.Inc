@@ -8,4 +8,6 @@ import javax.ejb.Local;
 public interface AlertaFacadeLocal {
     void create(Alerta alerta);
     List<Alerta> findAll();
+    Alerta find(Object id);
+    Alerta update(Alerta alerta);
 }

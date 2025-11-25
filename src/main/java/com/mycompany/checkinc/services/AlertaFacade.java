@@ -20,4 +20,14 @@ public class AlertaFacade implements AlertaFacadeLocal {
     public java.util.List<Alerta> findAll() {
         return em.createNamedQuery("Alerta.findAll", Alerta.class).getResultList();
     }
+
+    @Override
+    public Alerta find(Object id) {
+        return em.find(Alerta.class, id);
+    }
+
+    @Override
+    public Alerta update(Alerta alerta) {
+        return em.merge(alerta);
+    }
 }

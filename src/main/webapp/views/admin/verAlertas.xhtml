@@ -9,7 +9,7 @@
     <h:body>
         <h:form>
             <h1>Alertas del sistema</h1>
-            <h:dataTable value="#{alertaBean.alertas}" var="a" border="1" styleClass="table">
+            <h:dataTable id="tblAlertas" value="#{alertaBean.alertas}" var="a" border="1" styleClass="table">
                 <h:column>
                     <f:facet name="header">ID</f:facet>
                     #{a.idAlerta}
@@ -33,6 +33,12 @@
                 <h:column>
                     <f:facet name="header">Usuario</f:facet>
                     #{a.idUsuario != null ? a.idUsuario.nombres : '-'}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Acciones</f:facet>
+                    <h:commandButton value="Marcar visto" action="#{alertaBean.marcarVisto(a)}">
+                        <f:ajax execute="@this" render="tblAlertas" />
+                    </h:commandButton>
                 </h:column>
             </h:dataTable>
         </h:form>

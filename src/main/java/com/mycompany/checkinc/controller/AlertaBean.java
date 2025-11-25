@@ -23,6 +23,18 @@ public class AlertaBean implements Serializable {
         alertas = alertaFacade.findAll();
     }
 
+    public void marcarVisto(Alerta a) {
+        try {
+            if (a != null) {
+                a.setVisto(Boolean.TRUE);
+                alertaFacade.update(a);
+                alertas = alertaFacade.findAll();
+            }
+        } catch (Exception e) {
+            System.err.println("⚠️ [WARN] Error marcando alerta como vista: " + e.getMessage());
+        }
+    }
+
     public List<Alerta> getAlertas() {
         return alertas;
     }
