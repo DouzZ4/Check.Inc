@@ -38,9 +38,12 @@ create-jdbc-connection-pool \
   mysql_checks_pool
 
 # Crear el recurso JDBC
+# Payara Micro no permite ':' en el nombre del recurso al crearlo con CLI
+# Pero cuando la aplicación busca java:app/jdbc/checks, Payara lo resuelve
+# automáticamente desde jdbc/checks en el contexto de la aplicación
 create-jdbc-resource \
   --connectionpoolid mysql_checks_pool \
-  java:app/jdbc/checks
+  jdbc/checks
 
 # Verificar que el pool se creó correctamente
 list-jdbc-connection-pools
