@@ -1,0 +1,39 @@
+# Directorios de build
+target/
+.mvn/
+*.war
+*.jar
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+nb-configuration.xml
+
+# Git
+.git/
+.gitignore
+
+# Documentación
+docs/
+*.md
+!README.md
+
+# Archivos de configuración local
+config.properties
+
+# Logs
+*.log
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos temporales
+*.tmp
+*.bak
+*.swp
+*~
+
