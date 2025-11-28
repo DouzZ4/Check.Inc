@@ -9,8 +9,13 @@ MYSQL_DATABASE=${MYSQLDATABASE:-${MYSQL_DATABASE:-railway}}
 MYSQL_USER=${MYSQLUSER:-${MYSQL_USER:-root}}
 MYSQL_PASSWORD=${MYSQLPASSWORD:-${MYSQL_PASSWORD:-""}}
 
-# Construir la URL de conexión JDBC
-JDBC_URL="jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true"
+# Construir la URL de conexión JDBC con credenciales
+# Si hay contraseña, incluirla en la URL; si no, usar solo usuario
+if [ -n "$MYSQL_PASSWORD" ] && [ "$MYSQL_PASSWORD" != "" ]; then
+    JDBC_URL="jdbc:mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true"
+else
+    JDBC_URL="jdbc:mysql://${MYSQL_USER}@${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true"
+fi
 
 echo "=========================================="
 echo "Configurando conexión a MySQL"
@@ -19,15 +24,17 @@ echo "Host: ${MYSQL_HOST}"
 echo "Port: ${MYSQL_PORT}"
 echo "Database: ${MYSQL_DATABASE}"
 echo "User: ${MYSQL_USER}"
+echo "Password: [${#MYSQL_PASSWORD} caracteres]"
 echo "=========================================="
 
 # Crear archivo de configuración para Payara Micro
+# Usar la URL JDBC completa que incluye las credenciales
 cat > /tmp/post-boot-commands.txt <<EOF
-# Configurar el pool de conexiones MySQL
+# Configurar el pool de conexiones MySQL usando URL completa
 create-jdbc-connection-pool \
   --datasourceclassname com.mysql.cj.jdbc.MysqlDataSource \
   --restype javax.sql.DataSource \
-  --property serverName=${MYSQL_HOST}:portNumber=${MYSQL_PORT}:databaseName=${MYSQL_DATABASE}:User=${MYSQL_USER}:Password=${MYSQL_PASSWORD}:URL="${JDBC_URL}" \
+  --property URL="${JDBC_URL}" \
   mysql_checks_pool
 
 # Crear el recurso JDBC
