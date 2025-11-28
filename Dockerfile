@@ -17,7 +17,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Etapa 2: Ejecución con Payara Micro
-FROM openjdk:8-jre-slim
+FROM eclipse-temurin:8-jre
 
 WORKDIR /app
 
@@ -29,7 +29,8 @@ ENV DEPLOY_DIR=/opt/payara/deployments
 # Instalar dependencias necesarias
 RUN apt-get update && \
     apt-get install -y curl unzip && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean
 
 # Descargar e instalar Payara Micro
 RUN curl -L -o /tmp/payara-micro.jar \
