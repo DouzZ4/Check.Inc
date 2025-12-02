@@ -1,0 +1,47 @@
+# Configuración de Render para Check.Inc
+# Este archivo es opcional - puedes configurar todo desde el dashboard de Render
+# Si usas este archivo, Render lo detectará automáticamente
+
+services:
+  - type: web
+    name: check-inc
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free  # Cambia a 'starter' o 'standard' para producción
+    region: oregon  # Elige la región más cercana: oregon, frankfurt, singapore, etc.
+    buildCommand: ""  # Dejar vacío, el Dockerfile maneja el build
+    startCommand: ""  # Dejar vacío, el Dockerfile tiene ENTRYPOINT
+    envVars:
+      # Puerto - Render lo proporciona automáticamente, pero lo incluimos por claridad
+      - key: PORT
+        generateValue: true
+      
+      # Variables de MySQL - Configura estas según tu base de datos
+      # Opción 1: Si usas MySQL externo, configura estas variables manualmente
+      - key: MYSQL_HOST
+        sync: false  # No sincronizar desde otro servicio
+      - key: MYSQL_PORT
+        value: "3306"
+      - key: MYSQL_DATABASE
+        sync: false
+      - key: MYSQL_USER
+        sync: false
+      - key: MYSQL_PASSWORD
+        sync: false
+      
+      # Opción 2: Si Render proporciona DATABASE_URL (para PostgreSQL u otros)
+      # Descomenta y ajusta según sea necesario:
+      # - key: DATABASE_URL
+      #   sync: false
+      
+      # Variables opcionales para servicios externos
+      - key: SENDGRID_API_KEY
+        sync: false  # Configura manualmente si usas SendGrid
+
+# Notas importantes:
+# 1. Render no ofrece MySQL nativo, solo PostgreSQL
+# 2. Si necesitas MySQL, usa un servicio externo (AWS RDS, PlanetScale, Aiven, etc.)
+# 3. Configura las variables de entorno en el dashboard de Render después de crear el servicio
+# 4. El plan 'free' puede tener limitaciones (tiempo de inactividad, recursos limitados)
+

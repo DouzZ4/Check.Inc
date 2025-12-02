@@ -48,19 +48,26 @@ RUN curl -L -o ${PAYARA_HOME}/mysql-connector.jar \
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
-# Exponer el puerto (Payara Micro usa 8080 por defecto)
+# Crear script para healthcheck que usa el puerto dinámico
+RUN echo '#!/bin/sh\nPORT=${PORT:-8080}\ncurl -f http://localhost:${PORT}/ || exit 1' > /healthcheck.sh && \
+    chmod +x /healthcheck.sh
+
+# Exponer el puerto (Render usa PORT dinámico, 8080 como fallback)
 EXPOSE 8080
 
-# Variables de entorno para MySQL (se configurarán desde Railway)
-ENV MYSQL_HOST=mysql.railway.internal
+# Variables de entorno para MySQL (se configurarán desde Render/Railway)
+# Render puede proporcionar DATABASE_URL o variables separadas
+ENV MYSQL_HOST=""
 ENV MYSQL_PORT=3306
-ENV MYSQL_DATABASE=railway
-ENV MYSQL_USER=root
+ENV MYSQL_DATABASE=""
+ENV MYSQL_USER=""
 ENV MYSQL_PASSWORD=""
+ENV DATABASE_URL=""
+ENV PORT=8080
 
-# Healthcheck
+# Healthcheck (usa script que lee PORT dinámico)
 HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
-  CMD curl -f http://localhost:8080/ || exit 1
+  CMD /healthcheck.sh
 
 # Ejecutar Payara Micro
 ENTRYPOINT ["/docker-entrypoint.sh"]
