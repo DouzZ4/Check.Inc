@@ -9,10 +9,8 @@
 
         <!-- Branding / Logo -->
         <div class="navbar-branding">
-            <h:link outcome="/views/usuarios/Perfil.xhtml" styleClass="brand-link">
                 <h:graphicImage library="images" name="ICONO.png" alt="Logo Check" styleClass="logo-navbar" />
                 <h1>CHECK</h1>
-            </h:link>
         </div>
 
         <!-- Enlaces del menú principal -->
@@ -45,16 +43,20 @@
         <!-- Área de usuario (login/logout) -->
         <div class="navbar-user-info">
             <h:panelGroup rendered="#{not empty login.usuarioActual}">
-                <span class="welcome-message">Hola, #{login.usuarioActual.nombres}</span>
+        <h:form styleClass="profile-form">
+            <h:button value="Hola #{login.usuarioActual.nombres}" 
+                      outcome="/views/usuarios/Perfil.xhtml" 
+                      styleClass="action-button edit-button" />
+        </h:form>
+        <h:form styleClass="logout-form">
+            <h:commandButton value="Cerrar Sesión" 
+                             action="#{login.logout}" 
+                             styleClass="action-button delete-button">
+                <f:ajax render="@all"/>
+            </h:commandButton>
+        </h:form>
 
-                <h:form styleClass="logout-form">
-                    <h:commandButton value="Cerrar Sesión" 
-                                     action="#{login.logout}" 
-                                     styleClass="button-logout">
-                        <f:ajax render="@all"/>
-                    </h:commandButton>
-                </h:form>
-            </h:panelGroup>
+</h:panelGroup>
 
             <h:panelGroup rendered="#{empty login.usuarioActual}">
                 <h:link outcome="/views/usuarios/login" value="Iniciar Sesión" styleClass="button-login"/>

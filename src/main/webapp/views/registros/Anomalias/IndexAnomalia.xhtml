@@ -24,7 +24,7 @@
                     </h2>
 
                     <h:form id="formAnomalia">
-                        <h:inputHidden id="id" value="#{registroAnomalia.idAnomalia}" />
+                        <h:inputHidden value="#{registroAnomalia.idAnomalia}" />
 
                         <!-- FECHA -->
                         <div class="form-group">
@@ -39,7 +39,6 @@
                             <h:message for="fechaHora" styleClass="message error-message"/>
                         </div>
 
-                        <!-- DESCRIPCIÓN -->
                         <div class="form-group">
                             <h:outputLabel for="descripcion" value="Descripción:"/>
                             <h:inputTextarea id="descripcion"
@@ -50,7 +49,6 @@
                             <h:message for="descripcion" styleClass="message error-message"/>
                         </div>
 
-                        <!-- SÍNTOMAS -->
                         <div class="form-group">
                             <h:outputLabel for="sintomas" value="Síntomas:"/>
                             <h:inputTextarea id="sintomas"
@@ -77,13 +75,11 @@
                             <h:message for="gravedad" styleClass="message error-message"/>
                         </div>
 
-                        <!-- RESUELTO -->
                         <div class="form-group">
                             <h:selectBooleanCheckbox id="resuelto" value="#{registroAnomalia.resuelto}" />
                             <h:outputLabel for="resuelto" value="¿Marcar como resuelto?"/>
                         </div>
 
-                        <!-- BOTONES -->
                         <div id="form-buttons">
                             <h:commandButton value="#{registroAnomalia.editando ? 'Actualizar' : 'Registrar'}"
                                              action="#{registroAnomalia.registrar}"
@@ -96,7 +92,6 @@
                     </h:form>
                 </section>
 
-                <!-- TABLA DE REGISTROS -->
                 <section aria-labelledby="registros-heading">
                     <h2 id="registros-heading">Registros de Anomalías</h2>
                     <div style="overflow-x:auto;">

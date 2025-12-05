@@ -1,266 +1,105 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:h="http://xmlns.jcp.org/jsf/html"
-    xmlns:p="http://primefaces.org/ui"
-    lang="es" xml:lang="es"
-    xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      lang="es" xml:lang="es">
 
-<ui:composition template="/views/TemplateSitio.xhtml">
+
+
+    <ui:composition template="/views/TemplateSitio.xhtml">
     <ui:define name="title">Inicio - CHECK</ui:define>
 
     <ui:define name="content">
 
-        <!-- Si usuario es paciente, mostrar solo dashboard (sin template adicional) -->
-        <h:panelGroup rendered="#{not empty login.usuarioActual and login.usuarioActual.idRol.idRol == 2}">
-            <!-- Dashboard inline sin ui:include -->
-            <h:form id="patientDashboardForm">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <div>
-                        <h2 class="dashboard-title">Mi Salud - Dashboard</h2>
-                        <p class="dashboard-subtitle">Resumen rápido de tu control de glucosa, anomalías y próximas citas.</p>
-                    </div>
-                    <h:commandButton value="Descargar Reporte" 
-                                     action="#{reporteBean.exportarReporteSaludPDF}"
-                                     styleClass="download-button"
-                                     title="Descargar reporte completo de salud en PDF" />
+        <!-- HERO SECTION -->
+            <div class="hero-container two-column" style="background: linear-gradient(355deg, #D6DDE7, #ffffff); padding: 60px 20px; border-radius: 15px; margin-bottom: 40px;">
+                <div class="hero-image" style="flex:1; text-align:center;">
+                    <h:graphicImage name="LOGO PNG.png" library="images" alt="Logo CHECK" styleClass="logo-img" style="max-width: 250px;"/>
                 </div>
-
-                <!-- Tarjetas resumen -->
-                <div class="dashboard-grid">
-                    <div class="card card-accent-1">
-                        <p class="card-title">Última medición</p>
-                        <h3 class="card-value"> 
-                            <h:outputText value="#{not empty patientDashboardBean.glucosaReciente ? patientDashboardBean.glucosaReciente.get(0).nivelGlucosa : '-'}" />
-                            <small class="card-unit"> mg/dL</small>
-                        </h3>
-                        <p class="card-muted">
-                            <h:outputText value="#{not empty patientDashboardBean.glucosaReciente ? patientDashboardBean.glucosaReciente.get(0).fechaHora : ''}">
-                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
-                            </h:outputText>
-                        </p>
-                    </div>
-
-                    <div class="card card-accent-2">
-                        <p class="card-title">Promedio (últimos días)</p>
-                        <h3 class="card-value">
-                            <h:outputText value="#{patientDashboardBean.promedioGlucosa}">
-                                <f:convertNumber type="number" minFractionDigits="1" maxFractionDigits="2"/>
-                            </h:outputText>
-                            <small class="card-unit"> mg/dL</small>
-                        </h3>
-                        <p class="card-muted">Promedio de todos los registros</p>
-                    </div>
-
-                    <div class="card card-accent-3">
-                        <p class="card-title">Próxima cita</p>
-                        <h3 class="card-value">
-                            <h:outputText value="#{not empty patientDashboardBean.proximasCitas ? patientDashboardBean.proximasCitas.get(0).fecha : '-'}">
-                                <f:convertDateTime pattern="dd/MM/yyyy"/>
-                            </h:outputText>
-                        </h3>
-                        <p class="card-muted">
-                            <h:outputText value="#{not empty patientDashboardBean.proximasCitas ? patientDashboardBean.proximasCitas.get(0).motivo : 'Sin citas próximas'}"/>
-                        </p>
-                    </div>
-
-                    <div class="card card-accent-4">
-                        <p class="card-title">Medicamentos</p>
-                        <h3 class="card-value"> <h:outputText value="#{fn:length(patientDashboardBean.medicamentos)}" xmlns:fn="http://java.sun.com/jsp/jstl/functions"/> </h3>
-                        <p class="card-muted">Activos</p>
-                    </div>
-                </div>
-
-                <!-- Gráfico y tabla (apilados verticalmente) -->
-                <div class="stacked-grid">
-                    <div class="card-chart">
-                        <h3>Tendencia de Glucosa</h3>
-                        <p:lineChart id="patientLineChart" model="#{patientDashboardBean.lineChartModel}" style="max-height:320px;" />
-                    </div>
-
-                    <div class="card-table">
-                        <h3>Últimas lecturas</h3>
-                        <h:panelGroup rendered="#{empty patientDashboardBean.glucosaReciente}">
-                            <p style="color:rgba(255,255,255,0.85);">No hay registros de glucosa disponibles.</p>
-                        </h:panelGroup>
-                        <h:panelGroup rendered="#{not empty patientDashboardBean.glucosaReciente}">
-                            <h:dataTable value="#{patientDashboardBean.glucosaReciente}" var="g" styleClass="table-white">
-                                <h:column>
-                                    <f:facet name="header">
-                                        <div class="table-header-overlay">Fecha</div>
-                                    </f:facet>
-                                    <h:outputText value="#{g.fechaHora}">
-                                        <f:convertDateTime pattern="dd/MM HH:mm"/>
-                                    </h:outputText>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <div class="table-header-overlay">Nivel</div>
-                                    </f:facet>
-                                    <h:outputText value="#{g.nivelGlucosa}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <div class="table-header-overlay">Momento</div>
-                                    </f:facet>
-                                    <h:outputText value="#{g.momentoDia}"/>
-                                </h:column>
-                            </h:dataTable>
-                        </h:panelGroup>
-                    </div>
-                </div>
-
-                <!-- Anomalías recientes -->
-                <div class="card-anomalies">
-                    <h3>Anomalías recientes</h3>
-                    <h:panelGroup rendered="#{empty patientDashboardBean.anomaliasRecientes}">
-                        <p style="color:rgba(255,255,255,0.85);">No hay anomalías registradas.</p>
-                    </h:panelGroup>
-                    <h:panelGroup rendered="#{not empty patientDashboardBean.anomaliasRecientes}">
-                        <h:dataTable value="#{patientDashboardBean.anomaliasRecientes}" var="a" styleClass="table-white">
-                            <h:column>
-                                <f:facet name="header">
-                                    <div class="table-header-overlay">Fecha</div>
-                                </f:facet>
-                                <h:outputText value="#{a.fechaHora}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
-                                </h:outputText>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">
-                                    <div class="table-header-overlay">Descripción</div>
-                                </f:facet>
-                                <h:outputText value="#{a.descripcion}"/>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">
-                                    <div class="table-header-overlay">Gravedad</div>
-                                </f:facet>
-                                <h:panelGroup rendered="#{a.gravedad eq 'grave'}">
-                                    <span class="severity-grave">#{a.gravedad}</span>
-                                </h:panelGroup>
-                                <h:panelGroup rendered="#{a.gravedad eq 'moderada'}">
-                                    <span class="severity-moderada">#{a.gravedad}</span>
-                                </h:panelGroup>
-                                <h:panelGroup rendered="#{a.gravedad eq 'leve'}">
-                                    <span class="severity-leve">#{a.gravedad}</span>
-                                </h:panelGroup>
-                            </h:column>
-                        </h:dataTable>
-                    </h:panelGroup>
-                </div>
-
-            </h:form>
-
-            
-            
-        </h:panelGroup>
-        <h:panelGroup rendered="#{empty login.usuarioActual or login.usuarioActual.idRol.idRol == 1}">
-        <section id="inicio" class="hero-section">
-            <div class="hero-container two-column">
-                <div class="hero-image">
-                    <h:graphicImage name="LOGO PNG.png" library="images" alt="Logo CHECK" styleClass="logo-img" />
-                </div>
-                <div class="hero-content">
-                    <p class="hero-text">
+                <div class="hero-content" style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:flex-start; padding-left:20px;">
+                    <h1 style="color:#3058a6; font-size:2.5em; margin-bottom:20px;">CHECK: Tu Salud Bajo Control</h1>
+                    <p class="hero-text" style="color:#000000; font-size:1.2em; margin-bottom:30px;">
                         Monitorea tus niveles de azúcar, controla tus comidas y mantén tus citas médicas en un solo lugar.
                     </p>
 
                     <h:panelGroup rendered="#{empty login.username}">
-                        <div class="button-group">
+                        <div class="button-group" style="display:flex; gap:15px;">
                             <h:form>
-                                <h:button value="Iniciar Sesión" outcome="/views/usuarios/login.xhtml" styleClass="button login" />
+                                <h:button value="Iniciar Sesión" outcome="/views/usuarios/login.xhtml" styleClass="button login"/>
                             </h:form>
                             <h:form>
-                                <h:button value="Registrarse" outcome="/views/usuarios/registrousuario.xhtml" styleClass="button register" />
+                                <h:button value="Registrarse" outcome="/views/usuarios/registrousuario.xhtml" styleClass="button register"/>
                             </h:form>
                         </div>
                     </h:panelGroup>
 
                     <h:panelGroup rendered="#{not empty login.username}">
-                        <p>Bienvenido, #{login.username}. Navega por el menú o accede a tus registros.</p>
+                        <p style="color:#3058a6; font-weight:bold;">Bienvenido, #{login.username}. Navega por el menú o accede a tus registros.</p>
                         <div class="button-group">
                             <h:form>
-                                <h:commandButton value="Ir al panel de gestión" action="/views/inicioGestion.xhtml?faces-redirect=true" styleClass="btn btn-black" />
+                                <h:commandButton value="Ir al panel de gestión" action="/views/inicioGestion.xhtml?faces-redirect=true" styleClass="btn btn-black"/>
                             </h:form>
                         </div>
                     </h:panelGroup>
                 </div>
             </div>
-        </section>
 
-        <!-- Sección de funcionalidades -->
-        <section id="funcionalidades" class="features-section">
-            <h2 class="section-title">Beneficios</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
+        <!-- FUNCIONALIDADES -->
+            <h2 class="section-title" style="text-align:center; margin-bottom:2px; color:#3058a6;">Beneficios</h2>
+            <div class="features-grid" style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap;">
+                <div class="feature-card" style="flex:1 1 250px; background:#E8F4FF; padding:20px; border-radius:10px; text-align:center;">
+                    <div class="feature-icon" style="font-size:2em;">📊</div>
                     <h3>Mejor Control de Salud</h3>
                     <p>Seguimiento preciso de tu diabetes para evitar complicaciones.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📱</div>
+                <div class="feature-card" style="flex:1 1 250px; background:#D6DDE7; padding:20px; border-radius:10px; text-align:center;">
+                    <div class="feature-icon" style="font-size:2em;">📱</div>
                     <h3>Interfaz Intuitiva</h3>
                     <p>Diseño claro y amigable para cualquier usuario.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚙</div>
+                <div class="feature-card" style="flex:1 1 250px; background:#3058a6; padding:20px; border-radius:10px; text-align:center; color:white;">
+                    <div class="feature-icon" style="font-size:2em;">⚙</div>
                     <h3>Personalización</h3>
-                    <p>Ajusta alarmas y recordatorios según tus necesidades.</p>
+                    <p style="color: #ffffff">Ajusta alarmas y recordatorios según tus necesidades.</p>
                 </div>
             </div>
-        </section>
 
-        <!-- Sección testimonios -->
-        <section id="testimonios" class="testimonials-section">
-            <h2 class="section-title">Testimonios</h2>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="testimonial-icon">👩</div>
+        <!-- TESTIMONIOS -->
+            <h2 class="section-title" style="text-align:center; margin-bottom:30px; color:#3058a6;">Testimonios</h2>
+            <div class="testimonials-grid" style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap;">
+                <div class="testimonial-card" style="flex:1 1 250px; padding:20px; background:#F1F5F9; border-radius:10px; text-align:center;">
+                    <div class="testimonial-icon" style="font-size:2em;">👩</div>
                     <h3>María López</h3>
                     <blockquote>"Desde que comencé a usar esta app, he notado una gran mejora en mi control diario..."</blockquote>
                 </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-icon">👨</div>
+                <div class="testimonial-card" style="flex:1 1 250px; padding:20px; background:#F1F5F9; border-radius:10px; text-align:center;">
+                    <div class="testimonial-icon" style="font-size:2em;">👨</div>
                     <h3>Carlos Méndez</h3>
                     <blockquote>"Me encanta lo fácil que es registrar mis niveles de glucosa y mis comidas..."</blockquote>
                 </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-icon">👩</div>
+                <div class="testimonial-card" style="flex:1 1 250px; padding:20px; background:#D6DDE7; border-radius:10px; text-align:center;">
+                    <div class="testimonial-icon" style="font-size:2em;">👩</div>
                     <h3>Ana Fernández</h3>
                     <blockquote>"Esta app me ha facilitado muchísimo la vida. ¡Una verdadera ayuda!"</blockquote>
                 </div>
             </div>
-        </section>
 
-        <!-- Sección descargar -->
-        <section id="descargar" class="download-section two-column">
-            <div class="download-content">
-                <h2 class="section-title">Empieza a Controlar tu diabetes hoy:</h2>
-                <div class="download-buttons">
-                    <h:form>
-                        <h:commandButton value="Registrarme" action="/views/usuarios/registrousuario?faces-redirect=true" styleClass="btn btn-black" />
-                    </h:form>
-                    <h:form>
-                        <h:commandButton value="Descargar" action="#" styleClass="btn btn-black" />
-                    </h:form>
-                </div>
-            </div>
-            <div class="download-image">
-                <h:graphicImage name="img/phone-mockup.png" library="default" alt="App CHECK en celular" />
-            </div>
-        </section>
-
-        <!-- Contacto -->
-        <section id="contacto" class="contact-section">
-            <h2 class="section-title">Contáctanos</h2>
-            <p class="contact-text">¿Tienes preguntas? Escríbenos a 
+        <!-- CONTACTO -->
+            <h2 class="section-title" style="color:#3058a6;">Contáctanos</h2>
+            <p class="contact-text" style="font-size:1.1em;">
+                ¿Tienes preguntas? Escríbenos a 
                 <h:outputLink value="mailto:contacto@checkdiabetes.com">contacto@checkdiabetes.com</h:outputLink>
             </p>
-        </section>
-        </h:panelGroup>
 
     </ui:define>
 </ui:composition>
+
+
+    
+    
+    
+    
 </html>
