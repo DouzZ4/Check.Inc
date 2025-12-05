@@ -1,36 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE resources PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN"
-    "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
+<!DOCTYPE resources PUBLIC
+ "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN"
+ "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
 
 <resources>
 
-    <!-- ✅ POOL DE CONEXIÓN MYSQL 8 + GLASSFISH 5 + JAVA 8 -->
+    <!-- ✅ POOL CORRECTO MYSQL 8 + GLASSFISH + JAVA -->
     <jdbc-connection-pool
-        name="mysql_checks_pool"
+        name="checksPool"
         res-type="javax.sql.DataSource"
-        datasource-classname="com.mysql.jdbc.MysqlDataSource"
+        datasource-classname="com.mysql.cj.jdbc.MysqlDataSource"
         steady-pool-size="8"
         max-pool-size="32"
         max-wait-time-in-millis="60000">
 
-        <property name="serverName" value="node251883-env-8196014.sp1.br.saveincloud.net.br"/>
-        <property name="portNumber" value="3306"/>
-        <property name="databaseName" value="checks"/>
         <property name="user" value="root"/>
         <property name="password" value="jG1Xy9ZcN7"/>
-
-        <property name="URL"
+        <property name="url"
             value="jdbc:mysql://node251883-env-8196014.sp1.br.saveincloud.net.br:3306/checks?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC"/>
-
-        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
 
     </jdbc-connection-pool>
 
-    <!-- ✅ RECURSO JNDI (DEBE COINCIDIR CON persistence.xml) -->
-    <jdbc-resource
-        enabled="true"
-        jndi-name="java:app/jdbc/checks"
-        object-type="user"
-        pool-name="mysql_checks_pool"/>
+    <!-- ✅ JNDI CORRECTO -->
+    <jdbc-resource 
+        pool-name="checksPool"
+        jndi-name="jdbc/checks"/>
 
 </resources>

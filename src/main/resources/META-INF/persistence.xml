@@ -8,6 +8,9 @@
   <persistence-unit name="com.mycompany_CheckInc_war_1.0-SNAPSHOTPU"
                     transaction-type="JTA">
 
+          <!-- ✅ JNDI DEL POOL (OBLIGATORIO) -->
+    <jta-data-source>jdbc/checks</jta-data-source>
+
     <!-- ✅ TUS ENTIDADES -->
     <class>com.mycompany.checkinc.entities.Medicamento</class>
     <class>com.mycompany.checkinc.entities.Glucosa</class>
@@ -24,24 +27,9 @@
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
     <properties>
-
-      <!-- ✅ DRIVER MYSQL 8 CORRECTO -->
-      <property name="javax.persistence.jdbc.driver"
-                value="com.mysql.jdbc.Driver"/>
-
-      <!-- ✅ URL COMPLETA -->
-      <property name="javax.persistence.jdbc.url"
-                value="jdbc:mysql://node251883-env-8196014.sp1.br.saveincloud.net.br:3306/checks?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC"/>
-
-      <!-- ✅ USUARIO -->
-      <property name="javax.persistence.jdbc.user" value="root"/>
-
-      <!-- ✅ PASSWORD -->
-      <property name="javax.persistence.jdbc.password" value="jG1Xy9ZcN7"/>
-
       <property name="javax.persistence.schema-generation.database.action" value="none"/>
       <property name="eclipselink.logging.level" value="FINE"/>
-
+      <property name="eclipselink.logging.parameters" value="true"/>
     </properties>
 
   </persistence-unit>
