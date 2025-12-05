@@ -2,5 +2,5 @@ config.properties
 /target/
 
 # Archivos de configuración de persistencia y recursos GlassFish
-**/persistence.xml
-**/glassfish-resources.xml
+# **/persistence.xml
+# **/glassfish-resources.xml
