@@ -25,10 +25,13 @@
     <class>com.mycompany.checkinc.entities.NivelesGlucosa</class>
 
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-
+    <!-- Exclude unlisted classes -->
     <properties>
+      <!-- Generate schema action -->
       <property name="javax.persistence.schema-generation.database.action" value="none"/>
+      <!-- Logging level -->
       <property name="eclipselink.logging.level" value="FINE"/>
+      <!-- Logging parameters -->
       <property name="eclipselink.logging.parameters" value="true"/>
     </properties>
 

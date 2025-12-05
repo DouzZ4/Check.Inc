@@ -5,7 +5,7 @@
 
 <resources>
 
-    <!-- ✅ POOL CORRECTO MYSQL 8 + GLASSFISH + JAVA -->
+    <!-- POOL CORRECTO MYSQL 8 + GLASSFISH + JAVA -->
     <jdbc-connection-pool
         name="checksPool"
         res-type="javax.sql.DataSource"
@@ -21,7 +21,7 @@
 
     </jdbc-connection-pool>
 
-    <!-- ✅ JNDI CORRECTO -->
+    <!-- JNDI CORRECTO -->
     <jdbc-resource 
         pool-name="checksPool"
         jndi-name="jdbc/checks"/>
