@@ -17,6 +17,7 @@
 -->
 <glassfish-web-app error-url="">
   <class-loader delegate="true"/>
+  <context-root>/</context-root>
   <jsp-config>
     <property name="keepgenerated" value="true">
       <description>Keep a copy of the generated servlet class' java code.</description>
