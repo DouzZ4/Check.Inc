@@ -45,7 +45,7 @@ public class Filtro implements Filter {
             "style-src 'self' 'unsafe-inline'; " +
             "img-src 'self' data:; " +
             "font-src 'self' data:; " +
-            "connect-src 'self'");
+            "connect-src 'self' https://www.datos.gov.co");
         res.setHeader("X-Permitted-Cross-Domain-Policies", "none");
 
         String path = req.getRequestURI();
