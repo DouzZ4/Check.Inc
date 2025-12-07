@@ -7,7 +7,7 @@
 
     <!-- ✅ POOL CORRECTO MYSQL 8 + GLASSFISH + JAVA -->
     <jdbc-connection-pool
-        name="checksPool"
+        name="pool/checks"
         res-type="javax.sql.DataSource"
         datasource-classname="com.mysql.cj.jdbc.MysqlDataSource"
         steady-pool-size="8"
@@ -15,15 +15,15 @@
         max-wait-time-in-millis="60000">
 
         <property name="user" value="root"/>
-        <property name="password" value="jG1Xy9ZcN7"/>
+        <property name="password" value="HAMyds14691"/>
         <property name="url"
-            value="jdbc:mysql://node251883-env-8196014.sp1.br.saveincloud.net.br:3306/checks?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC"/>
+            value="jdbc:mysql://node252247-env-1844944.sp1.br.saveincloud.net:3306/checks?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC"/>
 
     </jdbc-connection-pool>
 
     <!-- ✅ JNDI CORRECTO -->
     <jdbc-resource 
-        pool-name="checksPool"
+        pool-name="pool/checks"
         jndi-name="jdbc/checks"/>
 
 </resources>
