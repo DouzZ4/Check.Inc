@@ -9,10 +9,10 @@
         <param-value>Production</param-value>
     </context-param>
 
-    <!-- Configuración de CDI -->
+    <!-- Configuración de CDI - Deshabilitado porque usamos @ManagedBean de JSF -->
     <context-param>
         <param-name>javax.faces.ENABLE_CDI_RESOLVER_CHAIN</param-name>
-        <param-value>true</param-value>
+        <param-value>false</param-value>
     </context-param>
     
     <!-- Configuración para PrimeFaces File Upload -->
