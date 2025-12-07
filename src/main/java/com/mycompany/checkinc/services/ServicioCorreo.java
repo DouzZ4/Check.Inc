@@ -67,7 +67,8 @@ public class ServicioCorreo {
             System.out.println("📤 [INFO] Enviando correo de registro a: " + correo);
 
             tempFile = File.createTempFile("sendgrid_registro", ".json");
-            String json = crearJsonRegistro(correo, nombres, apellidos, username, edad, tipoDiabetes, esInsulodependiente);
+            String json = crearJsonRegistro(correo, nombres, apellidos, username, edad, tipoDiabetes,
+                    esInsulodependiente);
 
             // ✅ Escritura con UTF-8 explícito
             try (OutputStreamWriter writer = new OutputStreamWriter(
@@ -90,44 +91,52 @@ public class ServicioCorreo {
             e.printStackTrace();
             return false;
         } finally {
-            if (tempFile != null && tempFile.exists()) tempFile.delete();
-        }
-    }
-/**
- * Envía un comunicado a usuarios registrados y correos externos.
- * Retorna true si al menos 1 envío fue exitoso.
- */
-public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuario> usuariosRegistrados, List<String> correosExternos) {
-    // Construir lista de destinatarios como strings (email + opcional nombre)
-    List<String> todos = new ArrayList<>();
-
-    // Agregar usuarios registrados (puedes usar su nombre para personalizar)
-    for (Usuario u : usuariosRegistrados) {
-        if (u != null && u.getCorreo() != null && !u.getCorreo().trim().isEmpty()) {
-            todos.add(u.getCorreo().trim());
+            if (tempFile != null && tempFile.exists())
+                tempFile.delete();
         }
     }
 
-    // Agregar correos externos
-    for (String c : correosExternos) {
-        if (c != null && !c.trim().isEmpty()) {
-            todos.add(c.trim());
+    /**
+     * Envía un comunicado a usuarios registrados y correos externos.
+     * Retorna true si al menos 1 envío fue exitoso.
+     */
+    public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuario> usuariosRegistrados,
+            List<String> correosExternos) {
+        // Construir lista de destinatarios como strings (email + opcional nombre)
+        List<String> todos = new ArrayList<>();
+
+        // Agregar usuarios registrados (puedes usar su nombre para personalizar)
+        for (Usuario u : usuariosRegistrados) {
+            if (u != null && u.getCorreo() != null && !u.getCorreo().trim().isEmpty()) {
+                todos.add(u.getCorreo().trim());
+            }
         }
+
+        // Agregar correos externos
+        for (String c : correosExternos) {
+            if (c != null && !c.trim().isEmpty()) {
+                todos.add(c.trim());
+            }
+        }
+
+        // Enviar uno por uno (puedes optimizar para batches si quieres)
+        int exitosos = 0;
+        int fallidos = 0;
+        for (String destinatario : todos) {
+            boolean sent = enviarCorreoIndividual(destinatario, "", "", asunto, mensaje);
+            if (sent)
+                exitosos++;
+            else
+                fallidos++;
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException ex) {
+                /* ignore */ }
+        }
+
+        System.out.println("📊 [RESULTADO] Exitosos: " + exitosos + " Fallidos: " + fallidos);
+        return exitosos > 0;
     }
-
-    // Enviar uno por uno (puedes optimizar para batches si quieres)
-    int exitosos = 0;
-    int fallidos = 0;
-    for (String destinatario : todos) {
-        boolean sent = enviarCorreoIndividual(destinatario, "", "", asunto, mensaje);
-        if (sent) exitosos++; else fallidos++;
-        try { Thread.sleep(300); } catch (InterruptedException ex) { /* ignore */ }
-    }
-
-    System.out.println("📊 [RESULTADO] Exitosos: " + exitosos + " Fallidos: " + fallidos);
-    return exitosos > 0;
-}
-
 
     // ======================================================
     // ✅ MÉTODO AUXILIAR: Enviar correo individual
@@ -153,9 +162,10 @@ public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuari
                     + "\"personalizations\": [{"
                     + "\"to\": [{\"email\": \"" + correo + "\",\"name\": \"" + nombres + " " + apellidos + "\"}]"
                     + "}],"
-                    + "\"from\": {\"email\": \"a-cmoreno@hotmail.com\",\"name\": \"CheckInc - Sistema de Diabetes\"},"
+                    + "\"from\": {\"email\": \"checkinc@outlook.com\",\"name\": \"CheckInc - Sistema de Diabetes\"},"
                     + "\"subject\": \"" + asunto.replace("\"", "\\\"") + "\","
-                    + "\"content\": [{\"type\": \"text/plain\",\"value\": \"" + mensajePersonalizado.replace("\"", "\\\"") + "\"}]"
+                    + "\"content\": [{\"type\": \"text/plain\",\"value\": \""
+                    + mensajePersonalizado.replace("\"", "\\\"") + "\"}]"
                     + "}";
 
             // ✅ Escritura segura con UTF-8
@@ -176,67 +186,72 @@ public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuari
             e.printStackTrace();
             return false;
         } finally {
-            if (tempFile != null && tempFile.exists()) tempFile.delete();
+            if (tempFile != null && tempFile.exists())
+                tempFile.delete();
         }
     }
 
     public boolean enviarCorreoAnomalia(String correoDestino, String asunto, String mensaje) {
-    File tempFile = null;
-    try {
-        tempFile = File.createTempFile("sendgrid_anomalia", ".json");
+        File tempFile = null;
+        try {
+            tempFile = File.createTempFile("sendgrid_anomalia", ".json");
 
-        String json = "{"
-                + "\"personalizations\": [{\"to\": [{\"email\": \"" + correoDestino + "\"}]}],"
-                + "\"from\": {\"email\": \"a-cmoreno@hotmail.com\",\"name\": \"CheckInc - Sistema de Diabetes\"},"
-                + "\"subject\": \"" + asunto.replace("\"", "\\\"") + "\","
-                + "\"content\": [{\"type\": \"text/plain\",\"value\": \"" + mensaje.replace("\"", "\\\"") + "\"}]"
-                + "}";
+            String json = "{"
+                    + "\"personalizations\": [{\"to\": [{\"email\": \"" + correoDestino + "\"}]}],"
+                    + "\"from\": {\"email\": \"checkinc@outlook.com\",\"name\": \"CheckInc - Sistema de Diabetes\"},"
+                    + "\"subject\": \"" + asunto.replace("\"", "\\\"") + "\","
+                    + "\"content\": [{\"type\": \"text/plain\",\"value\": \"" + mensaje.replace("\"", "\\\"") + "\"}]"
+                    + "}";
 
-        try (OutputStreamWriter writer = new OutputStreamWriter(
-                new FileOutputStream(tempFile), StandardCharsets.UTF_8)) {
-            writer.write(json);
+            try (OutputStreamWriter writer = new OutputStreamWriter(
+                    new FileOutputStream(tempFile), StandardCharsets.UTF_8)) {
+                writer.write(json);
+            }
+
+            return ejecutarEnvioCorreo(tempFile);
+
+        } catch (Exception e) {
+            System.err.println("❌ [ERROR] No se pudo enviar correo de anomalía: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (tempFile != null && tempFile.exists())
+                tempFile.delete();
         }
-
-        return ejecutarEnvioCorreo(tempFile);
-
-    } catch (Exception e) {
-        System.err.println("❌ [ERROR] No se pudo enviar correo de anomalía: " + e.getMessage());
-        e.printStackTrace();
-        return false;
-    } finally {
-        if (tempFile != null && tempFile.exists()) tempFile.delete();
     }
-}
-
 
     // ======================================================
     // ✅ MÉTODO COMÚN: Ejecutar envío con cURL
     // ======================================================
     private boolean ejecutarEnvioCorreo(File tempFile) {
-            return ejecutarEnvioConOkHttp(tempFile, null, "GENERICA", null);
+        return ejecutarEnvioConOkHttp(tempFile, null, "GENERICA", null);
     }
 
     /**
-     * Envia el JSON usando OkHttp y registra un objeto Alerta en BD si se proporciona el usuario.
+     * Envia el JSON usando OkHttp y registra un objeto Alerta en BD si se
+     * proporciona el usuario.
      * Retorna true si SendGrid devuelve 202.
      */
-    private boolean ejecutarEnvioConOkHttp(File tempFile, com.mycompany.checkinc.entities.Usuario usuario, String tipoAlerta, String destinoEmail) {
+    private boolean ejecutarEnvioConOkHttp(File tempFile, com.mycompany.checkinc.entities.Usuario usuario,
+            String tipoAlerta, String destinoEmail) {
         try {
-                if (sendgridApiKey == null || sendgridApiKey.trim().isEmpty()) {
-                System.err.println("🚫 [ERROR] No se encontró SENDGRID_API_KEY en el entorno ni en config.properties. Abortando envío.");
+            if (sendgridApiKey == null || sendgridApiKey.trim().isEmpty()) {
+                System.err.println(
+                        "🚫 [ERROR] No se encontró SENDGRID_API_KEY en el entorno ni en config.properties. Abortando envío.");
                 return false;
-                }
+            }
 
-                String json = new String(Files.readAllBytes(tempFile.toPath()), StandardCharsets.UTF_8);
+            String json = new String(Files.readAllBytes(tempFile.toPath()), StandardCharsets.UTF_8);
 
-                OkHttpClient client = this.httpClient != null ? this.httpClient : new OkHttpClient.Builder()
-                    .callTimeout(java.time.Duration.ofSeconds(30))
-                    .build();
+            OkHttpClient client = this.httpClient != null ? this.httpClient
+                    : new OkHttpClient.Builder()
+                            .callTimeout(java.time.Duration.ofSeconds(30))
+                            .build();
 
-                MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
-                RequestBody body = RequestBody.create(json, mediaType);
+            MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(json, mediaType);
 
-                Request request = new Request.Builder()
+            Request request = new Request.Builder()
                     .url(this.sendgridBaseUrl)
                     .addHeader("Authorization", "Bearer " + this.sendgridApiKey)
                     .addHeader("Content-Type", "application/json; charset=utf-8")
@@ -261,11 +276,14 @@ public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuari
                     try {
                         com.mycompany.checkinc.entities.Alerta alerta = new com.mycompany.checkinc.entities.Alerta();
                         alerta.setTipo(tipoAlerta != null ? tipoAlerta : "EMAIL");
-                        String contenido = "Envio a: " + (destinoEmail != null ? destinoEmail : "-") + " | Code=" + code + " | Attempts=" + attempts + " | Resp=" + (respBody.length() > 1000 ? respBody.substring(0, 1000) : respBody);
+                        String contenido = "Envio a: " + (destinoEmail != null ? destinoEmail : "-") + " | Code=" + code
+                                + " | Attempts=" + attempts + " | Resp="
+                                + (respBody.length() > 1000 ? respBody.substring(0, 1000) : respBody);
                         alerta.setContenido(contenido);
                         alerta.setFechaHora(new Date());
                         alerta.setVisto(Boolean.FALSE);
-                        if (usuario != null) alerta.setIdUsuario(usuario);
+                        if (usuario != null)
+                            alerta.setIdUsuario(usuario);
                         alertaFacade.create(alerta);
                     } catch (Exception ex) {
                         System.err.println("⚠️ [WARN] No se pudo registrar la alerta en BD: " + ex.getMessage());
@@ -291,7 +309,10 @@ public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuari
                 }
 
                 // backoff before next attempt
-                try { Thread.sleep(backoff); } catch (InterruptedException ie) { /* ignore */ }
+                try {
+                    Thread.sleep(backoff);
+                } catch (InterruptedException ie) {
+                    /* ignore */ }
                 backoff *= 2;
             }
 
@@ -321,7 +342,8 @@ public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuari
     // ======================================================
     // ✅ MÉTODO: Enviar alerta de glucosa con HTML
     // ======================================================
-    public boolean enviarAlertaGlucosaHTML(Usuario usuario, Glucosa glucosa, String estado, String rango, String recomendacion) {
+    public boolean enviarAlertaGlucosaHTML(Usuario usuario, Glucosa glucosa, String estado, String rango,
+            String recomendacion) {
         File tempFile = null;
         try {
             System.out.println("📤 [INFO] Enviando alerta de glucosa a: " + usuario.getCorreo());
@@ -363,16 +385,20 @@ public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuari
 
             // Construir HTML del correo
             String htmlBody = "<html><head><meta charset='UTF-8'></head><body style='font-family: Arial, sans-serif; line-height: 1.6; color: #333;'>"
-                    + "<div style='max-width: 600px; margin: 0 auto; background-color: #f9f9f9; border: 3px solid " + colorBorde + "; border-radius: 8px; padding: 20px;'>"
+                    + "<div style='max-width: 600px; margin: 0 auto; background-color: #f9f9f9; border: 3px solid "
+                    + colorBorde + "; border-radius: 8px; padding: 20px;'>"
                     + "<div style='text-align: center; margin-bottom: 20px;'>"
                     + "<h2 style='color: " + colorBorde + "; margin: 0;'>" + emoji + " ALERTA DE GLUCOSA</h2>"
                     + "</div>"
                     + "<hr style='border: none; border-top: 2px solid " + colorBorde + "; margin: 20px 0;'>"
                     + "<p><strong>Hola " + nombreUsuario + ",</strong></p>"
                     + "<p>Se ha detectado un nivel de glucosa fuera del rango normal:</p>"
-                    + "<div style='background-color: white; border-left: 4px solid " + colorBorde + "; padding: 15px; margin: 15px 0; border-radius: 4px;'>"
-                    + "<p><strong>📊 Nivel actual:</strong> <span style='font-size: 24px; color: " + colorBorde + "; font-weight: bold;'>" + nivelGlucosaStr + " mg/dL</span></p>"
-                    + "<p><strong>📍 Estado:</strong> <span style='color: " + colorBorde + "; font-weight: bold;'>" + estado + "</span></p>"
+                    + "<div style='background-color: white; border-left: 4px solid " + colorBorde
+                    + "; padding: 15px; margin: 15px 0; border-radius: 4px;'>"
+                    + "<p><strong>📊 Nivel actual:</strong> <span style='font-size: 24px; color: " + colorBorde
+                    + "; font-weight: bold;'>" + nivelGlucosaStr + " mg/dL</span></p>"
+                    + "<p><strong>📍 Estado:</strong> <span style='color: " + colorBorde + "; font-weight: bold;'>"
+                    + estado + "</span></p>"
                     + "<p><strong>🎯 Rango recomendado:</strong> " + rango + "</p>"
                     + "<p><strong>⏰ Hora del registro:</strong> " + fecha + "</p>"
                     + "<p><strong>🏥 Tipo de diabetes:</strong> " + tipoDiabetes + "</p>"
@@ -387,7 +413,8 @@ public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuari
                     + "Si necesitas contactar con soporte, accede a tu panel de CheckInc."
                     + "</p>"
                     + "<p style='text-align: center; margin-top: 20px;'>"
-                    + "<a href='http://localhost:8080/CheckInc' style='background-color: " + colorBorde + "; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block;'>Ir al Dashboard</a>"
+                    + "<a href='http://localhost:8080/CheckInc' style='background-color: " + colorBorde
+                    + "; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block;'>Ir al Dashboard</a>"
                     + "</p>"
                     + "</div>"
                     + "</body></html>";
@@ -397,8 +424,9 @@ public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuari
 
             // Construir JSON para SendGrid con soporte para HTML
             String json = "{"
-                    + "\"personalizations\": [{\"to\": [{\"email\": \"" + correoDestino + "\",\"name\": \"" + nombreUsuario + "\"}]}],"
-                    + "\"from\": {\"email\": \"a-cmoreno@hotmail.com\",\"name\": \"CheckInc - Sistema de Diabetes\"},"
+                    + "\"personalizations\": [{\"to\": [{\"email\": \"" + correoDestino + "\",\"name\": \""
+                    + nombreUsuario + "\"}]}],"
+                    + "\"from\": {\"email\": \"checkinc@outlook.com\",\"name\": \"CheckInc - Sistema de Diabetes\"},"
                     + "\"subject\": \"" + emoji + " ALERTA DE GLUCOSA - Nivel " + estado + "\","
                     + "\"content\": [{\"type\": \"text/html\",\"value\": \"" + htmlBody + "\"}]"
                     + "}";
@@ -425,7 +453,8 @@ public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuari
             e.printStackTrace();
             return false;
         } finally {
-            if (tempFile != null && tempFile.exists()) tempFile.delete();
+            if (tempFile != null && tempFile.exists())
+                tempFile.delete();
         }
     }
 
@@ -463,7 +492,7 @@ public boolean enviarComunicadoMasivo(String asunto, String mensaje, List<Usuari
                 + "}]"
                 + "}],"
                 + "\"from\": {"
-                + "\"email\": \"a-cmoreno@hotmail.com\","
+                + "\"email\": \"checkinc@outlook.com\","
                 + "\"name\": \"CheckInc - Sistema de Diabetes\""
                 + "},"
                 + "\"subject\": \"Bienvenido a CheckInc - Registro Exitoso\","
