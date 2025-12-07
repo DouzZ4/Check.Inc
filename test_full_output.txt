@@ -1,0 +1,82 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------------< com.mycompany:CheckInc >-----------------------
+[INFO] Building CheckInc 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ war ]---------------------------------
+[INFO] 
+[INFO] --- dependency:3.6.0:copy (default) @ CheckInc ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ CheckInc ---
+[INFO] Copying 3 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ CheckInc ---
+[WARNING]  Parameter 'compilerArguments' is deprecated: use compilerArgs instead.
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ CheckInc ---
+[INFO] skip non existing resourceDirectory C:\xampp\htdocs\Check.Inc\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ CheckInc ---
+[WARNING]  Parameter 'compilerArguments' is deprecated: use compilerArgs instead.
+[INFO] Changes detected - recompiling the module! :input tree
+[INFO] Compiling 2 source files with javac [debug target 1.8] to target\test-classes
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ CheckInc ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.mycompany.checkinc.services.PruebaCompletaEnvioTest
+? [INICIO] Prueba completa del módulo de correos
+? Cargando config.properties desde la raíz del proyecto.
+? API Key detectada correctamente.
+
+--- 1. Probando Envío Masivo ---
+? [INFO] Enviando petición HTTP a SendGrid (API key oculta en logs)
+? [RESPUESTA HTTP] Code=202 (attempt 1)
+
+?? [WARN] No se pudo registrar la alerta en BD: null
+? [OK] Correo enviado correctamente ?
+? [INFO] Enviando petición HTTP a SendGrid (API key oculta en logs)
+? [RESPUESTA HTTP] Code=202 (attempt 1)
+
+?? [WARN] No se pudo registrar la alerta en BD: null
+? [OK] Correo enviado correctamente ?
+? [RESULTADO] Exitosos: 2 Fallidos: 0
+? Envío Masivo: EXITOSO
+
+--- 2. Probando Alerta de Glucosa ---
+? [INFO] Enviando alerta de glucosa a: angeleduardomen@hotmail.com
+? [INFO] Enviando petición HTTP a SendGrid (API key oculta en logs)
+? [RESPUESTA HTTP] Code=202 (attempt 1)
+
+?? [WARN] No se pudo registrar la alerta en BD: null
+? [OK] Correo enviado correctamente ?
+? [OK] Alerta de glucosa enviada correctamente a angeleduardomen@hotmail.com
+? Alerta Glucosa: EXITOSA
+
+--- 3. Probando Correo de Registro ---
+? [INFO] Enviando correo de registro a: angeleduardomen@hotmail.com
+? [INFO] Enviando petición HTTP a SendGrid (API key oculta en logs)
+? [RESPUESTA HTTP] Code=202 (attempt 1)
+
+?? [WARN] No se pudo registrar la alerta en BD: null
+? [OK] Correo enviado correctamente ?
+? [OK] Correo de registro enviado correctamente a angeleduardomen@hotmail.com
+? Correo Registro: EXITOSO
+
+? [FIN] Pruebas finalizadas.
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.033 s -- in com.mycompany.checkinc.services.PruebaCompletaEnvioTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  5.722 s
+[INFO] Finished at: 2025-12-06T21:05:59-05:00
+[INFO] ------------------------------------------------------------------------
