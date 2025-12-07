@@ -117,7 +117,8 @@
         <cookie-config>
             <http-only>true</http-only>
             <!-- El flag 'secure' solo tiene efecto si la aplicación se sirve por HTTPS -->
-            <secure>true</secure>
+            <!-- Cambiado a false para permitir acceso via HTTP en hosting -->
+            <secure>false</secure>
         </cookie-config>
     </session-config>
 </web-app>
