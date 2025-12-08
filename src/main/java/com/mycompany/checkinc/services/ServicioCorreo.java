@@ -2,6 +2,7 @@ package com.mycompany.checkinc.services;
 
 import com.mycompany.checkinc.entities.Usuario;
 import com.mycompany.checkinc.entities.Glucosa;
+import com.mycompany.checkinc.entities.Cita;
 import com.mycompany.checkinc.util.Config;
 import java.io.File;
 import java.io.OutputStreamWriter;
@@ -191,7 +192,7 @@ public class ServicioCorreo {
         }
     }
 
-    public boolean enviarCorreoAnomalia(String correoDestino, String asunto, String mensaje) {
+    public boolean enviarCorreoAnomalia(Usuario usuario, String correoDestino, String asunto, String mensaje) {
         File tempFile = null;
         try {
             tempFile = File.createTempFile("sendgrid_anomalia", ".json");
@@ -208,7 +209,8 @@ public class ServicioCorreo {
                 writer.write(json);
             }
 
-            return ejecutarEnvioCorreo(tempFile);
+            // Using "ALERTA_ANOMALIA" type and passing user for logging
+            return ejecutarEnvioConOkHttp(tempFile, usuario, "ALERTA_ANOMALIA", correoDestino);
 
         } catch (Exception e) {
             System.err.println("❌ [ERROR] No se pudo enviar correo de anomalía: " + e.getMessage());
@@ -450,6 +452,58 @@ public class ServicioCorreo {
 
         } catch (Exception e) {
             System.err.println("❌ [ERROR] Falló el envío de alerta de glucosa: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (tempFile != null && tempFile.exists())
+                tempFile.delete();
+        }
+    }
+
+    // ======================================================
+    // ✅ MÉTODO: Enviar recordatorio de cita
+    // ======================================================
+    public boolean enviarRecordatorioCita(Cita cita) {
+        File tempFile = null;
+        try {
+            Usuario usuario = cita.getIdUsuario();
+            String correoDestino = usuario.getCorreo();
+
+            if (correoDestino == null || correoDestino.trim().isEmpty()) {
+                return false;
+            }
+
+            System.out.println("📤 [INFO] Enviando recordatorio de cita a: " + correoDestino);
+            tempFile = File.createTempFile("sendgrid_cita", ".json");
+
+            String fechaStr = new SimpleDateFormat("dd/MM/yyyy").format(cita.getFecha());
+            String horaStr = new SimpleDateFormat("HH:mm").format(cita.getHora());
+
+            String mensaje = "HOLA " + usuario.getNombres().toUpperCase() + ",\\n\\n"
+                    + "Te recordamos que tienes una cita programada para mañana.\\n\\n"
+                    + "📅 Fecha: " + fechaStr + "\\n"
+                    + "⏰ Hora: " + horaStr + "\\n"
+                    + "📝 Motivo: " + cita.getMotivo() + "\\n\\n"
+                    + "Por favor, asegúrate de asistir puntualmente.\\n\\n"
+                    + "Saludos,\\nEquipo CheckInc";
+
+            String json = "{"
+                    + "\"personalizations\": [{\"to\": [{\"email\": \"" + correoDestino + "\",\"name\": \""
+                    + usuario.getNombres() + " " + usuario.getApellidos() + "\"}]}],"
+                    + "\"from\": {\"email\": \"checkinc@outlook.com\",\"name\": \"CheckInc - Citas\"},"
+                    + "\"subject\": \"⏰ Recordatorio de Cita para Mañana\","
+                    + "\"content\": [{\"type\": \"text/plain\",\"value\": \"" + mensaje.replace("\"", "\\\"") + "\"}]"
+                    + "}";
+
+            try (OutputStreamWriter writer = new OutputStreamWriter(
+                    new FileOutputStream(tempFile), StandardCharsets.UTF_8)) {
+                writer.write(json);
+            }
+
+            return ejecutarEnvioConOkHttp(tempFile, usuario, "RECORDATORIO_CITA", correoDestino);
+
+        } catch (Exception e) {
+            System.err.println("❌ [ERROR] Falló envío de recordatorio de cita: " + e.getMessage());
             e.printStackTrace();
             return false;
         } finally {

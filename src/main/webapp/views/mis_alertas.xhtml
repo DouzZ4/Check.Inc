@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Mis Alertas - Check.Inc</title>
+</h:head>
+
+<h:body>
+    <ui:composition template="/WEB-INF/includes/template.xhtml">
+        <ui:define name="content">
+            <h:outputStylesheet name="css/dashboard.css" />
+
+            <div class="dashboard-container">
+                <div class="card">
+                    <h1
+                        style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-bottom: 20px;">
+                        <i class="pi pi-bell" style="font-size: 1.5rem; margin-right: 10px;"></i>
+                        Historial de Alertas y Correos
+                    </h1>
+
+                    <h:form id="formAlertas">
+                        <p:dataTable value="#{alertaBean.alertas}" var="alerta"
+                            emptyMessage="No tienes alertas registradas." paginator="true" rows="10"
+                            styleClass="ui-datatable-striped">
+
+                            <p:column headerText="Fecha" sortBy="#{alerta.fechaHora}"
+                                style="width: 150px; text-align: center;">
+                                <h:outputText value="#{alerta.fechaHora}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Tipo" sortBy="#{alerta.tipo}"
+                                style="width: 150px; text-align: center;">
+                                <span class="badge badge-#{alerta.tipo == 'ALERTA_GLUCOSA' ? 'danger' : 'info'}">
+                                    #{alerta.tipo}
+                                </span>
+                            </p:column>
+
+                            <p:column headerText="Detalle" filterBy="#{alerta.contenido}" filterMatchMode="contains">
+                                <h:outputText value="#{alerta.contenido}"
+                                    style="display: block; white-space: pre-wrap; font-family: monospace; font-size: 0.9em;" />
+                            </p:column>
+
+                            <p:column headerText="Estado" style="width: 100px; text-align: center;">
+                                <h:panelGroup rendered="#{alerta.visto}">
+                                    <i class="pi pi-check-circle" style="color: green; font-size: 1.5rem;"
+                                        title="Visto"></i>
+                                </h:panelGroup>
+                                <h:commandButton action="#{alertaBean.marcarVisto(alerta)}" value="Marcar Visto"
+                                    rendered="#{!alerta.visto}" styleClass="btn btn-sm btn-primary">
+                                    <f:ajax render="@form" />
+                                </h:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </div>
+            </div>
+        </ui:define>
+    </ui:composition>
+</h:body>
+
+</html>

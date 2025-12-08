@@ -54,7 +54,7 @@ public abstract class ReporteBasePDF {
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd 'de' MMMM 'de' yyyy");
-        Paragraph fecha = new Paragraph("Fecha de emisión: " + sdf.format(new Date()),
+        Paragraph fecha = new Paragraph("Fecha de emisi\u00F3n: " + sdf.format(new Date()),
                 FontManager.getFontFecha());
         fecha.setAlignment(Element.ALIGN_RIGHT);
         document.add(fecha);

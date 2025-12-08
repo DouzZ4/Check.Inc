@@ -93,7 +93,8 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
                 chartImage.setAlignment(Element.ALIGN_CENTER);
                 document.add(chartImage);
 
-                Paragraph legend = new Paragraph("Gráfico de tendencia de los últimos 7 días", fontEnfasis);
+                Paragraph legend = new Paragraph("Gr\u00E1fico de tendencia de los \u00FAltimos 7 d\u00EDas",
+                        fontEnfasis);
                 legend.setAlignment(Element.ALIGN_CENTER);
                 legend.setSpacingAfter(20f);
                 document.add(legend);
@@ -146,7 +147,7 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
                 table.setSpacingBefore(5f);
                 table.addCell(crearCeldaHeader("Nivel (mg/dL)"));
                 table.addCell(crearCeldaHeader("Fecha y Hora"));
-                table.addCell(crearCeldaHeader("Momento del Día"));
+                table.addCell(crearCeldaHeader("Momento del D\u00EDa"));
 
                 for (Glucosa g : listaMes) {
                     table.addCell(crearCeldaData(String.valueOf(g.getNivelGlucosa())));
@@ -165,7 +166,7 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
      * Genera la sección de citas médicas.
      */
     private void generarSeccionCitas(Document document, List<Cita> citaList) throws DocumentException {
-        agregarSeccion(document, "Citas Médicas");
+        agregarSeccion(document, "Citas M\u00E9dicas");
 
         // Agrupar citas por mes (año*100+mes)
         Map<Integer, List<Cita>> agrupado = citaList.stream()
