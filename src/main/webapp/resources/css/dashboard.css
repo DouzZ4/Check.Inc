@@ -2,14 +2,265 @@
 /* Global body/main and table styles are in resources/css/styles.css */
 /* Dashboard-specific layout, cards, and chart styles */
 
-/* Chart.js canvas styling */
+/* ========================================
+   TÍTULOS Y ENCABEZADOS
+   ======================================== */
+.dashboard-title {
+    color: #3058a6;
+    margin: 0;
+}
+
+.dashboard-subtitle {
+    color: #666;
+    margin: 0;
+}
+
+/* ========================================
+   GRID LAYOUTS
+   ======================================== */
+.dashboard-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-top: 18px;
+}
+
+.dashboard-content-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 18px;
+    margin-top: 20px;
+}
+
+.ml-predictions-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+}
+
+/* ========================================
+   TARJETAS BASE
+   ======================================== */
+.card {
+    background: #fff;
+    padding: 18px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.card-compact {
+    background: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Variantes de tarjetas con bordes de color */
+.card-primary {
+    border-left: 4px solid #3058a6;
+}
+
+.card-success {
+    border-left: 4px solid #38a169;
+}
+
+.card-warning {
+    border-left: 4px solid #dd6b20;
+}
+
+.card-purple {
+    border-left: 4px solid #6b46c1;
+}
+
+/* ========================================
+   CONTENIDO DE TARJETAS
+   ======================================== */
+.card-label {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.card-value {
+    margin: 6px 0;
+}
+
+.card-value-primary {
+    color: #3058a6;
+}
+
+.card-value-success {
+    color: #38a169;
+}
+
+.card-value-warning {
+    color: #dd6b20;
+}
+
+.card-value-purple {
+    color: #6b46c1;
+}
+
+.card-unit {
+    color: #999;
+    font-size: 0.8rem;
+}
+
+.card-meta {
+    margin: 0;
+    color: #999;
+    font-size: 0.85rem;
+}
+
+/* ========================================
+   TÍTULOS DE SECCIONES
+   ======================================== */
+.section-title {
+    color: #3058a6;
+    margin-top: 0;
+}
+
+/* ========================================
+   PANEL DE PREDICCIONES ML
+   ======================================== */
+.ml-panel {
+    margin-top: 20px;
+    background: #fff;
+    padding: 18px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.ml-panel-title {
+    color: #3058a6;
+    margin-top: 0;
+}
+
+/* ========================================
+   TARJETA DE RIESGO
+   ======================================== */
+.risk-card {
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    background: #f8f9fa;
+    border-width: 2px;
+    border-style: solid;
+}
+
+.risk-card-label {
+    margin: 0 0 8px 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.risk-badge {
+    margin: 0;
+    text-transform: uppercase;
+    font-size: 1.5em;
+    font-weight: bold;
+    display: block;
+}
+
+.risk-score {
+    margin: 8px 0 0 0;
+    color: #999;
+    font-size: 0.85rem;
+}
+
+/* Colores de riesgo */
+.risk-low {
+    color: #38a169;
+    border-color: #38a169;
+}
+
+.risk-medium {
+    color: #dd6b20;
+    border-color: #dd6b20;
+}
+
+.risk-high {
+    color: #e53e3e;
+    border-color: #e53e3e;
+}
+
+/* ========================================
+   RECOMENDACIONES
+   ======================================== */
+.recommendations-title {
+    color: #3058a6;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.recommendations-empty {
+    color: #999;
+    font-style: italic;
+}
+
+.recommendations-list {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.recommendation-item {
+    margin-bottom: 8px;
+    color: #444;
+    line-height: 1.5;
+}
+
+/* ========================================
+   TABLAS
+   ======================================== */
+.recent-readings-table {
+    width: 100%;
+    font-size: 0.9rem;
+    border-collapse: collapse;
+}
+
+.anomalies-table {
+    width: 100%;
+    font-size: 0.9rem;
+    border-collapse: collapse;
+}
+
+.table-header {
+    background: #f5f5f5;
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.empty-state {
+    color: #999;
+}
+
+/* ========================================
+   ANOMALÍAS - BADGES DE GRAVEDAD
+   ======================================== */
+.severity-grave {
+    color: #e53e3e;
+    font-weight: bold;
+}
+
+.severity-moderada {
+    color: #dd6b20;
+    font-weight: bold;
+}
+
+.severity-leve {
+    color: #38a169;
+}
+
+/* ========================================
+   CHART.JS CANVAS STYLING
+   ======================================== */
 #patientLineChart {
     max-height: 320px;
     display: block;
     margin: 0 auto;
 }
 
-/* Chart legend customization */
 .chart-legend {
     text-align: center;
     margin-top: 12px;
@@ -17,22 +268,36 @@
     color: #666;
 }
 
-/* Responsive adjustments for dashboard */
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
 @media (max-width: 1024px) {
-    .dashboard-grid {
+    .dashboard-cards-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashboard-content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ml-predictions-grid {
+        grid-template-columns: 1fr;
     }
 }
 
 @media (max-width: 768px) {
-    .dashboard-grid {
+    .dashboard-cards-grid {
         grid-template-columns: 1fr;
     }
-    
-    .stacked-grid {
+
+    .dashboard-content-grid {
         grid-template-columns: 1fr;
     }
-    
+
+    .ml-predictions-grid {
+        grid-template-columns: 1fr;
+    }
+
     .card-chart canvas {
         max-height: 250px;
     }
