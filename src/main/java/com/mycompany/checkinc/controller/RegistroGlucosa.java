@@ -8,6 +8,7 @@ import com.mycompany.checkinc.services.UsuarioFacadeLocal;
 import com.mycompany.checkinc.services.NivelesGlucosaFacadeLocal;
 import com.mycompany.checkinc.services.AnomaliaFacadeLocal;
 import com.mycompany.checkinc.services.ServicioCorreo;
+import com.mycompany.checkinc.services.ServicioPrediccionML;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,19 +29,22 @@ public class RegistroGlucosa implements Serializable {
 
     @EJB
     private GlucosaFacadeLocal glucosaFacade;
-    
+
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
-    
+
     @EJB
     private NivelesGlucosaFacadeLocal nivelesGlucosaFacade;
-    
+
     @EJB
     private AnomaliaFacadeLocal anomaliaFacade;
-    
+
     @EJB
     private ServicioCorreo servicioCorreo;
-    
+
+    @EJB
+    private ServicioPrediccionML servicioML;
+
     private Integer id;
     private Double nivelGlucosa;
     private Date fechaHora;
@@ -49,29 +53,54 @@ public class RegistroGlucosa implements Serializable {
     private List<Glucosa> registros;
     private boolean editando;
     private org.primefaces.model.charts.line.LineChartModel lineChartModel;
-    
+
     // Constants for glucose levels
     private static final double GLUCOSE_LOW_THRESHOLD = 70.0;
     private static final double GLUCOSE_HIGH_THRESHOLD = 180.0;
-    
+
     // --- Filtro y método filtrado para nivel de glucosa ---
     private String filtroNivel;
-    public String getFiltroNivel() { return filtroNivel; }
-    public void setFiltroNivel(String filtroNivel) { this.filtroNivel = filtroNivel; }
+
+    public String getFiltroNivel() {
+        return filtroNivel;
+    }
+
+    public void setFiltroNivel(String filtroNivel) {
+        this.filtroNivel = filtroNivel;
+    }
 
     // --- Filtros adicionales y orden para la vista ---
     private String filtroFecha;
     private String filtroHora;
     private boolean ascendente = true;
-    public String getFiltroFecha() { return filtroFecha; }
-    public void setFiltroFecha(String filtroFecha) { this.filtroFecha = filtroFecha; }
-    public String getFiltroHora() { return filtroHora; }
-    public void setFiltroHora(String filtroHora) { this.filtroHora = filtroHora; }
-    public boolean isAscendente() { return ascendente; }
-    public void setAscendente(boolean ascendente) { this.ascendente = ascendente; }
+
+    public String getFiltroFecha() {
+        return filtroFecha;
+    }
+
+    public void setFiltroFecha(String filtroFecha) {
+        this.filtroFecha = filtroFecha;
+    }
+
+    public String getFiltroHora() {
+        return filtroHora;
+    }
+
+    public void setFiltroHora(String filtroHora) {
+        this.filtroHora = filtroHora;
+    }
+
+    public boolean isAscendente() {
+        return ascendente;
+    }
+
+    public void setAscendente(boolean ascendente) {
+        this.ascendente = ascendente;
+    }
 
     public List<Glucosa> getRegistrosFiltrados() {
-        if (registros == null) return java.util.Collections.emptyList();
+        if (registros == null)
+            return java.util.Collections.emptyList();
         java.util.stream.Stream<Glucosa> stream = registros.stream();
         if (filtroNivel != null && !filtroNivel.isEmpty()) {
             stream = stream.filter(g -> String.valueOf(g.getNivelGlucosa()).contains(filtroNivel));
@@ -96,16 +125,15 @@ public class RegistroGlucosa implements Serializable {
         }
         return stream.sorted(comparator).collect(java.util.stream.Collectors.toList());
     }
-    
+
     public RegistroGlucosa() {
         this.fechaHora = new Date();
     }
-    
-    
 
     @PostConstruct
     public void init() {
-        Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(USUARIO_SESSION_KEY);
+        Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+                .get(USUARIO_SESSION_KEY);
         if (usuario != null) {
             cargarRegistros(usuario);
         }
@@ -121,7 +149,7 @@ public class RegistroGlucosa implements Serializable {
         this.momentosDia.add("Después de Cena");
         this.momentosDia.add("Antes de Dormir");
     }
-    
+
     private void cargarRegistros(Usuario usuario) {
         this.registros = glucosaFacade.findByUsuario(usuario);
         initLineChart(); // Actualiza el gráfico al cargar registros
@@ -130,13 +158,13 @@ public class RegistroGlucosa implements Serializable {
     private void initLineChart() {
         org.primefaces.model.charts.line.LineChartModel model = new org.primefaces.model.charts.line.LineChartModel();
         org.primefaces.model.charts.ChartData data = new org.primefaces.model.charts.ChartData();
-        
+
         // Dataset principal para niveles de glucosa
         org.primefaces.model.charts.line.LineChartDataSet dataSet = new org.primefaces.model.charts.line.LineChartDataSet();
-        
+
         // Dataset para límite bajo
         org.primefaces.model.charts.line.LineChartDataSet lowThresholdSet = new org.primefaces.model.charts.line.LineChartDataSet();
-        
+
         // Dataset para límite alto
         org.primefaces.model.charts.line.LineChartDataSet highThresholdSet = new org.primefaces.model.charts.line.LineChartDataSet();
 
@@ -144,17 +172,17 @@ public class RegistroGlucosa implements Serializable {
         java.util.List<Object> lowThresholdValues = new java.util.ArrayList<>();
         java.util.List<Object> highThresholdValues = new java.util.ArrayList<>();
         java.util.List<String> labels = new java.util.ArrayList<>();
-        
+
         if (registros != null) {
             java.text.SimpleDateFormat sdfShort = new java.text.SimpleDateFormat("dd/MM"); // Eje X
-            
+
             for (Glucosa g : registros) {
                 double nivelGlucosa = g.getNivelGlucosa();
                 values.add(nivelGlucosa);
                 lowThresholdValues.add(GLUCOSE_LOW_THRESHOLD);
                 highThresholdValues.add(GLUCOSE_HIGH_THRESHOLD);
                 labels.add(sdfShort.format(g.getFechaHora()));
-                
+
                 // Colorear los puntos según el nivel
                 String pointColor;
                 if (nivelGlucosa < GLUCOSE_LOW_THRESHOLD) {
@@ -167,7 +195,7 @@ public class RegistroGlucosa implements Serializable {
                 dataSet.setPointBackgroundColor(pointColor);
             }
         }
-        
+
         // Configuración del dataset principal
         dataSet.setData(values);
         dataSet.setLabel("Nivel de Glucosa");
@@ -178,7 +206,7 @@ public class RegistroGlucosa implements Serializable {
         dataSet.setPointHoverRadius(8);
         dataSet.setTension(0.4);
         dataSet.setShowLine(true);
-        
+
         // Configuración del límite bajo
         lowThresholdSet.setData(lowThresholdValues);
         lowThresholdSet.setLabel("Límite Bajo (70 mg/dL)");
@@ -186,7 +214,7 @@ public class RegistroGlucosa implements Serializable {
         lowThresholdSet.setBorderDash(Arrays.asList(5, 5));
         lowThresholdSet.setPointRadius(0);
         lowThresholdSet.setFill(false);
-        
+
         // Configuración del límite alto
         highThresholdSet.setData(highThresholdValues);
         highThresholdSet.setLabel("Límite Alto (180 mg/dL)");
@@ -199,38 +227,38 @@ public class RegistroGlucosa implements Serializable {
         data.addChartDataSet(dataSet);
         data.addChartDataSet(lowThresholdSet);
         data.addChartDataSet(highThresholdSet);
-        
+
         model.setData(data);
-        
+
         // Configuración de opciones del gráfico
         org.primefaces.model.charts.axes.cartesian.CartesianScales scales = new org.primefaces.model.charts.axes.cartesian.CartesianScales();
-        
+
         // Configuración del eje Y
         org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes yAxes = new org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes();
         yAxes.setOffset(true);
         yAxes.setBeginAtZero(true);
-        
+
         // Configuración del eje X
         org.primefaces.model.charts.axes.cartesian.category.CartesianCategoryAxes xAxes = new org.primefaces.model.charts.axes.cartesian.category.CartesianCategoryAxes();
         xAxes.setOffset(true);
-        
+
         scales.addYAxesData(yAxes);
         scales.addXAxesData(xAxes);
-        
+
         org.primefaces.model.charts.optionconfig.legend.Legend legend = new org.primefaces.model.charts.optionconfig.legend.Legend();
         legend.setDisplay(true);
         legend.setPosition("top");
-        
+
         org.primefaces.model.charts.optionconfig.title.Title title = new org.primefaces.model.charts.optionconfig.title.Title();
         title.setDisplay(true);
         title.setText("Niveles de Glucosa en el Tiempo");
         title.setFontSize(16);
-        
+
         org.primefaces.model.charts.line.LineChartOptions options = new org.primefaces.model.charts.line.LineChartOptions();
         options.setScales(scales);
         options.setLegend(legend);
         options.setTitle(title);
-        
+
         model.setOptions(options);
 
         this.lineChartModel = model;
@@ -248,27 +276,59 @@ public class RegistroGlucosa implements Serializable {
 
         this.lineChartModel = model;
     }
-    
+
     // Getters y Setters
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
-    
-    public Double getNivelGlucosa() { return nivelGlucosa; }
-    public void setNivelGlucosa(Double nivelGlucosa) { this.nivelGlucosa = nivelGlucosa; }
-    
-    public Date getFechaHora() { return fechaHora; }
-    public void setFechaHora(Date fechaHora) { this.fechaHora = fechaHora; }
-    
-    public String getMomentoDia() { return momentoDia; }
-    public void setMomentoDia(String momentoDia) { this.momentoDia = momentoDia; }
+    public Integer getId() {
+        return id;
+    }
 
-    public List<String> getMomentosDia() { return momentosDia; }
-    public void setMomentosDia(List<String> momentosDia) { this.momentosDia = momentosDia; }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    public List<Glucosa> getRegistros() { return registros; }
-    
-    public boolean isEditando() { return editando; }
-    public void setEditando(boolean editando) { this.editando = editando; }
+    public Double getNivelGlucosa() {
+        return nivelGlucosa;
+    }
+
+    public void setNivelGlucosa(Double nivelGlucosa) {
+        this.nivelGlucosa = nivelGlucosa;
+    }
+
+    public Date getFechaHora() {
+        return fechaHora;
+    }
+
+    public void setFechaHora(Date fechaHora) {
+        this.fechaHora = fechaHora;
+    }
+
+    public String getMomentoDia() {
+        return momentoDia;
+    }
+
+    public void setMomentoDia(String momentoDia) {
+        this.momentoDia = momentoDia;
+    }
+
+    public List<String> getMomentosDia() {
+        return momentosDia;
+    }
+
+    public void setMomentosDia(List<String> momentosDia) {
+        this.momentosDia = momentosDia;
+    }
+
+    public List<Glucosa> getRegistros() {
+        return registros;
+    }
+
+    public boolean isEditando() {
+        return editando;
+    }
+
+    public void setEditando(boolean editando) {
+        this.editando = editando;
+    }
 
     public org.primefaces.model.charts.line.LineChartModel getLineChartModel() {
         return lineChartModel;
@@ -278,10 +338,11 @@ public class RegistroGlucosa implements Serializable {
     public void setFechaHoraNow() {
         this.fechaHora = new Date();
     }
-    
+
     // Métodos de acción
     public void registrar() {
-        Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(USUARIO_SESSION_KEY);
+        Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+                .get(USUARIO_SESSION_KEY);
         if (usuario == null) {
             addMessage(FacesMessage.SEVERITY_ERROR, ERROR, "Debe iniciar sesión para registrar");
             return;
@@ -297,7 +358,8 @@ public class RegistroGlucosa implements Serializable {
                 glucosa.setFechaHora(fechaHora);
                 glucosa.setMomentoDia(momentoDia);
                 glucosaFacade.edit(glucosa);
-                addMessage(FacesMessage.SEVERITY_INFO, "Registro actualizado", "El registro ha sido actualizado correctamente");
+                addMessage(FacesMessage.SEVERITY_INFO, "Registro actualizado",
+                        "El registro ha sido actualizado correctamente");
                 editando = false;
             } else {
                 Glucosa glucosa = new Glucosa();
@@ -306,20 +368,34 @@ public class RegistroGlucosa implements Serializable {
                 glucosa.setIdUsuario(usuario);
                 glucosa.setMomentoDia(momentoDia);
                 glucosaFacade.create(glucosa);
-                addMessage(FacesMessage.SEVERITY_INFO, "Registro guardado", "El registro ha sido guardado correctamente");
-                
+                addMessage(FacesMessage.SEVERITY_INFO, "Registro guardado",
+                        "El registro ha sido guardado correctamente");
+
+                // 🆕 Sincronizar con servicio ML (no bloquea la UI)
+                try {
+                    boolean sincronizado = servicioML.sincronizarLecturaGlucosa(glucosa);
+                    if (sincronizado) {
+                        System.out.println("✅ Glucosa sincronizada con ML service");
+                    }
+                } catch (Exception ex) {
+                    // Error no crítico, solo registrar
+                    System.err.println("⚠ Error al sincronizar con ML service: " + ex.getMessage());
+                }
+
                 // 🆕 Determinar estado de glucosa y enviar alerta si es necesario
                 Float nivelFloat = nivelGlucosa.floatValue();
                 String estado = nivelesGlucosaFacade.determinarEstadoGlucosa(nivelFloat, usuario);
-                
+
                 // Enviar alerta solo si está fuera de rango normal
                 if (!estado.equals("NORMAL")) {
                     try {
                         String rango = nivelesGlucosaFacade.obtenerRangoTexto(usuario);
                         String recomendacion = nivelesGlucosaFacade.obtenerRecomendacion(estado);
-                        boolean alertaEnviada = servicioCorreo.enviarAlertaGlucosaHTML(usuario, glucosa, estado, rango, recomendacion);
-                        System.out.println("📧 Alerta de glucosa enviada: " + usuario.getCorreo() + " - Estado: " + estado);
-                        
+                        boolean alertaEnviada = servicioCorreo.enviarAlertaGlucosaHTML(usuario, glucosa, estado, rango,
+                                recomendacion);
+                        System.out.println(
+                                "📧 Alerta de glucosa enviada: " + usuario.getCorreo() + " - Estado: " + estado);
+
                         // 🆕 Si es CRÍTICO, crear registro de Anomalía
                         if (estado.equals("CRITICO_ALTO") || estado.equals("CRITICO_BAJO")) {
                             crearAnomaliaGlucosa(usuario, glucosa, estado, alertaEnviada, usuario.getCorreo());
@@ -337,7 +413,7 @@ public class RegistroGlucosa implements Serializable {
             addMessage(FacesMessage.SEVERITY_ERROR, ERROR, "No se pudo procesar el registro: " + e.getMessage());
         }
     }
-    
+
     public void editar(Glucosa glucosa) {
         this.id = glucosa.getIdGlucosa();
         this.nivelGlucosa = Double.valueOf(glucosa.getNivelGlucosa());
@@ -345,11 +421,12 @@ public class RegistroGlucosa implements Serializable {
         this.momentoDia = glucosa.getMomentoDia();
         this.editando = true;
     }
-    
+
     public void eliminar(Glucosa glucosa) {
         try {
             glucosaFacade.remove(glucosa);
-            Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(USUARIO_SESSION_KEY);
+            Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+                    .get(USUARIO_SESSION_KEY);
             if (usuario != null) {
                 cargarRegistros(usuario);
             }
@@ -358,63 +435,65 @@ public class RegistroGlucosa implements Serializable {
             addMessage(FacesMessage.SEVERITY_ERROR, ERROR, "No se pudo eliminar el registro: " + e.getMessage());
         }
     }
-    
+
     public void cancelarEdicion() {
         limpiarFormulario();
         editando = false;
     }
-    
+
     private void limpiarFormulario() {
         this.id = null;
         this.nivelGlucosa = null;
         this.fechaHora = new Date();
         this.momentoDia = null;
     }
-    
+
     private void addMessage(FacesMessage.Severity severity, String summary, String detail) {
-        FacesContext.getCurrentInstance().addMessage(null, 
-            new FacesMessage(severity, summary, detail));
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(severity, summary, detail));
     }
-    
+
     /**
      * Crea un registro de anomalía cuando se detecta glucosa crítica.
      * Incluye información sobre la alerta enviada.
      */
-    private void crearAnomaliaGlucosa(Usuario usuario, Glucosa glucosa, String estado, boolean alertaEnviada, String correoAlerta) {
+    private void crearAnomaliaGlucosa(Usuario usuario, Glucosa glucosa, String estado, boolean alertaEnviada,
+            String correoAlerta) {
         try {
             Anomalia anomalia = new Anomalia();
             anomalia.setIdUsuario(usuario);
             anomalia.setFechaHora(new Date());
-            
+
             // Construcción de descripción detallada
             String nivelStr = String.format("%.1f", glucosa.getNivelGlucosa());
             String descripcion = "ALERTA GLUCOSA " + estado + "\n"
                     + "Nivel de glucosa: " + nivelStr + " mg/dL\n"
                     + "Tipo: " + estado + "\n"
-                    + "Timestamp: " + new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(glucosa.getFechaHora());
-            
+                    + "Timestamp: "
+                    + new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(glucosa.getFechaHora());
+
             // Si se envió alerta, agregar información
             if (alertaEnviada) {
                 descripcion += "\n✅ Notificación enviada a: " + correoAlerta;
             } else {
                 descripcion += "\n❌ Falló el envío de notificación";
             }
-            
+
             anomalia.setDescripcion(descripcion);
-            
+
             // Síntomas relacionados con glucosa crítica
-            String sintomas = estado.equals("CRITICO_BAJO") 
-                ? "Mareos, confusión, temblores, sudoración, palpitaciones"
-                : "Visión borrosa, sed extrema, micción frecuente, fatiga";
+            String sintomas = estado.equals("CRITICO_BAJO")
+                    ? "Mareos, confusión, temblores, sudoración, palpitaciones"
+                    : "Visión borrosa, sed extrema, micción frecuente, fatiga";
             anomalia.setSintomas(sintomas);
-            
+
             // Definir gravedad según tipo de anomalía
             anomalia.setGravedad("ALTA");
             anomalia.setResuelto(false);
-            
+
             anomaliaFacade.create(anomalia);
             System.out.println("✅ Anomalía registrada: " + estado + " para usuario " + usuario.getIdUsuario());
-            
+
         } catch (Exception e) {
             System.err.println("❌ Error al crear anomalía: " + e.getMessage());
             e.printStackTrace();
