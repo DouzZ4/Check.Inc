@@ -25,7 +25,7 @@ public class ServicioPrediccionML {
     private static final Logger LOGGER = Logger.getLogger(ServicioPrediccionML.class.getName());
 
     // URL del microservicio Python (cambiar según environment)
-    private static final String ML_SERVICE_URL = "https://checkinc-ml-service.onrender.com";
+    private static final String ML_SERVICE_URL = "https://checkinc-ml-service.fly.dev";
     // Para desarrollo local: http://localhost:8000
 
     private static final String API_PREFIX = "/api/v1";

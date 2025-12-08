@@ -35,7 +35,8 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
- * Genera el reporte completo PDF del paciente con glucosa, citas y medicamentos.
+ * Genera el reporte completo PDF del paciente con glucosa, citas y
+ * medicamentos.
  * Incluye gráficos hermosos y estructura organizada por meses.
  */
 public class ReporteGeneralPDF extends ReporteBasePDF {
@@ -45,8 +46,8 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
     private final MedicamentoFacadeLocal medicamentoFacade;
     private final CitaFacadeLocal citaFacade;
 
-    public ReporteGeneralPDF(Usuario usuario, GlucosaFacadeLocal glucosaFacade, 
-                             MedicamentoFacadeLocal medicamentoFacade, CitaFacadeLocal citaFacade) {
+    public ReporteGeneralPDF(Usuario usuario, GlucosaFacadeLocal glucosaFacade,
+            MedicamentoFacadeLocal medicamentoFacade, CitaFacadeLocal citaFacade) {
         this.usuario = usuario;
         this.glucosaFacade = glucosaFacade;
         this.medicamentoFacade = medicamentoFacade;
@@ -91,7 +92,7 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
                 chartImage.scaleToFit(500, 300);
                 chartImage.setAlignment(Element.ALIGN_CENTER);
                 document.add(chartImage);
-                
+
                 Paragraph legend = new Paragraph("Gráfico de tendencia de los últimos 7 días", fontEnfasis);
                 legend.setAlignment(Element.ALIGN_CENTER);
                 legend.setSpacingAfter(20f);
@@ -103,17 +104,17 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
 
         // Agrupar por mes (usando clave año*100+mes para ordenar cronológicamente)
         Map<Integer, List<Glucosa>> agrupadoPorMes = glucosaList.stream()
-            .collect(Collectors.groupingBy(g -> {
-                Calendar c = Calendar.getInstance();
-                c.setTime(g.getFechaHora());
-                return c.get(Calendar.YEAR) * 100 + (c.get(Calendar.MONTH) + 1);
-            }));
+                .collect(Collectors.groupingBy(g -> {
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(g.getFechaHora());
+                    return c.get(Calendar.YEAR) * 100 + (c.get(Calendar.MONTH) + 1);
+                }));
 
         // Ordenar claves descendentes (meses más recientes primero)
         Map<Integer, List<Glucosa>> ordenadoPorMes = agrupadoPorMes.entrySet().stream()
-            .sorted(Map.Entry.<Integer, List<Glucosa>>comparingByKey(Comparator.reverseOrder()))
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                    (a, b) -> a, LinkedHashMap::new));
+                .sorted(Map.Entry.<Integer, List<Glucosa>>comparingByKey(Comparator.reverseOrder()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (a, b) -> a, LinkedHashMap::new));
 
         SimpleDateFormat sdfMes = new SimpleDateFormat("MMMM yyyy", new Locale("es", "ES"));
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -137,8 +138,8 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
 
                 // Ordenar registros del mes por fecha descendente
                 List<Glucosa> listaMes = entrada.getValue().stream()
-                    .sorted((g1, g2) -> g2.getFechaHora().compareTo(g1.getFechaHora()))
-                    .collect(Collectors.toList());
+                        .sorted((g1, g2) -> g2.getFechaHora().compareTo(g1.getFechaHora()))
+                        .collect(Collectors.toList());
 
                 PdfPTable table = new PdfPTable(3);
                 table.setWidthPercentage(100);
@@ -168,16 +169,16 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
 
         // Agrupar citas por mes (año*100+mes)
         Map<Integer, List<Cita>> agrupado = citaList.stream()
-            .collect(Collectors.groupingBy(c -> {
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(c.getFecha());
-                return cal.get(Calendar.YEAR) * 100 + (cal.get(Calendar.MONTH) + 1);
-            }));
+                .collect(Collectors.groupingBy(c -> {
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(c.getFecha());
+                    return cal.get(Calendar.YEAR) * 100 + (cal.get(Calendar.MONTH) + 1);
+                }));
 
         Map<Integer, List<Cita>> ordenado = agrupado.entrySet().stream()
-            .sorted(Map.Entry.<Integer, List<Cita>>comparingByKey(Comparator.reverseOrder()))
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                    (a, b) -> a, LinkedHashMap::new));
+                .sorted(Map.Entry.<Integer, List<Cita>>comparingByKey(Comparator.reverseOrder()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (a, b) -> a, LinkedHashMap::new));
 
         SimpleDateFormat sdfFecha = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm");
@@ -201,12 +202,13 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
 
                 // Ordenar por fecha/hora ascendente dentro del mes
                 List<Cita> listaMes = entrada.getValue().stream()
-                    .sorted((a, b) -> {
-                        int cmp = a.getFecha().compareTo(b.getFecha());
-                        if (cmp != 0) return cmp;
-                        return a.getHora().compareTo(b.getHora());
-                    })
-                    .collect(Collectors.toList());
+                        .sorted((a, b) -> {
+                            int cmp = a.getFecha().compareTo(b.getFecha());
+                            if (cmp != 0)
+                                return cmp;
+                            return a.getHora().compareTo(b.getHora());
+                        })
+                        .collect(Collectors.toList());
 
                 PdfPTable table = new PdfPTable(4);
                 table.setWidthPercentage(100);
@@ -233,7 +235,8 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
     /**
      * Genera la sección de medicamentos.
      */
-    private void generarSeccionMedicamentos(Document document, List<Medicamento> medicamentoList) throws DocumentException {
+    private void generarSeccionMedicamentos(Document document, List<Medicamento> medicamentoList)
+            throws DocumentException {
         agregarSeccion(document, "Medicamentos");
 
         PdfPTable table = new PdfPTable(5);
@@ -272,8 +275,8 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
             java.util.Date ultimaSemana = tempCal.getTime();
 
             List<Glucosa> registrosSemanales = glucosaList.stream()
-                .filter(g -> g.getFechaHora().after(ultimaSemana))
-                .collect(java.util.stream.Collectors.toList());
+                    .filter(g -> g.getFechaHora().after(ultimaSemana))
+                    .collect(java.util.stream.Collectors.toList());
 
             if (registrosSemanales.isEmpty()) {
                 return null;
@@ -281,21 +284,21 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
 
             // Agrupar por día (dd/MM) y calcular promedio para cada día
             Map<String, Double> promedioPorDia = registrosSemanales.stream()
-                .collect(Collectors.groupingBy(g -> sdf.format(g.getFechaHora()),
-                        Collectors.averagingDouble(g -> g.getNivelGlucosa())));
+                    .collect(Collectors.groupingBy(g -> sdf.format(g.getFechaHora()),
+                            Collectors.averagingDouble(g -> g.getNivelGlucosa())));
 
             // Ordenar por fecha cronológica
             List<String> diasOrdenados = promedioPorDia.keySet().stream()
-                .sorted((d1, d2) -> {
-                    try {
-                        java.util.Date dd1 = sdf.parse(d1);
-                        java.util.Date dd2 = sdf.parse(d2);
-                        return dd1.compareTo(dd2);
-                    } catch (Exception ex) {
-                        return d1.compareTo(d2);
-                    }
-                })
-                .collect(java.util.stream.Collectors.toList());
+                    .sorted((d1, d2) -> {
+                        try {
+                            java.util.Date dd1 = sdf.parse(d1);
+                            java.util.Date dd2 = sdf.parse(d2);
+                            return dd1.compareTo(dd2);
+                        } catch (Exception ex) {
+                            return d1.compareTo(d2);
+                        }
+                    })
+                    .collect(java.util.stream.Collectors.toList());
 
             for (String dia : diasOrdenados) {
                 dataset.addValue(promedioPorDia.get(dia), "Nivel de Glucosa", dia);
@@ -319,8 +322,8 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
             plot.setDomainGridlinePaint(new java.awt.Color(220, 220, 220));
             plot.setRangeGridlinePaint(new java.awt.Color(220, 220, 220));
 
-            org.jfree.chart.renderer.category.LineAndShapeRenderer renderer =
-                (org.jfree.chart.renderer.category.LineAndShapeRenderer) plot.getRenderer();
+            org.jfree.chart.renderer.category.LineAndShapeRenderer renderer = (org.jfree.chart.renderer.category.LineAndShapeRenderer) plot
+                    .getRenderer();
             renderer.setSeriesPaint(0, new java.awt.Color(48, 88, 166));
             renderer.setSeriesStroke(0, new java.awt.BasicStroke(2.0f));
             renderer.setSeriesShapesVisible(0, true);
@@ -333,13 +336,15 @@ public class ReporteGeneralPDF extends ReporteBasePDF {
             org.jfree.chart.axis.CategoryAxis domainAxis = plot.getDomainAxis();
             domainAxis.setLowerMargin(0.05);
             domainAxis.setUpperMargin(0.05);
-            domainAxis.setTickLabelFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 10));
+            domainAxis.setTickLabelFont(new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 10));
 
             org.jfree.chart.axis.NumberAxis rangeAxis = (org.jfree.chart.axis.NumberAxis) plot.getRangeAxis();
             rangeAxis.setStandardTickUnits(org.jfree.chart.axis.NumberAxis.createIntegerTickUnits());
-            rangeAxis.setTickLabelFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 10));
+            rangeAxis.setTickLabelFont(new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 10));
 
-            lineChart.getLegend().setItemFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 10));
+            // Configurar fuente de la leyenda y título con soporte Unicode
+            lineChart.getTitle().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 12));
+            lineChart.getLegend().setItemFont(new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 10));
 
             java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
             ChartUtilities.writeChartAsPNG(baos, lineChart, 500, 300);

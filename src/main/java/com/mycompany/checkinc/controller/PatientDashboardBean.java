@@ -10,6 +10,7 @@ import com.mycompany.checkinc.services.AnomaliaFacadeLocal;
 import com.mycompany.checkinc.services.CitaFacadeLocal;
 import com.mycompany.checkinc.services.MedicamentoFacadeLocal;
 import com.mycompany.checkinc.services.UsuarioFacadeLocal;
+import com.mycompany.checkinc.services.ServicioPrediccionML;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.primefaces.model.charts.ChartData;
 import org.primefaces.model.charts.line.LineChartModel;
@@ -48,6 +49,8 @@ public class PatientDashboardBean implements Serializable {
     private MedicamentoFacadeLocal medicamentoFacade;
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
+    @EJB
+    private ServicioPrediccionML servicioML;
 
     private Integer pacienteId;
     private Usuario paciente;
@@ -58,13 +61,19 @@ public class PatientDashboardBean implements Serializable {
     private String chartDataJson;
     private org.primefaces.model.charts.line.LineChartModel lineChartModel;
 
+    // 🆕 ML Predictions
+    private String nivelRiesgo;
+    private Double riesgoScore;
+    private List<String> recomendaciones;
+    private boolean mlDisponible = false;
+
     @PostConstruct
     public void init() {
         try {
             // Obtener usuario de la sesión (Login bean)
             FacesContext context = FacesContext.getCurrentInstance();
             HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
-            
+
             if (session != null) {
                 Usuario usuarioSession = (Usuario) session.getAttribute("usuario");
                 if (usuarioSession != null) {
@@ -72,8 +81,9 @@ public class PatientDashboardBean implements Serializable {
                     pacienteId = paciente.getIdUsuario();
                 }
             }
-            
-            // Si no hay usuario en sesión, intentar obtener del Request param (para caso de acceso directo)
+
+            // Si no hay usuario en sesión, intentar obtener del Request param (para caso de
+            // acceso directo)
             if (paciente == null) {
                 String paramId = context.getExternalContext().getRequestParameterMap().get("pacienteId");
                 if (paramId != null && !paramId.isEmpty()) {
@@ -81,7 +91,7 @@ public class PatientDashboardBean implements Serializable {
                     paciente = usuarioFacade.find(pacienteId);
                 }
             }
-            
+
         } catch (Exception ex) {
             ex.printStackTrace();
             paciente = null;
@@ -90,7 +100,8 @@ public class PatientDashboardBean implements Serializable {
     }
 
     public void loadData() {
-        if (paciente == null) return;
+        if (paciente == null)
+            return;
 
         try {
             // Obtiene registros de glucosa para este paciente (todos)
@@ -139,6 +150,7 @@ public class PatientDashboardBean implements Serializable {
             }
 
             generarDatosGrafico();
+            loadMLPredictions(); // 🆕 Cargar predicciones ML
         } catch (Exception ex) {
             ex.printStackTrace();
             glucosaReciente = new ArrayList<>();
@@ -149,10 +161,60 @@ public class PatientDashboardBean implements Serializable {
         }
     }
 
+    /**
+     * 🆕 Carga predicciones y recomendaciones desde el servicio ML
+     */
+    private void loadMLPredictions() {
+        if (pacienteId == null)
+            return;
+
+        recomendaciones = new ArrayList<>();
+        mlDisponible = false;
+
+        try {
+            // Verificar disponibilidad del servicio
+            if (!servicioML.verificarDisponibilidad()) {
+                System.out.println("Servicio ML no disponible");
+                return;
+            }
+
+            // Cargar evaluación de riesgo
+            com.fasterxml.jackson.databind.JsonNode riesgoResponse = servicioML.evaluarRiesgo(pacienteId);
+
+            if (riesgoResponse != null) {
+                mlDisponible = true;
+
+                // Extraer nivel de riesgo
+                if (riesgoResponse.has("risk_level")) {
+                    nivelRiesgo = riesgoResponse.get("risk_level").asText().toUpperCase();
+                }
+
+                // Extraer score de riesgo
+                if (riesgoResponse.has("risk_score")) {
+                    riesgoScore = riesgoResponse.get("risk_score").asDouble();
+                }
+
+                // Extraer recomendaciones
+                if (riesgoResponse.has("recommendations")) {
+                    com.fasterxml.jackson.databind.JsonNode recs = riesgoResponse.get("recommendations");
+                    for (com.fasterxml.jackson.databind.JsonNode rec : recs) {
+                        recomendaciones.add(rec.asText());
+                    }
+                }
+
+                System.out.println("✅ ML Predictions cargadas exitosamente");
+            }
+        } catch (Exception ex) {
+            System.err.println("⚠️ Error al cargar predicciones ML: " + ex.getMessage());
+            // No bloquear la carga del dashboard si falla ML
+            mlDisponible = false;
+        }
+    }
+
     private void generarDatosGrafico() {
         Map<String, List<Float>> byDate = new HashMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM");
-        
+
         for (Glucosa g : glucosaReciente) {
             String key = sdf.format(g.getFechaHora());
             byDate.computeIfAbsent(key, k -> new ArrayList<>()).add(g.getNivelGlucosa());
@@ -160,18 +222,19 @@ public class PatientDashboardBean implements Serializable {
 
         List<String> labels = new ArrayList<>();
         List<Double> values = new ArrayList<>();
-        
+
         // Ordenar por fecha en el mapa
         byDate.entrySet().stream()
-            .sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
-            .forEach(e -> {
-                labels.add(e.getKey());
-                List<Float> vals = e.getValue();
-                double sum = 0;
-                for (Float v : vals) sum += v;
-                double avg = vals.isEmpty() ? 0 : (sum / vals.size());
-                values.add(Math.round(avg * 100.0) / 100.0);
-            });
+                .sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
+                .forEach(e -> {
+                    labels.add(e.getKey());
+                    List<Float> vals = e.getValue();
+                    double sum = 0;
+                    for (Float v : vals)
+                        sum += v;
+                    double avg = vals.isEmpty() ? 0 : (sum / vals.size());
+                    values.add(Math.round(avg * 100.0) / 100.0);
+                });
 
         try {
             Map<String, Object> chartData = new HashMap<>();
@@ -194,7 +257,8 @@ public class PatientDashboardBean implements Serializable {
 
         LineChartDataSet dataSet = new LineChartDataSet();
         java.util.List<Object> dataValues = new java.util.ArrayList<>();
-        if (values != null) dataValues.addAll(values);
+        if (values != null)
+            dataValues.addAll(values);
         dataSet.setData(dataValues);
         dataSet.setLabel("Promedio Glucosa (mg/dL)");
         dataSet.setFill(true);
@@ -232,7 +296,8 @@ public class PatientDashboardBean implements Serializable {
 
     // Método para calcular promedio general
     public double getPromedioGlucosa() {
-        if (glucosaReciente == null || glucosaReciente.isEmpty()) return 0.0;
+        if (glucosaReciente == null || glucosaReciente.isEmpty())
+            return 0.0;
         double sum = 0;
         for (Glucosa g : glucosaReciente) {
             sum += g.getNivelGlucosa();
@@ -275,5 +340,38 @@ public class PatientDashboardBean implements Serializable {
 
     public LineChartModel getLineChartModel() {
         return lineChartModel;
+    }
+
+    // 🆕 Getters for ML Predictions
+    public String getNivelRiesgo() {
+        return nivelRiesgo;
+    }
+
+    public Double getRiesgoScore() {
+        return riesgoScore;
+    }
+
+    public List<String> getRecomendaciones() {
+        return recomendaciones != null ? recomendaciones : new ArrayList<>();
+    }
+
+    public boolean isMlDisponible() {
+        return mlDisponible;
+    }
+
+    public String getColorRiesgo() {
+        if (nivelRiesgo == null)
+            return "secondary";
+
+        switch (nivelRiesgo.toLowerCase()) {
+            case "bajo":
+                return "#38a169"; // Verde
+            case "medio":
+                return "#dd6b20"; // Naranja
+            case "alto":
+                return "#e53e3e"; // Rojo
+            default:
+                return "#666"; // Gris
+        }
     }
 }
