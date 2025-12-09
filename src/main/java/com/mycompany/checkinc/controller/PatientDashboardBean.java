@@ -28,6 +28,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -208,6 +209,47 @@ public class PatientDashboardBean implements Serializable {
             System.err.println("⚠️ Error al cargar predicciones ML: " + ex.getMessage());
             // No bloquear la carga del dashboard si falla ML
             mlDisponible = false;
+        }
+    }
+
+    /**
+     * 🆕 Sincroniza el historial local con IA y fuerza entrenamiento.
+     */
+    public void sincronizarHistorialIA() {
+        if (pacienteId == null || glucosaReciente == null || glucosaReciente.isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Sin datos", "No hay historial para sincronizar."));
+            return;
+        }
+
+        try {
+            // 1. Sincronización Masiva
+            boolean syncExito = servicioML.sincronizarLecturasMasivas(glucosaReciente);
+
+            if (syncExito) {
+                // 2. Entrenar Modelo
+                boolean trainExito = servicioML.entrenarModelo(pacienteId);
+
+                if (trainExito) {
+                    FacesContext.getCurrentInstance().addMessage(null,
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "IA actualizada con tu historial."));
+
+                    // 3. Recargar predicciones
+                    loadMLPredictions();
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null,
+                            new FacesMessage(FacesMessage.SEVERITY_WARN, "Parcial",
+                                    "Datos enviados, pero el entrenamiento tardará unos segundos."));
+                }
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+                                "No se pudo conectar con el servidor de IA."));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Fallo interno: " + e.getMessage()));
         }
     }
 

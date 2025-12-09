@@ -1,32 +1,38 @@
 package com.mycompany.checkinc.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.mycompany.checkinc.entities.Glucosa;
 import com.mycompany.checkinc.entities.Usuario;
+import com.mycompany.checkinc.services.GlucosaFacadeLocal;
 import com.mycompany.checkinc.services.ServicioPrediccionML;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.ejb.EJB;
 
 /**
  * Managed Bean para funcionalidades de predicción con Machine Learning.
  * 
  * @author Check.Inc Team
  */
-@Named
+@ManagedBean(name = "prediccionMLBean")
 @ViewScoped
 public class PrediccionMLBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Inject
+    @EJB
     private ServicioPrediccionML servicioML;
+
+    @EJB
+    private GlucosaFacadeLocal glucosaFacade;
 
     // Datos de predicción
     private List<PrediccionDTO> predicciones;
@@ -195,6 +201,57 @@ public class PrediccionMLBean implements Serializable {
         } catch (Exception e) {
             addMessage(FacesMessage.SEVERITY_ERROR, "Error",
                     "Error al cargar recomendaciones: " + e.getMessage());
+        } finally {
+            cargando = false;
+        }
+    }
+
+    /**
+     * Sincroniza TODO el historial de glucosa del usuario con el servicio ML.
+     */
+    public void sincronizarHistorial() {
+        if (!servicioDisponible) {
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Servicio ML no disponible");
+            return;
+        }
+
+        cargando = true;
+        try {
+            Usuario usuario = obtenerUsuarioActual();
+            if (usuario == null)
+                return;
+
+            // 1. Obtener todas las lecturas de la base de datos local
+            List<Glucosa> historial = glucosaFacade.findByUsuario(usuario);
+
+            if (historial == null || historial.isEmpty()) {
+                addMessage(FacesMessage.SEVERITY_WARN, "Sin datos", "No tienes registros de glucosa para sincronizar.");
+                return;
+            }
+
+            // 2. Enviar a Railway (Batch Sync)
+            boolean exito = servicioML.sincronizarLecturasMasivas(historial);
+
+            if (exito) {
+                // 3. Entrenar el modelo inmediatamente
+                servicioML.entrenarModelo(usuario.getIdUsuario());
+
+                // 4. Recargar datos del dashboard
+                cargarPredicciones();
+                cargarEvaluacionRiesgo();
+                cargarRecomendaciones();
+
+                addMessage(FacesMessage.SEVERITY_INFO, "Sincronización Completa",
+                        "Se han enviado " + historial.size() + " registros a la IA y se ha actualizado el análisis.");
+            } else {
+                addMessage(FacesMessage.SEVERITY_ERROR, "Error de Sincronización",
+                        "No se pudieron enviar los datos al servidor de IA.");
+            }
+
+        } catch (Exception e) {
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error Crítico",
+                    "Fallo durante la sincronización: " + e.getMessage());
+            e.printStackTrace();
         } finally {
             cargando = false;
         }

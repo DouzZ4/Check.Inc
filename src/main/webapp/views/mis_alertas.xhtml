@@ -9,56 +9,133 @@
 </h:head>
 
 <h:body>
-    <ui:composition template="/WEB-INF/includes/template.xhtml">
+    <ui:composition template="/views/TemplateSitio.xhtml">
         <ui:define name="content">
-            <h:outputStylesheet name="css/dashboard.css" />
+            <!-- Estilos específicos de alertas -->
+            <h:outputStylesheet name="css/alertas.css" />
 
-            <div class="dashboard-container">
-                <div class="card">
-                    <h1
-                        style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-bottom: 20px;">
-                        <i class="pi pi-bell" style="font-size: 1.5rem; margin-right: 10px;"></i>
-                        Historial de Alertas y Correos
-                    </h1>
+            <div class="alerts-page-container">
+                <!-- Header Premium -->
+                <div class="alerts-header">
+                    <div class="alerts-header-icon">
+                        <i class="pi pi-bell"></i>
+                    </div>
+                    <div class="alerts-header-content">
+                        <h1>Centro de Notificaciones</h1>
+                        <p>Historial de alertas, recordatorios y correos enviados</p>
+                    </div>
+                </div>
 
+                <!-- Estadísticas Rápidas -->
+                <div class="alerts-stats-bar">
+                    <div class="stat-card">
+                        <span class="stat-number">#{alertaBean.totalAlertas}</span>
+                        <span class="stat-label">Total Alertas</span>
+                    </div>
+                    <div class="stat-card stat-pending">
+                        <span class="stat-number">#{alertaBean.alertasPendientes}</span>
+                        <span class="stat-label">Sin Revisar</span>
+                    </div>
+                    <div class="stat-card stat-glucosa">
+                        <span class="stat-number">#{alertaBean.alertasGlucosa}</span>
+                        <span class="stat-label">Alertas Glucosa</span>
+                    </div>
+                    <div class="stat-card stat-anomaly">
+                        <span class="stat-number">#{alertaBean.alertasAnomalia}</span>
+                        <span class="stat-label">Anomalías</span>
+                    </div>
+                </div>
+
+                <!-- Tabla de Alertas -->
+                <div class="alerts-table-wrapper">
                     <h:form id="formAlertas">
                         <p:dataTable value="#{alertaBean.alertas}" var="alerta"
                             emptyMessage="No tienes alertas registradas." paginator="true" rows="10"
-                            styleClass="ui-datatable-striped">
+                            paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                            rowsPerPageTemplate="5,10,15,20" styleClass="ui-datatable-responsive">
 
-                            <p:column headerText="Fecha" sortBy="#{alerta.fechaHora}"
-                                style="width: 150px; text-align: center;">
-                                <h:outputText value="#{alerta.fechaHora}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                                </h:outputText>
+                            <!-- Columna FECHA -->
+                            <p:column headerText="Fecha" sortBy="#{alerta.fechaHora}" style="width: 120px;">
+                                <div class="alert-date">
+                                    <span class="alert-date-day">
+                                        <h:outputText value="#{alerta.fechaHora}">
+                                            <f:convertDateTime pattern="dd" />
+                                        </h:outputText>
+                                    </span>
+                                    <span class="alert-date-month">
+                                        <h:outputText value="#{alerta.fechaHora}">
+                                            <f:convertDateTime pattern="MMM yyyy" locale="es" />
+                                        </h:outputText>
+                                    </span>
+                                    <span class="alert-date-time">
+                                        <i class="pi pi-clock" style="font-size: 0.7rem; margin-right: 3px;"></i>
+                                        <h:outputText value="#{alerta.fechaHora}">
+                                            <f:convertDateTime pattern="HH:mm" />
+                                        </h:outputText>
+                                    </span>
+                                </div>
                             </p:column>
 
-                            <p:column headerText="Tipo" sortBy="#{alerta.tipo}"
-                                style="width: 150px; text-align: center;">
-                                <span class="badge badge-#{alerta.tipo == 'ALERTA_GLUCOSA' ? 'danger' : 'info'}">
-                                    #{alerta.tipo}
-                                </span>
-                            </p:column>
-
-                            <p:column headerText="Detalle" filterBy="#{alerta.contenido}" filterMatchMode="contains">
-                                <h:outputText value="#{alerta.contenido}"
-                                    style="display: block; white-space: pre-wrap; font-family: monospace; font-size: 0.9em;" />
-                            </p:column>
-
-                            <p:column headerText="Estado" style="width: 100px; text-align: center;">
-                                <h:panelGroup rendered="#{alerta.visto}">
-                                    <i class="pi pi-check-circle" style="color: green; font-size: 1.5rem;"
-                                        title="Visto"></i>
+                            <!-- Columna TIPO con badges coloridos -->
+                            <p:column headerText="Tipo" sortBy="#{alerta.tipo}" style="width: 180px;">
+                                <h:panelGroup rendered="#{alerta.tipo == 'ALERTA_GLUCOSA'}">
+                                    <span class="alert-type-badge badge-glucosa">
+                                        <i class="pi pi-exclamation-triangle"></i>
+                                        Glucosa
+                                    </span>
                                 </h:panelGroup>
-                                <h:commandButton action="#{alertaBean.marcarVisto(alerta)}" value="Marcar Visto"
-                                    rendered="#{!alerta.visto}" styleClass="btn btn-sm btn-primary">
-                                    <f:ajax render="@form" />
-                                </h:commandButton>
+                                <h:panelGroup rendered="#{alerta.tipo == 'ALERTA_ANOMALIA'}">
+                                    <span class="alert-type-badge badge-anomalia">
+                                        <i class="pi pi-chart-line"></i>
+                                        Anomalía
+                                    </span>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{alerta.tipo == 'RECORDATORIO'}">
+                                    <span class="alert-type-badge badge-recordatorio">
+                                        <i class="pi pi-calendar"></i>
+                                        Recordatorio
+                                    </span>
+                                </h:panelGroup>
+                                <h:panelGroup
+                                    rendered="#{alerta.tipo != 'ALERTA_GLUCOSA' and alerta.tipo != 'ALERTA_ANOMALIA' and alerta.tipo != 'RECORDATORIO'}">
+                                    <span class="alert-type-badge badge-general">
+                                        <i class="pi pi-info-circle"></i>
+                                        #{alerta.tipo}
+                                    </span>
+                                </h:panelGroup>
                             </p:column>
+
+                            <!-- Columna DETALLE con mejor formato -->
+                            <p:column headerText="Detalle" filterBy="#{alerta.contenido}" filterMatchMode="contains">
+                                <div class="alert-detail">
+                                    <div class="alert-detail-content">
+                                        <h:outputText value="#{alertaBean.formatearContenido(alerta.contenido)}"
+                                            escape="false" />
+                                    </div>
+                                </div>
+                            </p:column>
+
+                            <!-- Columna ESTADO -->
+                            <p:column headerText="Estado" style="width: 140px; text-align: center;">
+                                <div class="alert-status">
+                                    <h:panelGroup rendered="#{alerta.visto}">
+                                        <span class="status-viewed">
+                                            <i class="pi pi-check-circle"></i>
+                                            Revisado
+                                        </span>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{!alerta.visto}">
+                                        <p:commandButton action="#{alertaBean.marcarVisto(alerta)}" value="Marcar visto"
+                                            styleClass="btn-mark-viewed" update="@form" icon="pi pi-eye" />
+                                    </h:panelGroup>
+                                </div>
+                            </p:column>
+
                         </p:dataTable>
                     </h:form>
                 </div>
             </div>
+
         </ui:define>
     </ui:composition>
 </h:body>

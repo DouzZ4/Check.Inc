@@ -109,61 +109,82 @@
             </div>
 
             <!-- 🆕 Panel de Predicciones ML -->
-            <h:panelGroup rendered="#{patientDashboardBean.mlDisponible}">
-                <div class="ml-panel">
-                    <h3 class="ml-panel-title">🔮 Análisis Predictivo (IA)</h3>
-                    <div class="ml-predictions-grid">
-                        <!-- Nivel de Riesgo -->
-                        <h:panelGroup styleClass="risk-card risk-low"
-                            rendered="#{patientDashboardBean.nivelRiesgo eq 'bajo'}">
-                            <p class="risk-card-label">Nivel de Riesgo Actual</p>
-                            <h:outputText value="#{patientDashboardBean.nivelRiesgo}"
-                                styleClass="risk-badge risk-low" />
-                            <p class="risk-score">
-                                Score: <h:outputText value="#{patientDashboardBean.riesgoScore * 100}">
-                                    <f:convertNumber pattern="#0" />
-                                </h:outputText>%
-                            </p>
-                        </h:panelGroup>
-                        <h:panelGroup styleClass="risk-card risk-medium"
-                            rendered="#{patientDashboardBean.nivelRiesgo eq 'medio'}">
-                            <p class="risk-card-label">Nivel de Riesgo Actual</p>
-                            <h:outputText value="#{patientDashboardBean.nivelRiesgo}"
-                                styleClass="risk-badge risk-medium" />
-                            <p class="risk-score">
-                                Score: <h:outputText value="#{patientDashboardBean.riesgoScore * 100}">
-                                    <f:convertNumber pattern="#0" />
-                                </h:outputText>%
-                            </p>
-                        </h:panelGroup>
-                        <h:panelGroup styleClass="risk-card risk-high"
-                            rendered="#{patientDashboardBean.nivelRiesgo eq 'alto'}">
-                            <p class="risk-card-label">Nivel de Riesgo Actual</p>
-                            <h:outputText value="#{patientDashboardBean.nivelRiesgo}"
-                                styleClass="risk-badge risk-high" />
-                            <p class="risk-score">
-                                Score: <h:outputText value="#{patientDashboardBean.riesgoScore * 100}">
-                                    <f:convertNumber pattern="#0" />
-                                </h:outputText>%
-                            </p>
-                        </h:panelGroup>
-
-                        <!-- Recomendaciones -->
-                        <div>
-                            <h4 class="recommendations-title">💡 Recomendaciones
-                                Personalizadas</h4>
-                            <h:panelGroup rendered="#{empty patientDashboardBean.recomendaciones}">
-                                <p class="recommendations-empty">No hay suficientes datos para generar
-                                    recomendaciones.</p>
+            <!-- 🆕 Panel de Predicciones ML -->
+            <h:panelGroup id="mlPanelSection">
+                <!-- Case A: ML disponible con datos -->
+                <h:panelGroup rendered="#{patientDashboardBean.mlDisponible}">
+                    <div class="ml-panel">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <h3 class="ml-panel-title">🔮 Análisis Predictivo (IA)</h3>
+                            <p:commandButton value="Actualizar"
+                                actionListener="#{patientDashboardBean.sincronizarHistorialIA}" update="@form"
+                                icon="pi pi-refresh" styleClass="ui-button-outlined ui-button-secondary ui-button-sm" />
+                        </div>
+                        <div class="ml-predictions-grid">
+                            <!-- Nivel de Riesgo -->
+                            <h:panelGroup styleClass="risk-card risk-low"
+                                rendered="#{patientDashboardBean.nivelRiesgo eq 'bajo'}">
+                                <p class="risk-card-label">Nivel de Riesgo Actual</p>
+                                <h:outputText value="#{patientDashboardBean.nivelRiesgo}"
+                                    styleClass="risk-badge risk-low" />
+                                <p class="risk-score">
+                                    Score: <h:outputText value="#{patientDashboardBean.riesgoScore * 100}">
+                                        <f:convertNumber pattern="#0" />
+                                    </h:outputText>%
+                                </p>
                             </h:panelGroup>
-                            <ul class="recommendations-list">
-                                <ui:repeat value="#{patientDashboardBean.recomendaciones}" var="rec">
-                                    <li class="recommendation-item">#{rec}</li>
-                                </ui:repeat>
-                            </ul>
+                            <h:panelGroup styleClass="risk-card risk-medium"
+                                rendered="#{patientDashboardBean.nivelRiesgo eq 'medio'}">
+                                <p class="risk-card-label">Nivel de Riesgo Actual</p>
+                                <h:outputText value="#{patientDashboardBean.nivelRiesgo}"
+                                    styleClass="risk-badge risk-medium" />
+                                <p class="risk-score">
+                                    Score: <h:outputText value="#{patientDashboardBean.riesgoScore * 100}">
+                                        <f:convertNumber pattern="#0" />
+                                    </h:outputText>%
+                                </p>
+                            </h:panelGroup>
+                            <h:panelGroup styleClass="risk-card risk-high"
+                                rendered="#{patientDashboardBean.nivelRiesgo eq 'alto'}">
+                                <p class="risk-card-label">Nivel de Riesgo Actual</p>
+                                <h:outputText value="#{patientDashboardBean.nivelRiesgo}"
+                                    styleClass="risk-badge risk-high" />
+                                <p class="risk-score">
+                                    Score: <h:outputText value="#{patientDashboardBean.riesgoScore * 100}">
+                                        <f:convertNumber pattern="#0" />
+                                    </h:outputText>%
+                                </p>
+                            </h:panelGroup>
+
+                            <!-- Recomendaciones -->
+                            <div>
+                                <h4 class="recommendations-title">💡 Recomendaciones
+                                    Personalizadas</h4>
+                                <h:panelGroup rendered="#{empty patientDashboardBean.recomendaciones}">
+                                    <p class="recommendations-empty">No hay suficientes datos para generar
+                                        recomendaciones.</p>
+                                </h:panelGroup>
+                                <ul class="recommendations-list">
+                                    <ui:repeat value="#{patientDashboardBean.recomendaciones}" var="rec">
+                                        <li class="recommendation-item">#{rec}</li>
+                                    </ui:repeat>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </h:panelGroup>
+
+                <!-- Case B: ML no disponible (aún no sincronizado o error) -->
+                <h:panelGroup rendered="#{not patientDashboardBean.mlDisponible}">
+                    <div class="ml-panel" style="text-align:center; padding: 30px;">
+                        <h3 class="ml-panel-title" style="margin-bottom:15px;">🔮 Activar Inteligencia Artificial</h3>
+                        <p style="color:#666; margin-bottom:20px;">Sincroniza tu historial médico para recibir
+                            predicciones personalizadas y alertas de riesgo.</p>
+                        <p:commandButton value="Iniciar Análisis IA"
+                            actionListener="#{patientDashboardBean.sincronizarHistorialIA}" update="@form"
+                            icon="pi pi-sparkles" styleClass="ui-button-primary" />
+                    </div>
+                </h:panelGroup>
             </h:panelGroup>
 
             <!-- Anomalías recientes -->

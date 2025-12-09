@@ -70,4 +70,132 @@ public class AlertaBean implements Serializable {
     public List<Alerta> getAlertas() {
         return alertas;
     }
+
+    // ========== MÉTODOS DE ESTADÍSTICAS ==========
+
+    public int getTotalAlertas() {
+        return alertas != null ? alertas.size() : 0;
+    }
+
+    public int getAlertasPendientes() {
+        if (alertas == null)
+            return 0;
+        int count = 0;
+        for (Alerta a : alertas) {
+            if (a.getVisto() == null || !a.getVisto()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getAlertasGlucosa() {
+        if (alertas == null)
+            return 0;
+        int count = 0;
+        for (Alerta a : alertas) {
+            if ("ALERTA_GLUCOSA".equals(a.getTipo())) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getAlertasAnomalia() {
+        if (alertas == null)
+            return 0;
+        int count = 0;
+        for (Alerta a : alertas) {
+            if ("ALERTA_ANOMALIA".equals(a.getTipo())) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    // ========== FORMATEO DE CONTENIDO ==========
+
+    /**
+     * Formatea el contenido de la alerta para mejor visualización.
+     * Extrae email, códigos HTTP y mensajes de forma amigable.
+     */
+    public String formatearContenido(String contenido) {
+        if (contenido == null || contenido.trim().isEmpty()) {
+            return "<span style='color:#94a3b8;font-style:italic;'>Sin detalles</span>";
+        }
+
+        StringBuilder html = new StringBuilder();
+
+        // Extraer email si existe
+        if (contenido.contains("Envio a:")) {
+            String email = extraerValor(contenido, "Envio a:", "|");
+            if (email != null && !email.isEmpty()) {
+                html.append("<div class='alert-detail-email'>");
+                html.append("<i class='pi pi-envelope'></i>");
+                html.append("<span>").append(escapeHtml(email.trim())).append("</span>");
+                html.append("</div>");
+            }
+        }
+
+        // Extraer código HTTP
+        String codigo = extraerValor(contenido, "Code=", "|");
+        if (codigo != null && !codigo.isEmpty()) {
+            String codigoTrim = codigo.trim();
+            boolean esExito = codigoTrim.startsWith("2"); // 2xx = éxito
+            html.append("<span class='alert-detail-code ").append(esExito ? "code-success" : "code-error").append("'>");
+            html.append("<i class='pi ").append(esExito ? "pi-check" : "pi-times").append("'></i>");
+            html.append(" HTTP ").append(escapeHtml(codigoTrim));
+            html.append("</span> ");
+        }
+
+        // Mostrar intentos si existen
+        String intentos = extraerValor(contenido, "Attempts=", "|");
+        if (intentos != null && !intentos.isEmpty()) {
+            html.append("<span style='color:#64748b;font-size:0.8rem;margin-left:8px;'>");
+            html.append("Intento ").append(escapeHtml(intentos.trim()));
+            html.append("</span>");
+        }
+
+        // Si no se pudo parsear nada, mostrar texto simple
+        if (html.length() == 0) {
+            // Limpiar y mostrar texto resumido
+            String textoLimpio = contenido.replaceAll("\\s+", " ").trim();
+            if (textoLimpio.length() > 150) {
+                textoLimpio = textoLimpio.substring(0, 147) + "...";
+            }
+            html.append(escapeHtml(textoLimpio));
+        }
+
+        return html.toString();
+    }
+
+    private String extraerValor(String texto, String inicio, String fin) {
+        try {
+            int startIdx = texto.indexOf(inicio);
+            if (startIdx == -1)
+                return null;
+            startIdx += inicio.length();
+
+            int endIdx = texto.indexOf(fin, startIdx);
+            if (endIdx == -1) {
+                // Si no hay fin, tomar hasta el final o un máximo
+                endIdx = Math.min(startIdx + 100, texto.length());
+            }
+
+            return texto.substring(startIdx, endIdx);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private String escapeHtml(String text) {
+        if (text == null)
+            return "";
+        return text
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
+    }
 }
