@@ -3,17 +3,19 @@ package com.mycompany.checkinc.services;
 import com.mycompany.checkinc.entities.Usuario;
 import com.mycompany.checkinc.entities.Glucosa;
 import com.mycompany.checkinc.util.Config;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import org.junit.jupiter.api.Test;
 
 public class PruebaCompletaEnvioTest {
 
     private final String TARGET_EMAIL_1 = "angeleduardomen@hotmail.com";
     private final String TARGET_EMAIL_2 = "angeleduardomen@gmail.com";
 
+    @Disabled("Esperando configuración de API Key")
     @Test
     public void testModuloCompletoCorreos() {
         System.out.println("🚀 [INICIO] Prueba completa del módulo de correos");

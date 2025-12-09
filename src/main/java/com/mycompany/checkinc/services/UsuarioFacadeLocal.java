@@ -26,14 +26,21 @@ public interface UsuarioFacadeLocal {
     List<Usuario> findAll();
 
     List<Usuario> findRange(int[] range);
-    
-    Usuario findByUser(String user); 
+
+    Usuario findByUser(String user);
 
     // Buscar usuario por documento
     Usuario findByDocumento(int documento);
 
     int count();
-    
-    Usuario iniciarSesion(String username, String password);
-}
 
+    Usuario iniciarSesion(String username, String password);
+
+    Usuario findByCorreo(String correo);
+
+    Usuario findByToken(String token);
+
+    void actualizarTokenRecuperacion(Usuario usuario, String token, java.sql.Timestamp expira);
+
+    void actualizarPasswordRecuperacion(Usuario usuario, String nuevaPassword);
+}

@@ -30,7 +30,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     public UsuarioFacade() {
         super(Usuario.class);
     }
-      @Override
+
+    @Override
     public Usuario iniciarSesion(String username, String password) {
         try {
             System.out.println("UsuarioFacade: Intentando login para usuario: " + username);
@@ -88,15 +89,15 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     }
 
     @Override
-public Usuario findByUser(String user) {
-    try {
-        Query query = em.createQuery("SELECT u FROM Usuario u WHERE u.user = :user");
-        query.setParameter("user", user);
-        return (Usuario) query.getSingleResult();
-    } catch (NoResultException e) {
-        return null;
+    public Usuario findByUser(String user) {
+        try {
+            Query query = em.createQuery("SELECT u FROM Usuario u WHERE u.user = :user");
+            query.setParameter("user", user);
+            return (Usuario) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
-}
 
     @Override
     public Usuario findByDocumento(int documento) {
@@ -107,6 +108,43 @@ public Usuario findByUser(String user) {
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    @Override
+    public Usuario findByCorreo(String correo) {
+        try {
+            Query q = em.createQuery("SELECT u FROM Usuario u WHERE u.correo = :correo");
+            q.setParameter("correo", correo);
+            return (Usuario) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Usuario findByToken(String token) {
+        try {
+            Query q = em.createQuery("SELECT u FROM Usuario u WHERE u.tokenRecuperacion = :token");
+            q.setParameter("token", token);
+            return (Usuario) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public void actualizarTokenRecuperacion(Usuario usuario, String token, java.sql.Timestamp expira) {
+        usuario.setTokenRecuperacion(token);
+        usuario.setTokenExpira(expira);
+        em.merge(usuario);
+    }
+
+    @Override
+    public void actualizarPasswordRecuperacion(Usuario usuario, String nuevaPassword) {
+        usuario.setPassword(nuevaPassword);
+        usuario.setTokenRecuperacion(null);
+        usuario.setTokenExpira(null);
+        em.merge(usuario);
     }
 
 }
