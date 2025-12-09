@@ -137,23 +137,45 @@ public class AlertaBean implements Serializable {
             }
         }
 
-        // Extraer código HTTP
+        // Extraer código HTTP y mostrar mensaje amigable
         String codigo = extraerValor(contenido, "Code=", "|");
         if (codigo != null && !codigo.isEmpty()) {
             String codigoTrim = codigo.trim();
             boolean esExito = codigoTrim.startsWith("2"); // 2xx = éxito
+
+            // Mensaje amigable según el código
+            String mensajeEstado;
+            String iconoClase;
+            if (esExito) {
+                mensajeEstado = "Entregado";
+                iconoClase = "pi-check-circle";
+            } else if (codigoTrim.startsWith("4")) {
+                mensajeEstado = "Error de envío";
+                iconoClase = "pi-times-circle";
+            } else if (codigoTrim.startsWith("5")) {
+                mensajeEstado = "Error del servidor";
+                iconoClase = "pi-exclamation-circle";
+            } else {
+                mensajeEstado = "Pendiente";
+                iconoClase = "pi-clock";
+            }
+
             html.append("<span class='alert-detail-code ").append(esExito ? "code-success" : "code-error").append("'>");
-            html.append("<i class='pi ").append(esExito ? "pi-check" : "pi-times").append("'></i>");
-            html.append(" HTTP ").append(escapeHtml(codigoTrim));
+            html.append("<i class='pi ").append(iconoClase).append("'></i>");
+            html.append(" ").append(mensajeEstado);
             html.append("</span> ");
         }
 
-        // Mostrar intentos si existen
+        // Mostrar intentos si existen (solo si hubo error)
         String intentos = extraerValor(contenido, "Attempts=", "|");
         if (intentos != null && !intentos.isEmpty()) {
-            html.append("<span style='color:#64748b;font-size:0.8rem;margin-left:8px;'>");
-            html.append("Intento ").append(escapeHtml(intentos.trim()));
-            html.append("</span>");
+            String codigoCheck = extraerValor(contenido, "Code=", "|");
+            boolean mostrarIntentos = codigoCheck == null || !codigoCheck.trim().startsWith("2");
+            if (mostrarIntentos) {
+                html.append("<span style='color:#64748b;font-size:0.8rem;margin-left:8px;'>");
+                html.append("(Intento ").append(escapeHtml(intentos.trim())).append(")");
+                html.append("</span>");
+            }
         }
 
         // Si no se pudo parsear nada, mostrar texto simple

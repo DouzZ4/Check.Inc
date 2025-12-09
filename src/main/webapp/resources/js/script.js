@@ -2,10 +2,10 @@ $(document).ready(function () {
     // DataTable usuarios
     if ($('#usuariosForm\\:usuario').length) {
         let tablaUsuarios = $('#usuariosForm\\:usuario').DataTable({
-            language: {url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json"},
+            language: { url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json" },
             pageLength: 10,
             responsive: true,
-            columnDefs: [{orderable: false, targets: 0}]
+            columnDefs: [{ orderable: false, targets: 0 }]
         });
 
         // Select all
@@ -49,9 +49,13 @@ $(document).ready(function () {
 
     // Otras tablas
     if ($('#tablaForm\\:cita').length)
-        $('#tablaForm\\:cita').DataTable({language: {url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json"}, pageLength: 10, responsive: true});
+        $('#tablaForm\\:cita').DataTable({ language: { url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json" }, pageLength: 10, responsive: true });
     if ($('#tablaForm\\:medicamento').length)
-        $('#tablaForm\\:medicamento').DataTable({language: {url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json"}, pageLength: 10, responsive: true});
+        $('#tablaForm\\:medicamento').DataTable({ language: { url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json" }, pageLength: 10, responsive: true });
     if ($('#tablaForm\\:registro').length)
-        $('#tablaForm\\:registro').DataTable({language: {url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json"}, pageLength: 10, responsive: true});
+        $('#tablaForm\\:registro').DataTable({ language: { url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json" }, pageLength: 10, responsive: true });
+    if ($('#tablaForm\\:anomalia').length)
+        $('#tablaForm\\:anomalia').DataTable({ language: { url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json" }, pageLength: 10, responsive: true });
+    if ($('#tablaForm\\:alertaAdmin').length)
+        $('#tablaForm\\:alertaAdmin').DataTable({ language: { url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json" }, pageLength: 10, responsive: true });
 });

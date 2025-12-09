@@ -1,46 +1,98 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:head>
-        <title>Ver Alertas</title>
-    </h:head>
-    <h:body>
-        <h:form>
-            <h1>Alertas del sistema</h1>
-            <h:dataTable id="tblAlertas" value="#{alertaBean.alertas}" var="a" border="1" styleClass="table">
-                <h:column>
-                    <f:facet name="header">ID</f:facet>
-                    #{a.idAlerta}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Tipo</f:facet>
-                    #{a.tipo}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Contenido</f:facet>
-                    <h:outputText value="#{a.contenido}" escape="false" />
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Fecha</f:facet>
-                    <h:outputText value="#{a.fechaHora}" />
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Visto</f:facet>
-                    #{a.visto}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Usuario</f:facet>
-                    #{a.idUsuario != null ? a.idUsuario.nombres : '-'}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Acciones</f:facet>
-                    <h:commandButton value="Marcar visto" action="#{alertaBean.marcarVisto(a)}">
-                        <f:ajax execute="@this" render="tblAlertas" />
-                    </h:commandButton>
-                </h:column>
-            </h:dataTable>
-        </h:form>
-    </h:body>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui"
+    lang="es" xml:lang="es">
+<ui:composition template="/views/TemplateSitio.xhtml">
+    <ui:define name="title">Ver Alertas - Admin</ui:define>
+    <ui:define name="content">
+        <h:messages globalOnly="true" styleClass="message-box" infoClass="message-info" errorClass="message-error" />
+
+        <section aria-labelledby="alertas-heading">
+            <h2 id="alertas-heading">Alertas del Sistema</h2>
+            <p style="color: #666; margin-bottom: 20px;">
+                Panel de administración para visualizar y gestionar todas las alertas de los usuarios del sistema.
+            </p>
+
+            <div style="overflow-x: auto;">
+                <h:form id="tablaForm">
+                    <h:dataTable id="alertaAdmin" value="#{alertaBean.alertas}" var="a" styleClass="tabla-registros"
+                        headerClass="tabla-header" rowClasses="tabla-fila-par,tabla-fila-impar">
+
+                        <h:column>
+                            <f:facet name="header">ID</f:facet>
+                            #{a.idAlerta}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Tipo</f:facet>
+                            <h:panelGroup rendered="#{a.tipo == 'ALERTA_GLUCOSA'}">
+                                <span class="leve" style="background: #c6f6d5; padding: 4px 10px; border-radius: 12px;">
+                                    Glucosa
+                                </span>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{a.tipo == 'ALERTA_ANOMALIA'}">
+                                <span class="grave"
+                                    style="background: #fed7d7; padding: 4px 10px; border-radius: 12px;">
+                                    Anomalía
+                                </span>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{a.tipo == 'RECORDATORIO'}">
+                                <span class="moderada"
+                                    style="background: #feebc8; padding: 4px 10px; border-radius: 12px;">
+                                    Recordatorio
+                                </span>
+                            </h:panelGroup>
+                            <h:panelGroup
+                                rendered="#{a.tipo != 'ALERTA_GLUCOSA' and a.tipo != 'ALERTA_ANOMALIA' and a.tipo != 'RECORDATORIO'}">
+                                <span style="background: #e2e8f0; padding: 4px 10px; border-radius: 12px;">
+                                    #{a.tipo}
+                                </span>
+                            </h:panelGroup>
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Contenido</f:facet>
+                            <h:outputText value="#{a.contenido}" escape="false"
+                                style="max-width: 300px; display: inline-block;" />
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Fecha</f:facet>
+                            <h:outputText value="#{a.fechaHora}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                            </h:outputText>
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Visto</f:facet>
+                            <h:panelGroup rendered="#{a.visto}">
+                                <span style="color: #38a169; font-weight: bold;">✓ Sí</span>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{!a.visto}">
+                                <span style="color: #e53e3e; font-weight: bold;">✗ No</span>
+                            </h:panelGroup>
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Usuario</f:facet>
+                            #{a.idUsuario != null ? a.idUsuario.nombres : '-'}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Acciones</f:facet>
+                            <h:commandButton value="Marcar visto" action="#{alertaBean.marcarVisto(a)}"
+                                rendered="#{!a.visto}" styleClass="action-button edit-button">
+                                <f:ajax execute="@this" render="@form" />
+                            </h:commandButton>
+                            <h:outputText value="—" rendered="#{a.visto}" style="color: #999;" />
+                        </h:column>
+                    </h:dataTable>
+                </h:form>
+            </div>
+        </section>
+    </ui:define>
+</ui:composition>
+
 </html>

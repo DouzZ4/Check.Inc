@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.1.1-1.el7.remi
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 23-11-2025 a las 20:59:19
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Servidor: localhost
+-- Tiempo de generación: 09-12-2025 a las 01:42:16
+-- Versión del servidor: 10.6.4-MariaDB
+-- Versión de PHP: 7.4.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -35,7 +35,18 @@ CREATE TABLE `alerta` (
   `idUsuario` int(11) NOT NULL,
   `idAnomalia` int(11) DEFAULT NULL,
   `visto` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `alerta`
+--
+
+INSERT INTO `alerta` (`idAlerta`, `tipo`, `contenido`, `fechaHora`, `idUsuario`, `idAnomalia`, `visto`) VALUES
+(1, 'ALERTA_GLUCOSA', 'Envio a: angeleduardomen@gmail.com | Code=202 | Attempts=1 | Resp=', '2025-12-08 02:53:54', 1, NULL, 0),
+(2, 'ALERTA_GLUCOSA', 'Envio a: angeleduardomen@gmail.com | Code=202 | Attempts=1 | Resp=', '2025-12-08 15:02:55', 1, NULL, 0),
+(3, 'ALERTA_ANOMALIA', 'Envio a: angeleduardomen@gmail.com\n | Code=400 | Attempts=1 | Resp={\"errors\":[{\"message\":\"Bad Request\",\"field\":null,\"help\":null}]}', '2025-12-08 18:25:18', 1, NULL, 0),
+(4, 'ALERTA_GLUCOSA', 'Envio a: angeleduardomen@gmail.com | Code=202 | Attempts=1 | Resp=', '2025-12-08 19:30:17', 1, NULL, 1),
+(5, 'ALERTA_GLUCOSA', 'Envio a: angeleduardomen@gmail.com | Code=202 | Attempts=1 | Resp=', '2025-12-08 23:33:02', 1, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -51,7 +62,7 @@ CREATE TABLE `anomalia` (
   `idUsuario` int(11) NOT NULL,
   `gravedad` enum('leve','moderada','grave') DEFAULT 'leve',
   `resuelto` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `anomalia`
@@ -64,7 +75,9 @@ INSERT INTO `anomalia` (`idAnomalia`, `descripcion`, `fechaHora`, `sintomas`, `i
 (4, 'dwdffccxcv', '2025-10-16 19:24:00', 'sdcccsss', 1, 'grave', NULL),
 (5, 'dsdsdsds', '2025-10-16 19:25:00', 'sddds', 1, 'grave', NULL),
 (6, 'dsccscs', '2025-10-16 19:25:00', 'csccsscssc', 1, 'moderada', NULL),
-(7, 'effddfdf', '2025-10-24 21:03:00', 'erefeefef', 1, 'grave', NULL);
+(7, 'effddfdf', '2025-10-24 21:03:00', 'erefeefef', 1, 'grave', NULL),
+(8, 'fiebre', '2025-12-08 15:44:00', 'fiebre alta y calambres', 1, 'moderada', 0),
+(9, 'dolores en el cuerpo', '2025-12-08 18:24:00', 'mucho dolor en los brazos y las piernas principalmente ', 1, 'grave', 0);
 
 -- --------------------------------------------------------
 
@@ -79,7 +92,7 @@ CREATE TABLE `cita` (
   `motivo` text NOT NULL,
   `idUsuario` int(11) NOT NULL,
   `estado` varchar(20) DEFAULT 'Pendiente'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `cita`
@@ -124,7 +137,8 @@ INSERT INTO `cita` (`idCita`, `fecha`, `hora`, `motivo`, `idUsuario`, `estado`) 
 (48, '2025-09-26', '14:29:00', 'sise mi papax2', 1, NULL),
 (49, '2025-09-29', '15:23:00', 'control mensual', 1, NULL),
 (50, '2025-09-29', '15:23:00', 'control mensual', 1, NULL),
-(51, '2025-11-22', '10:39:00', 'nose sise', 1, NULL);
+(51, '2025-11-22', '10:39:00', 'nose sise', 1, NULL),
+(52, '2025-12-08', '18:21:00', 'control mensual', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -138,7 +152,7 @@ CREATE TABLE `glucosa` (
   `fechaHora` datetime NOT NULL,
   `idUsuario` int(11) NOT NULL,
   `momentoDia` varchar(50) DEFAULT NULL COMMENT 'Ej: Antes del desayuno, Después del almuerzo'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `glucosa`
@@ -192,7 +206,13 @@ INSERT INTO `glucosa` (`idGlucosa`, `nivelGlucosa`, `fechaHora`, `idUsuario`, `m
 (63, 70, '2025-11-22 04:37:00', 1, 'Antes de Desayuno'),
 (64, 76, '2025-11-21 05:37:00', 1, 'Después de Almuerzo'),
 (65, 190, '2025-11-22 05:37:00', 1, 'Después de Cena'),
-(66, 190, '2025-11-22 05:43:00', 1, 'En Ayuno');
+(66, 190, '2025-11-22 05:43:00', 1, 'En Ayuno'),
+(67, 190, '2025-12-08 02:53:00', 1, 'En Ayuno'),
+(68, 190, '2025-12-08 02:53:00', 1, 'En Ayuno'),
+(69, 70, '2025-12-08 15:02:00', 1, 'Antes de Desayuno'),
+(70, 80, '2025-12-08 19:29:00', 1, 'Antes de Cena'),
+(71, 70, '2025-12-08 19:29:00', 1, 'Antes de Dormir'),
+(72, 70, '2025-12-08 23:32:00', 1, 'Antes de Cena');
 
 -- --------------------------------------------------------
 
@@ -209,7 +229,7 @@ CREATE TABLE `medicamento` (
   `fechaFin` date NOT NULL,
   `idUsuario` int(11) NOT NULL,
   `observaciones` text DEFAULT NULL COMMENT 'Notas o recomendaciones del paciente o médico'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `medicamento`
@@ -244,7 +264,7 @@ INSERT INTO `medicamento` (`idMedicamento`, `nombre`, `dosis`, `frecuencia`, `fe
 CREATE TABLE `nivelesglucosa` (
   `idNivelGlucosa` int(11) NOT NULL,
   `idUsuario` int(11) DEFAULT NULL,
-  `tipoDiabetes` varchar(50) DEFAULT NULL,
+  `tipoDiabetes` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `nivelMinimo` float NOT NULL DEFAULT 80,
   `nivelMaximo` float NOT NULL DEFAULT 130,
   `nivelBajoCritico` float NOT NULL DEFAULT 70,
@@ -273,7 +293,7 @@ INSERT INTO `nivelesglucosa` (`idNivelGlucosa`, `idUsuario`, `tipoDiabetes`, `ni
 CREATE TABLE `rol` (
   `idRol` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL CHECK (`nombre` in ('admin','paciente'))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `rol`
@@ -305,47 +325,49 @@ CREATE TABLE `usuario` (
   `telefonoEmergencia` varchar(20) DEFAULT NULL,
   `correoEmergencia` varchar(100) DEFAULT NULL,
   `nombreContactoEmergencia` varchar(100) DEFAULT NULL,
-  `parentescoContacto` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `parentescoContacto` varchar(50) DEFAULT NULL,
+  `token_recuperacion` varchar(255) DEFAULT NULL,
+  `token_expira` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`idUsuario`, `user`, `password`, `documento`, `nombres`, `apellidos`, `correo`, `edad`, `idRol`, `tipoDiabetes`, `detalleTipoDiabetes`, `esInsulodependiente`, `telefonoEmergencia`, `correoEmergencia`, `nombreContactoEmergencia`, `parentescoContacto`) VALUES
-(1, 'carlosg', '$2a$10$OQHjlgrDQjBjL1qbK6he1Ow.OFcE3SE1zbcmYgxkRJierbLd3MnRS', 1001234567, 'Yeikol 2', 'Mahecha', 'angeleduardomen@gmail.com', 30, 2, 'Tipo 1', 'nose', 1, NULL, 'angeleduardomen@gmail.com\n', NULL, NULL),
-(2, 'anam', '$2a$10$qucyb.irkvKjeitLN0l3s.HusjzWo0F2NBihO3oVRIy79fOjSczEC', 1007654321, 'Ana', 'Martínez', 'ana.martinez@example.com', 25, 2, 'Tipo 1', NULL, 0, NULL, 'angeleduardomen@gmail.com', NULL, NULL),
-(3, 'luisf', '$2a$10$mGfPkrh.PdHrXV9HfHHmPeExO1j3jJpCl38vgcigPzjN2aUOWyJEG', 1012345678, 'Luis', 'Fernández', 'luis.fernandez@example.com', 40, 1, 'Gestacional', NULL, NULL, NULL, 'angeleduardomen@gmail.com', NULL, NULL),
-(4, 'marial', '$2a$10$5flvIkVVc7z3EeQHzQ/P.Ofg6Zfvac78Hl4w2ewiYQ1WmuXAd0IZa', 1018765432, 'Fernando', 'Gonzalez', 'fergoga@gmail.com', 35, 2, 'Otro', NULL, 0, NULL, NULL, NULL, NULL),
-(5, 'javierr', 'passabcd', 1023456789, 'Javier', 'Rodríguez', 'javier.rodriguez@example.com', 28, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(6, 'sofiap', 'claveqwerty', 1029876543, 'Sofía', 'Pérez', 'sofia.perez@example.com', 32, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(7, 'andresh', 'adminpass', 1034567890, 'Andrés', 'Hernández', 'andres.hernandez@example.com', 27, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(8, 'elenad', 'securepass', 1038765432, 'Elena', 'Díaz', 'elena.diaz@example.com', 29, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(15, 'DouzZ2', '$2y$10$DZhqqlCjPD0pOPuZUVqsfebujW2iSD.ucaqvFsUYBceOnUWjKxazO', 1193086736, 'angel mende', 'game', 'angeleduardomen@homail.com', 23, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(29, 'agomez', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765432, 'Ana', 'Gómez', 'ana.gomez@email.com', 34, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(30, 'lmartinez', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765433, 'Luis', 'Martínez', 'luis.martinez@email.com', 45, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(31, 'sperez', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765434, 'Sofía', 'Pérez', 'sofia.perez@email.com', 28, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(32, 'crodriguez', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765435, 'Carlos', 'Rodríguez', 'carlos.r@email.com', 52, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(33, 'mlopez', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765436, 'María', 'López', 'maria.lopez@email.com', 61, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(34, 'jhernandez', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765437, 'Javier', 'Hernández', 'javier.h@email.com', 30, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(35, 'lgarcia', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765438, 'Laura', 'García', 'laura.garcia@email.com', 25, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(36, 'mdiaz', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765439, 'Miguel', 'Díaz', 'miguel.diaz@email.com', 41, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(37, 'esanchez', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765440, 'Elena', 'Sánchez', 'elena.sanchez@email.com', 38, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(38, 'dromero', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765441, 'David', 'Romero', 'david.romero@email.com', 49, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(39, 'Bryalav', '$2y$10$l/BYSbWCpa/195MfHyZzjOrhdaDEOtdWNa/gyEsym74Eeh5JyEIei', 1023027242, 'Bryan', 'Lavao', 'b.lavaol7@gmail.com', 26, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(40, 'HaroldA11', '$2y$10$NHy5KyOznwmIL9takXZU4uilJ77IuWp3DO6/5OoGyD.G9ipHRKkpm', 1030520976, 'Harold', 'Alonso', 'harold@gmail', 21, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(42, 'nosex2', '$2y$10$JwhDxeU.VlWQsI9XQCqxvekItnG6pV2B2kpy9MLeGIvO8AuR4Tq/S', 1111111, 'edward', 'Alonso', 'nose@nose.com', 25, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(43, 'Brayan1', '$2y$10$6I3zjI2LgcXGD9nLWaEB9OA6BKe2YYUor9Tkags5dQgVOZ/J/iuRW', 78354234, 'Brayan', 'Lvao', 'ejemplo3@gmail.com', 23, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(44, 'Miguel1', '$2y$10$2Y25YDHiOrYErc0mj4.KMuj5faPILrwdj4z8j3ifAIzeV2nqh5DrW', 7693609, 'Miguel', 'Cabrera', 'gagsjgh@gmail.com', 20, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(45, 'juanp', 'contraseña_segura', 12345678, 'Juan', 'Perez', 'juan.perez@email.com', 35, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(47, 'carlosgg', 'pass123', 11223344, 'Carlos', 'Gomez', 'carlos.gomez@email.com', 42, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(48, 'anap', 'pass456', 55667788, 'Ana', 'Perez', 'ana.perez@email.com', 28, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(49, 'admin_check', 'adminpass', 99001122, 'Admin', 'Sistema', 'admin@checks.com', 35, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(51, 'Psilva82', '$2y$10$WeONEqE/.YWh4qZqPsDncurIuuwKzUqQKIAvUGAo.VlLL1zg8BX/q', 987654321, 'pedro antonio ', 'silva lagos', 'pedro.silva.test@email.com', 42, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL),
-(52, 'Angelm', '$2a$10$vyPFY2i/4wBSJlWgL2AocuPkxQarWG6sgRC7/Mz0L11zECq8Hut1.', 11930867, 'Angelll', 'gamezzz', 'angeleduardomen@hotmail.com', 23, 2, 'Tipo 1', NULL, 1, NULL, NULL, NULL, NULL),
-(65, 'AngelMendez22', '$2a$10$BcYAcPNhzTVQ279NcjIh9ufNONTvqPE0Nm7SjVBVN37/ni5zyDKSW', 3026617, 'Angel', 'Mendez', 'angeleduardomen@hotmail.com', 23, 2, 'Tipo 1', NULL, 1, NULL, 'angeleduardomen@hotmail.com', NULL, NULL),
-(66, 'AngelMendez23', '$2a$10$6cRGDCgnTfp3R5s6vanNTuont2FRybl.XW7CPm5tH8nmWPG.Q7/iu', 30266178, 'Angel', 'Mendez', 'angeleduardomen@gmail.com', 23, 2, 'Tipo 1', NULL, 1, NULL, 'angeleduardomen@gmail.com', NULL, NULL),
-(67, 'Alonso11', '$2a$10$qlJNBK.AzUXdIIH5SqpWj.C3TKsXTl2ZLdddM2zob7C6GiBMb0C8m', 1030380273, 'Harold', 'Alonso', 'haroldalonso1429@gmail.com', 23, 2, 'Tipo 1', NULL, 0, NULL, NULL, NULL, NULL);
+INSERT INTO `usuario` (`idUsuario`, `user`, `password`, `documento`, `nombres`, `apellidos`, `correo`, `edad`, `idRol`, `tipoDiabetes`, `detalleTipoDiabetes`, `esInsulodependiente`, `telefonoEmergencia`, `correoEmergencia`, `nombreContactoEmergencia`, `parentescoContacto`, `token_recuperacion`, `token_expira`) VALUES
+(1, 'carlosg', '$2a$10$OQHjlgrDQjBjL1qbK6he1Ow.OFcE3SE1zbcmYgxkRJierbLd3MnRS', 1001234567, 'Yeikol 2', 'Mahecha', 'angeleduardomen@gmail.com', 30, 2, 'Tipo 1', 'nose', 1, NULL, 'angeleduardomen@gmail.com\n', NULL, NULL, NULL, NULL),
+(2, 'anam', '$2a$10$qucyb.irkvKjeitLN0l3s.HusjzWo0F2NBihO3oVRIy79fOjSczEC', 1007654321, 'Ana', 'Martínez', 'ana.martinez@example.com', 25, 2, 'Tipo 1', NULL, 0, NULL, 'angeleduardomen@gmail.com', NULL, NULL, NULL, NULL),
+(3, 'luisf', '$2a$10$mGfPkrh.PdHrXV9HfHHmPeExO1j3jJpCl38vgcigPzjN2aUOWyJEG', 1012345678, 'Luis', 'Fernández', 'luis.fernandez@example.com', 40, 1, 'Gestacional', NULL, NULL, NULL, 'angeleduardomen@gmail.com', NULL, NULL, NULL, NULL),
+(4, 'marial', '$2a$10$5flvIkVVc7z3EeQHzQ/P.Ofg6Zfvac78Hl4w2ewiYQ1WmuXAd0IZa', 1018765432, 'Fernando', 'Gonzalez', 'fergoga@gmail.com', 35, 2, 'Otro', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(5, 'javierr', 'passabcd', 1023456789, 'Javier', 'Rodríguez', 'javier.rodriguez@example.com', 28, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(6, 'sofiap', 'claveqwerty', 1029876543, 'Sofía', 'Pérez', 'sofia.perez@example.com', 32, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(7, 'andresh', 'adminpass', 1034567890, 'Andrés', 'Hernández', 'andres.hernandez@example.com', 27, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(8, 'elenad', 'securepass', 1038765432, 'Elena', 'Díaz', 'elena.diaz@example.com', 29, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(15, 'DouzZ2', '$2y$10$DZhqqlCjPD0pOPuZUVqsfebujW2iSD.ucaqvFsUYBceOnUWjKxazO', 1193086736, 'angel mende', 'game', 'angeleduardomen@homail.com', 23, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(29, 'agomez', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765432, 'Ana', 'Gómez', 'ana.gomez@email.com', 34, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(30, 'lmartinez', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765433, 'Luis', 'Martínez', 'luis.martinez@email.com', 45, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(31, 'sperez', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765434, 'Sofía', 'Pérez', 'sofia.perez@email.com', 28, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(32, 'crodriguez', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765435, 'Carlos', 'Rodríguez', 'carlos.r@email.com', 52, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(33, 'mlopez', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765436, 'María', 'López', 'maria.lopez@email.com', 61, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(34, 'jhernandez', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765437, 'Javier', 'Hernández', 'javier.h@email.com', 30, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(35, 'lgarcia', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765438, 'Laura', 'García', 'laura.garcia@email.com', 25, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(36, 'mdiaz', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765439, 'Miguel', 'Díaz', 'miguel.diaz@email.com', 41, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(37, 'esanchez', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765440, 'Elena', 'Sánchez', 'elena.sanchez@email.com', 38, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(38, 'dromero', '$2y$10$fictionalHashExamplePretendItIsUnique123.', 1098765441, 'David', 'Romero', 'david.romero@email.com', 49, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(39, 'Bryalav', '$2y$10$l/BYSbWCpa/195MfHyZzjOrhdaDEOtdWNa/gyEsym74Eeh5JyEIei', 1023027242, 'Bryan', 'Lavao', 'b.lavaol7@gmail.com', 26, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(40, 'HaroldA11', '$2y$10$NHy5KyOznwmIL9takXZU4uilJ77IuWp3DO6/5OoGyD.G9ipHRKkpm', 1030520976, 'Harold', 'Alonso', 'harold@gmail', 21, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(42, 'nosex2', '$2y$10$JwhDxeU.VlWQsI9XQCqxvekItnG6pV2B2kpy9MLeGIvO8AuR4Tq/S', 1111111, 'edward', 'Alonso', 'nose@nose.com', 25, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(43, 'Brayan1', '$2y$10$6I3zjI2LgcXGD9nLWaEB9OA6BKe2YYUor9Tkags5dQgVOZ/J/iuRW', 78354234, 'Brayan', 'Lvao', 'ejemplo3@gmail.com', 23, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(44, 'Miguel1', '$2y$10$2Y25YDHiOrYErc0mj4.KMuj5faPILrwdj4z8j3ifAIzeV2nqh5DrW', 7693609, 'Miguel', 'Cabrera', 'gagsjgh@gmail.com', 20, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(45, 'juanp', 'contraseña_segura', 12345678, 'Juan', 'Perez', 'juan.perez@email.com', 35, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(47, 'carlosgg', 'pass123', 11223344, 'Carlos', 'Gomez', 'carlos.gomez@email.com', 42, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(48, 'anap', 'pass456', 55667788, 'Ana', 'Perez', 'ana.perez@email.com', 28, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(49, 'admin_check', 'adminpass', 99001122, 'Admin', 'Sistema', 'admin@checks.com', 35, 1, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(51, 'Psilva82', '$2y$10$WeONEqE/.YWh4qZqPsDncurIuuwKzUqQKIAvUGAo.VlLL1zg8BX/q', 987654321, 'pedro antonio ', 'silva lagos', 'pedro.silva.test@email.com', 42, 2, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(52, 'Angelm', '$2a$10$vyPFY2i/4wBSJlWgL2AocuPkxQarWG6sgRC7/Mz0L11zECq8Hut1.', 11930867, 'Angelll', 'gamezzz', 'angeleduardomen@hotmail.com', 23, 2, 'Tipo 1', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(65, 'AngelMendez22', '$2a$10$BcYAcPNhzTVQ279NcjIh9ufNONTvqPE0Nm7SjVBVN37/ni5zyDKSW', 3026617, 'Angel', 'Mendez', 'angeleduardomen@hotmail.com', 23, 2, 'Tipo 1', NULL, 1, NULL, 'angeleduardomen@hotmail.com', NULL, NULL, NULL, NULL),
+(66, 'AngelMendez23', '$2a$10$6cRGDCgnTfp3R5s6vanNTuont2FRybl.XW7CPm5tH8nmWPG.Q7/iu', 30266178, 'Angel', 'Mendez', 'angeleduardomen@gmail.com', 23, 2, 'Tipo 1', NULL, 1, NULL, 'angeleduardomen@gmail.com', NULL, NULL, NULL, NULL),
+(67, 'Alonso11', '$2a$10$qlJNBK.AzUXdIIH5SqpWj.C3TKsXTl2ZLdddM2zob7C6GiBMb0C8m', 1030380273, 'Harold', 'Alonso', 'haroldalonso1429@gmail.com', 23, 2, 'Tipo 1', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -445,25 +467,25 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `alerta`
 --
 ALTER TABLE `alerta`
-  MODIFY `idAlerta` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idAlerta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `anomalia`
 --
 ALTER TABLE `anomalia`
-  MODIFY `idAnomalia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idAnomalia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `cita`
 --
 ALTER TABLE `cita`
-  MODIFY `idCita` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `idCita` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT de la tabla `glucosa`
 --
 ALTER TABLE `glucosa`
-  MODIFY `idGlucosa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `idGlucosa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT de la tabla `medicamento`

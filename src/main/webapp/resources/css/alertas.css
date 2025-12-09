@@ -303,23 +303,28 @@
 .alert-detail-code {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    background: white;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-family: 'Consolas', 'Monaco', monospace;
-    font-size: 0.8rem;
-    margin-top: 8px;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.alert-detail-code i {
+    font-size: 1.1rem;
 }
 
 .alert-detail-code.code-success {
+    background: var(--alert-success-light);
     color: var(--alert-success);
-    border: 1px solid var(--alert-success-light);
+    border: none;
 }
 
 .alert-detail-code.code-error {
+    background: var(--alert-danger-light);
     color: var(--alert-danger);
-    border: 1px solid var(--alert-danger-light);
+    border: none;
 }
 
 /* === ESTADO === */

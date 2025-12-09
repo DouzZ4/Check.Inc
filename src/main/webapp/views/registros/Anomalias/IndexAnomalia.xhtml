@@ -1,151 +1,130 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <body>
-        <ui:composition template="/views/TemplateSitio.xhtml">
+<body>
+    <ui:composition template="/views/TemplateSitio.xhtml">
 
-            <ui:define name="title">
-                Registro y Consulta de Anomalías
-            </ui:define>
+        <ui:define name="title">
+            Registro y Consulta de Anomalías
+        </ui:define>
 
-            <ui:define name="content">
-                <h:messages globalOnly="true" styleClass="message-box"
-                            infoClass="message-info" errorClass="message-error"/>
+        <ui:define name="content">
+            <h:messages globalOnly="true" styleClass="message-box" infoClass="message-info"
+                errorClass="message-error" />
 
-                <!-- FORMULARIO PRINCIPAL -->
-                <section aria-labelledby="form-title-heading">
-                    <h2 id="form-title-heading">
-                        #{registroAnomalia.editando ? 'Editar Anomalía' : 'Registrar Anomalía'}
-                    </h2>
+            <!-- FORMULARIO PRINCIPAL -->
+            <section aria-labelledby="form-title-heading">
+                <h2 id="form-title-heading">
+                    #{registroAnomalia.editando ? 'Editar Anomalía' : 'Registrar Anomalía'}
+                </h2>
 
-                    <h:form id="formAnomalia">
-                        <h:inputHidden value="#{registroAnomalia.idAnomalia}" />
+                <h:form id="formAnomalia">
+                    <h:inputHidden value="#{registroAnomalia.idAnomalia}" />
 
-                        <!-- FECHA -->
-                        <div class="form-group">
-                            <h:outputLabel for="fechaHora" value="Fecha:"/>
-                            <p:datePicker id="fechaHora"
-                                          value="#{registroAnomalia.fechaHora}"
-                                          required="true"
-                                          requiredMessage="Por favor ingrese la fecha."
-                                          pattern="dd/MM/yyyy HH:mm"
-                                          showTime="true"
-                                          locale="es" />
-                            <h:message for="fechaHora" styleClass="message error-message"/>
-                        </div>
-
-                        <div class="form-group">
-                            <h:outputLabel for="descripcion" value="Descripción:"/>
-                            <h:inputTextarea id="descripcion"
-                                             value="#{registroAnomalia.descripcion}"
-                                             required="true"
-                                             requiredMessage="Por favor ingrese la descripción."
-                                             style="width:100%; min-height:80px;"/>
-                            <h:message for="descripcion" styleClass="message error-message"/>
-                        </div>
-
-                        <div class="form-group">
-                            <h:outputLabel for="sintomas" value="Síntomas:"/>
-                            <h:inputTextarea id="sintomas"
-                                             value="#{registroAnomalia.sintomas}"
-                                             required="true"
-                                             requiredMessage="Por favor ingrese los síntomas."
-                                             style="width:100%; min-height:80px;"/>
-                            <h:message for="sintomas" styleClass="message error-message"/>
-                        </div>
-
-                        <!-- GRAVEDAD -->
-                        <div class="form-group">
-                            <h:outputLabel for="gravedad" value="Gravedad:"/>
-                            <h:selectOneMenu id="gravedad"
-                                             value="#{registroAnomalia.gravedad}"
-                                             required="true"
-                                             requiredMessage="Debe seleccionar un nivel de gravedad."
-                                             styleClass="custom-select">
-                                <f:selectItem itemLabel="Seleccione..." itemValue=""/>
-                                <f:selectItem itemLabel="Leve" itemValue="leve"/>
-                                <f:selectItem itemLabel="Moderada" itemValue="moderada"/>
-                                <f:selectItem itemLabel="Grave" itemValue="grave"/>
-                            </h:selectOneMenu>
-                            <h:message for="gravedad" styleClass="message error-message"/>
-                        </div>
-
-                        <div class="form-group">
-                            <h:selectBooleanCheckbox id="resuelto" value="#{registroAnomalia.resuelto}" />
-                            <h:outputLabel for="resuelto" value="¿Marcar como resuelto?"/>
-                        </div>
-
-                        <div id="form-buttons">
-                            <h:commandButton value="#{registroAnomalia.editando ? 'Actualizar' : 'Registrar'}"
-                                             action="#{registroAnomalia.registrar}"
-                                             styleClass="submit-button"/>
-                            <h:commandButton value="Cancelar"
-                                             action="#{registroAnomalia.cancelarEdicion}"
-                                             immediate="true"
-                                             styleClass="cancel-button"/>
-                        </div>
-                    </h:form>
-                </section>
-
-                <section aria-labelledby="registros-heading">
-                    <h2 id="registros-heading">Registros de Anomalías</h2>
-                    <div style="overflow-x:auto;">
-                        <h:form id="tablaForm">
-                            <h:dataTable value="#{registroAnomalia.registros}" var="registro"
-                                         styleClass="tabla-registros"
-                                         headerClass="tabla-header"
-                                         rowClasses="tabla-fila-par,tabla-fila-impar">
-
-                                <h:column>
-                                    <f:facet name="header">Fecha</f:facet>
-                                    <h:outputText value="#{registro.fechaHora}">
-                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                                    </h:outputText>
-                                </h:column>
-
-                                <h:column>
-                                    <f:facet name="header">Descripción</f:facet>
-                                    #{registro.descripcion}
-                                </h:column>
-
-                                <h:column>
-                                    <f:facet name="header">Síntomas</f:facet>
-                                    #{registro.sintomas}
-                                </h:column>
-
-                                <h:column>
-                                    <f:facet name="header">Gravedad</f:facet>
-                                   <h:outputText value="#{registro.gravedad}"
-              styleClass="#{registro.gravedad eq 'grave' ? 'grave' : (registro.gravedad eq 'moderada' ? 'moderada' : 'leve')}" />
-</h:column>
-
-                                <h:column>
-                                    <f:facet name="header">Resuelto</f:facet>
-                                    <h:outputText value="#{registro.resuelto ? 'Sí' : 'No'}"/>
-                                </h:column>
-
-                                <h:column>
-                                    <f:facet name="header">Acciones</f:facet>
-                                    <h:commandButton value="Editar"
-                                                     action="#{registroAnomalia.editar(registro)}"
-                                                     styleClass="action-button edit-button"/>
-
-                                    <h:commandButton value="Eliminar"
-                                                     action="#{registroAnomalia.eliminar(registro)}"
-                                                     styleClass="action-button delete-button"
-                                                     onclick="return confirm('¿Está seguro de eliminar este registro?');"/>
-                                </h:column>
-                            </h:dataTable>
-                        </h:form>
+                    <!-- FECHA -->
+                    <div class="form-group">
+                        <h:outputLabel for="fechaHora" value="Fecha:" />
+                        <p:datePicker id="fechaHora" value="#{registroAnomalia.fechaHora}" required="true"
+                            requiredMessage="Por favor ingrese la fecha." pattern="dd/MM/yyyy HH:mm" showTime="true"
+                            locale="es" />
+                        <h:message for="fechaHora" styleClass="message error-message" />
                     </div>
-                </section>
 
-            </ui:define>
-        </ui:composition>
-    </body>
+                    <div class="form-group">
+                        <h:outputLabel for="descripcion" value="Descripción:" />
+                        <h:inputTextarea id="descripcion" value="#{registroAnomalia.descripcion}" required="true"
+                            requiredMessage="Por favor ingrese la descripción." style="width:100%; min-height:80px;" />
+                        <h:message for="descripcion" styleClass="message error-message" />
+                    </div>
+
+                    <div class="form-group">
+                        <h:outputLabel for="sintomas" value="Síntomas:" />
+                        <h:inputTextarea id="sintomas" value="#{registroAnomalia.sintomas}" required="true"
+                            requiredMessage="Por favor ingrese los síntomas." style="width:100%; min-height:80px;" />
+                        <h:message for="sintomas" styleClass="message error-message" />
+                    </div>
+
+                    <!-- GRAVEDAD -->
+                    <div class="form-group">
+                        <h:outputLabel for="gravedad" value="Gravedad:" />
+                        <h:selectOneMenu id="gravedad" value="#{registroAnomalia.gravedad}" required="true"
+                            requiredMessage="Debe seleccionar un nivel de gravedad." styleClass="custom-select">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                            <f:selectItem itemLabel="Leve" itemValue="leve" />
+                            <f:selectItem itemLabel="Moderada" itemValue="moderada" />
+                            <f:selectItem itemLabel="Grave" itemValue="grave" />
+                        </h:selectOneMenu>
+                        <h:message for="gravedad" styleClass="message error-message" />
+                    </div>
+
+                    <div class="form-group">
+                        <h:selectBooleanCheckbox id="resuelto" value="#{registroAnomalia.resuelto}" />
+                        <h:outputLabel for="resuelto" value="¿Marcar como resuelto?" />
+                    </div>
+
+                    <div id="form-buttons">
+                        <h:commandButton value="#{registroAnomalia.editando ? 'Actualizar' : 'Registrar'}"
+                            action="#{registroAnomalia.registrar}" styleClass="submit-button" />
+                        <h:commandButton value="Cancelar" action="#{registroAnomalia.cancelarEdicion}" immediate="true"
+                            styleClass="cancel-button" />
+                    </div>
+                </h:form>
+            </section>
+
+            <section aria-labelledby="registros-heading">
+                <h2 id="registros-heading">Registros de Anomalías</h2>
+                <div style="overflow-x:auto;">
+                    <h:form id="tablaForm">
+                        <h:dataTable id="anomalia" value="#{registroAnomalia.registros}" var="registro"
+                            styleClass="tabla-registros" headerClass="tabla-header"
+                            rowClasses="tabla-fila-par,tabla-fila-impar">
+
+                            <h:column>
+                                <f:facet name="header">Fecha</f:facet>
+                                <h:outputText value="#{registro.fechaHora}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText>
+                            </h:column>
+
+                            <h:column>
+                                <f:facet name="header">Descripción</f:facet>
+                                #{registro.descripcion}
+                            </h:column>
+
+                            <h:column>
+                                <f:facet name="header">Síntomas</f:facet>
+                                #{registro.sintomas}
+                            </h:column>
+
+                            <h:column>
+                                <f:facet name="header">Gravedad</f:facet>
+                                <h:outputText value="#{registro.gravedad}"
+                                    styleClass="#{registro.gravedad eq 'grave' ? 'grave' : (registro.gravedad eq 'moderada' ? 'moderada' : 'leve')}" />
+                            </h:column>
+
+                            <h:column>
+                                <f:facet name="header">Resuelto</f:facet>
+                                <h:outputText value="#{registro.resuelto ? 'Sí' : 'No'}" />
+                            </h:column>
+
+                            <h:column>
+                                <f:facet name="header">Acciones</f:facet>
+                                <h:commandButton value="Editar" action="#{registroAnomalia.editar(registro)}"
+                                    styleClass="action-button edit-button" />
+
+                                <h:commandButton value="Eliminar" action="#{registroAnomalia.eliminar(registro)}"
+                                    styleClass="action-button delete-button"
+                                    onclick="return confirm('¿Está seguro de eliminar este registro?');" />
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
+                </div>
+            </section>
+
+        </ui:define>
+    </ui:composition>
+</body>
+
 </html>

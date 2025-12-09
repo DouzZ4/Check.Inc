@@ -45,14 +45,13 @@ public class ServicioPrediccionML {
     private final ObjectMapper objectMapper;
 
     public ServicioPrediccionML() {
-        // Configurar cliente HTTP con TLS 1.2 explícito (necesario para Java 8 +
-        // Railway)
+        // Configurar cliente HTTP con TLS robusto para Java 8
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .writeTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(45, TimeUnit.SECONDS); // Predicciones pueden tardar
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS); // Predicciones pueden tardar
 
-        // Configurar SSLContext con TLS 1.2 para compatibilidad con Railway/Render
+        // Configurar SSLContext con máxima compatibilidad
         try {
             TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
                     TrustManagerFactory.getDefaultAlgorithm());
@@ -65,24 +64,46 @@ public class ServicioPrediccionML {
 
             X509TrustManager trustManager = (X509TrustManager) trustManagers[0];
 
-            // Forzar TLS 1.2 que es requerido por Railway/Render
-            SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
-            sslContext.init(null, new TrustManager[] { trustManager }, new SecureRandom());
-            SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+            // Intentar TLS 1.3 primero, luego 1.2 como fallback
+            SSLContext sslContext = null;
+            String[] protocolosIntentados = { "TLSv1.3", "TLSv1.2", "TLS" };
 
+            for (String protocolo : protocolosIntentados) {
+                try {
+                    sslContext = SSLContext.getInstance(protocolo);
+                    sslContext.init(null, new TrustManager[] { trustManager }, new SecureRandom());
+                    LOGGER.log(Level.INFO, "SSL/TLS configurado con protocolo: {0}", protocolo);
+                    break;
+                } catch (Exception e) {
+                    LOGGER.log(Level.FINE, "Protocolo {0} no disponible, intentando siguiente...", protocolo);
+                }
+            }
+
+            if (sslContext == null) {
+                sslContext = SSLContext.getDefault();
+                LOGGER.log(Level.WARNING, "Usando SSLContext por defecto");
+            }
+
+            SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
             builder.sslSocketFactory(sslSocketFactory, trustManager);
 
-            // Configurar cipher suites compatibles con servicios modernos
+            // Configurar specs de conexión más permisivas para máxima compatibilidad
             ConnectionSpec modernTLS = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                    .tlsVersions(TlsVersion.TLS_1_2, TlsVersion.TLS_1_3)
+                    .allEnabledTlsVersions()
+                    .allEnabledCipherSuites()
+                    .build();
+
+            ConnectionSpec compatibleTLS = new ConnectionSpec.Builder(ConnectionSpec.COMPATIBLE_TLS)
+                    .allEnabledTlsVersions()
+                    .allEnabledCipherSuites()
                     .build();
 
             // Permitir también conexiones sin cifrar para desarrollo local
             ConnectionSpec cleartext = new ConnectionSpec.Builder(ConnectionSpec.CLEARTEXT).build();
 
-            builder.connectionSpecs(Arrays.asList(modernTLS, cleartext));
+            builder.connectionSpecs(Arrays.asList(modernTLS, compatibleTLS, cleartext));
 
-            LOGGER.log(Level.INFO, "SSL/TLS configurado correctamente con TLS 1.2+");
+            LOGGER.log(Level.INFO, "Cliente OkHttp configurado correctamente para HTTPS");
 
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "No se pudo configurar TLS personalizado, usando defaults: " + e.getMessage());
