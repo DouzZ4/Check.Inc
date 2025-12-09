@@ -9,9 +9,6 @@
     <ui:define name="content">
         <h:outputStylesheet name="css/glucose.css" />
         <div class="glucose-container">
-            <h:link outcome="/views/glucosa/importarGlucosa.xhtml" value="Importar Glucosa"
-                styleClass="btn btn-secondary" style="margin-bottom: 20px; float: right;" />
-
             <h:messages globalOnly="true" styleClass="message-box" infoClass="message-info"
                 errorClass="message-error" />
             <section aria-labelledby="chart-heading" rendered="#{not empty registroGlucosa.registros}">
@@ -20,7 +17,14 @@
                     style="width:100%;height:400px" />
             </section>
             <section aria-labelledby="form-title-heading">
-                <h2 id="form-title-heading">#{registroGlucosa.editando ? 'Editar' : 'Registrar'} Medición</h2>
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f0f4f8; margin-bottom: 20px; padding-bottom: 10px;">
+                    <h2 id="form-title-heading" style="border:none; margin:0; padding:0;">#{registroGlucosa.editando ?
+                        'Editar' : 'Registrar'} Medición</h2>
+                    <h:link outcome="/views/glucosa/importarGlucosa.xhtml" value="Importar Glucosa"
+                        styleClass="submit-button"
+                        style="text-decoration:none; display:inline-flex; align-items:center;" />
+                </div>
                 <h:form id="formGlucosa">
                     <h:inputHidden id="id" value="#{registroGlucosa.id}" />
                     <div class="form-group">
