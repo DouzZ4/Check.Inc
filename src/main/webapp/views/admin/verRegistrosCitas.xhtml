@@ -138,9 +138,15 @@
 
                 <h:column>
                     <f:facet name="header">Fecha y Hora</f:facet>
-                    <h:outputText value="#{cita.fechaHora}">
-                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                    </h:outputText>
+                    <div>
+                        <h:outputText value="#{cita.fecha}" style="font-weight: bold;">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                        <br />
+                        <h:outputText value="#{cita.hora}" style="color: #666;">
+                            <f:convertDateTime pattern="HH:mm" />
+                        </h:outputText>
+                    </div>
                 </h:column>
 
                 <h:column>
