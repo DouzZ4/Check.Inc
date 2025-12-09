@@ -110,8 +110,8 @@
                 </div>
 
                 <!-- Fila 3: Panel ML y Anomalías lado a lado -->
-                <div class="grid-ml">
-                    <h:panelGroup id="mlPanelSection">
+                <div class="grid-ml" style="display:none;">
+                    <h:panelGroup id="mlPanelSection" rendered="false">
                         <!-- Case A: ML disponible con datos -->
                         <h:panelGroup rendered="#{patientDashboardBean.mlDisponible}">
                             <div class="ml-panel-compact">

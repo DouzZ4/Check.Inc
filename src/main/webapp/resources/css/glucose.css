@@ -1,6 +1,16 @@
 /* === GLUCOSE PAGE SPECIFIC STYLES === */
 /* Global body/main, table, and button styles are in resources/css/styles.css */
 
+/* Container específico para limitar el ancho en la página de Glucosa */
+.glucose-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+}
+
 .glucose-chart-container {
     background: white;
     padding: 20px;
@@ -126,16 +136,16 @@
         padding: 15px;
         margin: 15px 0;
     }
-    
+
     .glucose-form {
         padding: 15px;
     }
-    
+
     .glucose-table {
         display: block;
         overflow-x: auto;
     }
-    
+
     .glucose-chart {
         height: 300px !important;
     }

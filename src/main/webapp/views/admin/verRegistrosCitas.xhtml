@@ -155,13 +155,8 @@
                 </h:column>
 
                 <h:column>
-                    <f:facet name="header">Lugar</f:facet>
-                    #{cita.lugar}
-                </h:column>
-
-                <h:column>
-                    <f:facet name="header">Doctor</f:facet>
-                    Dr/a. #{cita.doctor}
+                    <f:facet name="header">Estado</f:facet>
+                    #{cita.estado != null ? cita.estado : 'N/A'}
                 </h:column>
 
                 <h:column>

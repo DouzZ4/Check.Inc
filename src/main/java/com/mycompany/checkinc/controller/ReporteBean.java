@@ -206,22 +206,26 @@ public class ReporteBean implements Serializable {
                 basePDF.agregarSeccion(document, "Registros de Glucosa");
 
                 // Añadir gráfico generado en la clase base (promedio diarios últimos 7 días)
-                try {
-                    Image chart = basePDF.crearGraficoGlucosa(glucosaList);
-                    if (chart != null) {
-                        chart.scaleToFit(500, 300);
-                        chart.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
-                        document.add(chart);
-
-                        Paragraph legend = new Paragraph("Gráfico de tendencia (promedio diario - últimos 7 días)",
-                                basePDF.fontEnfasis);
-                        legend.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
-                        legend.setSpacingAfter(12f);
-                        document.add(legend);
-                    }
-                } catch (Exception ex) {
-                    // Ignorar error de gráfico
-                }
+                /*
+                 * GRÁFICO DESACTIVADO TEMPORALMENTE PARA DEMO
+                 * try {
+                 * Image chart = basePDF.crearGraficoGlucosa(glucosaList);
+                 * if (chart != null) {
+                 * chart.scaleToFit(500, 300);
+                 * chart.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+                 * document.add(chart);
+                 * 
+                 * Paragraph legend = new
+                 * Paragraph("Gráfico de tendencia (promedio diario - últimos 7 días)",
+                 * basePDF.fontEnfasis);
+                 * legend.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+                 * legend.setSpacingAfter(12f);
+                 * document.add(legend);
+                 * }
+                 * } catch (Exception ex) {
+                 * // Ignorar error de gráfico
+                 * }
+                 */
 
                 // Agrupar por mes y generar tablas por mes
                 java.util.Map<Integer, java.util.List<Glucosa>> agrupado = glucosaList.stream()

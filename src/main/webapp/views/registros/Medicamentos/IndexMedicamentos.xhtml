@@ -1,72 +1,93 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui"
-      lang="es" xml:lang="es">
-    <ui:composition template="/views/TemplateSitio.xhtml">
-        <ui:define name="title">Registro y Consulta de Medicamentos</ui:define>
-        <ui:define name="content">
-            <h:messages globalOnly="true" styleClass="message-box" infoClass="message-info" errorClass="message-error"/>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui"
+    lang="es" xml:lang="es">
+<ui:composition template="/views/TemplateSitio.xhtml">
+    <ui:define name="title">Registro y Consulta de Medicamentos</ui:define>
+    <ui:define name="content">
+        <style>
+            .med-forms-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: 25px;
+                margin-bottom: 30px;
+            }
 
-            <section aria-labelledby="form-title-heading">
+            .med-card {
+                background: #fff;
+                padding: 25px;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                border: 1px solid #eee;
+            }
+
+            .med-card h2 {
+                margin-top: 0;
+                font-size: 1.3rem;
+                border-bottom: 1px solid #f0f0f0;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+            }
+        </style>
+
+        <h:messages globalOnly="true" styleClass="message-box" infoClass="message-info" errorClass="message-error" />
+
+        <div class="med-forms-grid">
+            <!-- COLUMNA 1: FORMULARIO REGISTRO -->
+            <section aria-labelledby="form-title-heading" class="med-card">
                 <h2 id="form-title-heading">#{registroMedicamento.editando ? 'Editar' : 'Registrar'} Medicamento</h2>
                 <h:form id="formMedicamento">
-                    <h:inputHidden id="id" value="#{registroMedicamento.id}"/>
+                    <h:inputHidden id="id" value="#{registroMedicamento.id}" />
                     <div class="form-group">
-                        <h:outputLabel for="nombre" value="Nombre del Medicamento:"/>
+                        <h:outputLabel for="nombre" value="Nombre del Medicamento:" />
                         <h:inputText id="nombre" value="#{registroMedicamento.nombre}" required="true"
-                                     requiredMessage="Por favor ingrese el nombre del medicamento"
-                                     styleClass="medicamento-nombre"/>
-                        <h:message for="nombre" styleClass="message error-message"/>
+                            requiredMessage="Por favor ingrese el nombre del medicamento"
+                            styleClass="medicamento-nombre" />
+                        <h:message for="nombre" styleClass="message error-message" />
                     </div>
                     <div class="form-group">
-                        <h:outputLabel for="dosis" value="Dosis:"/>
+                        <h:outputLabel for="dosis" value="Dosis:" />
                         <h:inputText id="dosis" value="#{registroMedicamento.dosis}" required="true"
-                                     requiredMessage="Por favor ingrese la dosis"/>
-                        <h:message for="dosis" styleClass="message error-message"/>
+                            requiredMessage="Por favor ingrese la dosis" />
+                        <h:message for="dosis" styleClass="message error-message" />
                     </div>
                     <div class="form-group">
-                        <h:outputLabel for="frecuencia" value="Frecuencia:"/>
+                        <h:outputLabel for="frecuencia" value="Frecuencia:" />
                         <h:inputText id="frecuencia" value="#{registroMedicamento.frecuencia}" required="true"
-                                     requiredMessage="Por favor ingrese la frecuencia"/>
-                        <h:message for="frecuencia" styleClass="message error-message"/>
+                            requiredMessage="Por favor ingrese la frecuencia" />
+                        <h:message for="frecuencia" styleClass="message error-message" />
                     </div>
                     <div class="form-group">
-                        <h:outputLabel for="fechaInicio" value="Fecha de Inicio:"/>
+                        <h:outputLabel for="fechaInicio" value="Fecha de Inicio:" />
                         <p:datePicker id="fechaInicio" value="#{registroMedicamento.fechaInicio}" required="true"
-                                      requiredMessage="Por favor ingrese la fecha de inicio"
-                                      pattern="dd/MM/yyyy" locale="es"/>
-                        <h:message for="fechaInicio" styleClass="message error-message"/>
+                            requiredMessage="Por favor ingrese la fecha de inicio" pattern="dd/MM/yyyy" locale="es" />
+                        <h:message for="fechaInicio" styleClass="message error-message" />
                     </div>
                     <div class="form-group">
-                        <h:outputLabel for="fechaFin" value="Fecha de Fin:"/>
+                        <h:outputLabel for="fechaFin" value="Fecha de Fin:" />
                         <p:datePicker id="fechaFin" value="#{registroMedicamento.fechaFin}" required="true"
-                                      requiredMessage="Por favor ingrese la fecha de fin"
-                                      pattern="dd/MM/yyyy" locale="es"/>
-                        <h:message for="fechaFin" styleClass="message error-message"/>
+                            requiredMessage="Por favor ingrese la fecha de fin" pattern="dd/MM/yyyy" locale="es" />
+                        <h:message for="fechaFin" styleClass="message error-message" />
                     </div>
                     <div id="form-buttons">
-                        <h:commandButton value="#{registroMedicamento.editando ? 'Actualizar' : 'Registrar'}" 
-                                         action="#{registroMedicamento.registrar}"
-                                         styleClass="submit-button"/>
-                        <h:commandButton value="Cancelar" 
-                                         action="#{registroMedicamento.cancelarEdicion}"
-                                         immediate="true" styleClass="cancel-button"/>
+                        <h:commandButton value="#{registroMedicamento.editando ? 'Actualizar' : 'Registrar'}"
+                            action="#{registroMedicamento.registrar}" styleClass="submit-button" />
+                        <h:commandButton value="Cancelar" action="#{registroMedicamento.cancelarEdicion}"
+                            immediate="true" styleClass="cancel-button" />
                     </div>
                 </h:form>
             </section>
 
-            <section aria-labelledby="invima-heading" style="margin-bottom:2em;">
+            <!-- COLUMNA 2: CONSULTA INVIMA -->
+            <section aria-labelledby="invima-heading" class="med-card">
                 <h2 id="invima-heading">Consultar Medicamento en INVIMA</h2>
 
                 <div class="form-group">
                     <label for="searchMedicamento">Buscar medicamento:</label>
-                    <input type="text" id="searchMedicamento" class="form-control" 
-                           placeholder="Ingrese el nombre del medicamento" 
-                           minlength="3"/>
+                    <input type="text" id="searchMedicamento" class="form-control"
+                        placeholder="Ingrese el nombre del medicamento" minlength="3" />
                     <small class="text-muted">Ingrese al menos 3 caracteres para buscar</small>
                 </div>
 
@@ -92,55 +113,54 @@
                     </table>
                 </div>
             </section>
+        </div>
 
-            <section aria-labelledby="registros-heading">
-                <h2 id="registros-heading">Registros de Medicamentos</h2>
-                <div style="overflow-x: auto;">
+        <section aria-labelledby="registros-heading">
+            <h2 id="registros-heading">Registros de Medicamentos</h2>
+            <div style="overflow-x: auto;">
 
-                    <h:form id="tablaForm">
-                        <h:dataTable id="medicamento" value="#{registroMedicamento.registrosFiltradosYOrdenados}" var="medicamento"
-                                     styleClass="tabla-registros"
-                                     headerClass="tabla-header"
-                                     rowClasses="tabla-fila-par,tabla-fila-impar">                     
-                            <h:column>
-                                <f:facet name="header">Nombre</f:facet>
-                                    #{medicamento.nombre}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">Dosis</f:facet>
-                                    #{medicamento.dosis}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">Frecuencia</f:facet>
-                                    #{medicamento.frecuencia}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">Fecha Inicio</f:facet>
-                                <h:outputText value="#{medicamento.fechaInicio}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy" />
-                                </h:outputText>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">Fecha Fin</f:facet>
-                                <h:outputText value="#{medicamento.fechaFin}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy" />
-                                </h:outputText>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">Acciones</f:facet>
-                                <h:commandButton value="Editar" 
-                                                 action="#{registroMedicamento.editar(medicamento)}"
-                                                 styleClass="action-button edit-button"/>
-                                <h:commandButton value="Eliminar" 
-                                                 action="#{registroMedicamento.eliminar(medicamento)}"
-                                                 styleClass="action-button delete-button"
-                                                 onclick="return confirm('¿Está seguro de eliminar este medicamento?');"/>
-                            </h:column>
-                        </h:dataTable>
-                    </h:form>
-                </div>
-            </section>
-            <h:outputScript library="js" name="invima-search.js" target="body"/>
-        </ui:define>
-    </ui:composition>
+                <h:form id="tablaForm">
+                    <h:dataTable id="medicamento" value="#{registroMedicamento.registrosFiltradosYOrdenados}"
+                        var="medicamento" styleClass="tabla-registros" headerClass="tabla-header"
+                        rowClasses="tabla-fila-par,tabla-fila-impar">
+                        <h:column>
+                            <f:facet name="header">Nombre</f:facet>
+                            #{medicamento.nombre}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Dosis</f:facet>
+                            #{medicamento.dosis}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Frecuencia</f:facet>
+                            #{medicamento.frecuencia}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Fecha Inicio</f:facet>
+                            <h:outputText value="#{medicamento.fechaInicio}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Fecha Fin</f:facet>
+                            <h:outputText value="#{medicamento.fechaFin}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Acciones</f:facet>
+                            <h:commandButton value="Editar" action="#{registroMedicamento.editar(medicamento)}"
+                                styleClass="action-button edit-button" />
+                            <h:commandButton value="Eliminar" action="#{registroMedicamento.eliminar(medicamento)}"
+                                styleClass="action-button delete-button"
+                                onclick="return confirm('¿Está seguro de eliminar este medicamento?');" />
+                        </h:column>
+                    </h:dataTable>
+                </h:form>
+            </div>
+        </section>
+        <h:outputScript library="js" name="invima-search.js" target="body" />
+    </ui:define>
+</ui:composition>
+
 </html>

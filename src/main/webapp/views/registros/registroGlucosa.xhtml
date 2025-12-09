@@ -1,59 +1,61 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui"
-      lang="es" xml:lang="es">
-    <ui:composition template="/views/TemplateSitio.xhtml">
-        <ui:define name="title">Registro y Consulta de Glucosa</ui:define>
-        <ui:define name="content">
-        <h:outputStylesheet name="css/glucose.css"/>
-        <h:link outcome="/views/glucosa/importarGlucosa.xhtml" value="importar glucosa" />
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui"
+    lang="es" xml:lang="es">
+<ui:composition template="/views/TemplateSitio.xhtml">
+    <ui:define name="title">Registro y Consulta de Glucosa</ui:define>
+    <ui:define name="content">
+        <h:outputStylesheet name="css/glucose.css" />
+        <div class="glucose-container">
+            <h:link outcome="/views/glucosa/importarGlucosa.xhtml" value="Importar Glucosa"
+                styleClass="btn btn-secondary" style="margin-bottom: 20px; float: right;" />
 
-            <h:messages globalOnly="true" styleClass="message-box" infoClass="message-info" errorClass="message-error"/>
+            <h:messages globalOnly="true" styleClass="message-box" infoClass="message-info"
+                errorClass="message-error" />
             <section aria-labelledby="chart-heading" rendered="#{not empty registroGlucosa.registros}">
                 <h2 id="chart-heading">Tendencia de Glucosa</h2>
-                <p:lineChart id="glucoseChart" model="#{registroGlucosa.lineChartModel}" style="width:100%;height:400px"/>
+                <p:lineChart id="glucoseChart" model="#{registroGlucosa.lineChartModel}"
+                    style="width:100%;height:400px" />
             </section>
             <section aria-labelledby="form-title-heading">
                 <h2 id="form-title-heading">#{registroGlucosa.editando ? 'Editar' : 'Registrar'} Medición</h2>
                 <h:form id="formGlucosa">
-                    <h:inputHidden id="id" value="#{registroGlucosa.id}"/>
+                    <h:inputHidden id="id" value="#{registroGlucosa.id}" />
                     <div class="form-group">
-                        <h:outputLabel for="nivelGlucosa" value="Nivel de Glucosa (mg/dL):"/>
+                        <h:outputLabel for="nivelGlucosa" value="Nivel de Glucosa (mg/dL):" />
                         <h:inputText id="nivelGlucosa" value="#{registroGlucosa.nivelGlucosa}" required="true"
-                                     requiredMessage="Por favor ingrese el nivel de glucosa"
-                                     validatorMessage="Ingrese un valor válido mayor a 0">
-                            <f:validateDoubleRange minimum="1"/>
+                            requiredMessage="Por favor ingrese el nivel de glucosa"
+                            validatorMessage="Ingrese un valor válido mayor a 0">
+                            <f:validateDoubleRange minimum="1" />
                         </h:inputText>
-                        <h:message for="nivelGlucosa" styleClass="message error-message"/>
+                        <h:message for="nivelGlucosa" styleClass="message error-message" />
                     </div>
                     <div class="form-group">
                         <h:outputLabel for="momentoDia" value="Momento del Día:" />
                         <h:selectOneMenu id="momentoDia" value="#{registroGlucosa.momentoDia}" required="true"
-                                         requiredMessage="Por favor seleccione el momento del día" styleClass="custom-select">
-                            <f:selectItem itemLabel="Seleccione..." itemValue=""  />
-                            <f:selectItems value="#{registroGlucosa.momentosDia}" var="momento" itemLabel="#{momento}" itemValue="#{momento}" />
+                            requiredMessage="Por favor seleccione el momento del día" styleClass="custom-select">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                            <f:selectItems value="#{registroGlucosa.momentosDia}" var="momento" itemLabel="#{momento}"
+                                itemValue="#{momento}" />
                         </h:selectOneMenu>
-                        <h:message for="momentoDia" styleClass="message error-message"/>
+                        <h:message for="momentoDia" styleClass="message error-message" />
                     </div>
                     <div class="form-group">
-                        <h:outputLabel for="fechaHora" value="Fecha y Hora:"/>
+                        <h:outputLabel for="fechaHora" value="Fecha y Hora:" />
                         <p:datePicker id="fechaHora" value="#{registroGlucosa.fechaHora}" required="true"
-                                      requiredMessage="Por favor ingrese la fecha y hora"
-                                      showTime="true" pattern="dd/MM/yyyy HH:mm" locale="es"/>
-                        <h:message for="fechaHora" styleClass="message error-message"/>
-                        <h:commandButton value="Ahora" action="#{registroGlucosa.setFechaHoraNow}" immediate="true" styleClass="now-button"/>
+                            requiredMessage="Por favor ingrese la fecha y hora" showTime="true"
+                            pattern="dd/MM/yyyy HH:mm" locale="es" />
+                        <h:message for="fechaHora" styleClass="message error-message" />
+                        <h:commandButton value="Ahora" action="#{registroGlucosa.setFechaHoraNow}" immediate="true"
+                            styleClass="now-button" />
                     </div>
                     <div id="form-buttons">
-                        <h:commandButton value="#{registroGlucosa.editando ? 'Actualizar' : 'Registrar'}" 
-                                         action="#{registroGlucosa.registrar}"
-                                         styleClass="submit-button"/>
-                        <h:commandButton value="Cancelar" 
-                                         action="#{registroGlucosa.cancelarEdicion}"
-                                         immediate="true" styleClass="cancel-button"/>
+                        <h:commandButton value="#{registroGlucosa.editando ? 'Actualizar' : 'Registrar'}"
+                            action="#{registroGlucosa.registrar}" styleClass="submit-button" />
+                        <h:commandButton value="Cancelar" action="#{registroGlucosa.cancelarEdicion}" immediate="true"
+                            styleClass="cancel-button" />
                     </div>
                 </h:form>
             </section>
@@ -63,13 +65,12 @@
                 <div style="overflow-x: auto;">
                     <h:form id="tablaForm">
                         <h:dataTable id="registro" value="#{registroGlucosa.registrosFiltrados}" var="registro"
-                                     styleClass="tabla-registros"
-                                     headerClass="tabla-header"
-                                     rowClasses="tabla-fila-par,tabla-fila-impar">
+                            styleClass="tabla-registros" headerClass="tabla-header"
+                            rowClasses="tabla-fila-par,tabla-fila-impar">
 
                             <h:column>
                                 <f:facet name="header">Nivel (mg/dL)</f:facet>
-                                    #{registro.nivelGlucosa}
+                                #{registro.nivelGlucosa}
                             </h:column>
 
                             <h:column>
@@ -86,19 +87,19 @@
 
                             <h:column>
                                 <f:facet name="header">Acciones</f:facet>
-                                <h:commandButton value="Editar" 
-                                                 action="#{registroGlucosa.editar(registro)}"
-                                                 styleClass="action-button edit-button"/>
+                                <h:commandButton value="Editar" action="#{registroGlucosa.editar(registro)}"
+                                    styleClass="action-button edit-button" />
 
-                                <h:commandButton value="Eliminar" 
-                                                 action="#{registroGlucosa.eliminar(registro)}"
-                                                 styleClass="action-button delete-button"
-                                                 onclick="return confirm('¿Está seguro de eliminar este registro?');"/>
+                                <h:commandButton value="Eliminar" action="#{registroGlucosa.eliminar(registro)}"
+                                    styleClass="action-button delete-button"
+                                    onclick="return confirm('¿Está seguro de eliminar este registro?');" />
                             </h:column>
                         </h:dataTable>
                     </h:form>
                 </div>
             </section>
-        </ui:define>
-    </ui:composition>
+        </div>
+    </ui:define>
+</ui:composition>
+
 </html>

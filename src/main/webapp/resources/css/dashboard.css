@@ -3,6 +3,17 @@
 /* Dashboard-specific layout, cards, and chart styles */
 
 /* ========================================
+   OVERRIDE GLOBAL CONTAINER
+   ======================================== */
+/* Permitir que el dashboard ocupe más ancho que el contenedor estándar */
+body .container {
+    max-width: 1600px !important;
+    width: 95% !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+
+/* ========================================
    HEADER DEL DASHBOARD
    ======================================== */
 .dashboard-header {
@@ -27,79 +38,66 @@
 }
 
 /* ========================================
-   GRID PRINCIPAL - LAYOUT BENTO BOX
+   GRID PRINCIPAL - LAYOUT RESPONSIVE (BENTO STYLE)
    ======================================== */
 .dashboard-main-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 2fr 2fr;
-    grid-template-rows: auto auto auto;
-    gap: 12px;
-    grid-template-areas:
-        "kpi1 kpi2 chart table"
-        "kpi3 kpi4 chart table"
-        "ml ml anomalias anomalias";
-}
-
-/* Asignación de áreas del grid */
-.grid-kpi-1 {
-    grid-area: kpi1;
-}
-
-.grid-kpi-2 {
-    grid-area: kpi2;
-}
-
-.grid-kpi-3 {
-    grid-area: kpi3;
-}
-
-.grid-kpi-4 {
-    grid-area: kpi4;
-}
-
-.grid-chart {
-    grid-area: chart;
-}
-
-.grid-table-glucosa {
-    grid-area: table;
-}
-
-.grid-ml {
-    grid-area: ml;
-}
-
-.grid-anomalias {
-    grid-area: anomalias;
-}
-
-/* Altura para las áreas que ocupan 2 filas */
-.grid-chart,
-.grid-table-glucosa {
-    min-height: 260px;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Grids antiguos (mantener para compatibilidad) */
-.dashboard-cards-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-    margin-top: 18px;
-}
-
-.dashboard-content-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-    margin-top: 20px;
-}
-
-.ml-predictions-grid {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
+    /* Grid fluido: Columnas de mínimo 280px que llenan el espacio */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-auto-rows: min-content;
     gap: 20px;
+    width: 100%;
+}
+
+/* En pantallas grandes, forzamos ciertas áreas para mantener estructura */
+@media (min-width: 1200px) {
+    .dashboard-main-grid {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-areas:
+            "kpi1 kpi2 kpi3 kpi4"
+            "chart chart chart table"
+            "ml ml anomalias anomalias";
+    }
+
+    /* Áreas específicas solo aplican en desktop layout explícito */
+    .grid-kpi-1 {
+        grid-area: kpi1;
+    }
+
+    .grid-kpi-2 {
+        grid-area: kpi2;
+    }
+
+    .grid-kpi-3 {
+        grid-area: kpi3;
+    }
+
+    .grid-kpi-4 {
+        grid-area: kpi4;
+    }
+
+    .grid-chart {
+        grid-area: chart;
+    }
+
+    .grid-table-glucosa {
+        grid-area: table;
+    }
+
+    .grid-ml {
+        grid-area: ml;
+    }
+
+    .grid-anomalias {
+        grid-area: anomalias;
+    }
+
+    .grid-chart,
+    .grid-table-glucosa {
+        min-height: 400px;
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 /* ========================================
@@ -110,6 +108,17 @@
     padding: 15px;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    /* Importante para que las tablas no rompan la tarjeta */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Wrappers de tablas con scroll */
+.table-wrapper-scroll {
+    overflow-x: auto;
+    width: 100%;
+    flex: 1;
 }
 
 .card-compact {
@@ -120,6 +129,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    min-height: 100px;
 }
 
 /* Variantes de tarjetas con bordes de color */
@@ -169,20 +179,16 @@
     color: #6b46c1;
 }
 
-.card-unit {
+.card-unit,
+.card-meta {
     color: #999;
     font-size: 0.75rem;
 }
 
 .card-meta {
     margin: 0;
-    color: #999;
-    font-size: 0.75rem;
 }
 
-/* ========================================
-   TÍTULOS DE SECCIONES
-   ======================================== */
 .section-title {
     color: #3058a6;
     margin: 0 0 10px 0;
@@ -190,71 +196,7 @@
 }
 
 /* ========================================
-   PANEL DE PREDICCIONES ML
-   ======================================== */
-.ml-panel {
-    background: #fff;
-    padding: 18px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-}
-
-.ml-panel-title {
-    color: #3058a6;
-    margin-top: 0;
-    font-size: 1rem;
-}
-
-/* ========================================
-   TARJETA DE RIESGO
-   ======================================== */
-.risk-card {
-    border-radius: 8px;
-    padding: 16px;
-    text-align: center;
-    background: #f8f9fa;
-    border-width: 2px;
-    border-style: solid;
-}
-
-.risk-card-label {
-    margin: 0 0 8px 0;
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.risk-badge {
-    margin: 0;
-    text-transform: uppercase;
-    font-size: 1.5em;
-    font-weight: bold;
-    display: block;
-}
-
-.risk-score {
-    margin: 8px 0 0 0;
-    color: #999;
-    font-size: 0.85rem;
-}
-
-/* Colores de riesgo */
-.risk-low {
-    color: #38a169;
-    border-color: #38a169;
-}
-
-.risk-medium {
-    color: #dd6b20;
-    border-color: #dd6b20;
-}
-
-.risk-high {
-    color: #e53e3e;
-    border-color: #e53e3e;
-}
-
-/* ========================================
-   PANEL ML COMPACTO (NUEVO LAYOUT)
+   PANEL ML COMPACTO
    ======================================== */
 .ml-panel-compact {
     background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
@@ -278,6 +220,7 @@
     display: flex;
     gap: 15px;
     align-items: flex-start;
+    flex-wrap: wrap;
 }
 
 .ml-inactive {
@@ -295,7 +238,6 @@
     font-size: 0.85rem;
 }
 
-/* Tarjeta de riesgo mini */
 .risk-card-mini {
     display: flex;
     flex-direction: column;
@@ -312,7 +254,6 @@
     font-size: 0.7rem;
     color: #666;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
     margin-bottom: 4px;
 }
 
@@ -329,11 +270,26 @@
     margin-top: 4px;
 }
 
-/* Recomendaciones compactas */
+.risk-low {
+    color: #38a169;
+    border-color: #38a169;
+}
+
+.risk-medium {
+    color: #dd6b20;
+    border-color: #dd6b20;
+}
+
+.risk-high {
+    color: #e53e3e;
+    border-color: #e53e3e;
+}
+
 .recommendations-compact {
     flex: 1;
     padding-left: 12px;
     border-left: 2px solid #eee;
+    min-width: 200px;
 }
 
 .recommendations-title-mini {
@@ -355,53 +311,13 @@
 }
 
 /* ========================================
-   RECOMENDACIONES
+   TABLAS Y BADGES
    ======================================== */
-.recommendations-title {
-    color: #3058a6;
-    margin-top: 0;
-    margin-bottom: 10px;
-}
-
-.recommendations-empty {
-    color: #999;
-    font-style: italic;
-    font-size: 0.85rem;
-}
-
-.recommendations-list {
-    margin: 0;
-    padding-left: 20px;
-}
-
-.recommendation-item {
-    margin-bottom: 8px;
-    color: #444;
-    line-height: 1.5;
-}
-
-/* ========================================
-   TABLAS
-   ======================================== */
-.recent-readings-table {
-    width: 100%;
-    font-size: 0.85rem;
-    border-collapse: collapse;
-}
-
+.recent-readings-table,
 .anomalies-table {
-    width: 100%;
+    width: 100% !important;
     font-size: 0.85rem;
     border-collapse: collapse;
-}
-
-.table-header {
-    background: transparent;
-    padding: 8px;
-    text-align: left;
-    color: #666;
-    font-weight: 600;
-    border-bottom: 1px solid #ddd;
 }
 
 .empty-state {
@@ -409,9 +325,6 @@
     font-size: 0.85rem;
 }
 
-/* ========================================
-   ANOMALÍAS - BADGES DE GRAVEDAD
-   ======================================== */
 .severity-grave {
     color: white;
     background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
@@ -442,163 +355,37 @@
 }
 
 /* ========================================
-   CHART.JS CANVAS STYLING
+   TABLE OVERRIDES 
    ======================================== */
-#patientLineChart {
-    max-height: 220px;
-    display: block;
+/* Ajustes para DataTables dentro de tarjetas */
+.dataTables_wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table.dataTable {
+    width: 100% !important;
     margin: 0 auto;
+    clear: both;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
-.chart-legend {
-    text-align: center;
-    margin-top: 8px;
-    font-size: 0.85em;
-    color: #666;
-}
-
-/* ========================================
-   RESPONSIVE ADJUSTMENTS
-   ======================================== */
-@media (max-width: 1200px) {
-    .dashboard-main-grid {
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-areas:
-            "kpi1 kpi2"
-            "kpi3 kpi4"
-            "chart chart"
-            "table table"
-            "ml ml"
-            "anomalias anomalias";
-    }
-
-    .grid-chart,
-    .grid-table-glucosa {
-        min-height: auto;
-    }
-}
-
-@media (max-width: 768px) {
-    .dashboard-main-grid {
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            "kpi1"
-            "kpi2"
-            "kpi3"
-            "kpi4"
-            "chart"
-            "table"
-            "ml"
-            "anomalias";
-    }
-
-    .dashboard-header {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .ml-content-horizontal {
-        flex-direction: column;
-    }
-
-    .recommendations-compact {
-        padding-left: 0;
-        padding-top: 12px;
-        border-left: none;
-        border-top: 2px solid #eee;
-    }
-}
-
-/* ========================================
-   JQUERY DATATABLES CUSTOMIZATION
-   ======================================== */
-#glucosaTable_wrapper,
-#anomaliasTable_wrapper {
-    padding: 0;
-}
-
-.dataTables_wrapper .dataTables_length,
-.dataTables_wrapper .dataTables_filter {
-    margin-bottom: 10px;
-}
-
-.dataTables_wrapper .dataTables_length select,
-.dataTables_wrapper .dataTables_filter input {
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 5px 10px;
-    font-size: 0.85rem;
-}
-
-.dataTables_wrapper .dataTables_filter input:focus {
-    outline: none;
-    border-color: #3058a6;
-    box-shadow: 0 0 0 2px rgba(48, 88, 166, 0.15);
-}
-
-#glucosaTable thead th,
-#anomaliasTable thead th {
+table.dataTable thead th {
     background: linear-gradient(135deg, #3058a6 0%, #4a78c4 100%);
     color: white;
-    padding: 10px 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.5px;
-    border: none;
-}
-
-#glucosaTable tbody td,
-#anomaliasTable tbody td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #eee;
-    vertical-align: middle;
-    font-size: 0.85rem;
-}
-
-#glucosaTable tbody tr:hover,
-#anomaliasTable tbody tr:hover {
-    background-color: rgba(48, 88, 166, 0.05);
-}
-
-#glucosaTable tbody tr:nth-child(even),
-#anomaliasTable tbody tr:nth-child(even) {
-    background-color: #f9fafb;
-}
-
-.text-center {
-    text-align: center !important;
-}
-
-.dataTables_wrapper .dataTables_paginate {
-    margin-top: 10px;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-    padding: 6px 12px;
-    margin: 0 2px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    background: white;
-    color: #3058a6 !important;
-    cursor: pointer;
-    font-size: 0.85rem;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    background: #3058a6;
-    color: white !important;
-    border-color: #3058a6;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.current {
-    background: #3058a6;
-    color: white !important;
-    border-color: #3058a6;
-}
-
-.dataTables_wrapper .dataTables_info {
-    color: #666;
+    padding: 8px 10px;
     font-size: 0.8rem;
-    margin-top: 8px;
+}
+
+table.dataTable tbody td {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+}
+
+/* CHART */
+#patientLineChart {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 300px;
 }
