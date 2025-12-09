@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.1"
-    xmlns="http://xmlns.jcp.org/xml/ns/persistence"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
-    http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-
-  <persistence-unit name="com.mycompany_CheckInc_war_1.0-SNAPSHOTPU"
-                    transaction-type="JTA">
-
-    <!-- ✅ PRIMERO VA EL JNDI -->
-    <jta-data-source>jdbc/checks</jta-data-source>
-
-    <!-- ✅ DESPUÉS LAS ENTIDADES -->
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="com.mycompany_CheckInc_war_1.0-SNAPSHOTPU" transaction-type="JTA">
+    <jta-data-source>java:app/jdbc/checks</jta-data-source>
     <class>com.mycompany.checkinc.entities.Medicamento</class>
     <class>com.mycompany.checkinc.entities.Glucosa</class>
     <class>com.mycompany.checkinc.entities.Notificacion</class>
@@ -20,17 +10,13 @@
     <class>com.mycompany.checkinc.entities.Cita</class>
     <class>com.mycompany.checkinc.entities.Rol</class>
     <class>com.mycompany.checkinc.entities.Recordatorio</class>
-    <class>com.mycompany.checkinc.entities.Usuario</class>
     <class>com.mycompany.checkinc.entities.Alerta</class>
     <class>com.mycompany.checkinc.entities.NivelesGlucosa</class>
-
+    <class>com.mycompany.checkinc.entities.Usuario</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-
     <properties>
-      <property name="javax.persistence.schema-generation.database.action" value="none"/>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
       <property name="eclipselink.logging.level" value="FINE"/>
-      <property name="eclipselink.logging.parameters" value="true"/>
     </properties>
-
   </persistence-unit>
 </persistence>

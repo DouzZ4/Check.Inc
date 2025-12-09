@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      lang="es"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Registro de Paciente - Control Glucosa</title>
+        <h:outputStylesheet library="css" name="navbar.css"/>
+        <h:outputStylesheet library="css" name="form.css"/>
+        <h:outputStylesheet library="css" name="styles.css"/>
+        <link rel="shortcut icon" href="#{resource['images:ICONO.png']}" />
+
+    </h:head>
+    <h:body>
+        <ui:include src="/includes/navbar.xhtml"/>
+
+        <main class="form-container">
+            <h2>Registro de Nuevo Paciente</h2>
+
+            <h:form>
+                <h:messages globalOnly="true" styleClass="message-box" 
+                            infoClass="message-info" errorClass="message-error"/>
+                <div class="form-group">
+                    <h:outputLabel for="password1" value="Nueva contraseña:"/>
+                    <h:inputSecret id="password1" value="#{restablecerPasswordBean.nuevaPassword}" required="true"
+                                   requiredMessage="Por favor ingrese la nueva contraseña"
+                                   validatorMessage="La contraseña debe tener al menos 8 caracteres, incluyendo mayúscula, minúscula y símbolo especial">
+                        <f:validateRegex pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$"/>
+                    </h:inputSecret>
+                    <h:message for="password1" styleClass="message error-message"/>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="password2" value="Confirmar Contraseña:"/>
+                    <h:inputSecret id="password2" value="#{restablecerPasswordBean.confirmarPassword}" required="true"
+                                   requiredMessage="Por favor confirme la contraseña"
+                                   validatorMessage="La contraseña debe tener al menos 8 caracteres, incluyendo mayúscula, minúscula y símbolo especial">
+                        <f:validateRegex pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$"/>
+                    </h:inputSecret>
+                    <h:message for="password2" styleClass="message error-message"/>
+                </div>
+                <h:commandButton value="Actualizar contraseña" action="#{restablecerPasswordBean.actualizarPassword()}" styleClass="submit-button"/>
+
+                <h:panelGroup rendered="#{not restablecerPasswordBean.tokenValido}">
+                    <p>El enlace no es válido o expiró.</p>
+                </h:panelGroup>
+
+                <div class="login-link">
+                    ¿Ya tienes cuenta? <h:link value="Inicia Sesión aquí" outcome="login"/>
+                </div>
+            </h:form>
+        </main>
+    </h:body>
+</html>

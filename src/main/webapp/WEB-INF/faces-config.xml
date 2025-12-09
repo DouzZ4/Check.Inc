@@ -15,6 +15,16 @@
             <redirect/>
         </navigation-case>
         <navigation-case>
+            <from-outcome>reset</from-outcome>
+            <to-view-id>/views/usuarios/reset.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>restablecer</from-outcome>
+            <to-view-id>/views/usuarios/restablecer.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
             <from-outcome>registroGlucosa</from-outcome>
             <to-view-id>/views/registros/registroGlucosa.xhtml</to-view-id>
             <redirect/>

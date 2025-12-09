@@ -5,12 +5,10 @@
 package com.mycompany.checkinc.entities;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,16 +16,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author angel
+ * @author cb00270
  */
 @Entity
 @Table(name = "usuario")
@@ -48,7 +46,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuario.findByTelefonoEmergencia", query = "SELECT u FROM Usuario u WHERE u.telefonoEmergencia = :telefonoEmergencia"),
     @NamedQuery(name = "Usuario.findByCorreoEmergencia", query = "SELECT u FROM Usuario u WHERE u.correoEmergencia = :correoEmergencia"),
     @NamedQuery(name = "Usuario.findByNombreContactoEmergencia", query = "SELECT u FROM Usuario u WHERE u.nombreContactoEmergencia = :nombreContactoEmergencia"),
-    @NamedQuery(name = "Usuario.findByParentescoContacto", query = "SELECT u FROM Usuario u WHERE u.parentescoContacto = :parentescoContacto")})
+    @NamedQuery(name = "Usuario.findByParentescoContacto", query = "SELECT u FROM Usuario u WHERE u.parentescoContacto = :parentescoContacto"),
+    @NamedQuery(name = "Usuario.findByTokenRecuperacion", query = "SELECT u FROM Usuario u WHERE u.tokenRecuperacion = :tokenRecuperacion"),
+    @NamedQuery(name = "Usuario.findByTokenExpira", query = "SELECT u FROM Usuario u WHERE u.tokenExpira = :tokenExpira")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -110,19 +110,15 @@ public class Usuario implements Serializable {
     @Size(max = 50)
     @Column(name = "parentescoContacto")
     private String parentescoContacto;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
-    private List<Alerta> alertaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
-    private List<Glucosa> glucosaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
-    private List<Anomalia> anomaliaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
-    private List<Medicamento> medicamentoList;
+    @Size(max = 255)
+    @Column(name = "token_recuperacion")
+    private String tokenRecuperacion;
+    @Column(name = "token_expira")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date tokenExpira;
     @JoinColumn(name = "idRol", referencedColumnName = "idRol")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     private Rol idRol;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
-    private List<Cita> citaList;
 
     public Usuario() {
     }
@@ -262,40 +258,20 @@ public class Usuario implements Serializable {
         this.parentescoContacto = parentescoContacto;
     }
 
-    @XmlTransient
-    public List<Alerta> getAlertaList() {
-        return alertaList;
+    public String getTokenRecuperacion() {
+        return tokenRecuperacion;
     }
 
-    public void setAlertaList(List<Alerta> alertaList) {
-        this.alertaList = alertaList;
+    public void setTokenRecuperacion(String tokenRecuperacion) {
+        this.tokenRecuperacion = tokenRecuperacion;
     }
 
-    @XmlTransient
-    public List<Glucosa> getGlucosaList() {
-        return glucosaList;
+    public Date getTokenExpira() {
+        return tokenExpira;
     }
 
-    public void setGlucosaList(List<Glucosa> glucosaList) {
-        this.glucosaList = glucosaList;
-    }
-
-    @XmlTransient
-    public List<Anomalia> getAnomaliaList() {
-        return anomaliaList;
-    }
-
-    public void setAnomaliaList(List<Anomalia> anomaliaList) {
-        this.anomaliaList = anomaliaList;
-    }
-
-    @XmlTransient
-    public List<Medicamento> getMedicamentoList() {
-        return medicamentoList;
-    }
-
-    public void setMedicamentoList(List<Medicamento> medicamentoList) {
-        this.medicamentoList = medicamentoList;
+    public void setTokenExpira(Date tokenExpira) {
+        this.tokenExpira = tokenExpira;
     }
 
     public Rol getIdRol() {
@@ -304,15 +280,6 @@ public class Usuario implements Serializable {
 
     public void setIdRol(Rol idRol) {
         this.idRol = idRol;
-    }
-
-    @XmlTransient
-    public List<Cita> getCitaList() {
-        return citaList;
-    }
-
-    public void setCitaList(List<Cita> citaList) {
-        this.citaList = citaList;
     }
 
     @Override
