@@ -12,6 +12,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.mycompany.checkinc.entities.Usuario;
 import com.mycompany.checkinc.entities.Glucosa;
+import com.mycompany.checkinc.util.FontManager;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
@@ -30,18 +31,13 @@ import javax.faces.context.FacesContext;
  */
 public abstract class ReporteBasePDF {
 
-    // Colores estandarizados
-    protected static final BaseColor COLOR_AZUL = new BaseColor(48, 88, 166);
-    protected static final BaseColor COLOR_NARANJA = new BaseColor(244, 85, 1);
-    protected static final BaseColor COLOR_GRIS = new BaseColor(127, 127, 127);
-    
-    // Fuentes estandarizadas
-    protected final Font fontTitulo = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, COLOR_AZUL);
-    protected final Font fontSubtitulo = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD, COLOR_NARANJA);
-    protected final Font fontHeader = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
-    protected final Font fontCelda = new Font(Font.FontFamily.HELVETICA, 11, Font.NORMAL, BaseColor.BLACK);
-    protected final Font fontEnfasis = new Font(Font.FontFamily.HELVETICA, 10, Font.ITALIC, COLOR_GRIS);
-    protected final Font fontPackage = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL, BaseColor.BLACK);
+    // Fuentes con soporte Unicode para caracteres especiales (ñ, tildes, etc.)
+    protected final Font fontTitulo = FontManager.getFontTitulo();
+    protected final Font fontSubtitulo = FontManager.getFontSubtitulo();
+    protected final Font fontHeader = FontManager.getFontHeader();
+    protected final Font fontCelda = FontManager.getFontCelda();
+    protected final Font fontEnfasis = FontManager.getFontEnfasis();
+    protected final Font fontPackage = FontManager.getFontNormal();
 
     /**
      * Agrega encabezado estándar al documento (logo + fecha).
@@ -49,20 +45,20 @@ public abstract class ReporteBasePDF {
     protected void agregarEncabezadoDocumento(Document document) throws DocumentException {
         try {
             Image logo = Image.getInstance(FacesContext.getCurrentInstance()
-                .getExternalContext().getRealPath("/resources/images/LOGO PNG.png"));
+                    .getExternalContext().getRealPath("/resources/images/LOGO PNG.png"));
             logo.scaleToFit(100, 100);
             logo.setAlignment(Element.ALIGN_CENTER);
             document.add(logo);
         } catch (Exception e) {
             // Si no hay logo, continuar sin detener el reporte
         }
-        
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd 'de' MMMM 'de' yyyy");
-        Paragraph fecha = new Paragraph("Fecha de emisión: " + sdf.format(new Date()), 
-            new Font(Font.FontFamily.HELVETICA, 10));
+        Paragraph fecha = new Paragraph("Fecha de emisi\u00F3n: " + sdf.format(new Date()),
+                FontManager.getFontFecha());
         fecha.setAlignment(Element.ALIGN_RIGHT);
         document.add(fecha);
-        
+
         document.add(new Paragraph(" "));
     }
 
@@ -80,17 +76,21 @@ public abstract class ReporteBasePDF {
      * Agrega encabezado con datos del paciente.
      */
     protected void agregarEncabezadoPaciente(Document document, Usuario usuario) throws DocumentException {
-        Paragraph header = new Paragraph("Datos del Paciente", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD, BaseColor.DARK_GRAY));
+        Paragraph header = new Paragraph("Datos del Paciente",
+                FontManager.getCustomFont(14, Font.BOLD, BaseColor.DARK_GRAY));
         header.setSpacingBefore(10f);
         header.setSpacingAfter(10f);
         document.add(header);
-        
+
         document.add(new Paragraph("Nombre: " + usuario.getNombres() + " " + usuario.getApellidos(), fontPackage));
         document.add(new Paragraph("Documento: " + usuario.getDocumento(), fontPackage));
         document.add(new Paragraph("Correo: " + usuario.getCorreo(), fontPackage));
         document.add(new Paragraph("Edad: " + usuario.getEdad(), fontPackage));
-        document.add(new Paragraph("Tipo de Diabetes: " + (usuario.getTipoDiabetes() != null ? usuario.getTipoDiabetes() : "N/A"), fontPackage));
-        document.add(new Paragraph("Insulodependiente: " + (usuario.getEsInsulodependiente() ? "Sí" : "No"), fontPackage));
+        document.add(new Paragraph(
+                "Tipo de Diabetes: " + (usuario.getTipoDiabetes() != null ? usuario.getTipoDiabetes() : "N/A"),
+                fontPackage));
+        document.add(
+                new Paragraph("Insulodependiente: " + (usuario.getEsInsulodependiente() ? "Sí" : "No"), fontPackage));
         document.add(new Paragraph(" "));
     }
 
@@ -109,7 +109,7 @@ public abstract class ReporteBasePDF {
      */
     protected PdfPCell crearCeldaHeader(String texto) {
         PdfPCell celda = new PdfPCell(new Phrase(texto, fontHeader));
-        celda.setBackgroundColor(COLOR_AZUL);
+        celda.setBackgroundColor(FontManager.COLOR_AZUL);
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
         celda.setVerticalAlignment(Element.ALIGN_MIDDLE);
         celda.setPadding(8f);
@@ -128,8 +128,10 @@ public abstract class ReporteBasePDF {
     }
 
     /**
-     * Crea un gráfico de tendencia de glucosa (promedio por día) a partir de una lista de registros.
-     * Devuelve un `Image` de iText listo para añadirse al documento, o `null` si no hay datos.
+     * Crea un gráfico de tendencia de glucosa (promedio por día) a partir de una
+     * lista de registros.
+     * Devuelve un `Image` de iText listo para añadirse al documento, o `null` si no
+     * hay datos.
      */
     protected Image crearGraficoGlucosa(List<Glucosa> glucosaList) {
         try {
@@ -144,8 +146,8 @@ public abstract class ReporteBasePDF {
             java.util.Date ultimaSemana = tempCal.getTime();
 
             List<Glucosa> registrosSemanales = glucosaList.stream()
-                .filter(g -> g.getFechaHora().after(ultimaSemana))
-                .collect(java.util.stream.Collectors.toList());
+                    .filter(g -> g.getFechaHora().after(ultimaSemana))
+                    .collect(java.util.stream.Collectors.toList());
 
             if (registrosSemanales.isEmpty()) {
                 return null;
@@ -153,21 +155,21 @@ public abstract class ReporteBasePDF {
 
             // Agrupar por día (dd/MM) y calcular promedio para cada día
             Map<String, Double> promedioPorDia = registrosSemanales.stream()
-                .collect(java.util.stream.Collectors.groupingBy(g -> sdf.format(g.getFechaHora()),
-                        java.util.stream.Collectors.averagingDouble(g -> g.getNivelGlucosa())));
+                    .collect(java.util.stream.Collectors.groupingBy(g -> sdf.format(g.getFechaHora()),
+                            java.util.stream.Collectors.averagingDouble(g -> g.getNivelGlucosa())));
 
             // Ordenar por fecha cronológica
             List<String> diasOrdenados = promedioPorDia.keySet().stream()
-                .sorted((d1, d2) -> {
-                    try {
-                        java.util.Date dd1 = sdf.parse(d1);
-                        java.util.Date dd2 = sdf.parse(d2);
-                        return dd1.compareTo(dd2);
-                    } catch (Exception ex) {
-                        return d1.compareTo(d2);
-                    }
-                })
-                .collect(java.util.stream.Collectors.toList());
+                    .sorted((d1, d2) -> {
+                        try {
+                            java.util.Date dd1 = sdf.parse(d1);
+                            java.util.Date dd2 = sdf.parse(d2);
+                            return dd1.compareTo(dd2);
+                        } catch (Exception ex) {
+                            return d1.compareTo(d2);
+                        }
+                    })
+                    .collect(java.util.stream.Collectors.toList());
 
             for (String dia : diasOrdenados) {
                 dataset.addValue(promedioPorDia.get(dia), "Nivel de Glucosa", dia);
@@ -191,8 +193,8 @@ public abstract class ReporteBasePDF {
             plot.setDomainGridlinePaint(new java.awt.Color(220, 220, 220));
             plot.setRangeGridlinePaint(new java.awt.Color(220, 220, 220));
 
-            org.jfree.chart.renderer.category.LineAndShapeRenderer renderer =
-                (org.jfree.chart.renderer.category.LineAndShapeRenderer) plot.getRenderer();
+            org.jfree.chart.renderer.category.LineAndShapeRenderer renderer = (org.jfree.chart.renderer.category.LineAndShapeRenderer) plot
+                    .getRenderer();
             renderer.setSeriesPaint(0, new java.awt.Color(48, 88, 166));
             renderer.setSeriesStroke(0, new java.awt.BasicStroke(2.0f));
             renderer.setSeriesShapesVisible(0, true);
@@ -205,13 +207,15 @@ public abstract class ReporteBasePDF {
             org.jfree.chart.axis.CategoryAxis domainAxis = plot.getDomainAxis();
             domainAxis.setLowerMargin(0.05);
             domainAxis.setUpperMargin(0.05);
-            domainAxis.setTickLabelFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 10));
+            domainAxis.setTickLabelFont(new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 10));
 
             org.jfree.chart.axis.NumberAxis rangeAxis = (org.jfree.chart.axis.NumberAxis) plot.getRangeAxis();
             rangeAxis.setStandardTickUnits(org.jfree.chart.axis.NumberAxis.createIntegerTickUnits());
-            rangeAxis.setTickLabelFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 10));
+            rangeAxis.setTickLabelFont(new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 10));
 
-            lineChart.getLegend().setItemFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 10));
+            // Configurar fuente de la leyenda y título con soporte Unicode
+            lineChart.getTitle().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 12));
+            lineChart.getLegend().setItemFont(new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 10));
 
             java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
             ChartUtilities.writeChartAsPNG(baos, lineChart, 500, 300);
@@ -227,4 +231,3 @@ public abstract class ReporteBasePDF {
      */
     protected abstract void generarReporte(Document document, Usuario usuario) throws DocumentException;
 }
-

@@ -1,69 +1,99 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
 
-<nav class="navbar" role="navigation" aria-label="Menú principal">
-    <div class="navbar-container">
+    <nav class="navbar" role="navigation" aria-label="Menú principal">
+        <div class="navbar-container">
 
-        <!-- Branding / Logo -->
-        <div class="navbar-branding">
+            <!-- Branding / Logo -->
+            <div class="navbar-branding">
                 <h:graphicImage library="images" name="ICONO.png" alt="Logo Check" styleClass="logo-navbar" />
                 <h1>CHECK</h1>
-        </div>
+            </div>
 
-        <!-- Enlaces del menú principal -->
-        <ul class="navbar-links">
-            <!-- Mostrar "Inicio" solo si NO hay sesión activa -->
-            <li rendered="#{empty login.usuarioActual}"><h:link outcome="/index" value="Inicio" styleClass="nav-link"/></li>
+            <!-- Enlaces del menú principal -->
+            <ul class="navbar-links">
+                <!-- Mostrar "Inicio" solo si NO hay sesión activa -->
+                <ui:fragment rendered="#{empty login.usuarioActual}">
+                    <li>
+                        <h:link outcome="/index" value="Inicio" styleClass="nav-link" />
+                    </li>
+                </ui:fragment>
 
-            <!-- Si el usuario está autenticado y es ADMIN -->
-            <ui:fragment rendered="#{not empty login.usuarioActual and login.usuarioActual.idRol.idRol == 1}">
-                <li><h:link outcome="/views/inicioGestion" value="Dashboard" styleClass="nav-link"/></li>
-                <li><h:link outcome="/views/admin_gestionar_usuarios.xhtml" value="Usuarios" styleClass="nav-link"/></li>
-                <li><h:link outcome="/views/admin/verRegistrosGlucosa" value="Registros Glucosa" styleClass="nav-link"/></li>
-                <li><h:link outcome="/views/admin/verRegistrosCitas" value="Registros Citas" styleClass="nav-link"/></li>
-            </ui:fragment>
+                <!-- Si el usuario está autenticado y es ADMIN -->
+                <ui:fragment rendered="#{not empty login.usuarioActual and login.usuarioActual.idRol.idRol == 1}">
+                    <li>
+                        <h:link outcome="/views/inicioGestion" value="Dashboard" styleClass="nav-link" />
+                    </li>
+                    <li>
+                        <h:link outcome="/views/admin_gestionar_usuarios.xhtml" value="Usuarios"
+                            styleClass="nav-link" />
+                    </li>
+                    <li>
+                        <h:link outcome="/views/admin/verRegistrosGlucosa" value="Registros Glucosa"
+                            styleClass="nav-link" />
+                    </li>
+                    <li>
+                        <h:link outcome="/views/admin/verRegistrosCitas" value="Registros Citas"
+                            styleClass="nav-link" />
+                    </li>
+                </ui:fragment>
 
-            <!-- Si el usuario está autenticado y es PACIENTE -->
-            <ui:fragment rendered="#{not empty login.usuarioActual and login.usuarioActual.idRol.idRol == 2}">
-                <li><h:link outcome="/views/registros/Citas/IndexCitas.xhtml" value="Citas" styleClass="nav-link"/></li>
-                <li><h:link outcome="/views/registros/Medicamentos/IndexMedicamentos.xhtml" value="Medicamentos" styleClass="nav-link"/></li>
-                <li><h:link outcome="/views/registros/registroGlucosa.xhtml" value="Glucosa" styleClass="nav-link"/></li>
-                <li><h:link outcome="/views/registros/Anomalias/IndexAnomalia.xhtml" value="Anomalias" styleClass="nav-link"/></li>
-                <li>
-                    <h:form>
-                        <p:commandButton value="Reporte" action="#{reporteBean.descargarReporteDinamico}" ajax="false" icon="pi pi-download"/>
+                <!-- Si el usuario está autenticado y es PACIENTE -->
+                <ui:fragment rendered="#{not empty login.usuarioActual and login.usuarioActual.idRol.idRol == 2}">
+                    <li>
+                        <h:link outcome="/views/paciente/dashboard.xhtml" value="Dashboard" styleClass="nav-link" />
+                    </li>
+                    <li>
+                        <h:link outcome="/views/registros/Citas/IndexCitas.xhtml" value="Citas" styleClass="nav-link" />
+                    </li>
+                    <li>
+                        <h:link outcome="/views/registros/Medicamentos/IndexMedicamentos.xhtml" value="Medicamentos"
+                            styleClass="nav-link" />
+                    </li>
+                    <li>
+                        <h:link outcome="/views/registros/registroGlucosa.xhtml" value="Glucosa"
+                            styleClass="nav-link" />
+                    </li>
+                    <li>
+                        <h:link outcome="/views/registros/Anomalias/IndexAnomalia.xhtml" value="Anomalias"
+                            styleClass="nav-link" />
+                    </li>
+                    <li>
+                        <h:link outcome="/views/mis_alertas.xhtml" value="Alertas" styleClass="nav-link" />
+                    </li>
+                    <li>
+                        <h:form>
+                            <p:commandButton value="Reporte" action="#{reporteBean.descargarReporteDinamico}"
+                                ajax="false" icon="pi pi-download" />
+                        </h:form>
+                    </li>
+                </ui:fragment>
+            </ul>
+
+            <!-- Área de usuario (login/logout) -->
+            <div class="navbar-user-info">
+                <h:panelGroup rendered="#{not empty login.usuarioActual}">
+                    <h:form styleClass="profile-form">
+                        <h:button value="Hola #{login.usuarioActual.nombres}" outcome="/views/usuarios/Perfil.xhtml"
+                            styleClass="action-button edit-button" />
                     </h:form>
-                </li>
-            </ui:fragment>
-        </ul>
+                    <h:form styleClass="logout-form">
+                        <h:commandButton value="Cerrar Sesión" action="#{login.logout}"
+                            styleClass="action-button delete-button">
+                            <f:ajax render="@all" />
+                        </h:commandButton>
+                    </h:form>
 
-        <!-- Área de usuario (login/logout) -->
-        <div class="navbar-user-info">
-            <h:panelGroup rendered="#{not empty login.usuarioActual}">
-        <h:form styleClass="profile-form">
-            <h:button value="Hola #{login.usuarioActual.nombres}" 
-                      outcome="/views/usuarios/Perfil.xhtml" 
-                      styleClass="action-button edit-button" />
-        </h:form>
-        <h:form styleClass="logout-form">
-            <h:commandButton value="Cerrar Sesión" 
-                             action="#{login.logout}" 
-                             styleClass="action-button delete-button">
-                <f:ajax render="@all"/>
-            </h:commandButton>
-        </h:form>
+                </h:panelGroup>
 
-</h:panelGroup>
-
-            <h:panelGroup rendered="#{empty login.usuarioActual}">
-                <h:link outcome="/views/usuarios/login" value="Iniciar Sesión" styleClass="button-login"/>
-                <h:link outcome="/views/usuarios/registrousuario" value="Registrarse" styleClass="button-register"/>
-            </h:panelGroup>
+                <h:panelGroup rendered="#{empty login.usuarioActual}">
+                    <h:link outcome="/views/usuarios/login" value="Iniciar Sesión" styleClass="button-login" />
+                    <h:link outcome="/views/usuarios/registrousuario" value="Registrarse"
+                        styleClass="button-register" />
+                </h:panelGroup>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
 </ui:composition>

@@ -40,7 +40,7 @@ public class ServicioCorreoTest {
         servicio.setAlertaFacade(mockFacade);
 
         // Act
-        boolean result = servicio.enviarCorreoAnomalia("test@example.com", "Prueba", "Mensaje de prueba");
+        boolean result = servicio.enviarCorreoAnomalia(null, "test@example.com", "Prueba", "Mensaje de prueba");
 
         // Assert
         assertTrue(result, "El envío debe devolver true para 202");

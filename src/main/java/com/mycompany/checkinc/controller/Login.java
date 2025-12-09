@@ -60,10 +60,10 @@ public class Login implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
 
         if (username == null || username.trim().isEmpty() ||
-            password == null || password.trim().isEmpty()) {
+                password == null || password.trim().isEmpty()) {
             context.addMessage(null, new FacesMessage(
-                FacesMessage.SEVERITY_ERROR,
-                "Usuario y contraseña son requeridos", null));
+                    FacesMessage.SEVERITY_ERROR,
+                    "Usuario y contraseña son requeridos", null));
             return null;
         }
 
@@ -76,31 +76,32 @@ public class Login implements Serializable {
                 this.authenticated = true;
 
                 context.getExternalContext().getFlash().setKeepMessages(true);
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡Bienvenido " + user.getNombres() + "!", null));
+                context.addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "¡Bienvenido " + user.getNombres() + "!", null));
 
                 // Redirección según rol
                 int rol = user.getIdRol().getIdRol();
                 if (rol == 1) {
                     return "/views/inicioGestion.xhtml?faces-redirect=true"; // Admin
                 } else if (rol == 2) {
-                    return "/index.xhtml?faces-redirect=true"; // Paciente
+                    return "/views/paciente/dashboard.xhtml?faces-redirect=true"; // Paciente
                 } else {
                     context.addMessage(null, new FacesMessage(
-                        FacesMessage.SEVERITY_WARN, "Rol no reconocido", null));
+                            FacesMessage.SEVERITY_WARN, "Rol no reconocido", null));
                     return null;
                 }
             } else {
                 this.username = null;
                 this.password = null;
                 context.addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_ERROR,
-                    "Usuario o contraseña incorrectos", null));
+                        FacesMessage.SEVERITY_ERROR,
+                        "Usuario o contraseña incorrectos", null));
                 return null;
             }
         } catch (Exception ex) {
             context.addMessage(null, new FacesMessage(
-                FacesMessage.SEVERITY_ERROR,
-                "Error inesperado al iniciar sesión: " + ex.getMessage(), null));
+                    FacesMessage.SEVERITY_ERROR,
+                    "Error inesperado al iniciar sesión: " + ex.getMessage(), null));
             return null;
         }
     }

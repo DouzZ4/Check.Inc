@@ -28,6 +28,8 @@ public interface CitaFacadeLocal {
     List<Cita> findRange(int[] range);
 
     int count();
-    
+
     List<Cita> findByUsuario(com.mycompany.checkinc.entities.Usuario usuario);
+
+    List<Cita> findCitasManana();
 }

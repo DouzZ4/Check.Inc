@@ -34,7 +34,7 @@ public class RegistroAnomalia implements Serializable {
 
     @EJB
     private ServicioCorreo servicioCorreo;
-    
+
     private Integer idAnomalia;
     private String descripcion;
     private Date fechaHora;
@@ -44,7 +44,7 @@ public class RegistroAnomalia implements Serializable {
     private List<Anomalia> registros;
     private Boolean editando = false; // Cambiado a Boolean con inicialización
 
-    //-- Filtrar por resuelto--//
+    // -- Filtrar por resuelto--//
     private String filtroResuelto;
 
     public RegistroAnomalia() {
@@ -53,7 +53,8 @@ public class RegistroAnomalia implements Serializable {
 
     @PostConstruct
     public void init() {
-        Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(USUARIO_SESSION_KEY);
+        Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+                .get(USUARIO_SESSION_KEY);
         if (usuario != null) {
             cargarRegistros(usuario);
         }
@@ -149,7 +150,8 @@ public class RegistroAnomalia implements Serializable {
     }
 
     public void registrar() {
-        Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(USUARIO_SESSION_KEY);
+        Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+                .get(USUARIO_SESSION_KEY);
         if (usuario == null) {
             addMessage(FacesMessage.SEVERITY_ERROR, ERROR, "Debe iniciar sesión para registrar una anomalía.");
             return;
@@ -160,27 +162,28 @@ public class RegistroAnomalia implements Serializable {
             if (editando != null && editando) {
                 // DEBUG: Verificar que el idAnomalia no es null
                 System.out.println("Editando anomalía ID: " + idAnomalia);
-                
+
                 anomalia = anomaliaFacade.find(idAnomalia);
                 if (anomalia == null) {
                     addMessage(FacesMessage.SEVERITY_ERROR, ERROR, "Registro no encontrado.");
                     return;
                 }
-                
+
                 // Verificar que la anomalía pertenece al usuario actual
                 if (!anomalia.getIdUsuario().getIdUsuario().equals(usuario.getIdUsuario())) {
                     addMessage(FacesMessage.SEVERITY_ERROR, ERROR, "No tiene permisos para editar esta anomalía.");
                     return;
                 }
-                
+
                 anomalia.setDescripcion(descripcion);
                 anomalia.setFechaHora(fechaHora);
                 anomalia.setSintomas(sintomas);
                 anomalia.setGravedad(gravedad);
                 anomalia.setResuelto(resuelto);
-                
+
                 anomaliaFacade.edit(anomalia);
-                addMessage(FacesMessage.SEVERITY_INFO, "Registro actualizado", "La anomalía ha sido actualizada correctamente.");
+                addMessage(FacesMessage.SEVERITY_INFO, "Registro actualizado",
+                        "La anomalía ha sido actualizada correctamente.");
                 editando = false;
 
             } else {
@@ -193,13 +196,14 @@ public class RegistroAnomalia implements Serializable {
                 anomalia.setResuelto(resuelto != null ? resuelto : false);
 
                 anomaliaFacade.create(anomalia);
-                addMessage(FacesMessage.SEVERITY_INFO, "Registro guardado", "La anomalía ha sido registrada correctamente.");
+                addMessage(FacesMessage.SEVERITY_INFO, "Registro guardado",
+                        "La anomalía ha sido registrada correctamente.");
 
                 if ("moderada".equalsIgnoreCase(gravedad) || "grave".equalsIgnoreCase(gravedad)) {
                     enviarAlertaEmergencia(usuario, anomalia);
                 }
             }
-            
+
             cargarRegistros(usuario);
             limpiarFormulario();
 
@@ -220,22 +224,21 @@ public class RegistroAnomalia implements Serializable {
             String asunto = "⚠️ Alerta de salud: " + usuario.getNombres() + " " + usuario.getApellidos();
             String mensaje = String.format(
                     "Hola %s,\n\n"
-                    + "Se ha registrado una anomalía %s en el sistema Check Inc para tu familiar %s %s.\n\n"
-                    + "🕒 Fecha y hora: %s\n"
-                    + "💬 Descripción: %s\n"
-                    + "🤒 Síntomas: %s\n\n"
-                    + "Por favor comunícate con él/ella o busca asistencia médica si es necesario.\n\n"
-                    + "-- Sistema Check Inc --",
+                            + "Se ha registrado una anomalía %s en el sistema Check Inc para tu familiar %s %s.\n\n"
+                            + "🕒 Fecha y hora: %s\n"
+                            + "💬 Descripción: %s\n"
+                            + "🤒 Síntomas: %s\n\n"
+                            + "Por favor comunícate con él/ella o busca asistencia médica si es necesario.\n\n"
+                            + "-- Sistema Check Inc --",
                     usuario.getNombreContactoEmergencia(),
                     anomalia.getGravedad(),
                     usuario.getNombres(),
                     usuario.getApellidos(),
                     anomalia.getFechaHora(),
                     anomalia.getDescripcion(),
-                    anomalia.getSintomas()
-            );
+                    anomalia.getSintomas());
 
-            boolean enviado = servicioCorreo.enviarCorreoAnomalia(correoDestino, asunto, mensaje);
+            boolean enviado = servicioCorreo.enviarCorreoAnomalia(usuario, correoDestino, asunto, mensaje);
 
             if (enviado) {
                 System.out.println("📧 Correo de emergencia enviado a " + correoDestino);
@@ -266,7 +269,8 @@ public class RegistroAnomalia implements Serializable {
     public void eliminar(Anomalia anomalia) {
         try {
             anomaliaFacade.remove(anomalia);
-            Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(USUARIO_SESSION_KEY);
+            Usuario usuario = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+                    .get(USUARIO_SESSION_KEY);
             if (usuario != null) {
                 cargarRegistros(usuario);
             }

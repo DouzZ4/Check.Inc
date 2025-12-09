@@ -10,23 +10,20 @@ import com.mycompany.checkinc.services.AnomaliaFacadeLocal;
 import com.mycompany.checkinc.services.CitaFacadeLocal;
 import com.mycompany.checkinc.services.MedicamentoFacadeLocal;
 import com.mycompany.checkinc.services.UsuarioFacadeLocal;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.primefaces.model.charts.ChartData;
+import com.mycompany.checkinc.services.ServicioPrediccionML;
+
 import org.primefaces.model.charts.line.LineChartModel;
-import org.primefaces.model.charts.line.LineChartDataSet;
-import org.primefaces.model.charts.optionconfig.title.Title;
-import org.primefaces.model.charts.optionconfig.legend.Legend;
-import org.primefaces.model.charts.line.LineChartOptions;
-import org.primefaces.model.charts.axes.cartesian.CartesianScales;
-import org.primefaces.model.charts.axes.cartesian.category.CartesianCategoryAxes;
-import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes;
+
+import java.util.Arrays;
+
+import java.util.Comparator;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -48,6 +45,8 @@ public class PatientDashboardBean implements Serializable {
     private MedicamentoFacadeLocal medicamentoFacade;
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
+    @EJB
+    private ServicioPrediccionML servicioML;
 
     private Integer pacienteId;
     private Usuario paciente;
@@ -58,13 +57,23 @@ public class PatientDashboardBean implements Serializable {
     private String chartDataJson;
     private org.primefaces.model.charts.line.LineChartModel lineChartModel;
 
+    // 🆕 ML Predictions
+    private String nivelRiesgo;
+    private Double riesgoScore;
+    private List<String> recomendaciones;
+    private boolean mlDisponible = false;
+
+    // Constants for glucose levels
+    private static final double GLUCOSE_LOW_THRESHOLD = 70.0;
+    private static final double GLUCOSE_HIGH_THRESHOLD = 180.0;
+
     @PostConstruct
     public void init() {
         try {
             // Obtener usuario de la sesión (Login bean)
             FacesContext context = FacesContext.getCurrentInstance();
             HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
-            
+
             if (session != null) {
                 Usuario usuarioSession = (Usuario) session.getAttribute("usuario");
                 if (usuarioSession != null) {
@@ -72,8 +81,9 @@ public class PatientDashboardBean implements Serializable {
                     pacienteId = paciente.getIdUsuario();
                 }
             }
-            
-            // Si no hay usuario en sesión, intentar obtener del Request param (para caso de acceso directo)
+
+            // Si no hay usuario en sesión, intentar obtener del Request param (para caso de
+            // acceso directo)
             if (paciente == null) {
                 String paramId = context.getExternalContext().getRequestParameterMap().get("pacienteId");
                 if (paramId != null && !paramId.isEmpty()) {
@@ -81,7 +91,7 @@ public class PatientDashboardBean implements Serializable {
                     paciente = usuarioFacade.find(pacienteId);
                 }
             }
-            
+
         } catch (Exception ex) {
             ex.printStackTrace();
             paciente = null;
@@ -90,7 +100,8 @@ public class PatientDashboardBean implements Serializable {
     }
 
     public void loadData() {
-        if (paciente == null) return;
+        if (paciente == null)
+            return;
 
         try {
             // Obtiene registros de glucosa para este paciente (todos)
@@ -139,6 +150,7 @@ public class PatientDashboardBean implements Serializable {
             }
 
             generarDatosGrafico();
+            loadMLPredictions(); // 🆕 Cargar predicciones ML
         } catch (Exception ex) {
             ex.printStackTrace();
             glucosaReciente = new ArrayList<>();
@@ -149,82 +161,162 @@ public class PatientDashboardBean implements Serializable {
         }
     }
 
-    private void generarDatosGrafico() {
-        Map<String, List<Float>> byDate = new HashMap<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM");
-        
-        for (Glucosa g : glucosaReciente) {
-            String key = sdf.format(g.getFechaHora());
-            byDate.computeIfAbsent(key, k -> new ArrayList<>()).add(g.getNivelGlucosa());
-        }
+    /**
+     * 🆕 Carga predicciones y recomendaciones desde el servicio ML
+     */
+    private void loadMLPredictions() {
+        if (pacienteId == null)
+            return;
 
-        List<String> labels = new ArrayList<>();
-        List<Double> values = new ArrayList<>();
-        
-        // Ordenar por fecha en el mapa
-        byDate.entrySet().stream()
-            .sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
-            .forEach(e -> {
-                labels.add(e.getKey());
-                List<Float> vals = e.getValue();
-                double sum = 0;
-                for (Float v : vals) sum += v;
-                double avg = vals.isEmpty() ? 0 : (sum / vals.size());
-                values.add(Math.round(avg * 100.0) / 100.0);
-            });
+        recomendaciones = new ArrayList<>();
+        mlDisponible = false;
 
         try {
-            Map<String, Object> chartData = new HashMap<>();
-            chartData.put("labels", labels);
-            chartData.put("values", values);
-            ObjectMapper mapper = new ObjectMapper();
-            chartDataJson = mapper.writeValueAsString(chartData);
-            // Build PrimeFaces LineChartModel
-            buildLineChartModel(labels, values);
+            // Verificar disponibilidad del servicio
+            if (!servicioML.verificarDisponibilidad()) {
+                System.out.println("Servicio ML no disponible");
+                return;
+            }
+
+            // Cargar evaluación de riesgo
+            com.fasterxml.jackson.databind.JsonNode riesgoResponse = servicioML.evaluarRiesgo(pacienteId);
+
+            if (riesgoResponse != null) {
+                mlDisponible = true;
+
+                // Extraer nivel de riesgo
+                if (riesgoResponse.has("risk_level")) {
+                    nivelRiesgo = riesgoResponse.get("risk_level").asText().toUpperCase();
+                }
+
+                // Extraer score de riesgo
+                if (riesgoResponse.has("risk_score")) {
+                    riesgoScore = riesgoResponse.get("risk_score").asDouble();
+                }
+
+                // Extraer recomendaciones
+                if (riesgoResponse.has("recommendations")) {
+                    com.fasterxml.jackson.databind.JsonNode recs = riesgoResponse.get("recommendations");
+                    for (com.fasterxml.jackson.databind.JsonNode rec : recs) {
+                        recomendaciones.add(rec.asText());
+                    }
+                }
+
+                System.out.println("✅ ML Predictions cargadas exitosamente");
+            }
         } catch (Exception ex) {
-            ex.printStackTrace();
-            chartDataJson = "";
-            lineChartModel = new LineChartModel();
+            System.err.println("⚠️ Error al cargar predicciones ML: " + ex.getMessage());
+            // No bloquear la carga del dashboard si falla ML
+            mlDisponible = false;
         }
     }
 
-    private void buildLineChartModel(List<String> labels, List<Double> values) {
-        LineChartModel model = new LineChartModel();
-        ChartData data = new ChartData();
+    private void generarDatosGrafico() {
+        org.primefaces.model.charts.line.LineChartModel model = new org.primefaces.model.charts.line.LineChartModel();
+        org.primefaces.model.charts.ChartData data = new org.primefaces.model.charts.ChartData();
 
-        LineChartDataSet dataSet = new LineChartDataSet();
-        java.util.List<Object> dataValues = new java.util.ArrayList<>();
-        if (values != null) dataValues.addAll(values);
-        dataSet.setData(dataValues);
-        dataSet.setLabel("Promedio Glucosa (mg/dL)");
+        // Dataset principal para niveles de glucosa
+        org.primefaces.model.charts.line.LineChartDataSet dataSet = new org.primefaces.model.charts.line.LineChartDataSet();
+
+        // Dataset para límite bajo
+        org.primefaces.model.charts.line.LineChartDataSet lowThresholdSet = new org.primefaces.model.charts.line.LineChartDataSet();
+
+        // Dataset para límite alto
+        org.primefaces.model.charts.line.LineChartDataSet highThresholdSet = new org.primefaces.model.charts.line.LineChartDataSet();
+
+        java.util.List<Object> values = new java.util.ArrayList<>();
+        java.util.List<Object> lowThresholdValues = new java.util.ArrayList<>();
+        java.util.List<Object> highThresholdValues = new java.util.ArrayList<>();
+        java.util.List<String> labels = new java.util.ArrayList<>();
+
+        // Usar una copia ordenada ascendentemente para el gráfico
+        List<Glucosa> chartDataList = new ArrayList<>(glucosaReciente);
+        chartDataList.sort(Comparator.comparing(Glucosa::getFechaHora));
+
+        if (chartDataList != null) {
+            java.text.SimpleDateFormat sdfShort = new java.text.SimpleDateFormat("dd/MM HH:mm"); // Eje X más detallado
+
+            for (Glucosa g : chartDataList) {
+                double nivelVal = g.getNivelGlucosa();
+                values.add(nivelVal);
+                lowThresholdValues.add(GLUCOSE_LOW_THRESHOLD);
+                highThresholdValues.add(GLUCOSE_HIGH_THRESHOLD);
+                labels.add(sdfShort.format(g.getFechaHora()));
+
+                // Colorear los puntos según el nivel
+                String pointColor;
+                if (nivelVal < GLUCOSE_LOW_THRESHOLD) {
+                    pointColor = "#e53e3e"; // Rojo para bajo
+                } else if (nivelVal > GLUCOSE_HIGH_THRESHOLD) {
+                    pointColor = "#dd6b20"; // Naranja para alto
+                } else {
+                    pointColor = "#38a169"; // Verde para normal
+                }
+                dataSet.setPointBackgroundColor(pointColor);
+            }
+        }
+
+        // Configuración del dataset principal
+        dataSet.setData(values);
+        dataSet.setLabel("Nivel de Glucosa");
         dataSet.setFill(true);
         dataSet.setBorderColor("#3058a6");
-        dataSet.setBackgroundColor("rgba(48,88,166,0.12)");
-        dataSet.setPointRadius(4);
-        dataSet.setTension(0.2);
+        dataSet.setBackgroundColor("rgba(48,88,166,0.1)");
+        dataSet.setPointRadius(5); // Puntos ligeramente más grandes para visibilidad
+        dataSet.setPointHoverRadius(7);
+        dataSet.setTension(0.3); // Suavizado ligero, similar al otro gráfico
+        dataSet.setShowLine(true);
+
+        // Configuración del límite bajo
+        lowThresholdSet.setData(lowThresholdValues);
+        lowThresholdSet.setLabel("Límite Bajo (70 mg/dL)");
+        lowThresholdSet.setBorderColor("#e53e3e");
+        lowThresholdSet.setBorderDash(Arrays.asList(5, 5));
+        lowThresholdSet.setPointRadius(0);
+        lowThresholdSet.setFill(false);
+
+        // Configuración del límite alto
+        highThresholdSet.setData(highThresholdValues);
+        highThresholdSet.setLabel("Límite Alto (180 mg/dL)");
+        highThresholdSet.setBorderColor("#dd6b20");
+        highThresholdSet.setBorderDash(Arrays.asList(5, 5));
+        highThresholdSet.setPointRadius(0);
+        highThresholdSet.setFill(false);
 
         data.setLabels(labels);
         data.addChartDataSet(dataSet);
+        data.addChartDataSet(lowThresholdSet);
+        data.addChartDataSet(highThresholdSet);
 
         model.setData(data);
 
-        LineChartOptions options = new LineChartOptions();
-        CartesianScales scales = new CartesianScales();
-        CartesianLinearAxes yAxes = new CartesianLinearAxes();
+        // Configuración de opciones del gráfico
+        org.primefaces.model.charts.axes.cartesian.CartesianScales scales = new org.primefaces.model.charts.axes.cartesian.CartesianScales();
+
+        // Configuración del eje Y
+        org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes yAxes = new org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes();
+        yAxes.setOffset(true);
         yAxes.setBeginAtZero(true);
-        CartesianCategoryAxes xAxes = new CartesianCategoryAxes();
+
+        // Configuración del eje X
+        org.primefaces.model.charts.axes.cartesian.category.CartesianCategoryAxes xAxes = new org.primefaces.model.charts.axes.cartesian.category.CartesianCategoryAxes();
+        xAxes.setOffset(true);
+
         scales.addYAxesData(yAxes);
         scales.addXAxesData(xAxes);
-        options.setScales(scales);
 
-        Legend legend = new Legend();
+        org.primefaces.model.charts.optionconfig.legend.Legend legend = new org.primefaces.model.charts.optionconfig.legend.Legend();
         legend.setDisplay(true);
         legend.setPosition("top");
-        options.setLegend(legend);
 
-        Title title = new Title();
-        title.setDisplay(false);
+        org.primefaces.model.charts.optionconfig.title.Title title = new org.primefaces.model.charts.optionconfig.title.Title();
+        title.setDisplay(false); // Título ya está en el HTML del dashboard
+
+        org.primefaces.model.charts.line.LineChartOptions options = new org.primefaces.model.charts.line.LineChartOptions();
+        options.setScales(scales);
+        options.setLegend(legend);
         options.setTitle(title);
+        options.setResponsive(true);
 
         model.setOptions(options);
         this.lineChartModel = model;
@@ -232,7 +324,8 @@ public class PatientDashboardBean implements Serializable {
 
     // Método para calcular promedio general
     public double getPromedioGlucosa() {
-        if (glucosaReciente == null || glucosaReciente.isEmpty()) return 0.0;
+        if (glucosaReciente == null || glucosaReciente.isEmpty())
+            return 0.0;
         double sum = 0;
         for (Glucosa g : glucosaReciente) {
             sum += g.getNivelGlucosa();
@@ -275,5 +368,38 @@ public class PatientDashboardBean implements Serializable {
 
     public LineChartModel getLineChartModel() {
         return lineChartModel;
+    }
+
+    // 🆕 Getters for ML Predictions
+    public String getNivelRiesgo() {
+        return nivelRiesgo;
+    }
+
+    public Double getRiesgoScore() {
+        return riesgoScore;
+    }
+
+    public List<String> getRecomendaciones() {
+        return recomendaciones != null ? recomendaciones : new ArrayList<>();
+    }
+
+    public boolean isMlDisponible() {
+        return mlDisponible;
+    }
+
+    public String getColorRiesgo() {
+        if (nivelRiesgo == null)
+            return "secondary";
+
+        switch (nivelRiesgo.toLowerCase()) {
+            case "bajo":
+                return "#38a169"; // Verde
+            case "medio":
+                return "#dd6b20"; // Naranja
+            case "alto":
+                return "#e53e3e"; // Rojo
+            default:
+                return "#666"; // Gris
+        }
     }
 }
