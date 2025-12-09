@@ -1,205 +1,201 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui" lang="es">
 
-<ui:composition template="/views/TemplateSitio.xhtml">
-    <ui:define name="title">Estadísticas - Glucosa</ui:define>
-    <ui:define name="content">
+<h:head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Estadísticas de Glucosa - Admin</title>
+    <h:outputStylesheet library="css" name="navbar.css" />
+    <h:outputStylesheet library="css" name="styles.css" />
+    <h:outputStylesheet library="css" name="glucose.css" />
+    <style>
+        .stats-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+        }
 
-        <h:form id="statsGlucosaForm">
-            <h2>Análisis de Glucosa - Dashboard Clínico</h2>
-            <p>Monitoreo detallado de niveles de glucosa por paciente para evaluación clínica.</p>
+        .filter-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
 
-            <!-- FILTROS -->
-            <div style="background:#f7f9ff; padding:20px; border-radius:8px; border-left:4px solid #3058a6; margin-top:20px;">
-                <h3 style="color:#3058a6; margin-top:0;">Filtros</h3>
-                
-                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px; margin-bottom:15px;">
-                    <!-- Filtro por Paciente -->
-                    <div>
-                        <label style="font-weight:bold; display:block; margin-bottom:8px;">Seleccionar Paciente</label>
-                        <h:selectOneMenu value="#{statsGlucosaBean.pacienteSeleccionado}" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;">
-                            <f:selectItem itemLabel="-- Todos los pacientes --" itemValue="0"/>
-                            <f:selectItems value="#{statsGlucosaBean.pacientes}" var="p" 
-                                          itemValue="#{p.idUsuario}" 
-                                          itemLabel="#{p.nombres} #{p.apellidos} (#{p.documento})"/>
-                        </h:selectOneMenu>
+        .chart-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .kpi-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid;
+        }
+
+        .kpi-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+            display: block;
+        }
+
+        .kpi-label {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+
+        .kpi-normal {
+            border-color: #38a169;
+        }
+
+        .kpi-normal .kpi-value {
+            color: #38a169;
+        }
+
+        .kpi-warning {
+            border-color: #dd6b20;
+        }
+
+        .kpi-warning .kpi-value {
+            color: #dd6b20;
+        }
+
+        .kpi-danger {
+            border-color: #e53e3e;
+        }
+
+        .kpi-danger .kpi-value {
+            color: #e53e3e;
+        }
+
+        .kpi-info {
+            border-color: #3058a6;
+        }
+
+        .kpi-info .kpi-value {
+            color: #3058a6;
+        }
+
+        .conclusion-box {
+            background-color: #ebf8ff;
+            border-left: 4px solid #3058a6;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+            font-size: 1.1em;
+            color: #2c5282;
+        }
+
+        body .ui-selectonemenu {
+            width: 100%;
+            max-width: 300px;
+        }
+    </style>
+    <link rel="shortcut icon" href="#{resource['images:ICONO.png']}" />
+</h:head>
+
+<h:body>
+    <ui:include src="/includes/navbar.xhtml" />
+
+    <main class="stats-container">
+        <div class="header-section"
+            style="margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1>📊 Análisis de Glucosa</h1>
+                <p>Monitoreo detallado de pacientes.</p>
+            </div>
+            <h:button value="Volver al Panel" outcome="/views/inicioGestion.xhtml"
+                styleClass="action-button cancel-button" />
+        </div>
+
+        <h:form id="statsForm">
+            <!-- Filtros -->
+            <div class="filter-card">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-end;">
+                    <div style="flex: 1; min-width: 250px;">
+                        <h:outputLabel value="Seleccionar Paciente:" for="paciente"
+                            style="display: block; margin-bottom: 8px; font-weight: bold;" />
+                        <p:selectOneMenu id="paciente" value="#{statsGlucosaBean.pacienteSeleccionado}" filter="true"
+                            filterMatchMode="contains" style="width: 100%;">
+                            <f:selectItem itemLabel="Todos los pacientes" itemValue="0" />
+                            <f:selectItems value="#{statsGlucosaBean.pacientes}" var="p"
+                                itemLabel="#{p.nombres} #{p.apellidos} (#{p.documento})" itemValue="#{p.idUsuario}" />
+                            <p:ajax listener="#{statsGlucosaBean.onPacienteChange}"
+                                update="chartPanel kpiPanel conclusionPanel" />
+                        </p:selectOneMenu>
                     </div>
 
-                    <!-- Filtro por Período -->
-                    <div>
-                        <label style="font-weight:bold; display:block; margin-bottom:8px;">Período</label>
-                        <h:selectOneMenu value="#{statsGlucosaBean.rangoPeriodo}" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;">
-                            <f:selectItem itemLabel="-- Todas las fechas --" itemValue="todos"/>
-                            <f:selectItem itemLabel="Última semana" itemValue="semana"/>
-                            <f:selectItem itemLabel="Último mes" itemValue="mes"/>
-                        </h:selectOneMenu>
-                    </div>
-
-                    <!-- Botones -->
-                    <div style="display:flex; align-items:flex-end; gap:10px;">
-                        <p:commandButton value="Aplicar Filtro" actionListener="#{statsGlucosaBean.loadData}" 
-                                        update="statsGlucosaForm:graficoGlucosa statsGlucosaForm:tablaGlucosa statsGlucosaForm:estadisticas" 
-                                        style="width:48%; background:#3058a6; color:white; padding:8px; border:none; border-radius:4px; cursor:pointer; font-weight:bold;" process="@form"/>
-                        <p:commandButton value="Limpiar" actionListener="#{statsGlucosaBean.init}" 
-                                        update="statsGlucosaForm:graficoGlucosa statsGlucosaForm:tablaGlucosa statsGlucosaForm:estadisticas" 
-                                        style="width:48%; background:#e9ecef; color:#333; padding:8px; border:none; border-radius:4px; cursor:pointer; font-weight:bold;" process="@form"/>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h:outputLabel value="Período:" for="periodo"
+                            style="display: block; margin-bottom: 8px; font-weight: bold;" />
+                        <p:selectOneMenu id="periodo" value="#{statsGlucosaBean.rangoPeriodo}" style="width: 100%;">
+                            <f:selectItem itemLabel="Histórico Completo" itemValue="todos" />
+                            <f:selectItem itemLabel="Última Semana" itemValue="semana" />
+                            <f:selectItem itemLabel="Último Mes" itemValue="mes" />
+                            <p:ajax listener="#{statsGlucosaBean.onPeriodoChange}"
+                                update="chartPanel kpiPanel conclusionPanel" />
+                        </p:selectOneMenu>
                     </div>
                 </div>
             </div>
 
-            <!-- RESUMEN DE ESTADÍSTICAS -->
-            <h:panelGroup id="estadisticas" layout="block">
-            <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:15px; margin-top:20px;">
-                <div style="background:#fff; padding:15px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); border-top:4px solid #3058a6;">
-                    <p style="margin:0 0 8px; color:#666; font-size:0.9rem;">PROMEDIO</p>
-                    <span style="font-size:1.8rem; font-weight:bold; color:#3058a6;">#{statsGlucosaBean.estadisticas.promedio}</span>
-                    <p style="margin:8px 0 0; font-size:0.85rem; color:#999;">mg/dL</p>
+            <!-- KPIs -->
+            <h:panelGroup id="kpiPanel" layout="block" styleClass="kpi-grid">
+                <div class="kpi-card kpi-info">
+                    <span class="kpi-value">#{statsGlucosaBean.estadisticas.promedio}</span>
+                    <span class="kpi-label">Promedio (mg/dL)</span>
                 </div>
-
-                <div style="background:#fff; padding:15px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); border-top:4px solid #38a169;">
-                    <p style="margin:0 0 8px; color:#666; font-size:0.9rem;">MÍNIMO</p>
-                    <span style="font-size:1.8rem; font-weight:bold; color:#38a169;">#{statsGlucosaBean.estadisticas.minimo}</span>
-                    <p style="margin:8px 0 0; font-size:0.85rem; color:#999;">mg/dL</p>
+                <div class="kpi-card kpi-normal">
+                    <span class="kpi-value">#{statsGlucosaBean.estadisticas.registrosNormales}</span>
+                    <span class="kpi-label">Normales</span>
                 </div>
-
-                <div style="background:#fff; padding:15px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); border-top:4px solid #dd6b20;">
-                    <p style="margin:0 0 8px; color:#666; font-size:0.9rem;">MÁXIMO</p>
-                    <span style="font-size:1.8rem; font-weight:bold; color:#dd6b20;">#{statsGlucosaBean.estadisticas.maximo}</span>
-                    <p style="margin:8px 0 0; font-size:0.85rem; color:#999;">mg/dL</p>
+                <div class="kpi-card kpi-warning">
+                    <span class="kpi-value">#{statsGlucosaBean.estadisticas.registrosAltos}</span>
+                    <span class="kpi-label">Altos (>180)</span>
                 </div>
-
-                <div style="background:#fff; padding:15px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); border-top:4px solid #6b46c1;">
-                    <p style="margin:0 0 8px; color:#666; font-size:0.9rem;">REGISTROS</p>
-                    <span style="font-size:1.8rem; font-weight:bold; color:#6b46c1;">#{statsGlucosaBean.glucosaRegistros.size()}</span>
-                    <p style="margin:8px 0 0; font-size:0.85rem; color:#999;">Mediciones</p>
+                <div class="kpi-card kpi-danger">
+                    <span class="kpi-value">#{statsGlucosaBean.estadisticas.registrosBajos}</span>
+                    <span class="kpi-label">Bajos (&lt;70)</span>
                 </div>
-            </div>
-
-            <!-- CONCLUSIÓN CLÍNICA -->
-            <div style="background:#f0f7ff; padding:18px; border-radius:8px; border-left:4px solid #3058a6; margin-top:20px;">
-                <h3 style="color:#3058a6; margin:0 0 10px;">Conclusión Clínica</h3>
-                <p style="margin:0; font-size:1rem; line-height:1.6;">
-                    #{statsGlucosaBean.estadisticas.conclusion}
-                </p>
-            </div>
             </h:panelGroup>
 
-            <!-- GRÁFICO -->
-            <h:panelGroup id="graficoGlucosa" layout="block">
-            <div style="background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-top:20px;">
-                <h3 style="color:#3058a6; margin-top:0;">Tendencia de Glucosa</h3>
-                <canvas id="lineChart" style="max-height:400px;"></canvas>
-            </div>
+            <!-- Gráfico -->
+            <h:panelGroup id="chartPanel" layout="block" styleClass="chart-card">
+                <h3 style="margin-top: 0; color: #3058a6;">Tendencia de Niveles de Glucosa</h3>
+                <p:lineChart model="#{statsGlucosaBean.lineChartModel}" style="width: 100%; height: 400px;" />
             </h:panelGroup>
 
-            <!-- TABLA DETALLADA DE REGISTROS -->
-            <h:panelGroup id="tablaGlucosa" layout="block">
-            <div style="margin-top:20px; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); overflow-x:auto;">
-                <h3 style="color:#3058a6; margin-top:0;">Registro Detallado de Glucosa</h3>
-                <table style="width:100%; border-collapse:collapse; font-size:0.95rem;">
-                    <thead>
-                        <tr style="background:#f7f9ff;">
-                            <th style="color:#3058a6; font-weight:bold; padding:12px; text-align:left; border-bottom:2px solid #e2e8f0;">Fecha/Hora</th>
-                            <th style="color:#3058a6; font-weight:bold; padding:12px; text-align:center; border-bottom:2px solid #e2e8f0;">Nivel (mg/dL)</th>
-                            <th style="color:#3058a6; font-weight:bold; padding:12px; text-align:left; border-bottom:2px solid #e2e8f0;">Momento</th>
-                            <th style="color:#3058a6; font-weight:bold; padding:12px; text-align:left; border-bottom:2px solid #e2e8f0;">Paciente</th>
-                            <th style="color:#3058a6; font-weight:bold; padding:12px; text-align:left; border-bottom:2px solid #e2e8f0;">Documento</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <h:dataTable value="#{statsGlucosaBean.glucosaRegistros}" var="g" >
-                            <h:column>
-                                <tr style="border-bottom:1px solid #f0f2f8;">
-                                    <td style="padding:12px; text-align:left;">
-                                        <h:outputText value="#{g.fechaHora}">
-                                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
-                                        </h:outputText>
-                                    </td>
-
-                                    <!-- Bloque corregido -->
-                                    <td style="padding:12px; text-align:center;">
-                                        <h:panelGroup rendered="#{g.nivelGlucosa &gt; 180}">
-                                            <h:outputText value="#{g.nivelGlucosa}" style="color:#e53e3e; font-weight:bold;"/>
-                                        </h:panelGroup>
-
-                                        <h:panelGroup rendered="#{g.nivelGlucosa &gt;= 70 and g.nivelGlucosa &lt;= 180}">
-                                            <h:outputText value="#{g.nivelGlucosa}" style="color:#38a169;"/>
-                                        </h:panelGroup>
-
-                                        <h:panelGroup rendered="#{g.nivelGlucosa &lt; 70}">
-                                            <h:outputText value="#{g.nivelGlucosa}" style="color:#dd6b20; font-weight:bold;"/>
-                                        </h:panelGroup>
-                                    </td>
-
-                                    <td style="padding:12px; text-align:left;">
-                                        <h:outputText value="#{g.momentoDia}"/>
-                                    </td>
-                                    <td style="padding:12px; text-align:left;">
-                                        <h:outputText value="#{g.idUsuario.nombres} #{g.idUsuario.apellidos}"/>
-                                    </td>
-                                    <td style="padding:12px; text-align:left;">
-                                        <h:outputText value="#{g.idUsuario.documento}"/>
-                                    </td>
-                                </tr>
-                            </h:column>
-                        </h:dataTable>
-                    </tbody>
-                </table>
-                <h:panelGroup rendered="#{empty statsGlucosaBean.glucosaRegistros}">
-                    <p style="text-align:center; color:#999; padding:20px;">No hay registros que coincidan con los filtros aplicados.</p>
+            <!-- Conclusión -->
+            <h:panelGroup id="conclusionPanel" layout="block">
+                <h:panelGroup rendered="#{statsGlucosaBean.estadisticas != null}" styleClass="conclusion-box"
+                    layout="block">
+                    <strong>Análisis Automático:</strong>
+                    <h:outputText value=" #{statsGlucosaBean.estadisticas.conclusion}" />
                 </h:panelGroup>
-            </div>
             </h:panelGroup>
+
         </h:form>
+    </main>
+</h:body>
 
-        <h:outputScript name="chart.min.js" library="js" target="body" />
-        <h:outputScript name="chart-placeholder.js" library="js" target="body" />
-        <script type="text/javascript">
-            //<![CDATA[
-            document.addEventListener('DOMContentLoaded', function() {
-                var chartDataJson = '#{statsGlucosaBean.chartDataJson}';
-                if (chartDataJson && chartDataJson.length > 0) {
-                    var chartData = JSON.parse(chartDataJson);
-                    var ctx = document.getElementById('lineChart').getContext('2d');
-                    new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: chartData.labels,
-                            datasets: [{
-                                label: 'Promedio Glucosa (mg/dL)',
-                                data: chartData.values,
-                                borderColor: '#3058a6',
-                                backgroundColor: 'rgba(48,88,166,0.12)',
-                                borderWidth: 2,
-                                pointRadius: 5,
-                                pointHoverRadius: 7,
-                                pointBackgroundColor: '#f45501',
-                                tension: 0.3,
-                                fill: true
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: true,
-                            scales: {
-                                y: { beginAtZero: false, title: { display: true, text: 'mg/dL' } }
-                            },
-                            plugins: {
-                                legend: { position: 'top' },
-                                title: { display: true, text: 'Tendencia de Glucosa' }
-                            }
-                        }
-                    });
-                }
-            });
-            //]]>
-        </script>
-
-    </ui:define>
-</ui:composition>
 </html>

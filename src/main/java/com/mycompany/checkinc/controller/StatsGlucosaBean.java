@@ -7,16 +7,26 @@ import com.mycompany.checkinc.services.UsuarioFacadeLocal;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.primefaces.model.charts.line.LineChartModel;
+import org.primefaces.model.charts.line.LineChartDataSet;
+import org.primefaces.model.charts.ChartData;
+import org.primefaces.model.charts.line.LineChartOptions;
+import org.primefaces.model.charts.optionconfig.legend.Legend;
+import org.primefaces.model.charts.optionconfig.title.Title;
+import org.primefaces.model.charts.axes.cartesian.CartesianScales;
+import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes;
+import org.primefaces.model.charts.axes.cartesian.category.CartesianCategoryAxes;
 
 @ManagedBean(name = "statsGlucosaBean")
 @ViewScoped
@@ -28,7 +38,7 @@ public class StatsGlucosaBean implements Serializable {
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
 
-    private String chartDataJson;
+    private LineChartModel lineChartModel;
     private List<Glucosa> glucosaRegistros;
     private List<Usuario> pacientes;
     private Integer pacienteSeleccionado;
@@ -36,6 +46,10 @@ public class StatsGlucosaBean implements Serializable {
     private Date fechaFin;
     private String rangoPeriodo = "todos"; // todos, semana, mes
     private GlucosaStats estadisticas;
+
+    // Constants for glucose levels
+    private static final double GLUCOSE_LOW_THRESHOLD = 70.0;
+    private static final double GLUCOSE_HIGH_THRESHOLD = 180.0;
 
     public static class GlucosaStats {
         private double promedio;
@@ -66,13 +80,33 @@ public class StatsGlucosaBean implements Serializable {
             }
         }
 
-        public double getPromedio() { return promedio; }
-        public float getMinimo() { return minimo; }
-        public float getMaximo() { return maximo; }
-        public int getRegistrosAltos() { return registrosAltos; }
-        public int getRegistrosNormales() { return registrosNormales; }
-        public int getRegistrosBajos() { return registrosBajos; }
-        public String getConclusion() { return conclusion; }
+        public double getPromedio() {
+            return promedio;
+        }
+
+        public float getMinimo() {
+            return minimo;
+        }
+
+        public float getMaximo() {
+            return maximo;
+        }
+
+        public int getRegistrosAltos() {
+            return registrosAltos;
+        }
+
+        public int getRegistrosNormales() {
+            return registrosNormales;
+        }
+
+        public int getRegistrosBajos() {
+            return registrosBajos;
+        }
+
+        public String getConclusion() {
+            return conclusion;
+        }
     }
 
     @PostConstruct
@@ -92,7 +126,7 @@ public class StatsGlucosaBean implements Serializable {
         try {
             // Primero, actualizar el período de fechas
             cambiarPeriodo();
-            
+
             List<Glucosa> allGlucosa = glucosaFacade.findAll();
             glucosaRegistros = new ArrayList<>();
 
@@ -112,57 +146,121 @@ public class StatsGlucosaBean implements Serializable {
                 List<Glucosa> filtroPorFecha = new ArrayList<>();
                 for (Glucosa g : glucosaRegistros) {
                     Date fechaG = g.getFechaHora();
-                    if ((fechaG.equals(fechaInicio) || fechaG.after(fechaInicio)) && 
-                        (fechaG.equals(fechaFin) || fechaG.before(fechaFin))) {
+                    if ((fechaG.equals(fechaInicio) || fechaG.after(fechaInicio)) &&
+                            (fechaG.equals(fechaFin) || fechaG.before(fechaFin))) {
                         filtroPorFecha.add(g);
                     }
                 }
                 glucosaRegistros = filtroPorFecha;
             }
 
+            // Ordenar por fecha ascendente para el gráfico
+            glucosaRegistros.sort((g1, g2) -> g1.getFechaHora().compareTo(g2.getFechaHora()));
+
             // Generar datos para el gráfico
-            generarDatosGrafico();
-            
+            crearModeloGrafico();
+
             // Calcular estadísticas
             calcularEstadisticas();
         } catch (Exception ex) {
             ex.printStackTrace();
             glucosaRegistros = new ArrayList<>();
-            chartDataJson = "";
+            lineChartModel = new LineChartModel();
             estadisticas = new GlucosaStats(0, 0, 0, 0, 0, 0);
         }
     }
 
-    private void generarDatosGrafico() {
-        // Agrupar por fecha (dd/MM)
-        Map<String, List<Float>> byDate = new HashMap<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM");
-        for (Glucosa g : glucosaRegistros) {
-            String key = sdf.format(g.getFechaHora());
-            byDate.computeIfAbsent(key, k -> new ArrayList<>()).add(g.getNivelGlucosa());
-        }
+    private void crearModeloGrafico() {
+        lineChartModel = new LineChartModel();
+        ChartData data = new ChartData();
 
+        LineChartDataSet dataSet = new LineChartDataSet();
+        LineChartDataSet lowThresholdSet = new LineChartDataSet();
+        LineChartDataSet highThresholdSet = new LineChartDataSet();
+
+        List<Object> values = new ArrayList<>();
+        List<Object> lowThresholdValues = new ArrayList<>();
+        List<Object> highThresholdValues = new ArrayList<>();
         List<String> labels = new ArrayList<>();
-        List<Double> values = new ArrayList<>();
 
-        for (Map.Entry<String, List<Float>> e : byDate.entrySet()) {
-            labels.add(e.getKey());
-            List<Float> vals = e.getValue();
-            double sum = 0;
-            for (Float v : vals) sum += v;
-            double avg = vals.isEmpty() ? 0 : (sum / vals.size());
-            values.add(Math.round(avg * 100.0) / 100.0);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM HH:mm");
+
+        for (Glucosa g : glucosaRegistros) {
+            values.add(g.getNivelGlucosa());
+            lowThresholdValues.add(GLUCOSE_LOW_THRESHOLD);
+            highThresholdValues.add(GLUCOSE_HIGH_THRESHOLD);
+            labels.add(sdf.format(g.getFechaHora()));
+
+            // Colorear puntos individualmente
+            String pointColor;
+            float nivel = g.getNivelGlucosa();
+            if (nivel < GLUCOSE_LOW_THRESHOLD) {
+                pointColor = "#e53e3e"; // Rojo
+            } else if (nivel > GLUCOSE_HIGH_THRESHOLD) {
+                pointColor = "#dd6b20"; // Naranja
+            } else {
+                pointColor = "#38a169"; // Verde
+            }
+            dataSet.setPointBackgroundColor(pointColor);
         }
 
-        try {
-            Map<String, Object> chartData = new HashMap<>();
-            chartData.put("labels", labels);
-            chartData.put("values", values);
-            ObjectMapper mapper = new ObjectMapper();
-            chartDataJson = mapper.writeValueAsString(chartData);
-        } catch (Exception ex) {
-            chartDataJson = "";
-        }
+        dataSet.setData(values);
+        dataSet.setLabel("Nivel Glucosa");
+        dataSet.setFill(true);
+        dataSet.setBorderColor("#3058a6");
+        dataSet.setBackgroundColor("rgba(48,88,166,0.1)");
+        dataSet.setPointRadius(5);
+        dataSet.setTension(0.4);
+
+        lowThresholdSet.setData(lowThresholdValues);
+        lowThresholdSet.setLabel("Min (70)");
+        lowThresholdSet.setBorderColor("#e53e3e");
+        lowThresholdSet.setBorderDash(Arrays.asList(5, 5));
+        lowThresholdSet.setPointRadius(0);
+        lowThresholdSet.setFill(false);
+
+        highThresholdSet.setData(highThresholdValues);
+        highThresholdSet.setLabel("Max (180)");
+        highThresholdSet.setBorderColor("#dd6b20");
+        highThresholdSet.setBorderDash(Arrays.asList(5, 5));
+        highThresholdSet.setPointRadius(0);
+        highThresholdSet.setFill(false);
+
+        data.setLabels(labels);
+        data.addChartDataSet(dataSet);
+        data.addChartDataSet(lowThresholdSet);
+        data.addChartDataSet(highThresholdSet);
+
+        lineChartModel.setData(data);
+
+        // Opciones
+        LineChartOptions options = new LineChartOptions();
+        CartesianScales scales = new CartesianScales();
+
+        CartesianLinearAxes yAxes = new CartesianLinearAxes();
+        yAxes.setBeginAtZero(true);
+        scales.addYAxesData(yAxes);
+
+        CartesianCategoryAxes xAxes = new CartesianCategoryAxes();
+        xAxes.setOffset(true);
+        scales.addXAxesData(xAxes);
+
+        options.setScales(scales);
+
+        Title title = new Title();
+        title.setDisplay(true);
+        title.setText("Tendencia de Niveles de Glucosa");
+        options.setTitle(title);
+
+        Legend legend = new Legend();
+        legend.setDisplay(true);
+        legend.setPosition("top");
+        options.setLegend(legend);
+
+        options.setResponsive(true);
+        options.setMaintainAspectRatio(false);
+
+        lineChartModel.setOptions(options);
     }
 
     private void calcularEstadisticas() {
@@ -176,19 +274,15 @@ public class StatsGlucosaBean implements Serializable {
         float maxValue = Float.MIN_VALUE;
         int altos = 0, normales = 0, bajos = 0;
 
-        // Rangos considerados (pueden ajustarse según protocolos médicos)
-        final float LIMITE_BAJO = 70f;
-        final float LIMITE_ALTO = 180f;
-
         for (Glucosa g : glucosaRegistros) {
             float nivel = g.getNivelGlucosa();
             suma += nivel;
             minValue = Math.min(minValue, nivel);
             maxValue = Math.max(maxValue, nivel);
 
-            if (nivel < LIMITE_BAJO) {
+            if (nivel < GLUCOSE_LOW_THRESHOLD) {
                 bajos++;
-            } else if (nivel > LIMITE_ALTO) {
+            } else if (nivel > GLUCOSE_HIGH_THRESHOLD) {
                 altos++;
             } else {
                 normales++;
@@ -205,11 +299,11 @@ public class StatsGlucosaBean implements Serializable {
         cal.set(Calendar.MINUTE, 59);
         cal.set(Calendar.SECOND, 59);
         fechaFin = cal.getTime();
-        
+
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
-        
+
         switch (rangoPeriodo) {
             case "semana":
                 cal.add(Calendar.DAY_OF_YEAR, -7);
@@ -231,9 +325,13 @@ public class StatsGlucosaBean implements Serializable {
         loadData();
     }
 
+    public void onPacienteChange() {
+        loadData();
+    }
+
     // Getters y Setters
-    public String getChartDataJson() {
-        return chartDataJson;
+    public LineChartModel getLineChartModel() {
+        return lineChartModel;
     }
 
     public List<Glucosa> getGlucosaRegistros() {

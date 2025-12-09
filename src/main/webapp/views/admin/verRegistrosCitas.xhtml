@@ -1,28 +1,182 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      lang="es">
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" lang="es">
+
 <h:head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Registros Citas - Admin</title>
-    <h:outputStylesheet library="css" name="navbar.css"/>
-    <h:outputStylesheet library="css" name="styles.css"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Historial de Citas - Admin</title>
+    <h:outputStylesheet library="css" name="navbar.css" />
+    <h:outputStylesheet library="css" name="styles.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
     <style>
-        .dashboard-container { padding: 20px 30px; }
-        .welcome-admin { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
-        .placeholder { color: #888; font-size: 1.2em; margin-top: 40px; text-align: center; }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            color: #3058a6;
+            margin: 0;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.9em;
+            display: inline-block;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .badge-medico {
+            background-color: #e9d8fd;
+            color: #553c9a;
+        }
+
+        .badge-examen {
+            background-color: #bee3f8;
+            color: #2c5282;
+        }
+
+        .badge-nutri {
+            background-color: #c6f6d5;
+            color: #276749;
+        }
+
+        table.dataTable thead th {
+            background-color: #3058a6;
+            color: white;
+        }
+
+        table.dataTable tr:hover {
+            background-color: #f5f5f7;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4a5568;
+            font-weight: bold;
+        }
     </style>
+    <link rel="shortcut icon" href="#{resource['images:ICONO.png']}" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#citasTable').DataTable({
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json"
+                },
+                "pageLength": 15,
+                "responsive": true,
+                "order": [[2, "desc"]] // Ordenar por fecha descendente
+            });
+        });
+    </script>
 </h:head>
+
 <h:body>
-    <ui:include src="/includes/navbar.xhtml"/>
-    <main class="dashboard-container">
-        <h1 class="welcome-admin">Registros de Citas</h1>
-        <div class="placeholder">
-            Aquí se mostrarán los registros de citas para el administrador.
+    <ui:include src="/includes/navbar.xhtml" />
+
+    <main class="container">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Historial Global de Citas</h1>
+                <p>Todas las citas médicas registradas en el sistema.</p>
+            </div>
+            <h:button value="Volver al Panel" outcome="/views/inicioGestion.xhtml"
+                styleClass="action-button cancel-button" />
         </div>
+
+        <h:form id="tablaForm">
+            <h:dataTable id="citasTable" value="#{adminRegistrosBean.listaCitasGlobal}" var="cita" styleClass="display"
+                style="width:100%">
+
+                <h:column>
+                    <f:facet name="header">ID</f:facet>
+                    #{cita.idCita}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Paciente</f:facet>
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            #{cita.idUsuario.nombres.substring(0,1)}
+                        </div>
+                        <div>
+                            <strong>#{cita.idUsuario.nombres} #{cita.idUsuario.apellidos}</strong><br />
+                            <small style="color: #666;">Doc: #{cita.idUsuario.documento}</small>
+                        </div>
+                    </div>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Fecha y Hora</f:facet>
+                    <h:outputText value="#{cita.fechaHora}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                    </h:outputText>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Motivo</f:facet>
+                    #{cita.motivo}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Lugar</f:facet>
+                    #{cita.lugar}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Doctor</f:facet>
+                    Dr/a. #{cita.doctor}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Tipo</f:facet>
+                    <ui:fragment
+                        rendered="#{cita.motivo.toLowerCase().contains('examen') or cita.motivo.toLowerCase().contains('analisis')}">
+                        <span class="badge badge-examen">EXAMEN</span>
+                    </ui:fragment>
+                    <ui:fragment
+                        rendered="#{cita.motivo.toLowerCase().contains('nutricion') or cita.motivo.toLowerCase().contains('dieta')}">
+                        <span class="badge badge-nutri">NUTRICIÓN</span>
+                    </ui:fragment>
+                    <ui:fragment
+                        rendered="#{not cita.motivo.toLowerCase().contains('examen') and not cita.motivo.toLowerCase().contains('analisis') and not cita.motivo.toLowerCase().contains('nutricion')}">
+                        <span class="badge badge-medico">MÉDICA</span>
+                    </ui:fragment>
+                </h:column>
+
+            </h:dataTable>
+        </h:form>
     </main>
 </h:body>
+
 </html>
