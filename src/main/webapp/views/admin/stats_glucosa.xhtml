@@ -8,10 +8,16 @@
 <h:head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Estadísticas de Glucosa - Admin</title>
+    <title>Gestión y Análisis de Glucosa - Admin</title>
     <h:outputStylesheet library="css" name="navbar.css" />
     <h:outputStylesheet library="css" name="styles.css" />
     <h:outputStylesheet library="css" name="glucose.css" />
+
+    <!-- DataTables CSS/JS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
     <style>
         .stats-container {
             max-width: 1400px;
@@ -28,6 +34,14 @@
         }
 
         .chart-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .table-card {
             background: white;
             padding: 30px;
             border-radius: 12px;
@@ -106,12 +120,83 @@
             color: #2c5282;
         }
 
+        /* Estilos Badge Tabla */
+        .badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.85em;
+            display: inline-block;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .badge-alto {
+            background-color: #fbd38d;
+            color: #9c4221;
+        }
+
+        .badge-normal {
+            background-color: #c6f6d5;
+            color: #276749;
+        }
+
+        .badge-bajo {
+            background-color: #fed7d7;
+            color: #c53030;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4a5568;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+
+        /* DataTables Header Override */
+        table.dataTable thead th {
+            background-color: #3058a6;
+            color: white;
+            border-bottom: none;
+        }
+
         body .ui-selectonemenu {
             width: 100%;
             max-width: 300px;
         }
     </style>
     <link rel="shortcut icon" href="#{resource['images:ICONO.png']}" />
+
+    <script type="text/javascript">
+        // Función para inicializar/reinicializar DataTables después de AJAX
+        function initTable() {
+            if ($.fn.DataTable.isDataTable('#registrosTable')) {
+                $('#registrosTable').DataTable().destroy();
+            }
+            $('#registrosTable').DataTable({
+                "language": { "url": "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json" },
+                "pageLength": 10,
+                "responsive": true,
+                "order": [[2, "desc"]]
+            });
+        }
+
+        $(document).ready(function () {
+            initTable();
+        });
+    </script>
 </h:head>
 
 <h:body>
@@ -121,8 +206,8 @@
         <div class="header-section"
             style="margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;">
             <div>
-                <h1>📊 Análisis de Glucosa</h1>
-                <p>Monitoreo detallado de pacientes.</p>
+                <h1>📊 Gestión de Glucosa</h1>
+                <p>Análisis visual e historial detallado de pacientes.</p>
             </div>
             <h:button value="Volver al Panel" outcome="/views/inicioGestion.xhtml"
                 styleClass="action-button cancel-button" />
@@ -141,7 +226,7 @@
                             <f:selectItems value="#{statsGlucosaBean.pacientes}" var="p"
                                 itemLabel="#{p.nombres} #{p.apellidos} (#{p.documento})" itemValue="#{p.idUsuario}" />
                             <p:ajax listener="#{statsGlucosaBean.onPacienteChange}"
-                                update="chartPanel kpiPanel conclusionPanel" />
+                                update="chartPanel kpiPanel conclusionPanel tablePanel" oncomplete="initTable()" />
                         </p:selectOneMenu>
                     </div>
 
@@ -153,7 +238,7 @@
                             <f:selectItem itemLabel="Última Semana" itemValue="semana" />
                             <f:selectItem itemLabel="Último Mes" itemValue="mes" />
                             <p:ajax listener="#{statsGlucosaBean.onPeriodoChange}"
-                                update="chartPanel kpiPanel conclusionPanel" />
+                                update="chartPanel kpiPanel conclusionPanel tablePanel" oncomplete="initTable()" />
                         </p:selectOneMenu>
                     </div>
                 </div>
@@ -181,17 +266,76 @@
 
             <!-- Gráfico -->
             <h:panelGroup id="chartPanel" layout="block" styleClass="chart-card">
-                <h3 style="margin-top: 0; color: #3058a6;">Tendencia de Niveles de Glucosa</h3>
+                <h3 style="margin-top: 0; color: #3058a6;">Tendencia de Niveles</h3>
                 <p:lineChart model="#{statsGlucosaBean.lineChartModel}" style="width: 100%; height: 400px;" />
+
+                <h:panelGroup id="conclusionPanel" layout="block">
+                    <h:panelGroup rendered="#{statsGlucosaBean.estadisticas != null}" styleClass="conclusion-box"
+                        layout="block">
+                        <strong>Análisis Automático:</strong>
+                        <h:outputText value=" #{statsGlucosaBean.estadisticas.conclusion}" />
+                    </h:panelGroup>
+                </h:panelGroup>
             </h:panelGroup>
 
-            <!-- Conclusión -->
-            <h:panelGroup id="conclusionPanel" layout="block">
-                <h:panelGroup rendered="#{statsGlucosaBean.estadisticas != null}" styleClass="conclusion-box"
-                    layout="block">
-                    <strong>Análisis Automático:</strong>
-                    <h:outputText value=" #{statsGlucosaBean.estadisticas.conclusion}" />
-                </h:panelGroup>
+            <!-- Tabla Detallada -->
+            <h:panelGroup id="tablePanel" layout="block" styleClass="table-card">
+                <h3 style="margin-top: 0; margin-bottom: 20px; color: #3058a6;">Registro Detallado de Mediciones</h3>
+
+                <!-- Importante: prependId=false para que DataTables encuentre la tabla por ID simple -->
+                <h:dataTable id="registrosTable" value="#{statsGlucosaBean.glucosaRegistros}" var="registro"
+                    styleClass="display" style="width:100%">
+
+                    <h:column>
+                        <f:facet name="header">ID</f:facet>
+                        #{registro.idGlucosa}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Paciente</f:facet>
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                #{registro.idUsuario.nombres.substring(0,1)}
+                            </div>
+                            <div>
+                                <strong>#{registro.idUsuario.nombres} #{registro.idUsuario.apellidos}</strong><br />
+                                <small style="color: #666;">Doc: #{registro.idUsuario.documento}</small>
+                            </div>
+                        </div>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Fecha y Hora</f:facet>
+                        <h:outputText value="#{registro.fechaHora}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                        </h:outputText>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Nivel (mg/dL)</f:facet>
+                        <h:outputText value="#{registro.nivelGlucosa}"
+                            style="font-weight: bold; font-size: 1.1em; color: #3058a6;" />
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Momento</f:facet>
+                        #{registro.momentoDia}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Estado</f:facet>
+                        <ui:fragment rendered="#{registro.nivelGlucosa gt 180}">
+                            <span class="badge badge-alto">ALTO</span>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{registro.nivelGlucosa lt 70}">
+                            <span class="badge badge-bajo">BAJO</span>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{registro.nivelGlucosa ge 70 and registro.nivelGlucosa le 180}">
+                            <span class="badge badge-normal">NORMAL</span>
+                        </ui:fragment>
+                    </h:column>
+
+                </h:dataTable>
             </h:panelGroup>
 
         </h:form>
