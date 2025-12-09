@@ -30,7 +30,8 @@ import org.primefaces.model.menu.MenuModel;
 
 /**
  * Bean de reportes refactorizado para usar la clase base ReporteBasePDF.
- * Centraliza la generación de reportes en PDF con estilos globales consistentes.
+ * Centraliza la generación de reportes en PDF con estilos globales
+ * consistentes.
  */
 @ManagedBean(name = "reporteBean")
 @RequestScoped
@@ -56,6 +57,15 @@ public class ReporteBean implements Serializable {
     }
 
     /**
+     * Exporta el reporte completo del paciente.
+     * Método público accesible desde inicioGestion.xhtml y otras páginas.
+     * Incluye glucosa, citas y medicamentos en un solo PDF.
+     */
+    public void exportarReporteCompletoPDF() throws IOException {
+        exportarReporteSaludPDF();
+    }
+
+    /**
      * Exporta el reporte general de salud del paciente desde el dashboard.
      * Incluye glucosa, citas y medicamentos en un solo PDF.
      */
@@ -64,18 +74,18 @@ public class ReporteBean implements Serializable {
         Usuario usuario = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
 
         if (usuario == null) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                "Error", "Usuario no autenticado"));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Error", "Usuario no autenticado"));
             return;
         }
 
         try {
-            ReporteGeneralPDF reporte = new ReporteGeneralPDF(usuario, glucosaFacade, 
-                medicamentoFacade, citaFacade);
+            ReporteGeneralPDF reporte = new ReporteGeneralPDF(usuario, glucosaFacade,
+                    medicamentoFacade, citaFacade);
             reporte.exportarPDF();
         } catch (Exception e) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                "Error", "No se pudo generar el reporte de salud."));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Error", "No se pudo generar el reporte de salud."));
             e.printStackTrace();
         }
     }
@@ -105,18 +115,18 @@ public class ReporteBean implements Serializable {
         response.setHeader("Content-Disposition", "attachment; filename=\"" + nombreArchivo + "\"");
 
         PrintWriter writer = response.getWriter();
-        writer.println("ID" + separador + "Usuario" + separador + "Nombres" + separador + 
-                      "Apellidos" + separador + "Edad" + separador + "Correo" + separador + "Documento");
+        writer.println("ID" + separador + "Usuario" + separador + "Nombres" + separador +
+                "Apellidos" + separador + "Edad" + separador + "Correo" + separador + "Documento");
 
         List<Usuario> usuarios = usuarioFacade.findAll();
         for (Usuario u : usuarios) {
             writer.println(u.getIdUsuario() + separador +
-                           u.getUser() + separador +
-                           u.getNombres() + separador +
-                           u.getApellidos() + separador +
-                           u.getEdad() + separador +
-                           u.getCorreo() + separador +
-                           u.getDocumento());
+                    u.getUser() + separador +
+                    u.getNombres() + separador +
+                    u.getApellidos() + separador +
+                    u.getEdad() + separador +
+                    u.getCorreo() + separador +
+                    u.getDocumento());
         }
 
         writer.flush();
@@ -126,7 +136,8 @@ public class ReporteBean implements Serializable {
 
     /**
      * Detecta la página actual y exporta el reporte correspondiente.
-     * Verifica primero las páginas específicas antes de la página genérica de index.
+     * Verifica primero las páginas específicas antes de la página genérica de
+     * index.
      */
     public void descargarReporteDinamico() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -134,12 +145,12 @@ public class ReporteBean implements Serializable {
 
         if (viewId == null) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
-                "Aviso", "No se puede detectar la página actual."));
+                    "Aviso", "No se puede detectar la página actual."));
             return;
         }
 
         String lower = viewId.toLowerCase();
-        
+
         // Evaluar páginas específicas primero (antes que index genérico)
         if (lower.contains("glucosa") || lower.contains("registroglucosa")) {
             exportarGlucosaPDF();
@@ -147,12 +158,12 @@ public class ReporteBean implements Serializable {
             exportarCitasPDF();
         } else if (lower.contains("medicamento") || lower.contains("medicamentos")) {
             exportarMedicamentosPDF();
-        } else if (lower.contains("index")) {
-            // Dashboard del paciente (evaluar al final)
+        } else if (lower.contains("dashboard") || lower.contains("index")) {
+            // Dashboard del paciente o página de inicio - genera reporte completo
             exportarReporteSaludPDF();
         } else {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, 
-                "Aviso", "No se puede generar reporte para esta página."));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                    "Aviso", "No se puede generar reporte para esta página."));
         }
     }
 
@@ -165,8 +176,8 @@ public class ReporteBean implements Serializable {
         Usuario usuario = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
 
         if (usuario == null) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                "Error", "Usuario no autenticado"));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Error", "Usuario no autenticado"));
             return;
         }
 
@@ -202,7 +213,8 @@ public class ReporteBean implements Serializable {
                         chart.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
                         document.add(chart);
 
-                        Paragraph legend = new Paragraph("Gráfico de tendencia (promedio diario - últimos 7 días)", basePDF.fontEnfasis);
+                        Paragraph legend = new Paragraph("Gráfico de tendencia (promedio diario - últimos 7 días)",
+                                basePDF.fontEnfasis);
                         legend.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
                         legend.setSpacingAfter(12f);
                         document.add(legend);
@@ -213,15 +225,15 @@ public class ReporteBean implements Serializable {
 
                 // Agrupar por mes y generar tablas por mes
                 java.util.Map<Integer, java.util.List<Glucosa>> agrupado = glucosaList.stream()
-                    .collect(java.util.stream.Collectors.groupingBy(g -> {
-                        java.util.Calendar cal = java.util.Calendar.getInstance();
-                        cal.setTime(g.getFechaHora());
-                        return cal.get(java.util.Calendar.YEAR) * 100 + (cal.get(java.util.Calendar.MONTH) + 1);
-                    }));
+                        .collect(java.util.stream.Collectors.groupingBy(g -> {
+                            java.util.Calendar cal = java.util.Calendar.getInstance();
+                            cal.setTime(g.getFechaHora());
+                            return cal.get(java.util.Calendar.YEAR) * 100 + (cal.get(java.util.Calendar.MONTH) + 1);
+                        }));
 
                 java.util.List<Integer> mesesOrdenados = agrupado.keySet().stream()
-                    .sorted(java.util.Comparator.reverseOrder())
-                    .collect(java.util.stream.Collectors.toList());
+                        .sorted(java.util.Comparator.reverseOrder())
+                        .collect(java.util.stream.Collectors.toList());
 
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 SimpleDateFormat sdfMes = new SimpleDateFormat("MMMM yyyy", new java.util.Locale("es", "ES"));
@@ -240,8 +252,8 @@ public class ReporteBean implements Serializable {
                     document.add(mesTitle);
 
                     java.util.List<Glucosa> listaMes = agrupado.get(clave).stream()
-                        .sorted((g1, g2) -> g2.getFechaHora().compareTo(g1.getFechaHora()))
-                        .collect(java.util.stream.Collectors.toList());
+                            .sorted((g1, g2) -> g2.getFechaHora().compareTo(g1.getFechaHora()))
+                            .collect(java.util.stream.Collectors.toList());
 
                     PdfPTable table = new PdfPTable(3);
                     table.setWidthPercentage(100);
@@ -278,8 +290,8 @@ public class ReporteBean implements Serializable {
         Usuario usuario = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
 
         if (usuario == null) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                "Error", "Usuario no autenticado"));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Error", "Usuario no autenticado"));
             return;
         }
 
@@ -345,8 +357,8 @@ public class ReporteBean implements Serializable {
         Usuario usuario = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
 
         if (usuario == null) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                "Error", "Usuario no autenticado"));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Error", "Usuario no autenticado"));
             return;
         }
 
@@ -378,15 +390,15 @@ public class ReporteBean implements Serializable {
 
             // Agrupar por mes (año*100+mes)
             java.util.Map<Integer, java.util.List<com.mycompany.checkinc.entities.Cita>> agrupado = citaList.stream()
-                .collect(java.util.stream.Collectors.groupingBy(c -> {
-                    java.util.Calendar cal = java.util.Calendar.getInstance();
-                    cal.setTime(c.getFecha());
-                    return cal.get(java.util.Calendar.YEAR) * 100 + (cal.get(java.util.Calendar.MONTH) + 1);
-                }));
+                    .collect(java.util.stream.Collectors.groupingBy(c -> {
+                        java.util.Calendar cal = java.util.Calendar.getInstance();
+                        cal.setTime(c.getFecha());
+                        return cal.get(java.util.Calendar.YEAR) * 100 + (cal.get(java.util.Calendar.MONTH) + 1);
+                    }));
 
             java.util.List<Integer> ordenMeses = agrupado.keySet().stream()
-                .sorted(java.util.Comparator.reverseOrder())
-                .collect(java.util.stream.Collectors.toList());
+                    .sorted(java.util.Comparator.reverseOrder())
+                    .collect(java.util.stream.Collectors.toList());
 
             SimpleDateFormat sdfFecha = new SimpleDateFormat("dd/MM/yyyy");
             SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm");
@@ -406,12 +418,13 @@ public class ReporteBean implements Serializable {
                 document.add(mesTitle);
 
                 java.util.List<com.mycompany.checkinc.entities.Cita> listaMes = agrupado.get(clave).stream()
-                    .sorted((a, b) -> {
-                        int cmp = a.getFecha().compareTo(b.getFecha());
-                        if (cmp != 0) return cmp;
-                        return a.getHora().compareTo(b.getHora());
-                    })
-                    .collect(java.util.stream.Collectors.toList());
+                        .sorted((a, b) -> {
+                            int cmp = a.getFecha().compareTo(b.getFecha());
+                            if (cmp != 0)
+                                return cmp;
+                            return a.getHora().compareTo(b.getHora());
+                        })
+                        .collect(java.util.stream.Collectors.toList());
 
                 PdfPTable table = new PdfPTable(4);
                 table.setWidthPercentage(100);

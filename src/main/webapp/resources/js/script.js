@@ -58,4 +58,31 @@ $(document).ready(function () {
         $('#tablaForm\\:anomalia').DataTable({ language: { url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json" }, pageLength: 10, responsive: true });
     if ($('#tablaForm\\:alertaAdmin').length)
         $('#tablaForm\\:alertaAdmin').DataTable({ language: { url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json" }, pageLength: 10, responsive: true });
+
+    // Dashboard del paciente - Tablas de Glucosa y Anomalías
+    if ($('#glucosaTable').length) {
+        $('#glucosaTable').DataTable({
+            language: { url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json" },
+            pageLength: 5,
+            responsive: true,
+            order: [[0, 'desc']], // Ordenar por fecha descendente
+            lengthMenu: [[5, 10, 25, -1], [5, 10, 25, "Todos"]],
+            dom: '<"top"lf>rt<"bottom"ip><"clear">',
+            columnDefs: [
+                { targets: 1, className: 'text-center' }, // Centrar columna de nivel
+                { targets: 2, className: 'text-center' }  // Centrar columna de momento
+            ]
+        });
+    }
+
+    if ($('#anomaliasTable').length) {
+        $('#anomaliasTable').DataTable({
+            language: { url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json" },
+            pageLength: 5,
+            responsive: true,
+            order: [[0, 'desc']], // Ordenar por fecha descendente
+            lengthMenu: [[5, 10, 25, -1], [5, 10, 25, "Todos"]],
+            dom: '<"top"lf>rt<"bottom"ip><"clear">'
+        });
+    }
 });

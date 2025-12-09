@@ -10,12 +10,20 @@
         <h:outputStylesheet name="css/dashboard.css" />
 
         <h:form id="patientDashboardForm">
-            <h2 class="dashboard-title">Mi Salud - Dashboard</h2>
-            <p class="dashboard-subtitle">Resumen rápido de tu control de glucosa, anomalías y próximas citas.</p>
+            <!-- Header del Dashboard -->
+            <div class="dashboard-header">
+                <div>
+                    <h2 class="dashboard-title">Mi Salud - Dashboard</h2>
+                    <p class="dashboard-subtitle">Resumen rápido de tu control de glucosa, anomalías y próximas citas.
+                    </p>
+                </div>
+            </div>
 
-            <!-- Tarjetas resumen -->
-            <div class="dashboard-cards-grid">
-                <div class="card-compact card-primary">
+            <!-- NUEVO: Layout Grid Principal -->
+            <div class="dashboard-main-grid">
+
+                <!-- Fila 1: Tarjetas KPI (4 columnas) -->
+                <div class="grid-kpi-1 card-compact card-primary">
                     <p class="card-label">Última medición</p>
                     <h3 class="card-value card-value-primary">
                         <h:outputText
@@ -30,7 +38,7 @@
                     </p>
                 </div>
 
-                <div class="card-compact card-success">
+                <div class="grid-kpi-2 card-compact card-success">
                     <p class="card-label">Promedio (últimos días)</p>
                     <h3 class="card-value card-value-success">
                         <h:outputText value="#{patientDashboardBean.promedioGlucosa}">
@@ -41,7 +49,7 @@
                     <p class="card-meta">Promedio de todos los registros</p>
                 </div>
 
-                <div class="card-compact card-warning">
+                <div class="grid-kpi-3 card-compact card-warning">
                     <p class="card-label">Próxima cita</p>
                     <h3 class="card-value card-value-warning">
                         <h:outputText
@@ -55,180 +63,174 @@
                     </p>
                 </div>
 
-                <div class="card-compact card-purple">
+                <div class="grid-kpi-4 card-compact card-purple">
                     <p class="card-label">Medicamentos</p>
                     <h3 class="card-value card-value-purple">
                         <h:outputText value="#{fn:length(patientDashboardBean.medicamentos)}" />
                     </h3>
                     <p class="card-meta">Activos</p>
                 </div>
-            </div>
 
-            <!-- Gráfico y tabla -->
-            <div class="dashboard-content-grid">
-                <div class="card">
-                    <h3 class="section-title">Tendencia de Glucosa</h3>
+                <!-- Fila 2: Gráfico (ocupa 2 columnas) y Tabla Glucosa (2 columnas) -->
+                <div class="grid-chart card">
+                    <h3 class="section-title">📈 Tendencia de Glucosa</h3>
                     <p:lineChart id="patientLineChart" model="#{patientDashboardBean.lineChartModel}"
-                        style="max-height:320px;" />
+                        style="max-height:280px;" />
                 </div>
 
-                <div class="card">
-                    <h3 class="section-title">Últimas lecturas</h3>
+                <div class="grid-table-glucosa card">
+                    <h3 class="section-title">📊 Últimas lecturas</h3>
                     <h:panelGroup rendered="#{empty patientDashboardBean.glucosaReciente}">
                         <p class="empty-state">No hay registros de glucosa disponibles.</p>
                     </h:panelGroup>
                     <h:panelGroup rendered="#{not empty patientDashboardBean.glucosaReciente}">
-                        <h:dataTable value="#{patientDashboardBean.glucosaReciente}" var="g"
-                            styleClass="recent-readings-table">
-                            <h:column>
-                                <f:facet name="header">
-                                    <div class="table-header">
-                                        Fecha</div>
-                                </f:facet>
-                                <h:outputText value="#{g.fechaHora}">
-                                    <f:convertDateTime pattern="dd/MM HH:mm" />
-                                </h:outputText>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">
-                                    <div class="table-header">
-                                        Nivel</div>
-                                </f:facet>
-                                <h:outputText value="#{g.nivelGlucosa}" />
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">
-                                    <div class="table-header">
-                                        Momento</div>
-                                </f:facet>
-                                <h:outputText value="#{g.momentoDia}" />
-                            </h:column>
-                        </h:dataTable>
+                        <table id="glucosaTable" class="display recent-readings-table" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Nivel (mg/dL)</th>
+                                    <th>Momento</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ui:repeat value="#{patientDashboardBean.glucosaReciente}" var="g">
+                                    <tr>
+                                        <td>
+                                            <h:outputText value="#{g.fechaHora}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                            </h:outputText>
+                                        </td>
+                                        <td>#{g.nivelGlucosa}</td>
+                                        <td>#{g.momentoDia}</td>
+                                    </tr>
+                                </ui:repeat>
+                            </tbody>
+                        </table>
                     </h:panelGroup>
                 </div>
-            </div>
 
-            <!-- 🆕 Panel de Predicciones ML -->
-            <!-- 🆕 Panel de Predicciones ML -->
-            <h:panelGroup id="mlPanelSection">
-                <!-- Case A: ML disponible con datos -->
-                <h:panelGroup rendered="#{patientDashboardBean.mlDisponible}">
-                    <div class="ml-panel">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <h3 class="ml-panel-title">🔮 Análisis Predictivo (IA)</h3>
-                            <p:commandButton value="Actualizar"
-                                actionListener="#{patientDashboardBean.sincronizarHistorialIA}" update="@form"
-                                icon="pi pi-refresh" styleClass="ui-button-outlined ui-button-secondary ui-button-sm" />
-                        </div>
-                        <div class="ml-predictions-grid">
-                            <!-- Nivel de Riesgo -->
-                            <h:panelGroup styleClass="risk-card risk-low"
-                                rendered="#{patientDashboardBean.nivelRiesgo eq 'bajo'}">
-                                <p class="risk-card-label">Nivel de Riesgo Actual</p>
-                                <h:outputText value="#{patientDashboardBean.nivelRiesgo}"
-                                    styleClass="risk-badge risk-low" />
-                                <p class="risk-score">
-                                    Score: <h:outputText value="#{patientDashboardBean.riesgoScore * 100}">
-                                        <f:convertNumber pattern="#0" />
-                                    </h:outputText>%
-                                </p>
-                            </h:panelGroup>
-                            <h:panelGroup styleClass="risk-card risk-medium"
-                                rendered="#{patientDashboardBean.nivelRiesgo eq 'medio'}">
-                                <p class="risk-card-label">Nivel de Riesgo Actual</p>
-                                <h:outputText value="#{patientDashboardBean.nivelRiesgo}"
-                                    styleClass="risk-badge risk-medium" />
-                                <p class="risk-score">
-                                    Score: <h:outputText value="#{patientDashboardBean.riesgoScore * 100}">
-                                        <f:convertNumber pattern="#0" />
-                                    </h:outputText>%
-                                </p>
-                            </h:panelGroup>
-                            <h:panelGroup styleClass="risk-card risk-high"
-                                rendered="#{patientDashboardBean.nivelRiesgo eq 'alto'}">
-                                <p class="risk-card-label">Nivel de Riesgo Actual</p>
-                                <h:outputText value="#{patientDashboardBean.nivelRiesgo}"
-                                    styleClass="risk-badge risk-high" />
-                                <p class="risk-score">
-                                    Score: <h:outputText value="#{patientDashboardBean.riesgoScore * 100}">
-                                        <f:convertNumber pattern="#0" />
-                                    </h:outputText>%
-                                </p>
-                            </h:panelGroup>
+                <!-- Fila 3: Panel ML y Anomalías lado a lado -->
+                <div class="grid-ml">
+                    <h:panelGroup id="mlPanelSection">
+                        <!-- Case A: ML disponible con datos -->
+                        <h:panelGroup rendered="#{patientDashboardBean.mlDisponible}">
+                            <div class="ml-panel-compact">
+                                <div class="ml-header">
+                                    <h3 class="ml-panel-title">🔮 Análisis Predictivo (IA)</h3>
+                                    <p:commandButton value="Actualizar"
+                                        actionListener="#{patientDashboardBean.sincronizarHistorialIA}" update="@form"
+                                        icon="pi pi-refresh"
+                                        styleClass="ui-button-outlined ui-button-secondary ui-button-sm" />
+                                </div>
+                                <div class="ml-content-horizontal">
+                                    <!-- Nivel de Riesgo -->
+                                    <h:panelGroup styleClass="risk-card-mini risk-low"
+                                        rendered="#{patientDashboardBean.nivelRiesgo eq 'bajo'}">
+                                        <span class="risk-label">Riesgo</span>
+                                        <h:outputText value="#{patientDashboardBean.nivelRiesgo}"
+                                            styleClass="risk-badge-mini risk-low" />
+                                        <span class="risk-score-mini">
+                                            <h:outputText value="#{patientDashboardBean.riesgoScore * 100}">
+                                                <f:convertNumber pattern="#0" />
+                                            </h:outputText>%
+                                        </span>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="risk-card-mini risk-medium"
+                                        rendered="#{patientDashboardBean.nivelRiesgo eq 'medio'}">
+                                        <span class="risk-label">Riesgo</span>
+                                        <h:outputText value="#{patientDashboardBean.nivelRiesgo}"
+                                            styleClass="risk-badge-mini risk-medium" />
+                                        <span class="risk-score-mini">
+                                            <h:outputText value="#{patientDashboardBean.riesgoScore * 100}">
+                                                <f:convertNumber pattern="#0" />
+                                            </h:outputText>%
+                                        </span>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="risk-card-mini risk-high"
+                                        rendered="#{patientDashboardBean.nivelRiesgo eq 'alto'}">
+                                        <span class="risk-label">Riesgo</span>
+                                        <h:outputText value="#{patientDashboardBean.nivelRiesgo}"
+                                            styleClass="risk-badge-mini risk-high" />
+                                        <span class="risk-score-mini">
+                                            <h:outputText value="#{patientDashboardBean.riesgoScore * 100}">
+                                                <f:convertNumber pattern="#0" />
+                                            </h:outputText>%
+                                        </span>
+                                    </h:panelGroup>
 
-                            <!-- Recomendaciones -->
-                            <div>
-                                <h4 class="recommendations-title">💡 Recomendaciones
-                                    Personalizadas</h4>
-                                <h:panelGroup rendered="#{empty patientDashboardBean.recomendaciones}">
-                                    <p class="recommendations-empty">No hay suficientes datos para generar
-                                        recomendaciones.</p>
-                                </h:panelGroup>
-                                <ul class="recommendations-list">
-                                    <ui:repeat value="#{patientDashboardBean.recomendaciones}" var="rec">
-                                        <li class="recommendation-item">#{rec}</li>
-                                    </ui:repeat>
-                                </ul>
+                                    <!-- Recomendaciones compactas -->
+                                    <div class="recommendations-compact">
+                                        <h4 class="recommendations-title-mini">💡 Recomendaciones</h4>
+                                        <h:panelGroup rendered="#{empty patientDashboardBean.recomendaciones}">
+                                            <p class="recommendations-empty">Sin datos suficientes.</p>
+                                        </h:panelGroup>
+                                        <ul class="recommendations-list-mini">
+                                            <ui:repeat value="#{patientDashboardBean.recomendaciones}" var="rec"
+                                                varStatus="status">
+                                                <li class="recommendation-item-mini" rendered="#{status.index lt 3}">
+                                                    #{rec}</li>
+                                            </ui:repeat>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </h:panelGroup>
+                        </h:panelGroup>
 
-                <!-- Case B: ML no disponible (aún no sincronizado o error) -->
-                <h:panelGroup rendered="#{not patientDashboardBean.mlDisponible}">
-                    <div class="ml-panel" style="text-align:center; padding: 30px;">
-                        <h3 class="ml-panel-title" style="margin-bottom:15px;">🔮 Activar Inteligencia Artificial</h3>
-                        <p style="color:#666; margin-bottom:20px;">Sincroniza tu historial médico para recibir
-                            predicciones personalizadas y alertas de riesgo.</p>
-                        <p:commandButton value="Iniciar Análisis IA"
-                            actionListener="#{patientDashboardBean.sincronizarHistorialIA}" update="@form"
-                            icon="pi pi-sparkles" styleClass="ui-button-primary" />
-                    </div>
-                </h:panelGroup>
-            </h:panelGroup>
+                        <!-- Case B: ML no disponible -->
+                        <h:panelGroup rendered="#{not patientDashboardBean.mlDisponible}">
+                            <div class="ml-panel-compact ml-inactive">
+                                <h3 class="ml-panel-title">🔮 Activar Inteligencia Artificial</h3>
+                                <p class="ml-description">Sincroniza tu historial para recibir predicciones y alertas.
+                                </p>
+                                <p:commandButton value="Iniciar Análisis IA"
+                                    actionListener="#{patientDashboardBean.sincronizarHistorialIA}" update="@form"
+                                    icon="pi pi-sparkles" styleClass="ui-button-primary" />
+                            </div>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </div>
 
-            <!-- Anomalías recientes -->
-            <div class="card" style="margin-top:20px;">
-                <h3 class="section-title">Anomalías recientes</h3>
-                <h:panelGroup rendered="#{empty patientDashboardBean.anomaliasRecientes}">
-                    <p class="empty-state">No hay anomalías registradas.</p>
-                </h:panelGroup>
-                <h:panelGroup rendered="#{not empty patientDashboardBean.anomaliasRecientes}">
-                    <h:dataTable value="#{patientDashboardBean.anomaliasRecientes}" var="a"
-                        styleClass="anomalies-table">
-                        <h:column>
-                            <f:facet name="header">
-                                <div class="table-header">
-                                    Fecha</div>
-                            </f:facet>
-                            <h:outputText value="#{a.fechaHora}">
-                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                            </h:outputText>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <div class="table-header">
-                                    Descripción</div>
-                            </f:facet>
-                            <h:outputText value="#{a.descripcion}" />
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <div class="table-header">
-                                    Gravedad</div>
-                            </f:facet>
-                            <h:panelGroup rendered="#{a.gravedad eq 'grave'}">
-                                <span class="severity-grave">#{a.gravedad}</span>
-                            </h:panelGroup>
-                            <h:panelGroup rendered="#{a.gravedad eq 'moderada'}">
-                                <span class="severity-moderada">#{a.gravedad}</span>
-                            </h:panelGroup>
-                            <h:panelGroup rendered="#{a.gravedad eq 'leve'}">
-                                <span class="severity-leve">#{a.gravedad}</span>
-                            </h:panelGroup>
-                        </h:column>
-                    </h:dataTable>
-                </h:panelGroup>
+                <!-- Anomalías (última columna de la fila 3) -->
+                <div class="grid-anomalias card">
+                    <h3 class="section-title">⚠️ Anomalías recientes</h3>
+                    <h:panelGroup rendered="#{empty patientDashboardBean.anomaliasRecientes}">
+                        <p class="empty-state">No hay anomalías registradas.</p>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{not empty patientDashboardBean.anomaliasRecientes}">
+                        <table id="anomaliasTable" class="display anomalies-table" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Descripción</th>
+                                    <th>Gravedad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ui:repeat value="#{patientDashboardBean.anomaliasRecientes}" var="a">
+                                    <tr>
+                                        <td>
+                                            <h:outputText value="#{a.fechaHora}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                            </h:outputText>
+                                        </td>
+                                        <td>#{a.descripcion}</td>
+                                        <td>
+                                            <h:panelGroup rendered="#{a.gravedad eq 'grave'}">
+                                                <span class="severity-grave">#{a.gravedad}</span>
+                                            </h:panelGroup>
+                                            <h:panelGroup rendered="#{a.gravedad eq 'moderada'}">
+                                                <span class="severity-moderada">#{a.gravedad}</span>
+                                            </h:panelGroup>
+                                            <h:panelGroup rendered="#{a.gravedad eq 'leve'}">
+                                                <span class="severity-leve">#{a.gravedad}</span>
+                                            </h:panelGroup>
+                                        </td>
+                                    </tr>
+                                </ui:repeat>
+                            </tbody>
+                        </table>
+                    </h:panelGroup>
+                </div>
             </div>
 
         </h:form>

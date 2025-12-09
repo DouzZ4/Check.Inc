@@ -35,10 +35,14 @@ public class DashboardAdminBean implements Serializable {
     @EJB
     private com.mycompany.checkinc.services.AnomaliaFacadeLocal anomaliaFacade;
 
+    @EJB
+    private com.mycompany.checkinc.services.AlertaFacadeLocal alertaFacade;
+
     private int totalUsuarios;
     private int totalRegistrosGlucosa;
     private int totalCitas;
     private int totalAnomalias;
+    private int totalAlertas;
     private int anomaliasSinResolver;
     private String errorStats;
 
@@ -64,6 +68,12 @@ public class DashboardAdminBean implements Serializable {
             } catch (Exception e) {
                 totalAnomalias = 0;
                 anomaliasSinResolver = 0;
+            }
+            // Alertas
+            try {
+                totalAlertas = alertaFacade.findAll().size();
+            } catch (Exception e) {
+                totalAlertas = 0;
             }
             cargarUsuarios();
             listaRoles = rolFacade.findAll();
@@ -106,7 +116,8 @@ public class DashboardAdminBean implements Serializable {
             usuarioEditable.setEditable(false);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Usuario actualizado correctamente"));
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al actualizar usuario: " + e.getMessage(), null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Error al actualizar usuario: " + e.getMessage(), null));
         }
     }
 
@@ -129,6 +140,10 @@ public class DashboardAdminBean implements Serializable {
 
     public int getTotalCitas() {
         return totalCitas;
+    }
+
+    public int getTotalAlertas() {
+        return totalAlertas;
     }
 
     public String getErrorStats() {
