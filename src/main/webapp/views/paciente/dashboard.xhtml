@@ -111,83 +111,11 @@
 
                 <!-- Fila 3: Panel ML y Anomalías lado a lado -->
                 <div class="grid-ml" style="display:none;">
-                    <h:panelGroup id="mlPanelSection" rendered="false">
-                        <!-- Case A: ML disponible con datos -->
-                        <h:panelGroup rendered="#{patientDashboardBean.mlDisponible}">
-                            <div class="ml-panel-compact">
-                                <div class="ml-header">
-                                    <h3 class="ml-panel-title">🔮 Análisis Predictivo (IA)</h3>
-                                    <p:commandButton value="Actualizar"
-                                        actionListener="#{patientDashboardBean.sincronizarHistorialIA}" update="@form"
-                                        icon="pi pi-refresh"
-                                        styleClass="ui-button-outlined ui-button-secondary ui-button-sm" />
-                                </div>
-                                <div class="ml-content-horizontal">
-                                    <!-- Nivel de Riesgo -->
-                                    <h:panelGroup styleClass="risk-card-mini risk-low"
-                                        rendered="#{patientDashboardBean.nivelRiesgo eq 'bajo'}">
-                                        <span class="risk-label">Riesgo</span>
-                                        <h:outputText value="#{patientDashboardBean.nivelRiesgo}"
-                                            styleClass="risk-badge-mini risk-low" />
-                                        <span class="risk-score-mini">
-                                            <h:outputText value="#{patientDashboardBean.riesgoScore * 100}">
-                                                <f:convertNumber pattern="#0" />
-                                            </h:outputText>%
-                                        </span>
-                                    </h:panelGroup>
-                                    <h:panelGroup styleClass="risk-card-mini risk-medium"
-                                        rendered="#{patientDashboardBean.nivelRiesgo eq 'medio'}">
-                                        <span class="risk-label">Riesgo</span>
-                                        <h:outputText value="#{patientDashboardBean.nivelRiesgo}"
-                                            styleClass="risk-badge-mini risk-medium" />
-                                        <span class="risk-score-mini">
-                                            <h:outputText value="#{patientDashboardBean.riesgoScore * 100}">
-                                                <f:convertNumber pattern="#0" />
-                                            </h:outputText>%
-                                        </span>
-                                    </h:panelGroup>
-                                    <h:panelGroup styleClass="risk-card-mini risk-high"
-                                        rendered="#{patientDashboardBean.nivelRiesgo eq 'alto'}">
-                                        <span class="risk-label">Riesgo</span>
-                                        <h:outputText value="#{patientDashboardBean.nivelRiesgo}"
-                                            styleClass="risk-badge-mini risk-high" />
-                                        <span class="risk-score-mini">
-                                            <h:outputText value="#{patientDashboardBean.riesgoScore * 100}">
-                                                <f:convertNumber pattern="#0" />
-                                            </h:outputText>%
-                                        </span>
-                                    </h:panelGroup>
-
-                                    <!-- Recomendaciones compactas -->
-                                    <div class="recommendations-compact">
-                                        <h4 class="recommendations-title-mini">💡 Recomendaciones</h4>
-                                        <h:panelGroup rendered="#{empty patientDashboardBean.recomendaciones}">
-                                            <p class="recommendations-empty">Sin datos suficientes.</p>
-                                        </h:panelGroup>
-                                        <ul class="recommendations-list-mini">
-                                            <ui:repeat value="#{patientDashboardBean.recomendaciones}" var="rec"
-                                                varStatus="status">
-                                                <li class="recommendation-item-mini" rendered="#{status.index lt 3}">
-                                                    #{rec}</li>
-                                            </ui:repeat>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </h:panelGroup>
-
-                        <!-- Case B: ML no disponible -->
-                        <h:panelGroup rendered="#{not patientDashboardBean.mlDisponible}">
-                            <div class="ml-panel-compact ml-inactive">
-                                <h3 class="ml-panel-title">🔮 Activar Inteligencia Artificial</h3>
-                                <p class="ml-description">Sincroniza tu historial para recibir predicciones y alertas.
-                                </p>
-                                <p:commandButton value="Iniciar Análisis IA"
-                                    actionListener="#{patientDashboardBean.sincronizarHistorialIA}" update="@form"
-                                    icon="pi pi-sparkles" styleClass="ui-button-primary" />
-                            </div>
-                        </h:panelGroup>
+                    <!-- PANEL IA DESACTIVADO POR DEMO
+                    <h:panelGroup id="mlPanelSection">
+                         ... contenido ...
                     </h:panelGroup>
+                    -->
                 </div>
 
                 <!-- Anomalías (última columna de la fila 3) -->

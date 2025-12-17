@@ -9,7 +9,7 @@
                     transaction-type="JTA">
 
     <!-- ✅ PRIMERO VA EL JNDI -->
-    <jta-data-source>jdbc/checks</jta-data-source>
+    <jta-data-source>java:app/jdbc/checks</jta-data-source>
 
     <!-- ✅ DESPUÉS LAS ENTIDADES -->
     <class>com.mycompany.checkinc.entities.Medicamento</class>
