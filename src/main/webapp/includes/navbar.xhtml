@@ -73,6 +73,10 @@
 
             <!-- Área de usuario (login/logout) -->
             <div class="navbar-user-info">
+                <button type="button" id="accessibility-toggle-btn" class="accessibility-btn"
+                    onclick="toggleAccessibilityMode()" aria-label="Activar modo lectura" title="Activar modo lectura">
+                    <i class="pi pi-volume-up"></i>
+                </button>
                 <h:panelGroup rendered="#{not empty login.usuarioActual}">
                     <h:form styleClass="profile-form">
                         <h:button value="Hola #{login.usuarioActual.nombres}" outcome="/views/usuarios/Perfil.xhtml"
